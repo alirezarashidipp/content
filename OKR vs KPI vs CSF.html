@@ -17,10 +17,10 @@
   "headline": "The Acronym Soup",
   "description": "One road trip, three instruments: CSFs are the car, KPIs are the dashboard, OKRs are the GPS. A calm guide with a radar, a gauge, and a cheat sheet.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -44,10 +44,7 @@ html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,
 ::-webkit-scrollbar-track { background: transparent; }
 body {
   margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif;
-  background:
-    radial-gradient(circle at 12% 8%, rgba(52,104,245,0.10), transparent 26%),
-    radial-gradient(circle at 86% 8%, rgba(118,80,230,0.10), transparent 25%),
-    linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+  background: linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
   line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
 ::selection { background: var(--ink); color: var(--paper); }
@@ -68,7 +65,7 @@ svg { max-width: 100%; height: auto; display: block; }
 .site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
 .topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
 .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
-.brand-dot { width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg, var(--blue), var(--purple)); box-shadow: 0 0 0 8px rgba(52,104,245,.08); }
+.brand-dot { width:12px; height:12px; border-radius:50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
 .nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
 .nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
 .nav a::before { content:""; position:absolute; left:-13px; top:50%; margin-top:-3px; width:6px; height:6px; border-radius:50%; background: var(--spy, var(--ink)); opacity:0; transition: opacity .2s ease; }
@@ -319,6 +316,52 @@ h1, h2, h3 { text-wrap: balance; }
   .swipe-hint { transition: none; }
 }
 
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
 /* external reference links */
 .xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
 .xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
@@ -335,7 +378,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>The Acronym Soup</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#trip">The road trip</a><a href="#trio">The trio</a><a href="#cheatsheet">Cheat sheet</a><a href="#choosing">Choosing</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#trip">The road trip</a><a href="#trio">The trio</a><a href="#cheatsheet">Cheat sheet</a><a href="#choosing">Choosing</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -352,8 +395,19 @@ h1, h2, h3 { text-wrap: balance; }
           <div>
             <p class="lead"><a class="xlink" href="https://en.wikipedia.org/wiki/Objectives_and_key_results" target="_blank" rel="noopener noreferrer">OKR</a> vs. <a class="xlink" href="https://en.wikipedia.org/wiki/Performance_indicator" target="_blank" rel="noopener noreferrer">KPI</a> vs. <a class="xlink" href="https://en.wikipedia.org/wiki/Critical_success_factor" target="_blank" rel="noopener noreferrer">CSF</a> — business jargon designed to sound complicated. It isn't. Imagine a road trip to a beach you've never visited: you need a car that works, a dashboard that tells you if you're speeding, and a GPS that tells you where to go. That's the whole soup.</p>
             <div class="hero-links"><a href="#trio">↓ <span>Meet the trio</span></a><a href="#cheatsheet">↓ <span>Skip to the cheat sheet</span></a></div>
+            <div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>5 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
           </div>
-          <div class="hero-note"><p>The friendliest guide to what matters, what works, and — let's be honest — <em>what gets you promoted.</em></p></div>
+          <div class="hero-note"><p>The friendliest guide to what matters, what works, and — let's be honest — <em>what gets you promoted.</em></p>
+            <div class="toc" aria-label="Table of contents">
+              <div class="toc-title">In this piece</div>
+              <ol>
+                <li><a href="#trip">The road trip</a> — one car, three instruments</li>
+                <li><a href="#trio">The trio</a> — CSF, KPI, OKR in depth</li>
+                <li><a href="#cheatsheet">Cheat sheet</a> — screenshot this</li>
+                <li><a href="#choosing">Choosing</a> — how to use them + quiz</li>
+                <li><a href="#sources">Sources</a> — where the frameworks come from</li>
+              </ol>
+            </div></div>
         </div>
       </section>      <section class="section reveal " id="trip" aria-labelledby="trip-h">
         <div class="section-head">
@@ -415,7 +469,7 @@ h1, h2, h3 { text-wrap: balance; }
             <div class="framework-role">Critical Success Factors</div>
             <div class="framework-summary">“What MUST go right?” — the non-negotiables. If one fails, the business stops.</div>
           </aside>
-          <div class="framework-content"><p>CSFs aren't usually numbers; they are <strong>states of being</strong>. In the road-trip analogy, a CSF is “the car has an engine.” If you don't have an engine, it doesn't matter what the GPS says.</p>
+          <div class="framework-content"><p>CSFs aren't usually numbers; they are <strong>states of being</strong>.<a class="xref" href="#src-1">[1]</a> In the road-trip analogy, a CSF is “the car has an engine.” If you don't have an engine, it doesn't matter what the GPS says.</p>
             <div class="section-label">Example — an airline</div>
             <div class="section-label">Must be true, always</div><ul class="project-list"><li><strong>Safety certification:</strong> non-negotiable, unscoreable, existential.</li><li><strong>Operational fleet:</strong> must have planes that fly.</li><li><strong>Skilled pilots:</strong> must have people who can fly them.</li></ul>
             <div class="callout-line" style="color:#3468f5">CSFs are permanent, binary, and boring — by design.<small>You don't improve a CSF. You defend it.</small></div></div>
@@ -446,7 +500,7 @@ h1, h2, h3 { text-wrap: balance; }
             <div class="framework-role">Objectives &amp; Key Results</div>
             <div class="framework-summary">“Where are we going next?” — aggressive, temporary goals of change.</div>
           </aside>
-          <div class="framework-content"><p>OKRs are the GPS setting a destination. You don't <em>maintain</em> an OKR; you <strong>achieve</strong> it and set a new one. An Objective is the qualitative “where”; Key Results are the measurable proof you're arriving.</p>
+          <div class="framework-content"><p>OKRs are the GPS setting a destination.<a class="xref" href="#src-2">[2]</a> You don't <em>maintain</em> an OKR; you <strong>achieve</strong> it and set a new one. An Objective is the qualitative “where”; Key Results are the measurable proof you're arriving.</p>
             <p><strong>Objective:</strong> Dominate the European market.</p>
             <div class="diagram-block">
           <div class="diagram-title">Scoring the key results</div>
@@ -473,7 +527,7 @@ h1, h2, h3 { text-wrap: balance; }
 <text class="bar-val" data-count="40" data-decimals="0" data-suffix="%" data-delay="120" x="569" y="216" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">40%</text>
 <text x="295" y="302" fill="#777" font-family="DM Sans" font-size="14">Key results are scored, time-boxed, and then retired or converted.</text>
 </svg></div>
-          <p class="diagram-caption"><strong>How to read this:</strong> KRs are graded honestly — 70% on an ambitious KR is often better than 100% on a sandbagged one.</p>
+          <p class="diagram-caption"><strong>How to read this:</strong> KRs are graded honestly — 70% on an ambitious KR is often better than 100% on a sandbagged one.<a class="xref" href="#src-3">[3]</a></p>
         </div>
             <div class="callout-line" style="color:#23956f">Once you launch in Germany, that OKR is done.<small>It may be demoted to a KPI — 'maintain German sales' — and that's a promotion for the business.</small></div></div>
         </article>
@@ -517,11 +571,25 @@ h1, h2, h3 { text-wrap: balance; }
 </div><p class="combo-line"><strong>The full loop:</strong> defend the CSFs, watch the KPIs, chase the OKRs — and when an OKR lands, let it retire into a KPI. That quiet demotion is what progress actually looks like.</p>
       </div>
     </section>
+    <section class="section reveal" id="sources" aria-labelledby="sources-h">
+      <div class="section-head">
+        <div>
+          <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span class="kicker-sep">—</span>Grounding</div>
+          <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+        </div>
+        <p class="body-copy">The road-trip analogy is ours. The three instruments are not — each has a documented birthplace.</p>
+      </div>
+      <ol class="sources-list">
+        <li id="src-1"><strong>Where CSFs come from.</strong> John F. Rockart, "Chief Executives Define Their Own Data Needs," <em>Harvard Business Review</em> 57(2):81–93 (1979) — "the few key areas where things must go right for the business to flourish," building on D. Ronald Daniel's 1961 success-factors concept. <a class="xlink" href="https://hbr.org/1979/03/chief-executives-define-their-own-data-needs" target="_blank" rel="noopener noreferrer">hbr.org</a></li>
+        <li id="src-2"><strong>Where OKRs come from.</strong> Andy Grove built the system at Intel in the 1970s and codified it in <em>High Output Management</em> (1983) — quarterly cadence, stretch goals, scores decoupled from pay. <a class="xlink" href="https://en.wikipedia.org/wiki/High_Output_Management" target="_blank" rel="noopener noreferrer">Overview</a></li>
+        <li id="src-3"><strong>How OKRs spread.</strong> John Doerr carried the framework from Intel to Google in 1999 and documented it in <em>Measure What Matters</em> (2017) — including the grading philosophy behind the "70% beats a sandbagged 100%" caption above. <a class="xlink" href="https://www.whatmatters.com/" target="_blank" rel="noopener noreferrer">whatmatters.com</a></li>
+      </ol>
+    </section>
     <div class="wrap">
             <footer>
         <div class="footer-title">The Acronym Soup</div>
         <div>Strategy jargon, translated into a road trip.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the Strategy Guides Series · Updated 5 August 2026. Charts are illustrative profiles.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the Strategy Guides Series · Updated 6 August 2026. Charts are illustrative profiles.</div>
       </footer>
     </div>
   </main>

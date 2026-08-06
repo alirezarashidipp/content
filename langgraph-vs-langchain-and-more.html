@@ -28,7 +28,7 @@
     "headline": "AI Framework Wars",
     "description": "A human, practical guide to choosing between LangChain, LangGraph, Instructor, and DSPy.",
     "datePublished": "2026-08-04",
-    "dateModified": "2026-08-05",
+    "dateModified": "2026-08-06",
     "author": {
       "@type": "Person",
       "name": "Your Name Here"
@@ -76,10 +76,7 @@
       margin: 0;
       color: var(--ink);
       font-family: "DM Sans", sans-serif;
-      background:
-        radial-gradient(circle at 12% 8%, rgba(52,104,245,0.10), transparent 26%),
-        radial-gradient(circle at 86% 8%, rgba(118,80,230,0.10), transparent 25%),
-        linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+      background: linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
       line-height: 1.7;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
@@ -128,7 +125,7 @@
       padding: 18px 0 12px; font-size: .96rem;
     }
     .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
-    .brand-dot { width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg, var(--blue), var(--purple)); box-shadow: 0 0 0 8px rgba(52,104,245,.08); }
+    .brand-dot { width:12px; height:12px; border-radius:50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
     .nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
     .nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
     .nav a::before {
@@ -444,6 +441,52 @@ h1, h2, h3 { text-wrap: balance; }
   .swipe-hint { transition: none; }
 }
 
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
 /* external reference links */
 .xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
 .xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
@@ -467,6 +510,7 @@ h1, h2, h3 { text-wrap: balance; }
         <a href="#community">Community</a>
         <a href="#frameworks">Frameworks</a>
         <a href="#decision">How to choose</a>
+        <a href="#sources">Sources</a>
       </nav>
     </div>
   </header>
@@ -487,9 +531,21 @@ h1, h2, h3 { text-wrap: balance; }
               <a href="#adoption">↓ <span>See the adoption snapshot</span></a>
               <a href="#community">↓ <span>Compare community footprint</span></a>
             </div>
+            <div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>7 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
           </div>
           <div class="hero-note">
             <p>The charts below use real public GitHub data. They do not claim technical superiority; they show something narrower and measurable: <em>community attention and open-source footprint</em>.</p>
+            <div class="toc" aria-label="Table of contents">
+              <div class="toc-title">In this piece</div>
+              <ol>
+                <li><a href="#overview">Overview</a> — the short version</li>
+                <li><a href="#adoption">Adoption</a> — the GitHub snapshot</li>
+                <li><a href="#community">Community</a> — stars vs forks</li>
+                <li><a href="#frameworks">The frameworks</a> — four personalities</li>
+                <li><a href="#decision">How to choose</a> — decision guide + quiz</li>
+                <li><a href="#sources">Sources</a> — data &amp; further reading</li>
+              </ol>
+            </div>
           </div>
         </div>
       </section>
@@ -516,13 +572,13 @@ h1, h2, h3 { text-wrap: balance; }
             <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">02</span><span class="kicker-sep">—</span>Adoption</div>
             <h2 id="adoption-h">Open-source adoption snapshot<a class="anchor" href="#adoption" aria-label="Link to this section">#</a></h2>
           </div>
-          <p class="body-copy">GitHub stars are not a quality score. They are a public signal of awareness, interest, and community reach. This chart uses a fixed snapshot from 4 August 2026 so the reader can see the scale difference without pretending that popularity equals technical superiority.</p>
+          <p class="body-copy">GitHub stars are not a quality score. They are a public signal of awareness, interest, and community reach. This chart uses a fixed snapshot from 6 August 2026<a class="xref" href="#src-1">[1]</a> so the reader can see the scale difference without pretending that popularity equals technical superiority.</p>
         </div>
 
         <div class="diagram-block">
           <div class="diagram-title">GitHub stars by repository</div>
           <div class="chart-scroll" id="barChart">
-            <svg viewBox="0 0 1080 560" role="img" aria-label="Horizontal bar chart comparing GitHub stars: LangChain 143 thousand, LangGraph 38.9 thousand, DSPy 36.6 thousand, Instructor 13.7 thousand.">
+            <svg viewBox="0 0 1080 560" role="img" aria-label="Horizontal bar chart comparing GitHub stars: LangChain 143.5 thousand, LangGraph 39 thousand, DSPy 36.7 thousand, Instructor 13.7 thousand.">
               <defs>
                 <linearGradient id="barLC" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3468f5"/><stop offset="1" stop-color="#6e91ff"/></linearGradient>
                 <linearGradient id="barLG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#eb8237"/><stop offset="1" stop-color="#f3a46c"/></linearGradient>
@@ -543,22 +599,22 @@ h1, h2, h3 { text-wrap: balance; }
               <line x1="1010" y1="55" x2="1010" y2="500" stroke="rgba(23,23,23,.07)"/>
 
               <text x="20" y="130" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="22">LangChain</text>
-              <rect class="bar-rect" style="--d:0s" x="210" y="95" width="717" height="54" rx="12" fill="url(#barLC)"/>
-              <text class="bar-val" data-count="143.4" data-decimals="1" data-suffix="k" data-delay="0" x="941" y="130" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">143.4k</text>
+              <rect class="bar-rect" style="--d:0s" x="210" y="95" width="718" height="54" rx="12" fill="url(#barLC)"/>
+              <text class="bar-val" data-count="143.5" data-decimals="1" data-suffix="k" data-delay="0" x="942" y="130" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">143.5k</text>
 
               <text x="20" y="235" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="22">LangGraph</text>
-              <rect class="bar-rect" style="--d:.12s" x="210" y="200" width="194" height="54" rx="12" fill="url(#barLG)"/>
-              <text class="bar-val" data-count="38.9" data-decimals="1" data-suffix="k" data-delay="120" x="418" y="235" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">38.9k</text>
+              <rect class="bar-rect" style="--d:.12s" x="210" y="200" width="195" height="54" rx="12" fill="url(#barLG)"/>
+              <text class="bar-val" data-count="39.0" data-decimals="1" data-suffix="k" data-delay="120" x="419" y="235" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">39.0k</text>
 
               <text x="20" y="340" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="22">DSPy</text>
               <rect class="bar-rect" style="--d:.24s" x="210" y="305" width="183" height="54" rx="12" fill="url(#barDS)"/>
-              <text class="bar-val" data-count="36.6" data-decimals="1" data-suffix="k" data-delay="240" x="407" y="340" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">36.6k</text>
+              <text class="bar-val" data-count="36.7" data-decimals="1" data-suffix="k" data-delay="240" x="407" y="340" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">36.7k</text>
 
               <text x="20" y="445" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="22">Instructor</text>
               <rect class="bar-rect" style="--d:.36s" x="210" y="410" width="68" height="54" rx="12" fill="url(#barIN)"/>
               <text class="bar-val" data-count="13.7" data-decimals="1" data-suffix="k" data-delay="360" x="292" y="445" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">13.7k</text>
 
-              <text x="210" y="535" fill="#777" font-family="DM Sans" font-size="14">GitHub stars — snapshot captured 4 August 2026</text>
+              <text x="210" y="535" fill="#777" font-family="DM Sans" font-size="14">GitHub stars — snapshot captured 6 August 2026</text>
             </svg>
           </div>
           <p class="diagram-caption"><strong>What this chart actually means:</strong> LangChain has the largest public open-source audience. LangGraph and DSPy have substantial communities of their own, while Instructor is smaller but still widely adopted. It says nothing by itself about which tool is the right technical choice.</p>
@@ -566,7 +622,7 @@ h1, h2, h3 { text-wrap: balance; }
 
         <div class="stat-strip" id="statStrip">
           <div class="stat">
-            <span class="stat-num" data-count="196.6" data-decimals="1" data-suffix="k">196.6k</span>
+            <span class="stat-num" data-count="232.9" data-decimals="1" data-suffix="k">232.9k</span>
             <span class="stat-label">combined stars across the four repos</span>
           </div>
           <div class="stat">
@@ -597,7 +653,7 @@ h1, h2, h3 { text-wrap: balance; }
         <div class="diagram-block">
           <div class="diagram-title">GitHub stars vs forks</div>
           <div class="chart-scroll" id="scatterChart">
-            <svg viewBox="0 0 1080 650" role="img" aria-label="Scatter plot of GitHub stars versus forks: LangChain 143.4 thousand stars and 23.9 thousand forks, LangGraph 38.9 thousand stars and 6.5 thousand forks, DSPy 36.6 thousand stars and 3.2 thousand forks, Instructor 13.7 thousand stars and 1.2 thousand forks.">
+            <svg viewBox="0 0 1080 650" role="img" aria-label="Scatter plot of GitHub stars versus forks: LangChain 143.5 thousand stars and 23.9 thousand forks, LangGraph 39 thousand stars and 6.6 thousand forks, DSPy 36.7 thousand stars and 3.2 thousand forks, Instructor 13.7 thousand stars and 1.2 thousand forks.">
               <line x1="105" y1="540" x2="1010" y2="540" stroke="rgba(23,23,23,.20)"/>
               <line x1="105" y1="70" x2="105" y2="540" stroke="rgba(23,23,23,.20)"/>
 
@@ -627,25 +683,25 @@ h1, h2, h3 { text-wrap: balance; }
               <text x="25" y="310" text-anchor="middle" fill="#666" font-family="DM Sans" font-size="15" transform="rotate(-90 25 310)">GitHub forks</text>
 
               <g class="sdot" style="--d:0s;--ld:.4s">
-                <circle cx="916" cy="72" r="16" fill="#3468f5" opacity=".94"/>
+                <circle cx="917" cy="72" r="16" fill="#3468f5" opacity=".94"/>
                 <text x="896" y="40" text-anchor="end" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="17">LangChain</text>
-                <text x="896" y="59" text-anchor="end" fill="#666" font-family="Roboto Mono" font-size="13">143.4k stars · 23.9k forks</text>
+                <text x="896" y="59" text-anchor="end" fill="#666" font-family="Roboto Mono" font-size="13">143.5k stars · 23.9k forks</text>
               </g>
 
               <g class="sdot" style="--d:.12s;--ld:.52s">
-                <circle cx="325" cy="413" r="14" fill="#eb8237" opacity=".94"/>
+                <circle cx="326" cy="411" r="14" fill="#eb8237" opacity=".94"/>
                 <text x="347" y="398" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="17">LangGraph</text>
-                <text x="347" y="416" fill="#666" font-family="Roboto Mono" font-size="13">38.9k · 6.5k</text>
+                <text x="347" y="416" fill="#666" font-family="Roboto Mono" font-size="13">39.0k · 6.6k</text>
               </g>
 
               <g class="sdot" style="--d:.24s;--ld:.64s">
-                <circle cx="312" cy="477" r="14" fill="#7650e6" opacity=".94"/>
+                <circle cx="312" cy="478" r="14" fill="#7650e6" opacity=".94"/>
                 <text x="334" y="462" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="17">DSPy</text>
-                <text x="334" y="480" fill="#666" font-family="Roboto Mono" font-size="13">36.6k · 3.2k</text>
+                <text x="334" y="480" fill="#666" font-family="Roboto Mono" font-size="13">36.7k · 3.2k</text>
               </g>
 
               <g class="sdot" style="--d:.36s;--ld:.76s">
-                <circle cx="183" cy="516" r="14" fill="#23956f" opacity=".94"/>
+                <circle cx="182" cy="517" r="14" fill="#23956f" opacity=".94"/>
                 <text x="205" y="502" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="17">Instructor</text>
                 <text x="205" y="520" fill="#666" font-family="Roboto Mono" font-size="13">13.7k · 1.2k</text>
               </g>
@@ -734,7 +790,7 @@ h1, h2, h3 { text-wrap: balance; }
             <div class="framework-summary">When you can measure quality and you want to improve it systematically instead of tweaking prompts by instinct, DSPy becomes interesting.</div>
           </aside>
           <div class="framework-content">
-            <p>DSPy is less about “writing the perfect prompt” and more about treating prompt-based behavior like something you can program, test, and optimize. That makes it especially attractive for teams that have evaluation data and care about squeezing more quality out of a system in a repeatable way.</p>
+            <p>DSPy is less about “writing the perfect prompt” and more about treating prompt-based behavior like something you can program, test, and optimize.<a class="xref" href="#src-2">[2]</a> That makes it especially attractive for teams that have evaluation data and care about squeezing more quality out of a system in a repeatable way.</p>
             <p>It is not the fastest path to a first prototype, but it can be incredibly valuable when your system is already important enough that manual prompt tweaking feels too fragile. In other words, DSPy shines when “good enough” is no longer enough.</p>
             <div class="callout-line" style="color: var(--purple);">Best when you can define what “better” means and actually measure it.<small>Think evaluation sets, signatures, modules, and systematic improvement.</small></div>
             <div class="split">
@@ -787,11 +843,27 @@ h1, h2, h3 { text-wrap: balance; }
       </div>
     </section>
 
+    <section class="section reveal" id="sources" aria-labelledby="sources-h">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">06</span><span class="kicker-sep">—</span>Grounding</div>
+            <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Stars and forks are live public data; everything else is documented in the projects' own papers and documentation.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><strong>Repository statistics.</strong> Star and fork counts pulled from the GitHub REST API on 6 August 2026 for <a class="xlink" href="https://github.com/langchain-ai/langchain" target="_blank" rel="noopener noreferrer">langchain-ai/langchain</a>, <a class="xlink" href="https://github.com/langchain-ai/langgraph" target="_blank" rel="noopener noreferrer">langchain-ai/langgraph</a>, <a class="xlink" href="https://github.com/stanfordnlp/dspy" target="_blank" rel="noopener noreferrer">stanfordnlp/dspy</a>, and <a class="xlink" href="https://github.com/567-labs/instructor" target="_blank" rel="noopener noreferrer">567-labs/instructor</a>. Values move daily.</li>
+          <li id="src-2"><strong>The DSPy paper.</strong> Khattab et al., "DSPy: Compiling Declarative Language Model Calls into Self-Improving Pipelines" (2023) — the research behind the optimizer mindset. <a class="xlink" href="https://arxiv.org/abs/2310.03714" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2310.03714</a></li>
+          <li id="src-3"><strong>Official documentation:</strong> <a class="xlink" href="https://python.langchain.com/" target="_blank" rel="noopener noreferrer">LangChain</a>, <a class="xlink" href="https://langchain-ai.github.io/langgraph/" target="_blank" rel="noopener noreferrer">LangGraph</a>, <a class="xlink" href="https://python.useinstructor.com/" target="_blank" rel="noopener noreferrer">Instructor</a>, and <a class="xlink" href="https://dspy.ai/" target="_blank" rel="noopener noreferrer">DSPy</a>.</li>
+        </ol>
+      </div>
+    </section>
     <div class="wrap">
             <footer>
         <div class="footer-title">AI Framework Wars</div>
         <div>A more human comparison for builders who want clarity, not hype.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Community charts use GitHub repository snapshots captured 4 August 2026. Values will change over time.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Community charts use GitHub repository snapshots captured 6 August 2026. Values will change over time.</div>
       </footer>
     </div>
   </main>

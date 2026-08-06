@@ -17,10 +17,10 @@
   "headline": "The Spectrum of Regression",
   "description": "A human, visual guide to the six fundamental regression types \u2014 Linear, Polynomial, Logistic, Ridge, Lasso, and Elastic Net \u2014 with hand-drawn charts and a 30-second chooser quiz.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -44,10 +44,7 @@ html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,
 ::-webkit-scrollbar-track { background: transparent; }
 body {
   margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif;
-  background:
-    radial-gradient(circle at 12% 8%, rgba(52,104,245,0.10), transparent 26%),
-    radial-gradient(circle at 86% 8%, rgba(118,80,230,0.10), transparent 25%),
-    linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+  background: linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
   line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
 ::selection { background: var(--ink); color: var(--paper); }
@@ -68,7 +65,7 @@ svg { max-width: 100%; height: auto; display: block; }
 .site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
 .topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
 .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
-.brand-dot { width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg, var(--blue), var(--purple)); box-shadow: 0 0 0 8px rgba(52,104,245,.08); }
+.brand-dot { width:12px; height:12px; border-radius:50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
 .nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
 .nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
 .nav a::before { content:""; position:absolute; left:-13px; top:50%; margin-top:-3px; width:6px; height:6px; border-radius:50%; background: var(--spy, var(--ink)); opacity:0; transition: opacity .2s ease; }
@@ -319,6 +316,52 @@ h1, h2, h3 { text-wrap: balance; }
   .swipe-hint { transition: none; }
 }
 
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
 /* external reference links */
 .xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
 .xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
@@ -335,7 +378,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>The Spectrum of Regression</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#overview">Overview</a><a href="#types">The six types</a><a href="#cheatsheet">Cheat sheet</a><a href="#choosing">Choosing</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#overview">Overview</a><a href="#types">The six types</a><a href="#cheatsheet">Cheat sheet</a><a href="#choosing">Choosing</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -353,8 +396,19 @@ h1, h2, h3 { text-wrap: balance; }
           <div>
             <p class="lead">Regression is the mathematical art of prediction — estimating how X impacts Y. From simple trends to complex decision boundaries, these are the <strong>six fundamental types</strong> every data scientist should master, each one a tool designed for a specific kind of chaos.</p>
             <div class="hero-links"><a href="#types">↓ <span>Meet the six types</span></a><a href="#cheatsheet">↓ <span>Skip to the cheat sheet</span></a></div>
+            <div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>9 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
           </div>
-          <div class="hero-note"><p>The charts on this page are hand-drawn teaching illustrations: small, honest datasets that show the <em>shape</em> of each idea rather than benchmark scores.</p></div>
+          <div class="hero-note"><p>The charts on this page are hand-drawn teaching illustrations: small, honest datasets that show the <em>shape</em> of each idea rather than benchmark scores.</p>
+            <div class="toc" aria-label="Table of contents">
+              <div class="toc-title">In this piece</div>
+              <ol>
+                <li><a href="#overview">The philosophy of prediction</a> — why one tool never fits</li>
+                <li><a href="#types">The six types</a> — what each one is really for</li>
+                <li><a href="#cheatsheet">The cheat sheet</a> — match problem shape to method</li>
+                <li><a href="#choosing">How I would choose</a> — a four-step workflow</li>
+                <li><a href="#sources">Sources</a> — the papers behind the methods</li>
+              </ol>
+            </div></div>
         </div>
       </section>      <section class="section reveal " id="overview" aria-labelledby="overview-h">
         <div class="section-head">
@@ -362,7 +416,7 @@ h1, h2, h3 { text-wrap: balance; }
             <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">01</span><span class="kicker-sep">—</span>Overview</div>
             <h2 id="overview-h">The philosophy of prediction<a class="anchor" href="#overview" aria-label="Link to this section">#</a></h2>
           </div>
-          <p class="body-copy">If we can mathematically define how variables relate, we gain the superpower of prediction — forecasting prices, estimating risk, scoring probabilities. But the world is rarely simple: relationships curve, data is noisy, and outliers mislead. Choosing the wrong technique is like cutting steak with a spoon.</p>
+          <p class="body-copy">If we can mathematically define how variables relate, we gain the superpower of prediction — forecasting prices, estimating risk, scoring probabilities. But the world is rarely simple: relationships curve, data is noisy, and outliers mislead. Choosing the wrong technique is like cutting steak with a spoon. The name itself is a piece of history: Francis Galton coined “regression” in 1886, watching the heights of children drift back toward the average — regression toward the mean.<a class="xref" href="#src-1">[1]</a></p>
         </div>
         <div class="mini-compare">
 <div class="mini-item"><span class="mini-dot" style="background:#3468f5"></span><strong>Linear</strong><span>A straight line for additive relationships — fast, interpretable, honest.</span></div>
@@ -386,7 +440,7 @@ h1, h2, h3 { text-wrap: balance; }
             <div class="framework-role">The Straight Line</div>
             <div class="framework-summary">The “Hello World” of machine learning — assumes the relationship between X and Y can be drawn as one honest straight line.</div>
           </aside>
-          <div class="framework-content"><p>Linear Regression is the simplest form of regression, dating back to the early 19th century. Its core assumption is elegance: the relationship between your input (X) and your output (Y) can be described by a straight line.</p>
+          <div class="framework-content"><p>Linear Regression is the simplest form of regression, built on the least-squares method Adrien-Marie Legendre published in 1805.<a class="xref" href="#src-1">[1]</a> Its core assumption is elegance: the relationship between your input (X) and your output (Y) can be described by a straight line.</p>
             <p>The algorithm finds the <strong>Line of Best Fit</strong> by minimising the Sum of Squared Errors — making the total distance between the data points and the line as small as possible. While basic, it is incredibly powerful for interpretation: the slope tells you exactly how much Y changes for every unit increase in X.</p>
             <div class="callout-line" style="color:#3468f5">Best when the relationship is genuinely additive and you need coefficients you can explain.<small>Think pricing, forecasting, and quick baselines.</small></div>
             <div class="formula">Price = (Price_per_sqft × Size) + Base_Price</div>
@@ -647,10 +701,26 @@ h1, h2, h3 { text-wrap: balance; }
       </div>
     </section>
     <div class="wrap">
+      <section class="section reveal" id="sources" aria-labelledby="sources-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span class="kicker-sep">—</span>Grounding</div>
+            <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">The methods on this page are not folklore — three of them descend from specific papers. The teaching charts are illustrative; the references are real.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><strong>Where the name comes from.</strong> Adrien-Marie Legendre published the <a class="xlink" href="https://en.wikipedia.org/wiki/Least_squares" target="_blank" rel="noopener noreferrer">least-squares method</a> in 1805; Francis Galton coined the term “regression” in 1886, studying how children's heights <a class="xlink" href="https://en.wikipedia.org/wiki/Regression_toward_the_mean" target="_blank" rel="noopener noreferrer">regress toward the mean</a>.</li>
+          <li id="src-2"><strong>Hoerl &amp; Kennard (1970) — Ridge.</strong> “Ridge Regression: Biased Estimation for Nonorthogonal Problems,” <em>Technometrics</em> 12(1). The original L2 paper. <a class="xlink" href="https://doi.org/10.1080/00401706.1970.10488634" target="_blank" rel="noopener noreferrer">DOI</a></li>
+          <li id="src-3"><strong>Tibshirani (1996) — Lasso.</strong> “Regression Shrinkage and Selection via the Lasso,” <em>JRSS B</em> 58(1). The original L1 paper. <a class="xlink" href="https://doi.org/10.1111/j.2517-6161.1996.tb02080.x" target="_blank" rel="noopener noreferrer">DOI</a></li>
+          <li id="src-4"><strong>Zou &amp; Hastie (2005) — Elastic Net.</strong> “Regularization and Variable Selection via the Elastic Net,” <em>JRSS B</em> 67(2). <a class="xlink" href="https://doi.org/10.1111/j.1467-9868.2005.00503.x" target="_blank" rel="noopener noreferrer">DOI</a></li>
+          <li id="src-5"><strong>Further study.</strong> James, Witten, Hastie &amp; Tibshirani, <a class="xlink" href="https://www.statlearning.com/" target="_blank" rel="noopener noreferrer"><em>An Introduction to Statistical Learning</em></a> (free PDF; chapters 3–6 cover this page), and the <a class="xlink" href="https://scikit-learn.org/stable/modules/linear_model.html" target="_blank" rel="noopener noreferrer">scikit-learn linear models guide</a> for the working implementation.</li>
+        </ol>
+      </section>
             <footer>
         <div class="footer-title">The Spectrum of Regression</div>
         <div>A calmer guide to the mathematics of prediction — for builders who want intuition, not just formulas.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of Ali's Data Science Series · Updated 5 August 2026. Teaching charts are illustrative, not benchmarks.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of Ali's Data Science Series · Updated 6 August 2026. Teaching charts are illustrative, not benchmarks.</div>
       </footer>
     </div>
   </main>

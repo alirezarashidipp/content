@@ -17,10 +17,10 @@
   "headline": "Agentic Coding",
   "description": "The four crafts of agentic coding: briefing, context files, verification loops, and session hygiene \u2014 plus the five failure modes that quietly waste the gains.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -325,6 +325,59 @@ h1, h2, h3 { text-wrap: balance; }
 .xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
 .section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
 .section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
+/* external reference links */
+.xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
+.xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
+.section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
+.section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+
 </style>
 </head>
 <body>
@@ -335,7 +388,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Agentic Coding</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#loop">The working loop</a><a href="#crafts">The four crafts</a><a href="#tooling">The tooling</a><a href="#failuremodes">Failure modes</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#loop">The working loop</a><a href="#crafts">The four crafts</a><a href="#tooling">The tooling</a><a href="#failuremodes">Failure modes</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -353,7 +406,7 @@ h1, h2, h3 { text-wrap: balance; }
             <p class="lead">Agentic coding tools can explore a codebase, plan a change, write the code, and run the tests. The developers getting outsized returns from them aren't the ones with better models — they're the ones with better steering.</p>
             <div class="hero-links"><a href="#loop">↓ <span>The working loop</span></a><a href="#failuremodes">↓ <span>Skip to failure modes</span></a></div>
           </div>
-          <div class="hero-note"><p>Skill in agentic coding is not typing faster prompts. It is briefing, constraining, verifying, and cleaning up — <em>four crafts nobody warns you about</em>.</p></div>
+          <div class="hero-note"><p>Skill in agentic coding is not typing faster prompts. It is briefing, constraining, verifying, and cleaning up — <em>four crafts nobody warns you about</em>.</p><div class="toc" aria-label="Table of contents"><div class="toc-title">In this piece</div><ol><li><a href="#loop">The working loop</a></li><li><a href="#crafts">The four crafts</a></li><li><a href="#tooling">The tooling</a></li><li><a href="#failuremodes">Failure modes</a></li><li><a href="#sources">Sources</a></li></ol></div><div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>7 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div></div>
         </div>
       </section>      <section class="section reveal " id="loop" aria-labelledby="loop-h">
         <div class="section-head">
@@ -467,13 +520,13 @@ h1, h2, h3 { text-wrap: balance; }
               <div class="text-block"><h4>Cut</h4><ul><li><strong>Anything obvious from the code:</strong> the agent can read.</li><li><strong>Rules it keeps ignoring:</strong> sharpen or delete — dead rules tax every session.</li><li><strong>History and rationale:</strong> that belongs in docs, not in the prompt budget.</li></ul></div>
             </div>
             <div class="callout-line" style="color:#23956f">A 400-token context file beats a 4,000-token one.<small>Every line you add is paid for in attention — in every future session, forever. AGENTS.md is emerging as the cross-tool standard: write it once, keep it honest.</small></div></div>
-        </article><article class="framework" id="loop" aria-labelledby="loop-h">
+        </article><article class="framework" id="verify" aria-labelledby="verify-h">
           <aside class="framework-aside">
-            <div class="framework-name"><span class="mark" style="background:#eb8237"></span><h3 id="loop-h">The Loop<a class="anchor" href="#loop" aria-label="Link to this section">#</a></h3></div>
+            <div class="framework-name"><span class="mark" style="background:#eb8237"></span><h3 id="verify-h">The Loop<a class="anchor" href="#verify" aria-label="Link to this section">#</a></h3></div>
             <div class="framework-role">Verification is the job</div>
             <div class="framework-summary">Agents are confident, not correct. The workflow needs gates that don't care about confidence.</div>
           </aside>
-          <div class="framework-content"><p>The failure that costs you is rarely the loud crash — it is the <strong>silent wrong answer</strong>: code that runs, looks right, and computes the wrong thing for three weeks. Verification is not a personality trait; it is infrastructure.</p>
+          <div class="framework-content"><p>The failure that costs you is rarely the loud crash — it is the <strong>silent wrong answer</strong>: code that runs, looks right, and computes the wrong thing for three weeks. Verification is not a personality trait; it is infrastructure. The same skepticism applies to your own speed: in METR’s 2025 randomized trial, experienced developers on their own mature repositories <em>felt</em> about 20% faster with AI — while the clock measured them <a class="xlink" href="https://arxiv.org/abs/2507.09089" target="_blank" rel="noopener noreferrer">19% slower</a>. Verify the loop itself, not just the output.</p>
             <div class="section-label">Three layers of gate</div><ol class="project-list"><li><strong>Automated:</strong> tests, typecheck, lint — wired as hooks that run after every agent edit, not when you remember.</li><li><strong>Structural:</strong> checkpoints before risky multi-file edits; git worktrees so parallel attempts never collide.</li><li><strong>Human:</strong> read the diff like a PR from a talented intern. If you won't review it, don't generate it.</li></ol>
             <div class="code">
             <div class="code-head"><i style="background:#db6478"></i><i style="background:#eb8237"></i><i style="background:#23956f"></i><span style="margin-left:8px">verify.sh</span></div>
@@ -525,10 +578,26 @@ npm run typecheck && npm run lint && npm test
       </div>
     </section>
     <div class="wrap">
+      <section class="section reveal" id="sources" aria-labelledby="sources-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span class="kicker-sep">—</span>Grounding</div>
+            <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">The session-failure chart is an editorial model; the productivity numbers are measured. Here is where each comes from — including the one that contradicts the hype.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><strong>Peng et al. (2023) — The Impact of AI on Developer Productivity: Evidence from GitHub Copilot.</strong> Source of the “55% faster” figure: a controlled trial, but a single contrived task (a JavaScript HTTP server), 95 developers, GitHub-authored. Real, and narrower than the headline. <a class="xlink" href="https://arxiv.org/abs/2302.06590" target="_blank" rel="noopener noreferrer">arXiv:2302.06590</a></li>
+          <li id="src-2"><strong>Becker, Rush, Barnes &amp; Rein — METR (2025).</strong> The most rigorous independent test: an RCT with 16 experienced open-source developers and 246 real tasks in their own mature repos. AI tools made them 19% slower — while they believed they were ~20% faster. The strongest evidence on this page for the verification craft. <a class="xlink" href="https://arxiv.org/abs/2507.09089" target="_blank" rel="noopener noreferrer">arXiv:2507.09089</a></li>
+          <li id="src-3"><strong>Qodo — The State of AI Code Quality 2025.</strong> Survey of 609 developers (June 2025): 82% use AI coding tools daily or weekly; 59% run three or more in parallel; teams juggling six or more report 28% shipping confidence. <a class="xlink" href="https://www.qodo.ai/reports/state-of-ai-code-quality/" target="_blank" rel="noopener noreferrer">qodo.ai</a></li>
+          <li id="src-4"><strong>DORA — State of AI-assisted Software Development 2025.</strong> ~5,000 professionals: adoption near-universal and self-reported productivity high, with organizational delivery metrics the honest benchmark. <a class="xlink" href="https://dora.dev/" target="_blank" rel="noopener noreferrer">dora.dev</a></li>
+          <li id="src-5"><strong>AGENTS.md.</strong> The cross-tool context-file standard referenced throughout: one file every agent reads, now supported across the major coding tools. <a class="xlink" href="https://agents.md/" target="_blank" rel="noopener noreferrer">agents.md</a></li>
+        </ol>
+      </section>
             <footer>
         <div class="footer-title">Agentic Coding</div>
         <div>The skill was never typing. It's judgment.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the Engineering Craft series · Updated 5 August 2026. Tool features as documented by vendors; the session-failure chart is an illustrative editorial model, and survey figures are cited inline.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the Engineering Craft series · Updated 6 August 2026. Tool features as documented by vendors; the session-failure chart is an illustrative editorial model, and survey figures are cited inline.</div>
       </footer>
     </div>
   </main>
@@ -637,7 +706,7 @@ npm run typecheck && npm run lint && npm test
     });
   }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
   document.querySelectorAll('main section[id]').forEach(function (s) { spy.observe(s); });
-  var FW_COLORS = {"crafts": {"brief": "#3468f5", "context": "#23956f", "loop": "#eb8237", "hygiene": "#7650e6"}};
+  var FW_COLORS = {"crafts": {"brief": "#3468f5", "context": "#23956f", "verify": "#eb8237", "hygiene": "#7650e6"}};
   Object.keys(FW_COLORS).forEach(function (navId) {
     var link = linkFor(navId);
     if (!link) return;

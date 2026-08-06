@@ -17,10 +17,10 @@
   "headline": "RAG Strategies",
   "description": "Every major RAG strategy explained: naive, the advanced trio (chunking, hybrid search, reranking), query transformations, GraphRAG, Self-RAG & CRAG, adaptive, and agentic \u2014 with cost, latency, and a decision tree.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -325,6 +325,59 @@ h1, h2, h3 { text-wrap: balance; }
 .xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
 .section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
 .section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
+/* external reference links */
+.xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
+.xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
+.section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
+.section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+
 </style>
 </head>
 <body>
@@ -335,7 +388,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>RAG Strategies</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#naive">The baseline</a><a href="#landscape">The landscape</a><a href="#strategies">The strategies</a><a href="#decisiontree">The decision</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#naive">The baseline</a><a href="#landscape">The landscape</a><a href="#strategies">The strategies</a><a href="#decisiontree">The decision</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -350,10 +403,10 @@ h1, h2, h3 { text-wrap: balance; }
         </h1>
         <div class="hero-grid">
           <div>
-            <p class="lead">Everyone demos naive RAG in an afternoon. Then production arrives: exact-match queries miss, chunks lack context, and the LLM confidently answers from the wrong paragraph. The distance between a demo and a product is retrieval strategy.</p>
+            <p class="lead">Everyone demos <a class="xlink" href="https://arxiv.org/abs/2005.11401" target="_blank" rel="noopener noreferrer">naive RAG</a> in an afternoon. Then production arrives: exact-match queries miss, chunks lack context, and the LLM confidently answers from the wrong paragraph. The distance between a demo and a product is retrieval strategy.</p>
             <div class="hero-links"><a href="#naive">↓ <span>Why naive RAG breaks</span></a><a href="#decisiontree">↓ <span>Skip to the decision tree</span></a></div>
           </div>
-          <div class="hero-note"><p>Six architectures, one decision: how much retrieval machinery does your problem actually need? <em>More is not better — matched is better.</em></p></div>
+          <div class="hero-note"><p>Six architectures, one decision: how much retrieval machinery does your problem actually need? <em>More is not better — matched is better.</em></p><div class="toc" aria-label="Table of contents"><div class="toc-title">In this piece</div><ol><li><a href="#naive">The baseline</a></li><li><a href="#landscape">The landscape</a></li><li><a href="#strategies">The strategies</a></li><li><a href="#decisiontree">The decision</a></li><li><a href="#sources">Sources</a></li></ol></div><div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>8 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div></div>
         </div>
       </section>      <section class="section reveal " id="naive" aria-labelledby="naive-h">
         <div class="section-head">
@@ -567,10 +620,28 @@ h1, h2, h3 { text-wrap: balance; }
       </div>
     </section>
     <div class="wrap">
+      <section class="section reveal" id="sources" aria-labelledby="sources-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span class="kicker-sep">—</span>Grounding</div>
+            <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Latency and cost figures on this page are practitioner ranges; the architecture claims below are peer-reviewed or primary. Here they are.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><strong>Lewis et al. (2020) — Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.</strong> NeurIPS 2020. The paper that named the four-step baseline: chunk, embed, retrieve, generate. <a class="xlink" href="https://arxiv.org/abs/2005.11401" target="_blank" rel="noopener noreferrer">arXiv:2005.11401</a></li>
+          <li id="src-2"><strong>Gao et al. (2023) — Retrieval-Augmented Generation for Large Language Models: A Survey.</strong> The reference taxonomy behind this page’s naive → advanced → modular progression. <a class="xlink" href="https://arxiv.org/abs/2312.10997" target="_blank" rel="noopener noreferrer">arXiv:2312.10997</a></li>
+          <li id="src-3"><strong>Gao et al. (2022) — HyDE: Precise Zero-Shot Dense Retrieval without Relevance Labels.</strong> ACL 2023. Hypothetical-document embeddings: embed the imagined answer, not the question. <a class="xlink" href="https://arxiv.org/abs/2212.10496" target="_blank" rel="noopener noreferrer">arXiv:2212.10496</a></li>
+          <li id="src-4"><strong>Asai et al. (2023) — Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection.</strong> ICLR 2024. Reflection tokens for retrieve?/relevant?/supported? — the self-checking loop. <a class="xlink" href="https://arxiv.org/abs/2310.11511" target="_blank" rel="noopener noreferrer">arXiv:2310.11511</a></li>
+          <li id="src-5"><strong>Yan et al. (2024) — Corrective Retrieval Augmented Generation (CRAG).</strong> A retrieval grader with web-search fallback when corpus confidence runs low. <a class="xlink" href="https://arxiv.org/abs/2401.15884" target="_blank" rel="noopener noreferrer">arXiv:2401.15884</a></li>
+          <li id="src-6"><strong>Edge et al. (2024) — From Local to Global: A Graph RAG Approach to Query-Focused Summarization.</strong> Microsoft Research. Entity/relationship extraction plus community summaries — the GraphRAG this page prices. <a class="xlink" href="https://arxiv.org/abs/2404.16130" target="_blank" rel="noopener noreferrer">arXiv:2404.16130</a></li>
+          <li id="src-7"><strong>Es et al. (2023) — RAGAS: Automated Evaluation of Retrieval Augmented Generation.</strong> EACL 2024 demo. The four dimensions in the stat strip: faithfulness, answer relevance, context precision and recall. <a class="xlink" href="https://arxiv.org/abs/2309.15217" target="_blank" rel="noopener noreferrer">arXiv:2309.15217</a></li>
+        </ol>
+      </section>
             <footer>
         <div class="footer-title">RAG Strategies</div>
         <div>Start with the trio; add machinery only when the evals demand it.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the AI Architecture series · Updated 5 August 2026. Latency and cost figures are practitioner ranges; the landscape chart and fix-rate stat are illustrative editorial models.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the AI Architecture series · Updated 6 August 2026. Latency and cost figures are practitioner ranges; the landscape chart and fix-rate stat are illustrative editorial models.</div>
       </footer>
     </div>
   </main>

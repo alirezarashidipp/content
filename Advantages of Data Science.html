@@ -17,8 +17,8 @@
   "headline": "Advantages of Data Science",
   "description": "The eight real advantages of data science — better decisions, efficiency, fraud detection, personalization — and the preconditions that decide whether you actually collect them.",
   "datePublished": "2026-08-05",
-  "dateModified": "2026-08-05",
-  "author": { "@type": "Person", "name": "Ali Reza" }
+  "dateModified": "2026-08-06",
+  "author": { "@type": "Person", "name": "Ali Reza Rashidi" }
 }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,10 +41,7 @@ html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,
 ::-webkit-scrollbar-track { background: transparent; }
 body {
   margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif;
-  background:
-    radial-gradient(circle at 12% 8%, rgba(52,104,245,0.10), transparent 26%),
-    radial-gradient(circle at 86% 8%, rgba(118,80,230,0.10), transparent 25%),
-    linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+  background: linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
   line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
 ::selection { background: var(--ink); color: var(--paper); }
@@ -65,7 +62,7 @@ svg { max-width: 100%; height: auto; display: block; }
 .site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
 .topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
 .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
-.brand-dot { width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg, var(--blue), var(--purple)); box-shadow: 0 0 0 8px rgba(52,104,245,.08); }
+.brand-dot { width:12px; height:12px; border-radius:50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
 .nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
 .nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
 .nav a::before { content:""; position:absolute; left:-13px; top:50%; margin-top:-3px; width:6px; height:6px; border-radius:50%; background: var(--spy, var(--ink)); opacity:0; transition: opacity .2s ease; }
@@ -316,6 +313,52 @@ h1, h2, h3 { text-wrap: balance; }
   .swipe-hint { transition: none; }
 }
 
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
 /* external reference links */
 .xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
 .xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
@@ -332,7 +375,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Advantages of Data Science</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#edge">The advantages</a><a href="#value">Reality check</a><a href="#practice">The catch</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#edge">The advantages</a><a href="#value">Reality check</a><a href="#practice">The catch</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -347,9 +390,20 @@ h1, h2, h3 { text-wrap: balance; }
         </h1>
         <div class="hero-grid">
           <p class="lead">Data science is an interdisciplinary craft &mdash; statistics, code, and domain sense &mdash; for turning raw records into decisions. The advantages are real and well documented. They are also conditional, and the conditions are where most programs quietly fail.</p>
-          <div class="hero-note">The honest version of the benefits list &mdash; each advantage with its price tag.</div>
+          <div class="hero-note">The honest version of the benefits list &mdash; each advantage with its price tag.
+            <div class="toc" aria-label="Table of contents">
+              <div class="toc-title">In this piece</div>
+              <ol>
+                <li><a href="#edge">The advantages</a> — eight, honestly priced</li>
+                <li><a href="#value">Reality check</a> — where value lands first</li>
+                <li><a href="#practice">The catch</a> — four preconditions</li>
+                <li><a href="#sources">Sources</a> — what the claims rest on</li>
+              </ol>
+            </div>
+          </div>
         </div>
         <div class="hero-links"><a href="#edge"><span>&darr;</span> The advantages</a><a href="#value"><span>&darr;</span> Reality check</a></div>
+        <div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>6 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
       </section>
 
       <section class="section reveal" id="edge" aria-labelledby="edge-h">
@@ -410,16 +464,40 @@ h1, h2, h3 { text-wrap: balance; }
         </div>
 <div class="decision-flow">
 <div class="decision-step" style="--ac:#3468f5"><span class="num">1</span><div><strong>Decide what question pays</strong><p>Start from a decision someone will actually change, not from the data you happen to have.</p></div></div>
-<div class="decision-step" style="--ac:#14a9c5"><span class="num">2</span><div><strong>Fix quality before models</strong><p>No algorithm survives wrong joins and silent nulls. Quality work is the unglamorous 80%.</p></div></div>
-<div class="decision-step" style="--ac:#23956f"><span class="num">3</span><div><strong>Ship to a workflow, not a slide</strong><p>Insight that never reaches an operational system is a very expensive PDF.</p></div></div>
+<div class="decision-step" style="--ac:#14a9c5"><span class="num">2</span><div><strong>Fix quality before models</strong><p>No algorithm survives wrong joins and silent nulls. Quality work is the unglamorous majority of the hours &mdash; surveys put data preparation anywhere from ~38% to ~80% of a project's time, depending on who counted and how.<a class="xref" href="#src-1">[1]</a></p></div></div>
+<div class="decision-step" style="--ac:#23956f"><span class="num">3</span><div><strong>Ship to a workflow, not a slide</strong><p>Insight that never reaches an operational system is a very expensive PDF. IDC's 2025 CIO Playbook found only 4 of every 33 AI proofs-of-concept reach production.<a class="xref" href="#src-2">[2]</a></p></div></div>
 <div class="decision-step" style="--ac:#db6478"><span class="num">4</span><div><strong>Measure adoption, then accuracy</strong><p>A model nobody uses has an error rate of 100%, whatever the notebook says.</p></div></div>
-</div><p class="quote-line">Data science does not create advantage. It converts organizational discipline into advantage &mdash; at a very good exchange rate.</p>
+</div><div class="quiz quiz-light" id="quiz">
+          <div class="quiz-head">
+            <div>
+              <div class="quiz-kicker">Interactive · 60 seconds</div>
+              <div class="quiz-title">Which advantage should you chase first?</div>
+            </div>
+            <div class="quiz-progress"><span class="quiz-step" id="quizStep">01 / 03</span><span class="quiz-track" aria-hidden="true"><span class="quiz-fill" id="quizFill"></span></span></div>
+          </div>
+          <div class="quiz-app"><div id="quizBody"></div><div id="quizResult"></div></div>
+          <noscript><p class="quiz-noscript">The matcher needs JavaScript &mdash; the time-to-value chart above reaches the same answer.</p></noscript>
+        </div><p class="quote-line">Data science does not create advantage. It converts organizational discipline into advantage &mdash; at a very good exchange rate.</p>
       </section>
 
+      <section class="section reveal" id="sources" aria-labelledby="sources-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span class="kicker-sep">&mdash;</span>Grounding</div>
+            <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">The chart above is an editorial synthesis; the claims underneath are not. Here is what they rest on.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><strong>How much of data science is data preparation?</strong> CrowdFlower's 2016 survey (~80 respondents, via Forbes) found 60% named cleaning and 19% collecting as their most time-consuming task; Anaconda's larger 2022 survey (n=3,493) measured ~38% of time on preparation and cleaning. Either way: the biggest block of the week. <a class="xlink" href="https://www.forbes.com/sites/gilpress/2016/03/23/data-preparation-most-time-consuming-least-enjoyable-data-science-task-survey-says/" target="_blank" rel="noopener noreferrer">Forbes coverage</a></li>
+          <li id="src-2"><strong>IDC &amp; Lenovo — CIO Playbook 2025.</strong> Global survey (n=2,920): ~88% of AI proofs-of-concept never reach production — four of 33 graduate. The cited causes are organizational readiness, not model quality. <a class="xlink" href="https://agentmodeai.com/why-88-percent-of-agentic-ai-deployments-fail/" target="_blank" rel="noopener noreferrer">Claim record</a></li>
+          <li id="src-3"><strong>Methods referenced in the advantages list:</strong> <a class="xlink" href="https://en.wikipedia.org/wiki/Anomaly_detection" target="_blank" rel="noopener noreferrer">anomaly detection</a>, <a class="xlink" href="https://en.wikipedia.org/wiki/Recommender_system" target="_blank" rel="noopener noreferrer">recommender systems</a>, and <a class="xlink" href="https://en.wikipedia.org/wiki/A/B_testing" target="_blank" rel="noopener noreferrer">A/B testing</a>.</li>
+        </ol>
+      </section>
       <footer>
         <div class="footer-title">Advantages of Data Science</div>
         <div>Benefits are real. Preconditions are realer.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the Data Fundamentals series &middot; Updated 5 August 2026. Charts marked editorial are illustrative syntheses, not measurements; cited figures link to their sources inline.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the Data Fundamentals series &middot; Updated 6 August 2026. Charts marked editorial are illustrative syntheses, not measurements; cited figures link to their sources inline.</div>
       </footer>
     </div>
   </main>
@@ -528,21 +606,7 @@ h1, h2, h3 { text-wrap: balance; }
     });
   }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
   document.querySelectorAll('main section[id]').forEach(function (s) { spy.observe(s); });
-  var FW_COLORS = {"anatomy": {"loop": "#3468f5", "worker": "#23956f", "system": "#eb8237", "governance": "#db6478"}};
-  Object.keys(FW_COLORS).forEach(function (navId) {
-    var link = linkFor(navId);
-    if (!link) return;
-    var fwSpy = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting && FW_COLORS[navId][entry.target.id]) {
-          link.style.setProperty('--spy', FW_COLORS[navId][entry.target.id]);
-        }
-      });
-    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
-    document.querySelectorAll('.framework').forEach(function (f) { fwSpy.observe(f); });
-  });
-
-  var QUIZ = {"title": "What do you actually need?", "noscript": "This matcher needs JavaScript \u2014 the comparison table above reaches the same answer.", "resultKicker": "Start here", "order": ["agent", "agentic", "neither"], "fw": {"agent": {"name": "An AI agent", "color": "#3468f5", "anchor": "#worker", "linkText": "Read the task-worker section", "why": "A defined task, executed reliably, inside rules you control.", "pairing": "Ship one agent for one job well. Add orchestration only when jobs start chaining."}, "agentic": {"name": "Agentic AI", "color": "#eb8237", "anchor": "#system", "linkText": "Read the system section", "why": "An open-ended objective where the path can't be pre-scripted.", "pairing": "Budget for oversight from day one: logs, checkpoints, evals, and a kill switch."}, "neither": {"name": "Neither \u2014 yet", "color": "#5b6b7a", "anchor": "#distinction", "linkText": "Re-read the distinction", "why": "You need a better answer, not an autonomous worker.", "pairing": "A well-prompted model or a plain RAG pipeline beats an agent you don't need."}}, "questions": [{"q": "What shape is your problem?", "answers": [{"t": "A recurring task with clear rules", "f": "agent"}, {"t": "An open-ended process with shifting context", "f": "agentic"}, {"t": "Honestly, I just want better answers from a model", "f": "neither"}]}, {"q": "Who should decide the next step?", "answers": [{"t": "Rules and workflows we write ourselves", "f": "agent"}, {"t": "The system figures it out toward the goal", "f": "agentic"}, {"t": "A human, every time \u2014 for now", "f": "neither"}]}, {"q": "Your tolerance for autonomy?", "answers": [{"t": "Approve each consequential action", "f": "agent"}, {"t": "Hands-off inside well-tested guardrails", "f": "agentic"}, {"t": "Zero \u2014 suggestions only, humans execute", "f": "neither"}]}]};
+  var QUIZ = {"title": "Which advantage should you chase first?", "noscript": "The matcher needs JavaScript — the chart above reaches the same answer.", "resultKicker": "Start here", "order": ["bi", "fc", "pers", "fraud"], "fw": {"bi": {"name": "Reporting & BI", "color": "#3468f5", "anchor": "#value", "linkText": "See why it pays fastest", "why": "Your fastest honest win: clean tables that already exist, and answers nobody has to wait for.", "pairing": "Ship one trusted dashboard for one recurring decision. Accuracy debates get easier once everyone sees the same numbers."}, "fc": {"name": "Forecasting", "color": "#14a9c5", "anchor": "#value", "linkText": "See the time-to-value chart", "why": "You have history with real seasonality — enough signal to plan inventory, staffing, or budget instead of guessing.", "pairing": "Give it a quarter of honest back-testing before the plan depends on it."}, "pers": {"name": "Personalization", "color": "#23956f", "anchor": "#edge", "linkText": "Re-read the advantages", "why": "You have the raw material — clickstream and user events — and a churn question worth answering.", "pairing": "Budget for A/B discipline: personalization without experiments is astrology with better tooling."}, "fraud": {"name": "Fraud & risk detection", "color": "#db6478", "anchor": "#edge", "linkText": "Re-read the advantages", "why": "Losses are accruing and reviewers cannot scale — the clearest ROI case in the catalogue.", "pairing": "Check your labels first: a fraud model is only as good as the history of confirmed cases it learns from."}}, "questions": [{"q": "What does your data look like today?", "answers": [{"t": "Clean tables, mostly current — we just can't see them", "f": "bi"}, {"t": "Years of history with real seasonality", "f": "fc"}, {"t": "Lots of clickstream and user events", "f": "pers"}, {"t": "Labeled examples of the bad thing happening", "f": "fraud"}]}, {"q": "How soon does the value need to show up?", "answers": [{"t": "Weeks — we need a visible win", "f": "bi"}, {"t": "A quarter is fine, if it's trusted", "f": "fc"}, {"t": "We can run experiments until it clicks", "f": "pers"}, {"t": "Yesterday — the losses are accruing", "f": "fraud"}]}, {"q": "What's the real bottleneck?", "answers": [{"t": "Nobody agrees on the numbers", "f": "bi"}, {"t": "Planning is structured guesswork", "f": "fc"}, {"t": "Customers leave and we don't know why", "f": "pers"}, {"t": "Human reviewers can't catch everything", "f": "fraud"}]}]};
   var quizBody = document.getElementById('quizBody');
   var quizResult = document.getElementById('quizResult');
   var quizStepEl = document.getElementById('quizStep');

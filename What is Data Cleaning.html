@@ -17,10 +17,10 @@
   "headline": "Data Cleaning",
   "description": "Data cleaning explained: the six core operations \u2014 profiling, deduplication, missing values, standardization, outliers, validation \u2014 plus the tools and the discipline that keeps data trustworthy.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -325,6 +325,59 @@ h1, h2, h3 { text-wrap: balance; }
 .xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
 .section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
 .section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
+/* external reference links */
+.xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
+.xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
+.section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
+.section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+
 </style>
 </head>
 <body>
@@ -335,7 +388,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Data Cleaning</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#reality">The reality</a><a href="#operations">The operations</a><a href="#tools">The tools</a><a href="#discipline">The discipline</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#reality">The reality</a><a href="#operations">The operations</a><a href="#tools">The tools</a><a href="#discipline">The discipline</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -353,7 +406,19 @@ h1, h2, h3 { text-wrap: balance; }
             <p class="lead">Before the model, before the dashboard, before the decision — someone has to fix the data. Data cleaning is that work: finding everything wrong with a dataset and making it worthy of trust.</p>
             <div class="hero-links"><a href="#operations">↓ <span>See the six operations</span></a><a href="#discipline">↓ <span>Skip to the discipline</span></a></div>
           </div>
-          <div class="hero-note"><p>The least glamorous stage of data work, and the one that decides whether everything downstream is worth anything. <em>No model outperforms its data.</em></p></div>
+          <div class="hero-note"><p>The least glamorous stage of data work, and the one that decides whether everything downstream is worth anything. <em>No model outperforms its data.</em></p>
+<nav class="toc" aria-label="In this article">
+<div class="toc-head"><span class="toc-kicker">In this article</span><span class="toc-count">5 sections</span></div>
+<div class="toc-grid">
+<a href="#reality"><span class="toc-num">01</span><span><span class="toc-t">The reality</span><span class="toc-d">The unglamorous majority: where data teams' hours actually go, with the survey numbers.</span></span></a>
+<a href="#operations"><span class="toc-num">02</span><span><span class="toc-t">The operations</span><span class="toc-d">Six core operations that cover nearly every cleaning job you will ever meet.</span></span></a>
+<a href="#tools"><span class="toc-num">03</span><span><span class="toc-t">The tools</span><span class="toc-d">Pick your weapon: pandas, SQL, OpenRefine, validation frameworks, no-code, AI-assisted.</span></span></a>
+<a href="#discipline"><span class="toc-num">04</span><span><span class="toc-t">The discipline</span><span class="toc-d">Cleaning is a discipline, not a phase — four rules that make it cheap to repeat.</span></span></a>
+<a href="#sources"><span class="toc-num">05</span><span><span class="toc-t">Sources</span><span class="toc-d">The surveys behind the stats and the paper behind tidy data.</span></span></a>
+</div>
+</nav>
+<div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>6 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
+</div>
         </div>
       </section>      <section class="section reveal " id="reality" aria-labelledby="reality-h">
         <div class="section-head">
@@ -536,11 +601,25 @@ suspect = df[~df[<span class="st">"amount"</span>].between(*fence)]  <span class
 </div><p class="combo-line"><strong>The real deliverable:</strong> not a clean dataset — a repeatable way to get one.</p>
       </div>
     </section>
+    <section id="sources" class="section reveal" aria-labelledby="sources-h">
+      <div class="wrap">
+        <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span class="kicker-sep">—</span>Grounding</div>
+        <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+        <p class="body-copy">The survey figures quoted inline come from these reports; the donut chart and the 80% time share are illustrative composites, as marked.</p>
+        <ol class="sources-list">
+          <li id="src-1"><strong>Alteryx (February 2025).</strong> "The 2025 State of Data Analysts in the Age of AI." Survey of 1,400 data, IT and operations analysts across five industries (fieldwork by Coleman Parkes, Nov–Dec 2024): 76% still use spreadsheets as their primary tool for cleaning and preparing data; 45% spend more than six hours a week on data cleansing. <a class="xlink" href="https://www.alteryx.com/about-us/newsroom/press-release/new-research-reveals-that-ai-brings-productivity-gains-but-reliance-on-spreadsheets-puts-data-quality-at-risk" target="_blank" rel="noopener noreferrer">alteryx.com — press release</a></li>
+          <li id="src-2"><strong>IBM Institute for Business Value (2025), via IBM Think.</strong> "The True Cost of Poor Data Quality." 43% of chief operations officers identify data quality issues as their most significant data priority; over a quarter of organizations estimate losses above USD 5 million a year from poor data quality. <a class="xlink" href="https://www.ibm.com/think/insights/cost-of-poor-data-quality" target="_blank" rel="noopener noreferrer">ibm.com/think/insights/cost-of-poor-data-quality</a></li>
+          <li id="src-3"><strong>Gil Press, Forbes (2016), reporting the CrowdFlower Data Science Survey.</strong> "Cleaning Big Data: Most Time-Consuming, Least Enjoyable Data Science Task." 60% of data scientists' time goes to cleaning and organizing data, 19% to collecting data sets — and cleaning is the least enjoyed part of the job. <a class="xlink" href="https://www.forbes.com/sites/gilpress/2016/03/23/data-preparation-most-time-consuming-least-enjoyable-data-science-task-survey-says/" target="_blank" rel="noopener noreferrer">forbes.com</a></li>
+          <li id="src-4"><strong>Wickham, H. (2014).</strong> "Tidy Data." <em>Journal of Statistical Software</em>, 59(10). The philosophy behind the standardize step: each variable a column, each observation a row — most cleaning is getting to that. <a class="xlink" href="https://doi.org/10.18637/jss.v059.i10" target="_blank" rel="noopener noreferrer">doi.org/10.18637/jss.v059.i10</a></li>
+          <li id="src-5"><strong>OpenRefine.</strong> The free, open-source desktop tool for clustering near-duplicate values and reconciling messy columns, as listed in the tools table. <a class="xlink" href="https://openrefine.org/" target="_blank" rel="noopener noreferrer">openrefine.org</a></li>
+        </ol>
+      </div>
+    </section>
     <div class="wrap">
             <footer>
         <div class="footer-title">Data Cleaning</div>
         <div>No model outperforms its data.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the Data Fundamentals series · Updated 5 August 2026. The issue-mix chart and time share are illustrative; survey figures are cited inline.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the Data Fundamentals series · Updated 6 August 2026. The issue-mix chart and time share are illustrative; survey figures are cited inline.</div>
       </footer>
     </div>
   </main>

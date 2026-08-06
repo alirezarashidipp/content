@@ -17,8 +17,8 @@
   "headline": "Statistical Significance",
   "description": "How the p-value became psychology's publication gate, what p < 0.05 actually means, the replication crisis it fed, and what good statistical practice looks like now.",
   "datePublished": "2026-08-05",
-  "dateModified": "2026-08-05",
-  "author": { "@type": "Person", "name": "Ali Reza" }
+  "dateModified": "2026-08-06",
+  "author": { "@type": "Person", "name": "Ali Reza Rashidi" }
 }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -322,6 +322,59 @@ h1, h2, h3 { text-wrap: balance; }
 .xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
 .section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
 .section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
+/* external reference links */
+.xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
+.xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
+.section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
+.section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+
 </style>
 </head>
 <body>
@@ -332,7 +385,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Statistical Significance</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#origin">The origin</a><a href="#meaning">The meaning</a><a href="#fallout">The fallout</a><a href="#repair">The repair</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#origin">The origin</a><a href="#meaning">The meaning</a><a href="#fallout">The fallout</a><a href="#repair">The repair</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -347,7 +400,7 @@ h1, h2, h3 { text-wrap: balance; }
         </h1>
         <div class="hero-grid">
           <p class="lead">A convenience threshold from the 1920s became the gatekeeper of an entire discipline &mdash; and then the centerpiece of its crisis. This is the story of p &lt; 0.05: what it means, how it broke psychology, and how the repair looks.</p>
-          <div class="hero-note">Origin, meaning, fallout, repair &mdash; the honest biography of the p-value.</div>
+          <div class="hero-note">Origin, meaning, fallout, repair &mdash; the honest biography of the p-value.<div class="toc" aria-label="Table of contents"><div class="toc-title">In this piece</div><ol><li><a href="#origin">The origin</a></li><li><a href="#meaning">The meaning</a></li><li><a href="#fallout">The fallout</a></li><li><a href="#repair">The repair</a></li><li><a href="#sources">Sources</a></li></ol></div><div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>5 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div></div>
         </div>
         <div class="hero-links"><a href="#origin"><span>&darr;</span> The origin</a><a href="#meaning"><span>&darr;</span> The meaning</a></div>
       </section>
@@ -404,12 +457,45 @@ h1, h2, h3 { text-wrap: balance; }
 <div class="decision-step" style="--ac:#7650e6"><span class="num">3</span><div><strong>Make risky predictions</strong><p>Theories earn credibility from specific forecasts that could fail, not from piles of rejected nulls.</p></div></div>
 <div class="decision-step" style="--ac:#14a9c5"><span class="num">4</span><div><strong>Treat 0.05 as a convention, not a verdict</strong><p>A screening heuristic in Fisher&rsquo;s hands; a decision rule only when paired with judgment, power, and context.</p></div></div>
 </div><p class="quote-line">Statistical significance tells you the world is probably not exactly one specific way. Science needs to know how the world <em>is</em>.</p>
+        <div class="quiz quiz-light" role="group" aria-labelledby="quizTitle">
+          <div class="quiz-head">
+            <h3 class="quiz-title" id="quizTitle">Which repair do you need?</h3>
+            <div class="quiz-progress" aria-hidden="true">
+              <span class="quiz-step" id="quizStep">01 / 03</span>
+              <span class="quiz-track"><span class="quiz-fill" id="quizFill"></span></span>
+            </div>
+          </div>
+          <noscript><p class="quiz-noscript">This matcher needs JavaScript &mdash; the four repairs above reach the same answer.</p></noscript>
+          <div class="quiz-app">
+            <div class="quiz-body" id="quizBody"></div>
+            <div class="quiz-result" id="quizResult" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="sources" aria-labelledby="sources-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span class="kicker-sep">&mdash;</span>Grounding</div>
+            <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Every number on this page traces to a primary source. Here they are.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><strong>Fisher, R.A. (1925) &mdash; <em>Statistical Methods for Research Workers</em>.</strong> Where the informal 5% screening convention comes from; Fisher never intended it as a publication gate. Oliver &amp; Boyd. <a class="xlink" href="https://en.wikipedia.org/wiki/Statistical_Methods_for_Research_Workers" target="_blank" rel="noopener noreferrer">Overview</a></li>
+          <li id="src-2"><strong>Wasserstein &amp; Lazar (2016) &mdash; The ASA&rsquo;s Statement on p-Values.</strong> The American Statistician, 70(2):129&ndash;133. The unprecedented formal warning referenced in Section 02. <a class="xlink" href="https://doi.org/10.1080/00031305.2016.1154108" target="_blank" rel="noopener noreferrer">doi.org</a></li>
+          <li id="src-3"><strong>Wasserstein, Schirm &amp; Lazar (2019) &mdash; Moving to a World Beyond &ldquo;p &lt; 0.05&rdquo;.</strong> The American Statistician, 73(sup1):1&ndash;19. The follow-up: don&rsquo;t say &ldquo;statistically significant&rdquo; at all. <a class="xlink" href="https://doi.org/10.1080/00031305.2019.1583913" target="_blank" rel="noopener noreferrer">doi.org</a></li>
+          <li id="src-4"><strong>Open Science Collaboration (2015) &mdash; Estimating the reproducibility of psychological science.</strong> Science, 349(6251). 100 studies re-run; 97% of originals were significant, only 36% of replications were &mdash; the ~36% figure in Section 03. <a class="xlink" href="https://doi.org/10.1126/science.aac4716" target="_blank" rel="noopener noreferrer">doi.org</a></li>
+          <li id="src-5"><strong>Simmons, Nelson &amp; Simonsohn (2011) &mdash; False-Positive Psychology.</strong> Psychological Science, 22(11):1359&ndash;1366. The paper that showed how researcher degrees of freedom make p-hacking almost effortless. <a class="xlink" href="https://doi.org/10.1177/0956797611417632" target="_blank" rel="noopener noreferrer">doi.org</a></li>
+          <li id="src-6"><strong>Amrhein, Greenland &amp; McShane (2019) &mdash; Scientists rise up against statistical significance.</strong> Nature, 567:305&ndash;307, signed by 800+ researchers. The case for retiring the dichotomy. <a class="xlink" href="https://doi.org/10.1038/d41586-019-00857-9" target="_blank" rel="noopener noreferrer">doi.org</a></li>
+          <li id="src-7"><strong>Center for Open Science &mdash; Registered Reports.</strong> The preregistration venue named in repair step 2: peer review on design, before results exist. <a class="xlink" href="https://www.cos.io/initiatives/registered-reports" target="_blank" rel="noopener noreferrer">cos.io</a></li>
+        </ol>
       </section>
 
       <footer>
         <div class="footer-title">Statistical Significance</div>
         <div>Significance was never the same thing as truth.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the Science &amp; Method series &middot; Updated 5 August 2026. Charts marked editorial are illustrative syntheses, not measurements; cited figures link to their sources inline.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the Science &amp; Method series &middot; Updated 6 August 2026. Charts marked editorial are illustrative syntheses, not measurements; cited figures link to their sources inline.</div>
       </footer>
     </div>
   </main>
@@ -532,7 +618,7 @@ h1, h2, h3 { text-wrap: balance; }
     document.querySelectorAll('.framework').forEach(function (f) { fwSpy.observe(f); });
   });
 
-  var QUIZ = {"title": "What do you actually need?", "noscript": "This matcher needs JavaScript \u2014 the comparison table above reaches the same answer.", "resultKicker": "Start here", "order": ["agent", "agentic", "neither"], "fw": {"agent": {"name": "An AI agent", "color": "#3468f5", "anchor": "#worker", "linkText": "Read the task-worker section", "why": "A defined task, executed reliably, inside rules you control.", "pairing": "Ship one agent for one job well. Add orchestration only when jobs start chaining."}, "agentic": {"name": "Agentic AI", "color": "#eb8237", "anchor": "#system", "linkText": "Read the system section", "why": "An open-ended objective where the path can't be pre-scripted.", "pairing": "Budget for oversight from day one: logs, checkpoints, evals, and a kill switch."}, "neither": {"name": "Neither \u2014 yet", "color": "#5b6b7a", "anchor": "#distinction", "linkText": "Re-read the distinction", "why": "You need a better answer, not an autonomous worker.", "pairing": "A well-prompted model or a plain RAG pipeline beats an agent you don't need."}}, "questions": [{"q": "What shape is your problem?", "answers": [{"t": "A recurring task with clear rules", "f": "agent"}, {"t": "An open-ended process with shifting context", "f": "agentic"}, {"t": "Honestly, I just want better answers from a model", "f": "neither"}]}, {"q": "Who should decide the next step?", "answers": [{"t": "Rules and workflows we write ourselves", "f": "agent"}, {"t": "The system figures it out toward the goal", "f": "agentic"}, {"t": "A human, every time \u2014 for now", "f": "neither"}]}, {"q": "Your tolerance for autonomy?", "answers": [{"t": "Approve each consequential action", "f": "agent"}, {"t": "Hands-off inside well-tested guardrails", "f": "agentic"}, {"t": "Zero \u2014 suggestions only, humans execute", "f": "neither"}]}]};
+  var QUIZ = {"title": "Which repair do you need?", "noscript": "This matcher needs JavaScript \u2014 the four repairs above reach the same answer.", "resultKicker": "Your first repair", "order": ["effect", "prereg", "risky", "convention"], "fw": {"effect": {"name": "Report effect sizes & intervals", "color": "#23956f", "anchor": "#repair", "linkText": "Read the repair", "why": "Your result may be real but mis-sized. Stars and thresholds hide magnitude; an estimate with its interval shows it.", "pairing": "Lead every finding with the estimate and its uncertainty \u2014 significance becomes a footnote."}, "prereg": {"name": "Preregister the analysis", "color": "#3468f5", "anchor": "#repair", "linkText": "Read the repair", "why": "Your risk is flexibility: enough analyst degrees of freedom can manufacture p < 0.05 from noise \u2014 that is p-hacking.", "pairing": "Timestamp the hypotheses and the analysis plan before touching outcome data \u2014 Registered Reports if possible."}, "risky": {"name": "Make risky predictions", "color": "#7650e6", "anchor": "#repair", "linkText": "Read the repair", "why": "A theory that explains everything predicts nothing. Rejected nulls cannot tell strong theories from vague ones.", "pairing": "Derive one specific, falsifiable forecast per study \u2014 and report it even when it fails."}, "convention": {"name": "Demote the 0.05 line", "color": "#14a9c5", "anchor": "#repair", "linkText": "Read the repair", "why": "Treating a convenience threshold as a verdict is exactly the misuse the ASA warned about in 2016.", "pairing": "Report the p-value as one statistic among many \u2014 effect, interval, power, and context beside it."}}, "questions": [{"q": "Your study returns p = 0.047. First reaction?", "answers": [{"t": "Significant \u2014 write it up", "f": "convention"}, {"t": "What is the effect size and its interval?", "f": "effect"}, {"t": "Was this exact test the one I planned?", "f": "prereg"}, {"t": "Did my theory predict this, specifically?", "f": "risky"}]}, {"q": "What leads your results section today?", "answers": [{"t": "Stars and threshold crossings", "f": "convention"}, {"t": "Estimates with uncertainty", "f": "effect"}, {"t": "A timestamped analysis plan", "f": "prereg"}, {"t": "A forecast that could have failed", "f": "risky"}]}, {"q": "What worries you most about published results?", "answers": [{"t": "Good work missing the publication gate", "f": "convention"}, {"t": "Tiny effects inflated into headlines", "f": "effect"}, {"t": "Hypotheses written after the results (HARKing)", "f": "prereg"}, {"t": "Theories flexible enough to explain anything", "f": "risky"}]}]};
   var quizBody = document.getElementById('quizBody');
   var quizResult = document.getElementById('quizResult');
   var quizStepEl = document.getElementById('quizStep');

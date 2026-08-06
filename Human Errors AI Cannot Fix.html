@@ -17,10 +17,10 @@
   "headline": "The Unfixable",
   "description": "AI is not a truth machine. A calm tour of the five flaws no model can fix \u2014 bias, context blindness, data quality, the ethics gap, and the case for human-in-the-loop systems.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -44,10 +44,7 @@ html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,
 ::-webkit-scrollbar-track { background: transparent; }
 body {
   margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif;
-  background:
-    radial-gradient(circle at 12% 8%, rgba(52,104,245,0.10), transparent 26%),
-    radial-gradient(circle at 86% 8%, rgba(118,80,230,0.10), transparent 25%),
-    linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+  background: linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
   line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
 ::selection { background: var(--ink); color: var(--paper); }
@@ -68,7 +65,7 @@ svg { max-width: 100%; height: auto; display: block; }
 .site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
 .topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
 .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
-.brand-dot { width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg, var(--blue), var(--purple)); box-shadow: 0 0 0 8px rgba(52,104,245,.08); }
+.brand-dot { width:12px; height:12px; border-radius:50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
 .nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
 .nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
 .nav a::before { content:""; position:absolute; left:-13px; top:50%; margin-top:-3px; width:6px; height:6px; border-radius:50%; background: var(--spy, var(--ink)); opacity:0; transition: opacity .2s ease; }
@@ -319,6 +316,52 @@ h1, h2, h3 { text-wrap: balance; }
   .swipe-hint { transition: none; }
 }
 
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
 /* external reference links */
 .xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
 .xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
@@ -335,7 +378,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>The Unfixable</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#overview">Overview</a><a href="#gaps">The five gaps</a><a href="#verdict">The verdict</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#overview">Overview</a><a href="#gaps">The five gaps</a><a href="#verdict">The verdict</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -353,8 +396,18 @@ h1, h2, h3 { text-wrap: balance; }
           <div>
             <p class="lead">In the frenzy of the AI gold rush, a dangerous narrative has taken hold: that AI is a truth machine — that because an output is mathematical, it must be objective. It is not. These are the five flaws no architecture can fix.</p>
             <div class="hero-links"><a href="#gaps">↓ <span>See the five gaps</span></a><a href="#verdict">↓ <span>Skip to the verdict</span></a></div>
+            <div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>8 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
           </div>
-          <div class="hero-note"><p>AI engines are engines of prediction trained on human history. And history is messy. <em>We risk creating systems that are highly confident, mathematically precise, and catastrophically wrong.</em></p></div>
+          <div class="hero-note"><p>AI engines are engines of prediction trained on human history. And history is messy. <em>We risk creating systems that are highly confident, mathematically precise, and catastrophically wrong.</em></p>
+            <div class="toc" aria-label="Table of contents">
+              <div class="toc-title">In this piece</div>
+              <ol>
+                <li><a href="#overview">Overview</a> — the myth of the magic wand</li>
+                <li><a href="#gaps">The five gaps</a> — bias, context, quality, ethics, the future</li>
+                <li><a href="#verdict">The verdict</a> — humans required</li>
+                <li><a href="#sources">Sources</a> — what the claims rest on</li>
+              </ol>
+            </div></div>
         </div>
       </section>      <section class="section reveal " id="overview" aria-labelledby="overview-h">
         <div class="section-head">
@@ -417,7 +470,7 @@ h1, h2, h3 { text-wrap: balance; }
           </aside>
           <div class="framework-content"><p>An AI trained on arrest records doesn't predict crime; it predicts <strong>arrest patterns</strong>. Feed an engine human history and you get a mirror that reflects every <a class="xlink" href="https://en.wikipedia.org/wiki/Cognitive_bias" target="_blank" rel="noopener noreferrer">bias</a>, prejudice, and logical fallacy we have committed for centuries.</p>
             <div class="section-label">📦 Case study — Amazon's hiring engine</div>
-            <p><strong>The goal:</strong> automate finding top talent by reviewing resumes. <strong>The failure:</strong> the AI taught itself that male candidates were preferable, because most past successful resumes came from men. It penalized resumes containing the word “women's” — as in “women's chess captain.” The project was scrapped, and it remains the canonical lesson a decade later.</p>
+            <p><strong>The goal:</strong> automate finding top talent by reviewing resumes. <strong>The failure:</strong> the AI taught itself that male candidates were preferable, because most past successful resumes came from men. It penalized resumes containing the word “women's” — as in “women's chess captain.” The project was scrapped, and it remains the canonical lesson a decade later.<a class="xref" href="#src-1">[1]</a></p>
             <div class="diagram-block">
           <div class="diagram-title">The bias amplification loop</div>
           <div class="chart-scroll" id="biasLoop" data-chart="bars"><svg viewBox="0 0 1080 470" role="img" aria-label="Bar chart: bias grows from 20 percent in raw data to 95 percent in output as it passes through the pipeline.">
@@ -474,7 +527,7 @@ h1, h2, h3 { text-wrap: balance; }
           </aside>
           <div class="framework-content"><p>There is a belief that AI tolerates sloppy inputs. False. AI is a <strong>multiplier</strong>: feed it flawed data and it hallucinates connections that look like insight.</p>
             <div class="section-label">📉 The inventory nightmare</div>
-            <p>A major retailer used AI to forecast demand, while staff frequently forgot to scan “shrinkage” (theft and damage) out of the system.</p>
+            <p>A major retailer — name withheld, but the pattern is familiar to anyone who has worked supply chain — used AI to forecast demand, while staff frequently forgot to scan “shrinkage” (theft and damage) out of the system.</p>
             <div class="decision-flow">
 <div class="decision-step" style="--ac:#7650e6"><div class="num">1</div><div><strong>The data says: 100 units in stock. Reality: 0.</strong><p>The system trusted the database over the shelf.</p></div></div>
 <div class="decision-step" style="--ac:#7650e6"><div class="num">2</div><div><strong>The AI stops ordering — “we have plenty.”</strong><p>A perfectly logical decision on perfectly wrong data.</p></div></div>
@@ -492,6 +545,7 @@ h1, h2, h3 { text-wrap: balance; }
               <div class="text-block"><h4>Stay straight</h4><ul><li><strong>Hitting the pedestrian</strong> — who never agreed to be part of the calculation.</li></ul></div>
             </div>
             <p>This is not an engineering problem; it is a moral one. Who decides the weighting — the engineer, the corporation, the government? Someone does, explicitly or by default.</p>
+            <p>And the public does not agree on the answer. MIT's Moral Machine experiment gathered 40 million decisions from millions of people in 233 countries and territories — the "right" choice shifted measurably with culture, age, and income.<a class="xref" href="#src-2">[2]</a></p>
             <div class="callout-line" style="color:#3468f5">Every automated decision has an author. Pretending otherwise is also a decision.<small>Write the values down before you ship the system.</small></div></div>
         </article><article class="framework" id="future" aria-labelledby="future-h">
           <aside class="framework-aside">
@@ -555,11 +609,25 @@ h1, h2, h3 { text-wrap: balance; }
 </div><p class="combo-line"><strong>The honest position:</strong> AI is the most powerful tool we have ever built for repeating ourselves. Use it to amplify what is worth repeating.</p>
       </div>
     </section>
+    <section class="section reveal" id="sources" aria-labelledby="sources-h">
+      <div class="section-head">
+        <div>
+          <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span class="kicker-sep">—</span>Grounding</div>
+          <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+        </div>
+        <p class="body-copy">The charts in this piece are illustrative. The claims underneath are not — here is what they rest on.</p>
+      </div>
+      <ol class="sources-list">
+        <li id="src-1"><strong>Amazon's scrapped hiring engine.</strong> Reuters' 2018 investigation: the model penalized resumes containing the word "women's" and was trained on a decade of mostly male hiring patterns. The project was abandoned. <a class="xlink" href="https://www.reuters.com/article/us-amazon-com-jobs-automation-insight/amazon-scraps-secret-ai-recruiting-tool-that-showed-bias-against-women-idUSKCN1MK08G" target="_blank" rel="noopener noreferrer">Reuters, October 2018</a></li>
+        <li id="src-2"><strong>The Moral Machine experiment.</strong> Awad et al., <em>Nature</em> 563:59–64 (2018) — 40 million moral decisions from millions of visitors across 233 countries and territories, showing strong cross-cultural disagreement on machine ethics. <a class="xlink" href="https://doi.org/10.1038/s41586-018-0637-6" target="_blank" rel="noopener noreferrer">doi.org/10.1038/s41586-018-0637-6</a></li>
+        <li id="src-3"><strong>Further reading:</strong> Cathy O'Neil, <em>Weapons of Math Destruction</em> (2016) — the canonical account of how biased, unauditable models scale human error. <a class="xlink" href="https://en.wikipedia.org/wiki/Weapons_of_Math_Destruction" target="_blank" rel="noopener noreferrer">Overview</a></li>
+      </ol>
+    </section>
     <div class="wrap">
             <footer>
         <div class="footer-title">The Unfixable</div>
         <div>An ethics brief for builders who would rather be honest than impressed.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the AI Ethics Series · Updated 5 August 2026. Case studies documented in public reporting; charts are illustrative.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the AI Ethics Series · Updated 6 August 2026. The Amazon case is documented in public reporting (see Sources); the inventory story is a composite of common supply-chain failures; charts are illustrative.</div>
       </footer>
     </div>
   </main>

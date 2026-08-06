@@ -17,10 +17,10 @@
   "headline": "The Curious Machine",
   "description": "Active learning lets the model choose which data is worth labeling \u2014 reaching the same accuracy with a fraction of the budget. Uncertainty sampling, decision boundaries, and real ROI.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -325,6 +325,59 @@ h1, h2, h3 { text-wrap: balance; }
 .xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
 .section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
 .section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
+/* external reference links */
+.xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
+.xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
+.section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
+.section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+
 </style>
 </head>
 <body>
@@ -335,7 +388,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>The Curious Machine</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#problem">The problem</a><a href="#ideas">The ideas</a><a href="#choosing">Choosing</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#problem">The problem</a><a href="#ideas">The ideas</a><a href="#choosing">Choosing</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -353,7 +406,18 @@ h1, h2, h3 { text-wrap: balance; }
             <p class="lead">Active learning is the counterintuitive art of training on less data — by letting the model choose which data is worth a human's time. It is how you get clinical accuracy on a startup budget.</p>
             <div class="hero-links"><a href="#ideas">↓ <span>See the ideas</span></a><a href="#roi">↓ <span>Skip to the ROI</span></a></div>
           </div>
-          <div class="hero-note"><p>We are leaving the era of Big Data and entering the era of <em>Smart Data</em> — where the quality of each label matters far more than the quantity.</p></div>
+          <div class="hero-note"><p>We are leaving the era of Big Data and entering the era of <em>Smart Data</em> — where the quality of each label matters far more than the quantity.</p>
+<nav class="toc" aria-label="In this article">
+<div class="toc-head"><span class="toc-kicker">In this article</span><span class="toc-count">4 sections</span></div>
+<div class="toc-grid">
+<a href="#problem"><span class="toc-num">01</span><span><span class="toc-t">The problem</span><span class="toc-d">The "dumb student" problem: why labeling everything wastes the expert's time.</span></span></a>
+<a href="#ideas"><span class="toc-num">02</span><span><span class="toc-t">The ideas</span><span class="toc-d">Measure confusion, label the boundary, go where experts are expensive, bank the difference.</span></span></a>
+<a href="#choosing"><span class="toc-num">03</span><span><span class="toc-t">Choosing</span><span class="toc-d">When active learning pays, and when passive labeling is honestly fine.</span></span></a>
+<a href="#sources"><span class="toc-num">04</span><span><span class="toc-t">Sources</span><span class="toc-d">The canonical papers behind uncertainty sampling, from 1994 to the deep era.</span></span></a>
+</div>
+</nav>
+<div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>6 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
+</div>
         </div>
       </section>      <section class="section reveal " id="problem" aria-labelledby="problem-h">
         <div class="section-head">
@@ -549,11 +613,24 @@ h1, h2, h3 { text-wrap: balance; }
 </div><p class="combo-line"><strong>The bottom line:</strong> stop asking “how much data can we label?” and start asking “which 1,000 examples would teach the model the most?” That question is the whole technique.</p>
       </div>
     </section>
+    <section id="sources" class="section reveal" aria-labelledby="sources-h">
+      <div class="wrap">
+        <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span class="kicker-sep">—</span>Grounding</div>
+        <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+        <p class="body-copy">The learning curves and the medical-imaging scenario are illustrative; the ideas underneath are three decades of published research.</p>
+        <ol class="sources-list">
+          <li id="src-1"><strong>Settles, B. (2009).</strong> "Active Learning Literature Survey." Computer Sciences Technical Report 1648, University of Wisconsin–Madison. The canonical survey — every strategy in this piece (least confidence, margin, entropy, query-by-committee) is catalogued here. <a class="xlink" href="https://minds.wisconsin.edu/handle/1793/60660" target="_blank" rel="noopener noreferrer">minds.wisconsin.edu/handle/1793/60660</a></li>
+          <li id="src-2"><strong>Lewis, D. D., &amp; Gale, W. A. (1994).</strong> "A Sequential Algorithm for Training Text Classifiers." <em>SIGIR '94</em>, pp. 3–12. The paper that introduced uncertainty sampling: train on what the classifier is least sure about, and watch the labeling budget collapse. <a class="xlink" href="https://dl.acm.org/citation.cfm?id=188490.188495" target="_blank" rel="noopener noreferrer">dl.acm.org</a></li>
+          <li id="src-3"><strong>Lewis, D. D., &amp; Catlett, J. (1994).</strong> "Heterogeneous Uncertainty Sampling for Supervised Learning." <em>ICML 1994</em>, pp. 148–156. The companion paper that showed uncertainty sampling works beyond text, across learning algorithms. <a class="xlink" href="https://www.sciencedirect.com/science/article/pii/B978155860335650026X" target="_blank" rel="noopener noreferrer">sciencedirect.com</a></li>
+          <li id="src-4"><strong>Sener, O., &amp; Savarese, S. (2018).</strong> "Active Learning for Convolutional Neural Networks: A Core-Set Approach." <em>ICLR 2018.</em> The modern deep-learning answer: pick labels that cover the feature space, not just the most confusing points. <a class="xlink" href="https://arxiv.org/abs/1708.00489" target="_blank" rel="noopener noreferrer">arxiv.org/abs/1708.00489</a></li>
+        </ol>
+      </div>
+    </section>
     <div class="wrap">
             <footer>
         <div class="footer-title">The Curious Machine</div>
         <div>The era of Smart Data, not Big Data.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the Machine Learning Series · Updated 5 August 2026. Charts are illustrative learning curves.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the Machine Learning Series · Updated 6 August 2026. Charts are illustrative learning curves.</div>
       </footer>
     </div>
   </main>

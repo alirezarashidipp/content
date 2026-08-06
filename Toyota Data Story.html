@@ -17,10 +17,10 @@
   "headline": "Toyota: The Data Engine",
   "description": "From the Andon cord to IoT sensors and predictive models: how Toyota turned a century of factory discipline into a data engine \u2014 and what to steal from it.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -325,6 +325,59 @@ h1, h2, h3 { text-wrap: balance; }
 .xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
 .section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
 .section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
+/* external reference links */
+.xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
+.xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
+.section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
+.section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+
 </style>
 </head>
 <body>
@@ -335,7 +388,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Toyota: The Data Engine</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#story">The story</a><a href="#lessons">The lessons</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#story">The story</a><a href="#lessons">The lessons</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -354,7 +407,17 @@ h1, h2, h3 { text-wrap: balance; }
             <p class="lead">A century ago the answer was a cord any worker could pull. Today it is sensors, models, and over-the-air updates — but the discipline never changed. This is how the world's most trusted car company turned its factory philosophy into a data engine.</p>
             <div class="hero-links"><a href="#story">↓ <span>Read the story</span></a><a href="#lessons">↓ <span>Skip to the lessons</span></a></div>
           </div>
-          <div class="hero-note"><p>Every stop was a record. Every record told a story. <em>See. Decide. Act.</em> — at machine speed.</p></div>
+          <div class="hero-note"><p>Every stop was a record. Every record told a story. <em>See. Decide. Act.</em> — at machine speed.</p>
+<nav class="toc" aria-label="In this article">
+<div class="toc-head"><span class="toc-kicker">In this article</span><span class="toc-count">3 sections</span></div>
+<div class="toc-grid">
+<a href="#story"><span class="toc-num">01</span><span><span class="toc-t">The story</span><span class="toc-d">From the cord to the cloud: four chapters of one idea, from Sakichi's loom to the sensor on wheels.</span></span></a>
+<a href="#lessons"><span class="toc-num">02</span><span><span class="toc-t">The lessons</span><span class="toc-d">Steal the loop, not the tools: three moves, in order, without Toyota's budget.</span></span></a>
+<a href="#sources"><span class="toc-num">03</span><span><span class="toc-t">Sources</span><span class="toc-d">The record behind the story: Toyota's own documents and the standard texts.</span></span></a>
+</div>
+</nav>
+<div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>6 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
+</div>
         </div>
       </section>      <section class="section reveal " id="story" aria-labelledby="story-h">
         <div class="section-head">
@@ -404,7 +467,7 @@ h1, h2, h3 { text-wrap: balance; }
             <div class="framework-role">IoT &amp; quality loops</div>
             <div class="framework-summary">The car is no longer just metal — it is a sensor on wheels, and the factory listens.</div>
           </aside>
-          <div class="framework-content"><p>Toyota Connected turns vehicle data into services. A spike in a small part in one region? Flag it. Trace it. Fix it — before it becomes a recall.</p>
+          <div class="framework-content"><p><a class="xlink" href="https://toyotaconnected.com/about/" target="_blank" rel="noopener noreferrer">Toyota Connected</a> turns vehicle data into services. A spike in a small part in one region? Flag it. Trace it. Fix it — before it becomes a recall.</p>
             <div class="split">
               <div class="text-block"><h4>Predictive maintenance</h4><ul><li><strong>Alerts before the breakdown:</strong> “Your battery voltage is dropping — schedule service now.” The car phones ahead.</li></ul></div>
               <div class="text-block"><h4>Quality loops</h4><ul><li><strong>Warranty claims as early warnings:</strong> what used to be late news now stitches factories and suppliers into one nervous system.</li></ul></div>
@@ -485,11 +548,26 @@ h1, h2, h3 { text-wrap: balance; }
 </div><p class="combo-line"><strong>The quiet lesson:</strong> Toyota's advantage was never robots or dashboards — it was the habit of stopping for the truth. Data just gave that habit a longer reach. Disciplined curiosity, industrialized.</p>
       </div>
     </section>
+    <section id="sources" class="section reveal" aria-labelledby="sources-h">
+      <div class="wrap">
+        <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">03</span><span class="kicker-sep">—</span>Grounding</div>
+        <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+        <p class="body-copy">The story leans on Toyota's own record — its production-system documentation, its press releases, and the standard histories. The charts are illustrative; the lineage is real.</p>
+        <ol class="sources-list">
+          <li id="src-1"><strong>Toyota Motor Corporation.</strong> "Toyota Production System." Toyota's official description of the two pillars — jidoka (automation with a human touch) and just-in-time — and of the line-stop discipline behind the Andon cord. <a class="xlink" href="https://global.toyota/en/company/vision-and-philosophy/production-system/" target="_blank" rel="noopener noreferrer">global.toyota/en/company/vision-and-philosophy/production-system</a></li>
+          <li id="src-2"><strong>Toyota Motor Corporation, 75-Year History.</strong> "The Birth of Jidoka." Sakichi Toyoda's automatic loom stopped itself when a thread broke — the origin of the idea that defects never travel downstream. <a class="xlink" href="https://www.toyota-global.com/company/history_of_toyota/75years/text/taking_on_the_automotive_business/chapter1/section2/item1.html" target="_blank" rel="noopener noreferrer">toyota-global.com — 75-year history</a></li>
+          <li id="src-3"><strong>Liker, J. K. (2004).</strong> <em>The Toyota Way: 14 Management Principles from the World's Greatest Manufacturer.</em> McGraw-Hill. The standard English account of why the culture, not the tools, does the compounding. <a class="xlink" href="https://en.wikipedia.org/wiki/The_Toyota_Way" target="_blank" rel="noopener noreferrer">en.wikipedia.org/wiki/The_Toyota_Way</a></li>
+          <li id="src-4"><strong>Ohno, T. (1988).</strong> <em>Toyota Production System: Beyond Large-Scale Production.</em> Productivity Press. The father of TPS on jidoka, kaizen, and why stopping for the truth is the cheapest quality control ever invented. <a class="xlink" href="https://en.wikipedia.org/wiki/Taiichi_Ohno" target="_blank" rel="noopener noreferrer">en.wikipedia.org/wiki/Taiichi_Ohno</a></li>
+          <li id="src-5"><strong>Toyota Motor North America (April 2017).</strong> "Toyota Connected to Double Headcount, Expanding in Plano." Press release: founded April 2016 as Toyota's global data-science hub, running vehicle big data on Microsoft Azure. <a class="xlink" href="https://pressroom.toyota.com/toyota-connected-double-headcount-plano/" target="_blank" rel="noopener noreferrer">pressroom.toyota.com</a></li>
+          <li id="src-6"><strong>Toyota Connected North America.</strong> "About." The company behind this piece's connected-car chapter: predictive and contextual services, telematics, and the Connected Mobility Intelligence Platform. <a class="xlink" href="https://toyotaconnected.com/about/" target="_blank" rel="noopener noreferrer">toyotaconnected.com/about</a></li>
+        </ol>
+      </div>
+    </section>
     <div class="wrap">
             <footer>
         <div class="footer-title">Toyota: The Data Engine</div>
         <div>Reliability was the reputation. Data is the reason.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of Ali's Industry Series · Updated 5 August 2026. Charts are illustrative.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of Ali's Industry Series · Updated 6 August 2026. Charts are illustrative.</div>
       </footer>
     </div>
   </main>

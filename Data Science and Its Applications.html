@@ -17,8 +17,8 @@
   "headline": "Data Science &amp; Applications",
   "description": "What data science is and where it lands: business, healthcare, policy, entertainment, logistics, and science — one loop, different stakes.",
   "datePublished": "2026-08-05",
-  "dateModified": "2026-08-05",
-  "author": { "@type": "Person", "name": "Ali Reza" }
+  "dateModified": "2026-08-06",
+  "author": { "@type": "Person", "name": "Ali Reza Rashidi" }
 }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,10 +41,7 @@ html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,
 ::-webkit-scrollbar-track { background: transparent; }
 body {
   margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif;
-  background:
-    radial-gradient(circle at 12% 8%, rgba(52,104,245,0.10), transparent 26%),
-    radial-gradient(circle at 86% 8%, rgba(118,80,230,0.10), transparent 25%),
-    linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+  background: linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
   line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
 ::selection { background: var(--ink); color: var(--paper); }
@@ -65,7 +62,7 @@ svg { max-width: 100%; height: auto; display: block; }
 .site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
 .topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
 .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
-.brand-dot { width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg, var(--blue), var(--purple)); box-shadow: 0 0 0 8px rgba(52,104,245,.08); }
+.brand-dot { width:12px; height:12px; border-radius:50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
 .nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
 .nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
 .nav a::before { content:""; position:absolute; left:-13px; top:50%; margin-top:-3px; width:6px; height:6px; border-radius:50%; background: var(--spy, var(--ink)); opacity:0; transition: opacity .2s ease; }
@@ -316,6 +313,52 @@ h1, h2, h3 { text-wrap: balance; }
   .swipe-hint { transition: none; }
 }
 
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
 /* external reference links */
 .xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
 .xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
@@ -332,7 +375,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Data Science &amp; Applications</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#field">The field</a><a href="#map">The map</a><a href="#edge2">The edge</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#field">The field</a><a href="#map">The map</a><a href="#edge2">The edge</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -347,9 +390,19 @@ h1, h2, h3 { text-wrap: balance; }
         </h1>
         <div class="hero-grid">
           <p class="lead">Data science reshaped business, healthcare, and research not with one breakthrough but with one habit: frame, model, ship, monitor. The industries differ; the loop is identical.</p>
-          <div class="hero-note">A tour of the field and the six domains where it pays most visibly.</div>
+          <div class="hero-note">A tour of the field and the six domains where it pays most visibly.
+            <div class="toc" aria-label="Table of contents">
+              <div class="toc-title">In this piece</div>
+              <ol>
+                <li><a href="#field">The field</a> — one method under the hood</li>
+                <li><a href="#map">The map</a> — six domains where it lands</li>
+                <li><a href="#edge2">The edge</a> — users vs winners</li>
+                <li><a href="#sources">Sources</a> — the receipts</li>
+              </ol>
+            </div></div>
         </div>
         <div class="hero-links"><a href="#field"><span>&darr;</span> The field</a><a href="#map"><span>&darr;</span> The map</a></div>
+        <div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>5 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
       </section>
 
       <section class="section reveal" id="field" aria-labelledby="field-h">
@@ -380,9 +433,9 @@ h1, h2, h3 { text-wrap: balance; }
 <div class="mini-item"><span class="mini-dot" style="background:#3468f5"></span><strong>Business &amp; finance</strong><span>Predictive analytics, customer segmentation, pricing, credit and risk scoring &mdash; the native habitat.</span></div>
 <div class="mini-item"><span class="mini-dot" style="background:#db6478"></span><strong>Healthcare</strong><span>Outbreak prediction, patient-flow optimization, <a class="xlink" href="https://en.wikipedia.org/wiki/Personalized_medicine" target="_blank" rel="noopener noreferrer">personalized treatment</a>, imaging-assisted diagnosis.</span></div>
 <div class="mini-item"><span class="mini-dot" style="background:#7650e6"></span><strong>Social science &amp; policy</strong><span>Measuring social trends and program outcomes so policy argues from evidence, not anecdote.</span></div>
-<div class="mini-item"><span class="mini-dot" style="background:#c9a227"></span><strong>Entertainment</strong><span>Netflix and Spotify built empires on <a class="xlink" href="https://en.wikipedia.org/wiki/Recommender_system" target="_blank" rel="noopener noreferrer">recommender systems</a> tuned to behavior, not demographics.</span></div>
+<div class="mini-item"><span class="mini-dot" style="background:#c9a227"></span><strong>Entertainment</strong><span>Netflix and Spotify built empires on <a class="xlink" href="https://en.wikipedia.org/wiki/Recommender_system" target="_blank" rel="noopener noreferrer">recommender systems</a> tuned to behavior, not demographics. Netflix's own team credits recommendations with ~80% of hours streamed &mdash; and values personalization at over $1B a year.<a class="xref" href="#src-1">[1]</a></span></div>
 <div class="mini-item"><span class="mini-dot" style="background:#14a9c5"></span><strong>Transportation &amp; logistics</strong><span>Route planning, demand forecasting, predictive maintenance &mdash; minutes and fuel at fleet scale.</span></div>
-<div class="mini-item"><span class="mini-dot" style="background:#23956f"></span><strong>Science &amp; climate</strong><span>From protein structure to emissions modeling &mdash; research itself now runs on the same loop.</span></div>
+<div class="mini-item"><span class="mini-dot" style="background:#23956f"></span><strong>Science &amp; climate</strong><span>From protein structure &mdash; AlphaFold's solution of a 50-year problem took a share of the 2024 Nobel Prize in Chemistry<a class="xref" href="#src-2">[2]</a> &mdash; to emissions modeling: research itself now runs on the same loop.</span></div>
 </div>
       </section>
 
@@ -398,13 +451,41 @@ h1, h2, h3 { text-wrap: balance; }
 <div class="decision-step" style="--ac:#3468f5"><span class="num">1</span><div><strong>Proximity to a decision</strong><p>Winning applications sit inside a workflow &mdash; the model output lands where someone already acts.</p></div></div>
 <div class="decision-step" style="--ac:#14a9c5"><span class="num">2</span><div><strong>Feedback loops</strong><p>Recommendations, fraud, routing: the best domains generate their own labels and improve while running.</p></div></div>
 <div class="decision-step" style="--ac:#23956f"><span class="num">3</span><div><strong>Data as a product</strong><p>Owned, documented, quality-monitored datasets beat heroic one-off extracts every time.</p></div></div>
+</div><div class="quiz quiz-light" role="group" aria-labelledby="quizTitle">
+<div class="quiz-head">
+<h3 class="quiz-title" id="quizTitle">Where would the loop pay you back first?</h3>
+<div class="quiz-progress" aria-hidden="true">
+<span class="quiz-step" id="quizStep">01 / 03</span>
+<span class="quiz-track"><span class="quiz-fill" id="quizFill"></span></span>
+</div>
+</div>
+<noscript><p class="quiz-noscript">This matcher needs JavaScript &mdash; the map above reaches the same answer.</p></noscript>
+<div class="quiz-app">
+<div class="quiz-body" id="quizBody"></div>
+<div class="quiz-result" id="quizResult" aria-live="polite"></div>
+</div>
 </div><p class="quote-line">The method is portable. The advantage is not &mdash; it lives in the loop between your model and your operations.</p>
+      </section>
+
+      <section class="section reveal" id="sources" aria-labelledby="sources-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span class="kicker-sep">&mdash;</span>Grounding</div>
+            <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">A short list, because this piece argues qualitatively &mdash; but the two flagship claims are on the record.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><strong>Gomez-Uribe &amp; Hunt (2015) — the Netflix recommender, valued by its owners.</strong> <em>ACM TMIS</em> 6(4): recommendations influence ~80% of hours streamed, and “the combined effect of personalization and recommendations save[s] us more than $1B per year.” <a class="xlink" href="https://doi.org/10.1145/2843948" target="_blank" rel="noopener noreferrer">DOI</a></li>
+          <li id="src-2"><strong>The 2024 Nobel Prize in Chemistry.</strong> Half to David Baker (computational protein design), half jointly to Demis Hassabis and John Jumper (AlphaFold protein-structure prediction) — the committee's “50-year-old dream,” fulfilled. <a class="xlink" href="https://www.nobelprize.org/prizes/chemistry/2024/press-release/" target="_blank" rel="noopener noreferrer">Press release</a></li>
+          <li id="src-3"><strong>Amatriain &amp; Basilico (2012) — where the 80% started.</strong> “Netflix Recommendations: Beyond the 5 Stars,” the post that first put the figure at 75% of viewing. <a class="xlink" href="https://netflixtechblog.com/netflix-recommendations-beyond-the-5-stars-part-1-55838468f429" target="_blank" rel="noopener noreferrer">Netflix TechBlog</a></li>
+        </ol>
       </section>
 
       <footer>
         <div class="footer-title">Data Science &amp; Applications</div>
         <div>The loop is portable. The advantage is local.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the Data Fundamentals series &middot; Updated 5 August 2026. Charts marked editorial are illustrative syntheses, not measurements; cited figures link to their sources inline.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the Data Fundamentals series &middot; Updated 6 August 2026. Charts marked editorial are illustrative syntheses, not measurements; cited figures link to their sources inline.</div>
       </footer>
     </div>
   </main>
@@ -513,21 +594,7 @@ h1, h2, h3 { text-wrap: balance; }
     });
   }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
   document.querySelectorAll('main section[id]').forEach(function (s) { spy.observe(s); });
-  var FW_COLORS = {"anatomy": {"loop": "#3468f5", "worker": "#23956f", "system": "#eb8237", "governance": "#db6478"}};
-  Object.keys(FW_COLORS).forEach(function (navId) {
-    var link = linkFor(navId);
-    if (!link) return;
-    var fwSpy = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting && FW_COLORS[navId][entry.target.id]) {
-          link.style.setProperty('--spy', FW_COLORS[navId][entry.target.id]);
-        }
-      });
-    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
-    document.querySelectorAll('.framework').forEach(function (f) { fwSpy.observe(f); });
-  });
-
-  var QUIZ = {"title": "What do you actually need?", "noscript": "This matcher needs JavaScript \u2014 the comparison table above reaches the same answer.", "resultKicker": "Start here", "order": ["agent", "agentic", "neither"], "fw": {"agent": {"name": "An AI agent", "color": "#3468f5", "anchor": "#worker", "linkText": "Read the task-worker section", "why": "A defined task, executed reliably, inside rules you control.", "pairing": "Ship one agent for one job well. Add orchestration only when jobs start chaining."}, "agentic": {"name": "Agentic AI", "color": "#eb8237", "anchor": "#system", "linkText": "Read the system section", "why": "An open-ended objective where the path can't be pre-scripted.", "pairing": "Budget for oversight from day one: logs, checkpoints, evals, and a kill switch."}, "neither": {"name": "Neither \u2014 yet", "color": "#5b6b7a", "anchor": "#distinction", "linkText": "Re-read the distinction", "why": "You need a better answer, not an autonomous worker.", "pairing": "A well-prompted model or a plain RAG pipeline beats an agent you don't need."}}, "questions": [{"q": "What shape is your problem?", "answers": [{"t": "A recurring task with clear rules", "f": "agent"}, {"t": "An open-ended process with shifting context", "f": "agentic"}, {"t": "Honestly, I just want better answers from a model", "f": "neither"}]}, {"q": "Who should decide the next step?", "answers": [{"t": "Rules and workflows we write ourselves", "f": "agent"}, {"t": "The system figures it out toward the goal", "f": "agentic"}, {"t": "A human, every time \u2014 for now", "f": "neither"}]}, {"q": "Your tolerance for autonomy?", "answers": [{"t": "Approve each consequential action", "f": "agent"}, {"t": "Hands-off inside well-tested guardrails", "f": "agentic"}, {"t": "Zero \u2014 suggestions only, humans execute", "f": "neither"}]}]};
+  var QUIZ = {"title": "Where would the loop pay you back first?", "noscript": "This matcher needs JavaScript \u2014 the map above reaches the same answer.", "resultKicker": "Start here", "order": ["decision", "forecast", "personalize"], "fw": {"decision": {"name": "A decision-support model", "color": "#3468f5", "anchor": "#field", "linkText": "See the loop up close", "why": "Your pain is judgment under uncertainty \u2014 pricing, risk, segmentation.", "pairing": "Start with a baseline model inside a workflow where someone already acts. Proximity beats sophistication."}, "forecast": {"name": "A forecasting engine", "color": "#14a9c5", "anchor": "#map", "linkText": "Find your domain on the map", "why": "Your pain is planning \u2014 demand, routes, capacity, maintenance.", "pairing": "Forecasting plus simple optimization pays back in minutes and fuel long before it pays in glory."}, "personalize": {"name": "A personalization loop", "color": "#c9a227", "anchor": "#map", "linkText": "See the entertainment row", "why": "Your pain is relevance \u2014 too much choice, too little attention.", "pairing": "A recommender tuned to behavior labels itself: every click, skip, and finish is training data."}}, "questions": [{"q": "What is the expensive problem?", "answers": [{"t": "Decisions made on gut feel", "f": "decision"}, {"t": "Plans that reality keeps breaking", "f": "forecast"}, {"t": "Customers drowning in choice", "f": "personalize"}]}, {"q": "What data do you already exhaust?", "answers": [{"t": "Transactions, prices, customer records", "f": "decision"}, {"t": "Timestamps, locations, sensor logs", "f": "forecast"}, {"t": "Clicks, watches, listens, skips", "f": "personalize"}]}, {"q": "What does a win look like in six months?", "answers": [{"t": "One recurring decision made measurably better", "f": "decision"}, {"t": "Fewer stockouts, empty miles, and surprises", "f": "forecast"}, {"t": "Engagement that compounds week over week", "f": "personalize"}]}]};
   var quizBody = document.getElementById('quizBody');
   var quizResult = document.getElementById('quizResult');
   var quizStepEl = document.getElementById('quizStep');

@@ -17,10 +17,10 @@
   "headline": "The LLM Evaluation Framework",
   "description": "A practical guide to benchmarking LLM performance, safety, and reliability \u2014 from logprob confidence and the RAG triad to red-teaming, price-performance, and the evaluation tool stack.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -44,10 +44,7 @@ html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,
 ::-webkit-scrollbar-track { background: transparent; }
 body {
   margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif;
-  background:
-    radial-gradient(circle at 12% 8%, rgba(52,104,245,0.10), transparent 26%),
-    radial-gradient(circle at 86% 8%, rgba(118,80,230,0.10), transparent 25%),
-    linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+  background: linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
   line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
 ::selection { background: var(--ink); color: var(--paper); }
@@ -68,7 +65,7 @@ svg { max-width: 100%; height: auto; display: block; }
 .site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
 .topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
 .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
-.brand-dot { width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg, var(--blue), var(--purple)); box-shadow: 0 0 0 8px rgba(52,104,245,.08); }
+.brand-dot { width:12px; height:12px; border-radius:50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
 .nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
 .nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
 .nav a::before { content:""; position:absolute; left:-13px; top:50%; margin-top:-3px; width:6px; height:6px; border-radius:50%; background: var(--spy, var(--ink)); opacity:0; transition: opacity .2s ease; }
@@ -319,6 +316,52 @@ h1, h2, h3 { text-wrap: balance; }
   .swipe-hint { transition: none; }
 }
 
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
 /* external reference links */
 .xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
 .xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
@@ -335,7 +378,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>The LLM Evaluation Framework</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#overview">Overview</a><a href="#layers">The layers</a><a href="#stack">The stack</a><a href="#choosing">Choosing</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#overview">Overview</a><a href="#layers">The layers</a><a href="#stack">The stack</a><a href="#choosing">Choosing</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -352,8 +395,19 @@ h1, h2, h3 { text-wrap: balance; }
           <div>
             <p class="lead">Building a prototype is easy; taking it to production is hard. The difficulty is evaluation. Unlike traditional software, where tests pass or fail, generative outputs are probabilistic and subjective — so reliability needs a multi-layered strategy, from raw mathematical confidence to human-aligned operations.</p>
             <div class="hero-links"><a href="#layers">↓ <span>See the five layers</span></a><a href="#stack">↓ <span>Skip to the tools</span></a></div>
+            <div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>7 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
           </div>
-          <div class="hero-note"><p>A working demo is a prompt away. A trustworthy system is five layers of measurement deep. <em>What you don't measure, the model decides for you.</em></p></div>
+          <div class="hero-note"><p>A working demo is a prompt away. A trustworthy system is five layers of measurement deep. <em>What you don't measure, the model decides for you.</em></p>
+            <div class="toc" aria-label="Table of contents">
+              <div class="toc-title">In this piece</div>
+              <ol>
+                <li><a href="#overview">Overview</a> — why evaluation is the job</li>
+                <li><a href="#layers">The layers</a> — four kinds of measurement</li>
+                <li><a href="#stack">The stack</a> — DeepEval, Ragas, LangSmith, Phoenix</li>
+                <li><a href="#choosing">Choosing</a> — how to assemble it</li>
+                <li><a href="#sources">Sources</a> — the research behind it</li>
+              </ol>
+            </div></div>
         </div>
       </section>      <section class="section reveal " id="overview" aria-labelledby="overview-h">
         <div class="section-head">
@@ -425,12 +479,12 @@ h1, h2, h3 { text-wrap: balance; }
             <div class="framework-role">Layer 02 · Retrieval</div>
             <div class="framework-summary">For RAG systems, “did it work?” is too vague. Score three vectors separately — usually with a model judging a model.</div>
           </aside>
-          <div class="framework-content"><p>Every RAG answer decomposes into three independent failures. Score them separately and you know which part of the pipeline to fix.</p>
+          <div class="framework-content"><p>Every RAG answer decomposes into three independent failures. Score them separately and you know which part of the pipeline to fix.<a class="xref" href="#src-1">[1]</a></p>
             <div class="flow">
 <div class="fstep" style="--ac:#eb8237"><span class="fnum">1</span><strong>Contextual relevance</strong><span>Is the retrieved data actually useful for the query? · Essential</span></div>
 <div class="fstep" style="--ac:#db6478"><span class="fnum">2</span><strong>Faithfulness / groundedness</strong><span>Is the answer derived only from the context? · Critical</span></div>
 <div class="fstep" style="--ac:#eb8237"><span class="fnum">3</span><strong>Answer relevance</strong><span>Does the final output address the user's prompt? · Essential</span></div>
-<div class="fstep" style="--ac:#7650e6"><span class="fnum">⚖</span><strong>Model-as-a-judge</strong><span>A frontier model grades a smaller one — cheap, scalable, and good enough to trend.</span></div>
+<div class="fstep" style="--ac:#7650e6"><span class="fnum">⚖</span><strong>Model-as-a-judge</strong><span>A frontier model grades a smaller one — cheap, scalable, and good enough to trend.<a class="xref" href="#src-2">[2]</a></span></div>
 </div>
             <div class="section-label">Scenario — the medical bot</div>
             <p><strong>User:</strong> “Does this drug cause headaches?” <strong>Context retrieved:</strong> “Patient X reported nausea.” (No mention of headaches.) <strong>Bot answer:</strong> “No, this drug does not cause headaches.”</p>
@@ -469,7 +523,7 @@ h1, h2, h3 { text-wrap: balance; }
           <p class="diagram-caption"><strong>How to read this:</strong> guardrails do not make a model safe — they make it <em>measurably safer</em>. The remaining 12% is why you also log and review.</p>
         </div>
             <div class="split">
-              <div class="text-block"><h4>Automated safety</h4><ul><li><strong>Scalable:</strong> 10,000 adversarial prompts in minutes.</li><li><strong>Standardized:</strong> established benchmarks like RealToxicityPrompts.</li></ul></div>
+              <div class="text-block"><h4>Automated safety</h4><ul><li><strong>Scalable:</strong> 10,000 adversarial prompts in minutes.</li><li><strong>Standardized:</strong> established benchmarks like RealToxicityPrompts.<a class="xref" href="#src-3">[3]</a></li></ul></div>
               <div class="text-block"><h4>Human review</h4><ul><li><strong>Nuance:</strong> humans catch cultural context scripts miss.</li><li><strong>Creative attacks:</strong> humans invent the jailbreaks automation never imagined.</li></ul></div>
             </div></div>
         </article><article class="framework" id="ops" aria-labelledby="ops-h">
@@ -628,11 +682,25 @@ h1, h2, h3 { text-wrap: balance; }
 </div><p class="combo-line"><strong>A realistic stack:</strong> DeepEval in CI to catch regressions, Ragas for retrieval quality, LangSmith or Phoenix for traces and drift — plus a weekly human review of the cases the judges flag. Evaluation is a loop, not a gate.</p>
       </div>
     </section>
+    <section class="section reveal" id="sources" aria-labelledby="sources-h">
+      <div class="section-head">
+        <div>
+          <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span class="kicker-sep">—</span>Grounding</div>
+          <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+        </div>
+        <p class="body-copy">The charts are illustrative; the measurement layers are not. These are the papers that define them.</p>
+      </div>
+      <ol class="sources-list">
+        <li id="src-1"><strong>The RAG triad, formalized.</strong> Es, James, Espinosa-Anke &amp; Schockaert, "RAGAS: Automated Evaluation of Retrieval Augmented Generation" (EACL 2024, System Demonstrations) — reference-free scoring of faithfulness, context relevance, and answer relevance. <a class="xlink" href="https://arxiv.org/abs/2309.15217" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2309.15217</a></li>
+        <li id="src-2"><strong>Model-as-a-judge, with its caveats.</strong> Zheng et al., "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena" (NeurIPS 2023) — strong models match human preferences at over 80% agreement, but position and verbosity biases are real, which is why the grader needs spot-checking too. <a class="xlink" href="https://arxiv.org/abs/2306.05685" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2306.05685</a></li>
+        <li id="src-3"><strong>The safety benchmark mentioned above.</strong> Gehman et al., "RealToxicityPrompts: Evaluating Neural Toxic Degeneration in Language Models" (Findings of EMNLP 2020) — 100k naturally occurring prompts for measuring toxic completions. <a class="xlink" href="https://arxiv.org/abs/2009.11462" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2009.11462</a></li>
+      </ol>
+    </section>
     <div class="wrap">
             <footer>
         <div class="footer-title">The LLM Evaluation Framework</div>
         <div>For teams who would rather measure their model than admire it.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the AI Engineering Series · Updated 5 August 2026. Chart values are illustrative tiers, not vendor benchmarks.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the AI Engineering Series · Updated 6 August 2026. Chart values are illustrative tiers, not vendor benchmarks.</div>
       </footer>
     </div>
   </main>

@@ -17,10 +17,10 @@
   "headline": "Hierarchy of Intelligence",
   "description": "Four nested eras of machine cognition \u2014 what analytics, machine learning, deep learning, and generative AI each actually do, cost, and break.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -44,10 +44,7 @@ html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,
 ::-webkit-scrollbar-track { background: transparent; }
 body {
   margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif;
-  background:
-    radial-gradient(circle at 12% 8%, rgba(52,104,245,0.10), transparent 26%),
-    radial-gradient(circle at 86% 8%, rgba(118,80,230,0.10), transparent 25%),
-    linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+  background: linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
   line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
 ::selection { background: var(--ink); color: var(--paper); }
@@ -68,7 +65,7 @@ svg { max-width: 100%; height: auto; display: block; }
 .site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
 .topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
 .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
-.brand-dot { width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg, var(--blue), var(--purple)); box-shadow: 0 0 0 8px rgba(52,104,245,.08); }
+.brand-dot { width:12px; height:12px; border-radius:50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
 .nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
 .nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
 .nav a::before { content:""; position:absolute; left:-13px; top:50%; margin-top:-3px; width:6px; height:6px; border-radius:50%; background: var(--spy, var(--ink)); opacity:0; transition: opacity .2s ease; }
@@ -319,6 +316,52 @@ h1, h2, h3 { text-wrap: balance; }
   .swipe-hint { transition: none; }
 }
 
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
 /* external reference links */
 .xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
 .xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
@@ -335,7 +378,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Hierarchy of Intelligence</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#overview">The big picture</a><a href="#levels">The four levels</a><a href="#compare">Comparison</a><a href="#horizon">The horizon</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#overview">The big picture</a><a href="#levels">The four levels</a><a href="#compare">Comparison</a><a href="#horizon">The horizon</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -353,8 +396,19 @@ h1, h2, h3 { text-wrap: balance; }
           <div>
             <p class="lead">AI, machine learning, deep learning, generative AI — boardrooms throw these around as synonyms. They are not. Think of them as Russian nesting dolls: each era lives inside the previous one, and each changed what machines can perceive, predict, and create.</p>
             <div class="hero-links"><a href="#levels">↓ <span>Climb the four levels</span></a><a href="#compare">↓ <span>Skip to the comparison</span></a></div>
+            <div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>7 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
           </div>
-          <div class="hero-note"><p>We are living through the transition from explicit instruction — humans telling machines exactly what to do — to implicit induction, where machines observe the world and infer the rules themselves.</p></div>
+          <div class="hero-note"><p>We are living through the transition from explicit instruction — humans telling machines exactly what to do — to implicit induction, where machines observe the world and infer the rules themselves.</p>
+            <div class="toc" aria-label="Table of contents">
+              <div class="toc-title">In this piece</div>
+              <ol>
+                <li><a href="#overview">The big picture</a> — the center of gravity moved</li>
+                <li><a href="#levels">The four levels</a> — analytics, ML, deep learning, GenAI</li>
+                <li><a href="#compare">The comparison</a> — one table to settle the argument</li>
+                <li><a href="#horizon">The horizon</a> — level 5 is already knocking</li>
+                <li><a href="#sources">Sources</a> — what the claims rest on</li>
+              </ol>
+            </div></div>
         </div>
       </section>      <section class="section reveal " id="overview" aria-labelledby="overview-h">
         <div class="section-head">
@@ -469,7 +523,7 @@ h1, h2, h3 { text-wrap: balance; }
 <circle class="line-dot" style="--d:0.86s" cx="1010" cy="60" r="6" fill="#7650e6" stroke="#fcfbf8" stroke-width="2.5"/>
 <text x="105" y="548" fill="#777" font-family="DM Sans" font-size="14">Parameter counts, compressed to a log-style index — direction is real, values are illustrative.</text>
 </svg></div><div class="legend"><span><i style="background:#7650e6"></i>Parameter scale (log index)</span></div>
-          <p class="diagram-caption"><strong>How to read this:</strong> each generation bought capability with orders of magnitude more parameters. The bill arrives as compute, data, and opacity.</p>
+          <p class="diagram-caption"><strong>How to read this:</strong> each generation bought capability with orders of magnitude more parameters.<a class="xref" href="#src-1">[1]</a> The bill arrives as compute, data, and opacity.</p>
         </div></div>
         </article><article class="framework" id="dl" aria-labelledby="dl-h">
           <aside class="framework-aside">
@@ -489,7 +543,7 @@ h1, h2, h3 { text-wrap: balance; }
             <div class="framework-role">Level 04 · The Era of Creation</div>
             <div class="framework-summary">Synthesis. A traditional model can tell you a picture contains a sunset. A generative one can paint it.</div>
           </aside>
-          <div class="framework-content"><p>Powered by the <strong><a class="xlink" href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener noreferrer">Transformer</a></strong> architecture (Google, 2017), LLMs moved beyond classification to synthesis. They learn the probability distribution of data so well they can create new instances of it — they don't just recognize patterns, they continue them.</p>
+          <div class="framework-content"><p>Powered by the <strong><a class="xlink" href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener noreferrer">Transformer</a></strong> architecture (Google, 2017), LLMs moved beyond classification to synthesis.<a class="xref" href="#src-4">[4]</a> They learn the probability distribution of data so well they can create new instances of it — they don't just recognize patterns, they continue them.</p>
             <p>The key innovation was <strong>attention</strong>: instead of reading left-to-right and forgetting, the model sees the whole sentence at once — knowing “bank” means something different in “river bank” and “bank deposit.”</p>
             <div class="diagram-block">
           <div class="diagram-title">What it eats</div>
@@ -503,7 +557,7 @@ h1, h2, h3 { text-wrap: balance; }
 <text class="donut-center" x="260.0" y="284.0" text-anchor="middle" fill="#8a8a8a" font-family="DM Sans" font-size="13">of enterprise data is unstructured</text>
 <text x="30" y="544" fill="#777" font-family="DM Sans" font-size="14">What generative models actually consume — illustrative mix.</text>
 </svg></div><div class="legend"><span><i style="background:#3468f5"></i>Text · 40</span><span><i style="background:#5b6b7a"></i>Structured · 30</span><span><i style="background:#7650e6"></i>Vision · 20</span><span><i style="background:#23956f"></i>Audio · 10</span></div>
-          <p class="diagram-caption"><strong>How to read this:</strong> the generative era runs on the unstructured 80% — text, images, and audio that previous eras could barely touch.</p>
+          <p class="diagram-caption"><strong>How to read this:</strong> the generative era runs on the unstructured 80%<a class="xref" href="#src-3">[3]</a> — text, images, and audio that previous eras could barely touch.</p>
         </div>
             <div class="callout-line" style="color:#23956f">The truth gap: generative AI is probabilistic, not deterministic.<small>It predicts the likely word, not the true one — a dreaming machine that can invent court cases. Plausibility over truth.</small></div></div>
         </article>
@@ -561,17 +615,32 @@ h1, h2, h3 { text-wrap: balance; }
         </div>
         <div class="decision-flow">
 <div class="decision-step" style="--ac:#3468f5"><div class="num">1</div><div><strong>Need a defensible report? Stay at Level 1.</strong><p>SQL and a dashboard beat a hallucinated paragraph.</p></div></div>
-<div class="decision-step" style="--ac:#eb8237"><div class="num">2</div><div><strong>Need predictions from tables? Level 2.</strong><p>XGBoost and friends remain unbeaten on structured data.</p></div></div>
+<div class="decision-step" style="--ac:#eb8237"><div class="num">2</div><div><strong>Need predictions from tables? Level 2.</strong><p>XGBoost and friends remain unbeaten on structured data.<a class="xref" href="#src-2">[2]</a></p></div></div>
 <div class="decision-step" style="--ac:#7650e6"><div class="num">3</div><div><strong>Need perception? Level 3.</strong><p>Images, audio, and raw signals belong to the networks.</p></div></div>
 <div class="decision-step" style="--ac:#23956f"><div class="num">4</div><div><strong>Need language, code, or creation? Level 4.</strong><p>Then wrap it in evaluation, because it dreams.</p></div></div>
 </div><p class="combo-line"><strong>The honest stack:</strong> most real products in 2026 use all four levels at once — analytics for the money, ML for the predictions, deep learning for perception, and generative AI for the interface. Status: learning continues.</p>
       </div>
     </section>
+    <section class="section reveal" id="sources" aria-labelledby="sources-h">
+      <div class="section-head">
+        <div>
+          <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span class="kicker-sep">—</span>Grounding</div>
+          <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+        </div>
+        <p class="body-copy">The indexed charts are illustrative shapes. The claims underneath them are documented — here is what they rest on.</p>
+      </div>
+      <ol class="sources-list">
+        <li id="src-1"><strong>The parameter race, formalized.</strong> Kaplan et al., "Scaling Laws for Neural Language Models" (2020) — loss falls as a power law with model size, data, and compute across seven orders of magnitude; the paper the scaling chart gestures at. <a class="xlink" href="https://arxiv.org/abs/2001.08361" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2001.08361</a></li>
+        <li id="src-2"><strong>Why Level 2 is not dead.</strong> Grinsztajn, Oyallon &amp; Varoquaux, "Why do tree-based models still outperform deep learning on typical tabular data?" (NeurIPS 2022) — across 45 tabular datasets, gradient-boosted trees kept the crown. <a class="xlink" href="https://arxiv.org/abs/2207.08815" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2207.08815</a></li>
+        <li id="src-3"><strong>The unstructured 80%.</strong> IDC's DataSphere research estimates 80–90% of the world's data is unstructured — the raw material the generative era feeds on. <a class="xlink" href="https://www.cdotrends.com/story/4122" target="_blank" rel="noopener noreferrer">IDC via CDOTrends</a></li>
+        <li id="src-4"><strong>The architecture behind Level 4.</strong> Vaswani et al., "Attention Is All You Need" (NeurIPS 2017) — the transformer, linked in the text and cited here for the record. <a class="xlink" href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener noreferrer">arxiv.org/abs/1706.03762</a></li>
+      </ol>
+    </section>
     <div class="wrap">
             <footer>
         <div class="footer-title">Hierarchy of Intelligence</div>
         <div>A field guide to four eras that share one family name.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of Ali's Data Intelligence Series · Updated 5 August 2026. Indexed chart values are illustrative.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of Ali's Data Intelligence Series · Updated 6 August 2026. Indexed chart values are illustrative.</div>
       </footer>
     </div>
   </main>

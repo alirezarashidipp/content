@@ -17,10 +17,10 @@
   "headline": "Anatomy of a Choice",
   "description": "Logits, temperature, softmax, and nucleus sampling \u2014 the four transformations between raw numbers and the next word, explained with one prompt and honest diagrams.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -44,10 +44,7 @@ html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,
 ::-webkit-scrollbar-track { background: transparent; }
 body {
   margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif;
-  background:
-    radial-gradient(circle at 12% 8%, rgba(52,104,245,0.10), transparent 26%),
-    radial-gradient(circle at 86% 8%, rgba(118,80,230,0.10), transparent 25%),
-    linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+  background: linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
   line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
 ::selection { background: var(--ink); color: var(--paper); }
@@ -68,7 +65,7 @@ svg { max-width: 100%; height: auto; display: block; }
 .site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
 .topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
 .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
-.brand-dot { width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg, var(--blue), var(--purple)); box-shadow: 0 0 0 8px rgba(52,104,245,.08); }
+.brand-dot { width:12px; height:12px; border-radius:50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
 .nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
 .nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
 .nav a::before { content:""; position:absolute; left:-13px; top:50%; margin-top:-3px; width:6px; height:6px; border-radius:50%; background: var(--spy, var(--ink)); opacity:0; transition: opacity .2s ease; }
@@ -319,6 +316,52 @@ h1, h2, h3 { text-wrap: balance; }
   .swipe-hint { transition: none; }
 }
 
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
 /* external reference links */
 .xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
 .xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
@@ -335,7 +378,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Anatomy of a Choice</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#overview">Overview</a><a href="#pipeline">The pipeline</a><a href="#steering">Steering</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#overview">Overview</a><a href="#pipeline">The pipeline</a><a href="#steering">Steering</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -352,8 +395,18 @@ h1, h2, h3 { text-wrap: balance; }
           <div>
             <p class="lead">“The weather today is very…” — how does an LLM decide what comes next? Not magic, but a sequence of precise mathematical transformations: raw scores, a creativity knob, a probability translator, and a ruthless filter. This is that journey, one token at a time.</p>
             <div class="hero-links"><a href="#pipeline">↓ <span>Enter the pipeline</span></a><a href="#steering">↓ <span>Skip to the settings</span></a></div>
+            <div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>6 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
           </div>
-          <div class="hero-note"><p>Every word you have ever read from a language model survived this exact gauntlet. <em>Once you see the pipeline, the mystery becomes machinery.</em></p></div>
+          <div class="hero-note"><p>Every word you have ever read from a language model survived this exact gauntlet. <em>Once you see the pipeline, the mystery becomes machinery.</em></p>
+            <div class="toc" aria-label="Table of contents">
+              <div class="toc-title">In this piece</div>
+              <ol>
+                <li><a href="#overview">Overview</a> — from numbers to a word</li>
+                <li><a href="#pipeline">The pipeline</a> — logits, temperature, softmax, top-p</li>
+                <li><a href="#steering">Steering</a> — how to set the knobs + quiz</li>
+                <li><a href="#sources">Sources</a> — the papers behind the machinery</li>
+              </ol>
+            </div></div>
         </div>
       </section>      <section class="section reveal " id="overview" aria-labelledby="overview-h">
         <div class="section-head">
@@ -383,7 +436,7 @@ h1, h2, h3 { text-wrap: balance; }
             <div class="framework-role">Step 01 · The raw scores</div>
             <div class="framework-summary">The model scans its entire vocabulary and assigns a raw score to every possible next token.</div>
           </aside>
-          <div class="framework-content"><p>The journey begins when the model scans its vocabulary — modern tokenizers hold <strong>100,000 to 200,000+ tokens</strong> — and assigns a raw score to every candidate. These scores are <strong><a class="xlink" href="https://en.wikipedia.org/wiki/Logit" target="_blank" rel="noopener noreferrer">logits</a></strong>.</p>
+          <div class="framework-content"><p>The journey begins when the model scans its vocabulary — modern tokenizers hold <strong>100,000 to 200,000+ tokens</strong><a class="xref" href="#src-1">[1]</a> — and assigns a raw score to every candidate. These scores are <strong><a class="xlink" href="https://en.wikipedia.org/wiki/Logit" target="_blank" rel="noopener noreferrer">logits</a></strong>.</p>
             <p>Logits are unnormalized real numbers: positive or negative, no upper limit. A higher logit means the model favors the word, but these are not percentages yet.</p>
             <div class="diagram-block">
           <div class="diagram-title">The raw board</div>
@@ -418,7 +471,7 @@ h1, h2, h3 { text-wrap: balance; }
 </svg></div>
           <p class="diagram-caption"><strong>How to read this:</strong> “hot” and “cold” are neck-and-neck at the top, “cloudy” trails, and “frog” is buried below zero. Nothing here sums to 100 — that comes next.</p>
         </div>
-            <p><strong>Insight:</strong> these are raw outputs from the neural network's final layer — preference, before probability.</p></div>
+            <p><strong>Insight:</strong> these are raw outputs from the neural network's final layer — preference, before probability.<a class="xref" href="#src-3">[3]</a></p></div>
         </article><article class="framework" id="temperature" aria-labelledby="temperature-h">
           <aside class="framework-aside">
             <div class="framework-name"><span class="mark" style="background:#eb8237"></span><h3 id="temperature-h">Temperature<a class="anchor" href="#temperature" aria-label="Link to this section">#</a></h3></div>
@@ -463,7 +516,7 @@ h1, h2, h3 { text-wrap: balance; }
           </aside>
           <div class="framework-content"><p>First, the vocabulary is <strong>sorted</strong> from highest to lowest probability. Then <strong><a class="xlink" href="https://arxiv.org/abs/1904.09751" target="_blank" rel="noopener noreferrer">top-p (nucleus) sampling</a></strong> sets a cumulative threshold — say P = 0.90 — and keeps only the top tokens whose probabilities sum to it. The tail is discarded before sampling, so the model can never blurt a nonsensical word.</p>
             <table class="tbl"><thead><tr><th>Candidate</th><th>Cumulative probability</th><th>Verdict</th></tr></thead><tbody><tr><td><span class="tdot" style="background:#3468f5"></span><strong>hot</strong> (0.70)</td><td>0.70</td><td><span style="color:#23956f;font-weight:700">KEEP</span></td></tr><tr><td><span class="tdot" style="background:#14a9c5"></span><strong>cold</strong> (0.20)</td><td>0.90 — threshold reached</td><td><span style="color:#23956f;font-weight:700">KEEP</span></td></tr><tr><td><span class="tdot" style="background:#5b6b7a"></span><strong>cloudy</strong> (0.08)</td><td>past threshold</td><td><span style="color:#db6478;font-weight:700">DISCARD</span></td></tr><tr><td><span class="tdot" style="background:#db6478"></span><strong>frog</strong> (0.02)</td><td>past threshold</td><td><span style="color:#db6478;font-weight:700">DISCARD</span></td></tr></tbody></table>
-            <div class="callout-line" style="color:#7650e6">The nucleus is dynamic: one token on confident days, dozens when the model is unsure.<small>The filter adapts to the shape of the distribution itself.</small></div>
+            <div class="callout-line" style="color:#7650e6">The nucleus is dynamic: one token on confident days, dozens when the model is unsure.<a class="xref" href="#src-2">[2]</a><small>The filter adapts to the shape of the distribution itself.</small></div>
             <p>Finally, the model <strong>samples</strong> from the survivors — weighted by their probabilities. That single sampled token is appended to the text, and the entire pipeline runs again for the next one. The weather today is very… <em>hot</em>.</p></div>
         </article>
       </section>
@@ -498,11 +551,25 @@ h1, h2, h3 { text-wrap: balance; }
 </div><p class="combo-line"><strong>The mental model:</strong> logits are opinion, softmax is honesty, temperature is courage, and top-p is judgment. Choose your settings like you would choose those traits in a colleague.</p>
       </div>
     </section>
+    <section class="section reveal" id="sources" aria-labelledby="sources-h">
+      <div class="section-head">
+        <div>
+          <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span class="kicker-sep">—</span>Grounding</div>
+          <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+        </div>
+        <p class="body-copy">The example logits are invented for readability. The pipeline itself is documented fact — here is the record.</p>
+      </div>
+      <ol class="sources-list">
+        <li id="src-1"><strong>Vocabulary sizes.</strong> OpenAI's tiktoken documents the encodings behind the page's "100k–200k+ tokens" claim: cl100k_base (~100k tokens, GPT-4/3.5) and o200k_base (~200k, GPT-4o). <a class="xlink" href="https://github.com/openai/tiktoken" target="_blank" rel="noopener noreferrer">github.com/openai/tiktoken</a></li>
+        <li id="src-2"><strong>Nucleus (top-p) sampling.</strong> Holtzman, Buys, Du, Forbes &amp; Choi, "The Curious Case of Neural Text Degeneration" (ICLR 2020) — why sampling from a dynamic nucleus beats both greedy decoding and fixed top-k. <a class="xlink" href="https://arxiv.org/abs/1904.09751" target="_blank" rel="noopener noreferrer">arxiv.org/abs/1904.09751</a></li>
+        <li id="src-3"><strong>The machine that produces the logits.</strong> Vaswani et al., "Attention Is All You Need" (NeurIPS 2017) — the transformer architecture every modern LLM uses to score the next token. <a class="xlink" href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener noreferrer">arxiv.org/abs/1706.03762</a></li>
+      </ol>
+    </section>
     <div class="wrap">
             <footer>
         <div class="footer-title">Anatomy of a Choice</div>
         <div>The four moves between raw numbers and your next word.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the AI Architecture Series · Updated 5 August 2026. Example values are illustrative.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the AI Architecture Series · Updated 6 August 2026. Example values are illustrative.</div>
       </footer>
     </div>
   </main>

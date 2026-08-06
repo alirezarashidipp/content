@@ -17,10 +17,10 @@
   "headline": "Vector Databases",
   "description": "How high-dimensional semantic search gives AI its long-term memory: embeddings, nearest-neighbor search, HNSW, and the RAG pattern that grounds LLMs.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -325,6 +325,59 @@ h1, h2, h3 { text-wrap: balance; }
 .xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
 .section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
 .section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
+/* external reference links */
+.xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
+.xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
+.section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
+.section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+
 </style>
 </head>
 <body>
@@ -335,7 +388,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Vector Databases</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#concepts">The concepts</a><a href="#compare">Comparison</a><a href="#choosing">Choosing</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#concepts">The concepts</a><a href="#compare">Comparison</a><a href="#choosing">Choosing</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -354,7 +407,18 @@ h1, h2, h3 { text-wrap: balance; }
             <p class="lead">Vector databases are the long-term memory of AI. They store the world as coordinates in high-dimensional space — so machines can finally find things by what they mean, not just what they're called.</p>
             <div class="hero-links"><a href="#concepts">↓ <span>Learn the concepts</span></a><a href="#compare">↓ <span>Skip to the comparison</span></a></div>
           </div>
-          <div class="hero-note"><p>Emails, PDFs, images, audio: the messy 80% of the world's data finally has a home. <em>Keywords find words. Vectors find ideas.</em></p></div>
+          <div class="hero-note"><p>Emails, PDFs, images, audio: the messy 80% of the world's data finally has a home. <em>Keywords find words. Vectors find ideas.</em></p>
+<nav class="toc" aria-label="In this article">
+<div class="toc-head"><span class="toc-kicker">In this article</span><span class="toc-count">4 sections</span></div>
+<div class="toc-grid">
+<a href="#concepts"><span class="toc-num">01</span><span><span class="toc-t">The concepts</span><span class="toc-d">Why keyword search breaks, how meaning becomes math, and the app that made it unavoidable.</span></span></a>
+<a href="#compare"><span class="toc-num">02</span><span><span class="toc-t">Comparison</span><span class="toc-d">Old school vs. new school — a complement with a completely different shape.</span></span></a>
+<a href="#choosing"><span class="toc-num">03</span><span><span class="toc-t">Choosing</span><span class="toc-d">How I would choose: start with pgvector, go dedicated when vectors are the product.</span></span></a>
+<a href="#sources"><span class="toc-num">04</span><span><span class="toc-t">Sources</span><span class="toc-d">IDC, word2vec, HNSW, FAISS, and the paper that named RAG.</span></span></a>
+</div>
+</nav>
+<div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>7 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
+</div>
         </div>
       </section>      <section class="section reveal " id="concepts" aria-labelledby="concepts-h">
         <div class="section-head">
@@ -370,7 +434,7 @@ h1, h2, h3 { text-wrap: balance; }
             <div class="framework-role">40 years of exact matches</div>
             <div class="framework-summary">SQL is brilliant at “find user ID 402.” It cannot find “a shirt that looks like this photo.”</div>
           </aside>
-          <div class="framework-content"><p>For 40 years the world ran on relational databases, and they are perfect for exact matches. But roughly <strong>80% of enterprise data is unstructured</strong> — emails, PDFs, images, audio, Slack messages.</p>
+          <div class="framework-content"><p>For 40 years the world ran on relational databases, and they are perfect for exact matches. But roughly <strong><a class="xlink" href="https://www.idc.com/getdoc.jsp?containerId=US51128223" target="_blank" rel="noopener noreferrer">80% of enterprise data is unstructured</a></strong> — emails, PDFs, images, audio, Slack messages.</p>
             <p>Ask SQL for “a legal clause about indemnity that doesn't use the word <em>indemnity</em>” and it fails — not because it's slow, but because keyword search has no concept of meaning.</p>
             <div class="diagram-block">
           <div class="diagram-title">The unstructured flood</div>
@@ -420,7 +484,7 @@ h1, h2, h3 { text-wrap: balance; }
             <div class="framework-summary">Before a database can store “meaning,” every item must become a list of numbers.</div>
           </aside>
           <div class="framework-content"><p>An <a class="xlink" href="https://en.wikipedia.org/wiki/Sentence_embedding" target="_blank" rel="noopener noreferrer">embedding model</a> takes a piece of content — text, image, audio — and maps it to a long vector of floats: [0.002, -0.45, 0.11, …]. Similar meanings land at similar coordinates.</p>
-            <div class="section-label">The famous analogy</div>
+            <div class="section-label">The famous <a class="xlink" href="https://arxiv.org/abs/1310.4546" target="_blank" rel="noopener noreferrer">word2vec</a> analogy</div>
             <p>Plot the word <strong>“King”</strong>, subtract the vector for <strong>“Man”</strong>, add the vector for <strong>“Woman”</strong> — the nearest point to the result is <strong>“Queen.”</strong> Geography becomes grammar.</p>
             <div class="formula">King − Man + Woman ≈ Queen</div>
             <div class="callout-line" style="color:#7650e6">Real embedding spaces run 1,536 dimensions or more.<small>Every nuance, tone, and context gets a coordinate.</small></div></div>
@@ -546,11 +610,27 @@ h1, h2, h3 { text-wrap: balance; }
 </div><p class="combo-line"><strong>The mental model:</strong> SQL remembers facts; vector databases remember meaning. The winning systems of this decade keep both kinds of memory — and know exactly which one they are consulting.</p>
       </div>
     </section>
+    <section id="sources" class="section reveal" aria-labelledby="sources-h">
+      <div class="wrap">
+        <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span class="kicker-sep">—</span>Grounding</div>
+        <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+        <p class="body-copy">The charts are illustrative; the claims underneath them are not. Every load-bearing idea traces to one of these.</p>
+        <ol class="sources-list">
+          <li id="src-1"><strong>IDC (2023).</strong> "90% of Your Data Is Unstructured, and It's Full of Untapped Value." IDC White Paper #US51128223. The analyst estimate behind the "roughly 80%" figure — IDC has projected that ~80% of worldwide data will be unstructured by 2025. <a class="xlink" href="https://www.idc.com/getdoc.jsp?containerId=US51128223" target="_blank" rel="noopener noreferrer">idc.com — white paper US51128223</a></li>
+          <li id="src-2"><strong>Mikolov, T., Sutskever, I., Chen, K., Corrado, G., &amp; Dean, J. (2013).</strong> "Distributed Representations of Words and Phrases and their Compositionality." <em>NeurIPS 2013.</em> The word2vec paper that made vector arithmetic famous — the King − Man + Woman ≈ Queen example lives here. <a class="xlink" href="https://arxiv.org/abs/1310.4546" target="_blank" rel="noopener noreferrer">arxiv.org/abs/1310.4546</a></li>
+          <li id="src-3"><strong>Malkov, Y. A., &amp; Yashunin, D. A. (2016).</strong> "Efficient and Robust Approximate Nearest Neighbor Search Using Hierarchical Navigable Small World Graphs." (Later in <em>IEEE TPAMI</em>, 42(4), 824–836, 2020.) The HNSW index — the "highway system" behind the latency chart. <a class="xlink" href="https://arxiv.org/abs/1603.09320" target="_blank" rel="noopener noreferrer">arxiv.org/abs/1603.09320</a></li>
+          <li id="src-4"><strong>Johnson, J., Douze, M., &amp; Jégou, H. (2017).</strong> "Billion-scale Similarity Search with GPUs." <em>IEEE Transactions on Big Data</em>, 7(3), 535–547. The FAISS paper — billion-vector search made economically practical. <a class="xlink" href="https://arxiv.org/abs/1702.08734" target="_blank" rel="noopener noreferrer">arxiv.org/abs/1702.08734</a></li>
+          <li id="src-5"><strong>Douze, M., et al. (2024).</strong> "The Faiss Library." The current reference for the library that most vector products build on. <a class="xlink" href="https://arxiv.org/abs/2401.08281" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2401.08281</a></li>
+          <li id="src-6"><strong>Lewis, P., et al. (2020).</strong> "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks." <em>NeurIPS 2020.</em> The paper that named RAG — the killer app in the first section. <a class="xlink" href="https://arxiv.org/abs/2005.11401" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2005.11401</a></li>
+          <li id="src-7"><strong>pgvector.</strong> Open-source vector similarity search for Postgres — the "start with what you already run" recommendation in the Choosing section. <a class="xlink" href="https://github.com/pgvector/pgvector" target="_blank" rel="noopener noreferrer">github.com/pgvector/pgvector</a></li>
+        </ol>
+      </div>
+    </section>
     <div class="wrap">
             <footer>
         <div class="footer-title">Vector Databases</div>
         <div>Keywords find words. Vectors find ideas.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of Ali's Tech Deep Dives · Updated 5 August 2026. Charts are illustrative.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of Ali's Tech Deep Dives · Updated 6 August 2026. Charts are illustrative.</div>
       </footer>
     </div>
   </main>

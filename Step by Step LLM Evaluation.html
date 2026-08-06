@@ -17,10 +17,10 @@
   "headline": "LLM Eval, Step by Step",
   "description": "The operating procedure for LLM evaluation: define failure, build a golden dataset, choose scorers, calibrate the judge, gate in CI, and close the loop in production.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -325,6 +325,59 @@ h1, h2, h3 { text-wrap: balance; }
 .xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
 .section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
 .section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
+/* external reference links */
+.xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
+.xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
+.section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
+.section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+
 </style>
 </head>
 <body>
@@ -335,7 +388,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>LLM Eval, Step by Step</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#pipeline">The pipeline</a><a href="#steps">The procedure</a><a href="#metrics">The metrics</a><a href="#antipatterns">Anti-patterns</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#pipeline">The pipeline</a><a href="#steps">The procedure</a><a href="#metrics">The metrics</a><a href="#antipatterns">Anti-patterns</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -353,7 +406,7 @@ h1, h2, h3 { text-wrap: balance; }
             <p class="lead">Every serious LLM team learns the same lesson: you cannot improve what you do not measure, and you cannot measure what you have not defined. Evaluation is not a phase at the end — it is the operating system of the whole project.</p>
             <div class="hero-links"><a href="#pipeline">↓ <span>The five stages</span></a><a href="#antipatterns">↓ <span>Skip to anti-patterns</span></a></div>
           </div>
-          <div class="hero-note"><p>This is the procedure, step by step: from the first embarrassing output to the production feedback loop. The companion piece on <a href="LLM Evaluation.html">what to measure</a> is already on this site.</p></div>
+          <div class="hero-note"><p>This is the procedure, step by step: from the first embarrassing output to the production feedback loop. The companion piece on <a href="LLM Evaluation.html">what to measure</a> is already on this site.</p><div class="toc" aria-label="Table of contents"><div class="toc-title">In this piece</div><ol><li><a href="#pipeline">The pipeline</a></li><li><a href="#steps">The procedure</a></li><li><a href="#metrics">The metrics</a></li><li><a href="#antipatterns">Anti-patterns</a></li><li><a href="#sources">Sources</a></li></ol></div><div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>7 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div></div>
         </div>
       </section>      <section class="section reveal " id="pipeline" aria-labelledby="pipeline-h">
         <div class="section-head">
@@ -540,10 +593,26 @@ h1, h2, h3 { text-wrap: balance; }
       </div>
     </section>
     <div class="wrap">
+      <section class="section reveal" id="sources" aria-labelledby="sources-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span class="kicker-sep">—</span>Grounding</div>
+            <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Thresholds on this page are practitioner conventions, marked as such. The judge science and the evaluation frameworks are primary sources. Here they are.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><strong>Husain, H. — “Your AI Product Needs Evals.”</strong> The practitioner origin of the failure-first procedure on this page: look at real outputs, write down failure modes, then build tests for them. <a class="xlink" href="https://hamel.dev/blog/posts/evals/" target="_blank" rel="noopener noreferrer">hamel.dev</a></li>
+          <li id="src-2"><strong>Zheng et al. (2023) — Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena.</strong> NeurIPS 2023. The evidence behind preferring pairwise comparisons — and the catalog of judge biases (position, verbosity, self-enhancement) that calibration must control. <a class="xlink" href="https://arxiv.org/abs/2306.05685" target="_blank" rel="noopener noreferrer">arXiv:2306.05685</a></li>
+          <li id="src-3"><strong>Liu et al. (2023) — G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment.</strong> EMNLP 2023. Rubric-based LLM judging: why “correct refund amount, no invented policy, ≤3 bullets” grades and “good” does not. <a class="xlink" href="https://arxiv.org/abs/2303.16634" target="_blank" rel="noopener noreferrer">arXiv:2303.16634</a></li>
+          <li id="src-4"><strong>Es et al. (2023) — RAGAS: Automated Evaluation of Retrieval Augmented Generation.</strong> EACL 2024 demo. The retrieval/generation layer split in the metrics table: faithfulness, answer relevance, context precision and recall. <a class="xlink" href="https://arxiv.org/abs/2309.15217" target="_blank" rel="noopener noreferrer">arXiv:2309.15217</a></li>
+          <li id="src-5"><strong>OpenAI Evals.</strong> The open-source evaluation harness referenced for CI-grade regression suites; its registry pattern is the model for versioning cases like code. <a class="xlink" href="https://github.com/openai/evals" target="_blank" rel="noopener noreferrer">github.com/openai/evals</a></li>
+        </ol>
+      </section>
             <footer>
         <div class="footer-title">LLM Eval, Step by Step</div>
         <div>Define failure → test for it → gate on it → catch it live → add it to the test.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the AI Engineering series · Updated 5 August 2026. Companion to “LLM Evaluation” (what to measure). The release-quality chart is illustrative; thresholds are practitioner conventions, not standards.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the AI Engineering series · Updated 6 August 2026. Companion to “LLM Evaluation” (what to measure). The release-quality chart is illustrative; thresholds are practitioner conventions, not standards.</div>
       </footer>
     </div>
   </main>

@@ -17,8 +17,8 @@
   "headline": "Big Data",
   "description": "What big data actually meant: the five Vs, the real benefits and blockers, and the 2026 landscape — lakehouses, streaming, and the case that most data isn't big.",
   "datePublished": "2026-08-05",
-  "dateModified": "2026-08-05",
-  "author": { "@type": "Person", "name": "Ali Reza" }
+  "dateModified": "2026-08-06",
+  "author": { "@type": "Person", "name": "Ali Reza Rashidi" }
 }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,10 +41,7 @@ html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,
 ::-webkit-scrollbar-track { background: transparent; }
 body {
   margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif;
-  background:
-    radial-gradient(circle at 12% 8%, rgba(52,104,245,0.10), transparent 26%),
-    radial-gradient(circle at 86% 8%, rgba(118,80,230,0.10), transparent 25%),
-    linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+  background: linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
   line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
 ::selection { background: var(--ink); color: var(--paper); }
@@ -65,7 +62,7 @@ svg { max-width: 100%; height: auto; display: block; }
 .site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
 .topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
 .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
-.brand-dot { width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg, var(--blue), var(--purple)); box-shadow: 0 0 0 8px rgba(52,104,245,.08); }
+.brand-dot { width:12px; height:12px; border-radius:50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
 .nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
 .nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
 .nav a::before { content:""; position:absolute; left:-13px; top:50%; margin-top:-3px; width:6px; height:6px; border-radius:50%; background: var(--spy, var(--ink)); opacity:0; transition: opacity .2s ease; }
@@ -316,6 +313,52 @@ h1, h2, h3 { text-wrap: balance; }
   .swipe-hint { transition: none; }
 }
 
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
 /* external reference links */
 .xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
 .xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
@@ -332,7 +375,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Big Data</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#what">The term</a><a href="#vs">The five Vs</a><a href="#impact">The payoff</a><a href="#now">2026</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#what">The term</a><a href="#vs">The five Vs</a><a href="#impact">The payoff</a><a href="#now">2026</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -347,9 +390,20 @@ h1, h2, h3 { text-wrap: balance; }
         </h1>
         <div class="hero-grid">
           <p class="lead">Big data promised that scale itself would produce insight. Two decades in, the verdict is clearer: scale is cheap, judgment is not &mdash; and the five Vs were always a checklist for judgment.</p>
-          <div class="hero-note">A field guide to the term, the stack it built, and what replaced the hype.</div>
+          <div class="hero-note">A field guide to the term, the stack it built, and what replaced the hype.
+            <div class="toc" aria-label="Table of contents">
+              <div class="toc-title">In this piece</div>
+              <ol>
+                <li><a href="#what">The term</a> — what big data actually meant</li>
+                <li><a href="#vs">The five Vs</a> — one that matters</li>
+                <li><a href="#impact">The payoff</a> — why it changed everything</li>
+                <li><a href="#now">2026</a> — what comes after big data</li>
+                <li><a href="#sources">Sources</a> — what the numbers rest on</li>
+              </ol>
+            </div></div>
         </div>
         <div class="hero-links"><a href="#what"><span>&darr;</span> The term</a><a href="#vs"><span>&darr;</span> The five Vs</a></div>
+        <div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>6 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
       </section>
 
       <section class="section reveal" id="what" aria-labelledby="what-h">
@@ -362,10 +416,10 @@ h1, h2, h3 { text-wrap: balance; }
         </div>
 <p class="intro-copy"><a class="xlink" href="https://en.wikipedia.org/wiki/Big_data" target="_blank" rel="noopener noreferrer">Big data</a> is the name we gave to datasets too large, too fast, or too messy for traditional software &mdash; and to the stack that grew up around them: distributed storage, parallel compute, streaming pipelines. The label mattered less than the shift it forced: data stopped being a byproduct of business and became infrastructure.</p>
 <div class="stat-strip">
-<div><span class="stat-num" data-count="181" data-decimals="0" data-suffix="" data-prefix="" data-delay="0">181</span><span class="stat-label">zettabytes of data created and replicated in 2025 &mdash; IDC Global DataSphere forecast</span></div>
-<div><span class="stat-num" data-count="5" data-decimals="0" data-suffix="" data-prefix="" data-delay="120">5</span><span class="stat-label">Vs in the classic definition &mdash; volume, velocity, variety, veracity, value</span></div>
-<div><span class="stat-num" data-count="80" data-decimals="0" data-suffix="%" data-prefix="~" data-delay="240">~80%</span><span class="stat-label">of enterprise data is unstructured &mdash; widely cited industry estimate</span></div>
-<div><span class="stat-num" data-count="2006" data-decimals="0" data-suffix="" data-prefix="" data-delay="360">2006</span><span class="stat-label">the year Hadoop shipped and made &ldquo;big&rdquo; affordable</span></div>
+<div><span class="stat-num" data-count="181" data-decimals="0" data-suffix="" data-prefix="" data-delay="0">181</span><span class="stat-label">zettabytes of data created and replicated in 2025 &mdash; IDC Global DataSphere forecast<a class="xref" href="#src-1">[1]</a></span></div>
+<div><span class="stat-num" data-count="5" data-decimals="0" data-suffix="" data-prefix="" data-delay="120">5</span><span class="stat-label">Vs in the classic checklist &mdash; Laney coined three in 2001; veracity and value came later<a class="xref" href="#src-2">[2]</a></span></div>
+<div><span class="stat-num" data-count="80" data-decimals="0" data-suffix="%" data-prefix="~" data-delay="240">~80%</span><span class="stat-label">of enterprise data is unstructured &mdash; IDC estimate<a class="xref" href="#src-1">[1]</a></span></div>
+<div><span class="stat-num" data-count="2006" data-decimals="0" data-suffix="" data-prefix="" data-delay="360">2006</span><span class="stat-label">the year Hadoop shipped and made &ldquo;big&rdquo; affordable<a class="xref" href="#src-3">[3]</a></span></div>
 </div>
       </section>
 
@@ -426,13 +480,42 @@ h1, h2, h3 { text-wrap: balance; }
           </div>
           <p class="body-copy">The term faded because the stack won. The problems &mdash; and a new debate about scale &mdash; remain.</p>
         </div>
-<p class="intro-copy">Cheap object storage plus engines like <a class="xlink" href="https://spark.apache.org/" target="_blank" rel="noopener noreferrer">Spark</a>, <a class="xlink" href="https://kafka.apache.org/" target="_blank" rel="noopener noreferrer">Kafka</a> and the <a class="xlink" href="https://en.wikipedia.org/wiki/Data_lakehouse" target="_blank" rel="noopener noreferrer">lakehouse</a> pattern made yesterday&rsquo;s &ldquo;big&rdquo; into today&rsquo;s default. Meanwhile the pendulum swung back: single-node engines like <a class="xlink" href="https://duckdb.org/" target="_blank" rel="noopener noreferrer">DuckDB</a> showed that most working datasets fit on one machine, and the provocative essay <a class="xlink" href="https://motherduck.com/blog/big-data-is-dead/" target="_blank" rel="noopener noreferrer">&ldquo;Big Data Is Dead&rdquo;</a> argued that scale was never most companies&rsquo; real problem. Both things are true: the biggest datasets keep growing, and most teams should stop cosplaying as Google.</p><p class="quote-line">Big data stopped being a technology problem and became a judgment problem: knowing which data is worth the trouble.</p>
+<p class="intro-copy">Cheap object storage plus engines like <a class="xlink" href="https://spark.apache.org/" target="_blank" rel="noopener noreferrer">Spark</a>, <a class="xlink" href="https://kafka.apache.org/" target="_blank" rel="noopener noreferrer">Kafka</a> and the <a class="xlink" href="https://en.wikipedia.org/wiki/Data_lakehouse" target="_blank" rel="noopener noreferrer">lakehouse</a> pattern made yesterday&rsquo;s &ldquo;big&rdquo; into today&rsquo;s default. Meanwhile the pendulum swung back: single-node engines like <a class="xlink" href="https://duckdb.org/" target="_blank" rel="noopener noreferrer">DuckDB</a> showed that most working datasets fit on one machine, and the provocative essay <a class="xlink" href="https://motherduck.com/blog/big-data-is-dead/" target="_blank" rel="noopener noreferrer">&ldquo;Big Data Is Dead&rdquo;</a> argued that scale was never most companies&rsquo; real problem. Both things are true: the biggest datasets keep growing, and most teams should stop cosplaying as Google.</p><div class="quiz quiz-light" role="group" aria-labelledby="quizTitle">
+<div class="quiz-head">
+<h3 class="quiz-title" id="quizTitle">How big is your data problem, really?</h3>
+<div class="quiz-progress" aria-hidden="true">
+<span class="quiz-step" id="quizStep">01 / 03</span>
+<span class="quiz-track"><span class="quiz-fill" id="quizFill"></span></span>
+</div>
+</div>
+<noscript><p class="quiz-noscript">This matcher needs JavaScript &mdash; the section below reaches the same answer.</p></noscript>
+<div class="quiz-app">
+<div class="quiz-body" id="quizBody"></div>
+<div class="quiz-result" id="quizResult" aria-live="polite"></div>
+</div>
+</div><p class="quote-line">Big data stopped being a technology problem and became a judgment problem: knowing which data is worth the trouble.</p>
+      </section>
+
+      <section class="section reveal" id="sources" aria-labelledby="sources-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span class="kicker-sep">&mdash;</span>Grounding</div>
+            <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">The numbers on this page trace to these. The stall-chart is an editorial synthesis and says so; everything else links out.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><strong>IDC Global DataSphere.</strong> Worldwide data created and replicated reaches roughly 181 zettabytes in 2025 (on the way to ~394 ZB by 2028), and 80&ndash;90% of it is unstructured. <a class="xlink" href="https://www.cdotrends.com/story/4122/architecting-data-superhighway-toward-ai-ubiquity-sea" target="_blank" rel="noopener noreferrer">Coverage of the IDC forecast</a></li>
+          <li id="src-2"><strong>Doug Laney (2001) — the original Vs.</strong> “3-D Data Management: Controlling Data Volume, Velocity and Variety,” META Group research note. Laney defined three Vs; veracity and value were bolted on by later writers. <a class="xlink" href="https://blogs.gartner.com/doug-laney/files/2012/01/ad949-3D-Data-Management-Controlling-Data-Volume-Velocity-and-Variety.pdf" target="_blank" rel="noopener noreferrer">Original note (PDF)</a></li>
+          <li id="src-3"><strong>Apache Hadoop (2006).</strong> Doug Cutting and Mike Cafarella's open-source MapReduce stack — named after a toy elephant — made commodity-cluster storage cheap. <a class="xlink" href="https://en.wikipedia.org/wiki/Apache_Hadoop" target="_blank" rel="noopener noreferrer">History</a></li>
+          <li id="src-4"><strong>Jordan Tigani (2022) — “Big Data Is Dead.”</strong> The argument that most companies' data fits on one machine, cited in the 2026 section. <a class="xlink" href="https://motherduck.com/blog/big-data-is-dead/" target="_blank" rel="noopener noreferrer">Essay</a></li>
+        </ol>
       </section>
 
       <footer>
         <div class="footer-title">Big Data</div>
         <div>Scale is cheap. Judgment is not.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the Data Fundamentals series &middot; Updated 5 August 2026. Charts marked editorial are illustrative syntheses, not measurements; cited figures link to their sources inline.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the Data Fundamentals series &middot; Updated 6 August 2026. Charts marked editorial are illustrative syntheses, not measurements; cited figures link to their sources inline.</div>
       </footer>
     </div>
   </main>
@@ -541,21 +624,7 @@ h1, h2, h3 { text-wrap: balance; }
     });
   }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
   document.querySelectorAll('main section[id]').forEach(function (s) { spy.observe(s); });
-  var FW_COLORS = {"anatomy": {"loop": "#3468f5", "worker": "#23956f", "system": "#eb8237", "governance": "#db6478"}};
-  Object.keys(FW_COLORS).forEach(function (navId) {
-    var link = linkFor(navId);
-    if (!link) return;
-    var fwSpy = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting && FW_COLORS[navId][entry.target.id]) {
-          link.style.setProperty('--spy', FW_COLORS[navId][entry.target.id]);
-        }
-      });
-    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
-    document.querySelectorAll('.framework').forEach(function (f) { fwSpy.observe(f); });
-  });
-
-  var QUIZ = {"title": "What do you actually need?", "noscript": "This matcher needs JavaScript \u2014 the comparison table above reaches the same answer.", "resultKicker": "Start here", "order": ["agent", "agentic", "neither"], "fw": {"agent": {"name": "An AI agent", "color": "#3468f5", "anchor": "#worker", "linkText": "Read the task-worker section", "why": "A defined task, executed reliably, inside rules you control.", "pairing": "Ship one agent for one job well. Add orchestration only when jobs start chaining."}, "agentic": {"name": "Agentic AI", "color": "#eb8237", "anchor": "#system", "linkText": "Read the system section", "why": "An open-ended objective where the path can't be pre-scripted.", "pairing": "Budget for oversight from day one: logs, checkpoints, evals, and a kill switch."}, "neither": {"name": "Neither \u2014 yet", "color": "#5b6b7a", "anchor": "#distinction", "linkText": "Re-read the distinction", "why": "You need a better answer, not an autonomous worker.", "pairing": "A well-prompted model or a plain RAG pipeline beats an agent you don't need."}}, "questions": [{"q": "What shape is your problem?", "answers": [{"t": "A recurring task with clear rules", "f": "agent"}, {"t": "An open-ended process with shifting context", "f": "agentic"}, {"t": "Honestly, I just want better answers from a model", "f": "neither"}]}, {"q": "Who should decide the next step?", "answers": [{"t": "Rules and workflows we write ourselves", "f": "agent"}, {"t": "The system figures it out toward the goal", "f": "agentic"}, {"t": "A human, every time \u2014 for now", "f": "neither"}]}, {"q": "Your tolerance for autonomy?", "answers": [{"t": "Approve each consequential action", "f": "agent"}, {"t": "Hands-off inside well-tested guardrails", "f": "agentic"}, {"t": "Zero \u2014 suggestions only, humans execute", "f": "neither"}]}]};
+  var QUIZ = {"title": "How big is your data problem, really?", "noscript": "This matcher needs JavaScript \u2014 the 2026 section above reaches the same answer.", "resultKicker": "Start here", "order": ["rightsize", "scale", "hygiene"], "fw": {"rightsize": {"name": "A single-node setup", "color": "#3468f5", "anchor": "#now", "linkText": "Read what comes after big data", "why": "Most working datasets fit comfortably on one modern machine.", "pairing": "DuckDB, Postgres, or plain files beat a cluster you have to babysit. Spend the savings on analysis."}, "scale": {"name": "A distributed stack", "color": "#eb8237", "anchor": "#vs", "linkText": "Re-check the five Vs", "why": "Continuous, high-volume, multi-shape data is the genuine case for distributed storage and compute.", "pairing": "Spark, Kafka, and a lakehouse earn their keep here \u2014 with a platform team and SLAs to match."}, "hygiene": {"name": "A data-hygiene project", "color": "#23956f", "anchor": "#impact", "linkText": "See where initiatives stall", "why": "Your bottleneck is trust and ownership, not volume.", "pairing": "Fix quality, silos, and ownership first \u2014 they quietly poison everything downstream."}}, "questions": [{"q": "How much data are we actually talking about?", "answers": [{"t": "Gigabytes, maybe a few terabytes in total", "f": "rightsize"}, {"t": "Terabytes a day, arriving continuously", "f": "scale"}, {"t": "Honestly, nobody can tell me", "f": "hygiene"}]}, {"q": "What hurts most today?", "answers": [{"t": "Queries are slow on one machine", "f": "rightsize"}, {"t": "Ingesting and processing streams fast enough", "f": "scale"}, {"t": "Nobody trusts the numbers", "f": "hygiene"}]}, {"q": "Who owns the data end-to-end?", "answers": [{"t": "Basically me", "f": "rightsize"}, {"t": "A platform team with SLAs", "f": "scale"}, {"t": "Ownership is\u2026 unclear", "f": "hygiene"}]}]};
   var quizBody = document.getElementById('quizBody');
   var quizResult = document.getElementById('quizResult');
   var quizStepEl = document.getElementById('quizStep');

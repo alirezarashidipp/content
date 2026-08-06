@@ -17,8 +17,8 @@
   "headline": "Data Science Skills",
   "description": "The seven skills data science projects actually use — math, programming, wrangling, ML, storytelling, domain sense, MLOps — and the gaps that really sink projects.",
   "datePublished": "2026-08-05",
-  "dateModified": "2026-08-05",
-  "author": { "@type": "Person", "name": "Ali Reza" }
+  "dateModified": "2026-08-06",
+  "author": { "@type": "Person", "name": "Ali Reza Rashidi" }
 }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -322,6 +322,59 @@ h1, h2, h3 { text-wrap: balance; }
 .xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
 .section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
 .section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
+/* external reference links */
+.xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
+.xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
+.section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
+.section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+
 </style>
 </head>
 <body>
@@ -332,7 +385,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Data Science Skills</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#stack">The stack</a><a href="#fail">The gap</a><a href="#grow">The path</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#stack">The stack</a><a href="#fail">The gap</a><a href="#grow">The path</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -347,7 +400,7 @@ h1, h2, h3 { text-wrap: balance; }
         </h1>
         <div class="hero-grid">
           <p class="lead">Data science blends mathematics, code, domain knowledge, and communication. The tools are learnable in months. What separates practitioners is the craft around them &mdash; framing, judgment, and the discipline to ship.</p>
-          <div class="hero-note">Seven skills, the failure modes they prevent, and how they compound.</div>
+          <div class="hero-note">Seven skills, the failure modes they prevent, and how they compound.<div class="toc" aria-label="Table of contents"><div class="toc-title">In this piece</div><ol><li><a href="#stack">The stack</a></li><li><a href="#fail">The gap</a></li><li><a href="#grow">The path</a></li><li><a href="#sources">Sources</a></li></ol></div><div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>5 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div></div>
         </div>
         <div class="hero-links"><a href="#stack"><span>&darr;</span> The stack</a><a href="#fail"><span>&darr;</span> The gap</a></div>
       </section>
@@ -412,12 +465,43 @@ h1, h2, h3 { text-wrap: balance; }
 <div class="decision-step" style="--ac:#14a9c5"><span class="num">2</span><div><strong>Steal from adjacent crafts</strong><p>Software engineering for rigor, design for communication, product for framing. The field is a borrower.</p></div></div>
 <div class="decision-step" style="--ac:#23956f"><span class="num">3</span><div><strong>Go deep once</strong><p>One domain, one method family, one tool &mdash; depth somewhere beats shallow everywhere, and it compounds.</p></div></div>
 </div><p class="quote-line">The stack gets you hired. The craft &mdash; framing, judgment, communication &mdash; is what gets your work used.</p>
+        <div class="quiz quiz-light" role="group" aria-labelledby="quizTitle">
+          <div class="quiz-head">
+            <h3 class="quiz-title" id="quizTitle">Which skill is your bottleneck?</h3>
+            <div class="quiz-progress" aria-hidden="true">
+              <span class="quiz-step" id="quizStep">01 / 03</span>
+              <span class="quiz-track"><span class="quiz-fill" id="quizFill"></span></span>
+            </div>
+          </div>
+          <noscript><p class="quiz-noscript">This matcher needs JavaScript &mdash; the gap chart above ranks the same answers.</p></noscript>
+          <div class="quiz-app">
+            <div class="quiz-body" id="quizBody"></div>
+            <div class="quiz-result" id="quizResult" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="sources" aria-labelledby="sources-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span class="kicker-sep">&mdash;</span>Grounding</div>
+            <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">The failure chart is an editorial synthesis; the surveys and failure-rate studies behind it are not. Here they are.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><strong>Where the hours go &mdash; data preparation.</strong> CrowdFlower&rsquo;s 2016 survey (via Forbes) had 60% of data scientists naming cleaning and 19% collecting as their most time-consuming task; Anaconda&rsquo;s larger 2022 survey (n=3,493) measured ~38% of time on preparation and cleaning. <a class="xlink" href="https://www.forbes.com/sites/gilpress/2016/03/23/data-preparation-most-time-consuming-least-enjoyable-data-science-task-survey-says/" target="_blank" rel="noopener noreferrer">Forbes coverage</a></li>
+          <li id="src-2"><strong>RAND Corporation (2024) &mdash; The Root Causes of Failure for AI Projects.</strong> Interviews with 65 practitioners: 80%+ of AI projects fail &mdash; twice the failure rate of non-AI IT projects. The leading causes are framing, data, and process, not modeling. <a class="xlink" href="https://www.rand.org/pubs/research_reports/RRA2680-1.html" target="_blank" rel="noopener noreferrer">rand.org</a></li>
+          <li id="src-3"><strong>IDC &amp; Lenovo &mdash; CIO Playbook 2025.</strong> Global survey (n=2,920): ~88% of AI proofs-of-concept never reach production &mdash; the &ldquo;no adoption path&rdquo; bar, quantified. <a class="xlink" href="https://agentmodeai.com/why-88-percent-of-agentic-ai-deployments-fail/" target="_blank" rel="noopener noreferrer">Claim record</a></li>
+          <li id="src-4"><strong>Pedregosa et al. (2011) &mdash; Scikit-learn: Machine Learning in Python.</strong> JMLR 12:2825&ndash;2830. Reference for the ML tooling named in the stack. <a class="xlink" href="https://jmlr.org/papers/v12/pedregosa11a.html" target="_blank" rel="noopener noreferrer">jmlr.org</a></li>
+          <li id="src-5"><strong>Wickham (2014) &mdash; Tidy Data.</strong> Journal of Statistical Software, 59(10). The conceptual basis of the wrangling craft: reshape first, analyze second. <a class="xlink" href="https://doi.org/10.18637/jss.v059.i10" target="_blank" rel="noopener noreferrer">doi.org</a></li>
+        </ol>
       </section>
 
       <footer>
         <div class="footer-title">Data Science Skills</div>
         <div>Tools are learnable. Craft compounds.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the Engineering Craft series &middot; Updated 5 August 2026. Charts marked editorial are illustrative syntheses, not measurements; cited figures link to their sources inline.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the Engineering Craft series &middot; Updated 6 August 2026. Charts marked editorial are illustrative syntheses, not measurements; cited figures link to their sources inline.</div>
       </footer>
     </div>
   </main>
@@ -540,7 +624,7 @@ h1, h2, h3 { text-wrap: balance; }
     document.querySelectorAll('.framework').forEach(function (f) { fwSpy.observe(f); });
   });
 
-  var QUIZ = {"title": "What do you actually need?", "noscript": "This matcher needs JavaScript \u2014 the comparison table above reaches the same answer.", "resultKicker": "Start here", "order": ["agent", "agentic", "neither"], "fw": {"agent": {"name": "An AI agent", "color": "#3468f5", "anchor": "#worker", "linkText": "Read the task-worker section", "why": "A defined task, executed reliably, inside rules you control.", "pairing": "Ship one agent for one job well. Add orchestration only when jobs start chaining."}, "agentic": {"name": "Agentic AI", "color": "#eb8237", "anchor": "#system", "linkText": "Read the system section", "why": "An open-ended objective where the path can't be pre-scripted.", "pairing": "Budget for oversight from day one: logs, checkpoints, evals, and a kill switch."}, "neither": {"name": "Neither \u2014 yet", "color": "#5b6b7a", "anchor": "#distinction", "linkText": "Re-read the distinction", "why": "You need a better answer, not an autonomous worker.", "pairing": "A well-prompted model or a plain RAG pipeline beats an agent you don't need."}}, "questions": [{"q": "What shape is your problem?", "answers": [{"t": "A recurring task with clear rules", "f": "agent"}, {"t": "An open-ended process with shifting context", "f": "agentic"}, {"t": "Honestly, I just want better answers from a model", "f": "neither"}]}, {"q": "Who should decide the next step?", "answers": [{"t": "Rules and workflows we write ourselves", "f": "agent"}, {"t": "The system figures it out toward the goal", "f": "agentic"}, {"t": "A human, every time \u2014 for now", "f": "neither"}]}, {"q": "Your tolerance for autonomy?", "answers": [{"t": "Approve each consequential action", "f": "agent"}, {"t": "Hands-off inside well-tested guardrails", "f": "agentic"}, {"t": "Zero \u2014 suggestions only, humans execute", "f": "neither"}]}]};
+  var QUIZ = {"title": "Which skill is your bottleneck?", "noscript": "This matcher needs JavaScript \u2014 the gap chart above ranks the same answers.", "resultKicker": "Your bottleneck", "order": ["framing", "data", "adoption", "model"], "fw": {"framing": {"name": "Problem framing", "color": "#db6478", "anchor": "#fail", "linkText": "See the gap", "why": "The most common cause of failure is solving the wrong question well. No model repairs a mis-framed problem.", "pairing": "Spend the first week on the decision the analysis serves; write it down and get the stakeholder to sign it."}, "data": {"name": "Data wrangling & quality", "color": "#eb8237", "anchor": "#stack", "linkText": "See the stack", "why": "Most of the hours go here \u2014 and most of the silent failures start here too.", "pairing": "Profile before you model: distributions, joins, missingness, lineage. Make the boring part a ritual."}, "adoption": {"name": "Storytelling & adoption", "color": "#7650e6", "anchor": "#fail", "linkText": "See the gap", "why": "Insight that never reaches a workflow has an accuracy of zero.", "pairing": "Design the adoption path before the analysis: who acts, on what screen, at which threshold."}, "model": {"name": "Machine-learning depth", "color": "#3468f5", "anchor": "#grow", "linkText": "See the path", "why": "Modeling is the least common cause of failure \u2014 but when it is the bottleneck, depth is the only fix.", "pairing": "One method family, deeply: know its failure modes by name before reaching for the next one."}}, "questions": [{"q": "Your last project stalled. Where?", "answers": [{"t": "We built a great answer to the wrong question", "f": "framing"}, {"t": "The data was never what we assumed", "f": "data"}, {"t": "The insight never reached anyone\u2019s workflow", "f": "adoption"}, {"t": "The model underperformed a simple baseline", "f": "model"}]}, {"q": "What do you reach for first on a new problem?", "answers": [{"t": "The stakeholder and the decision", "f": "framing"}, {"t": "The raw tables and their history", "f": "data"}, {"t": "The people who will use the output", "f": "adoption"}, {"t": "A benchmark and a baseline", "f": "model"}]}, {"q": "Your interviews go best when you talk about\u2026", "answers": [{"t": "Business context and problem shape", "f": "framing"}, {"t": "Pipelines and cleaning", "f": "data"}, {"t": "Presenting and persuading", "f": "adoption"}, {"t": "Algorithms and evaluation", "f": "model"}]}]};
   var quizBody = document.getElementById('quizBody');
   var quizResult = document.getElementById('quizResult');
   var quizStepEl = document.getElementById('quizStep');

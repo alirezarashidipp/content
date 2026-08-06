@@ -17,10 +17,10 @@
   "headline": "Hypothesis \u00b7 Law \u00b7 Theory",
   "description": "Fact vs hypothesis vs law vs theory in science: why the schoolbook ladder is a myth, what each word really means, and why 'just a theory' gets science backwards.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -325,6 +325,59 @@ h1, h2, h3 { text-wrap: balance; }
 .xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
 .section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
 .section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
+/* external reference links */
+.xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
+.xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
+.section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
+.section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+
 </style>
 </head>
 <body>
@@ -335,7 +388,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Hypothesis · Law · Theory</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#ladder">The ladder that isn't</a><a href="#words">The four words</a><a href="#method">The method</a><a href="#misconceptions">Misconceptions</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#ladder">The ladder that isn't</a><a href="#words">The four words</a><a href="#method">The method</a><a href="#misconceptions">Misconceptions</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -353,7 +406,19 @@ h1, h2, h3 { text-wrap: balance; }
             <p class="lead">Few words cause more confusion between the lab and the living room than fact, <a class="xlink" href="https://en.wikipedia.org/wiki/Hypothesis" target="_blank" rel="noopener noreferrer">hypothesis</a>, law, and theory. In everyday speech a theory is a hunch; in science it is the opposite — the strongest knowledge humans possess.</p>
             <div class="hero-links"><a href="#ladder">↓ <span>The ladder that isn't</span></a><a href="#misconceptions">↓ <span>Skip to misconceptions</span></a></div>
           </div>
-          <div class="hero-note"><p>These four words are not a ladder of promotion. They are four different jobs in one enterprise: <em>knowing things reliably</em>.</p></div>
+          <div class="hero-note"><p>These four words are not a ladder of promotion. They are four different jobs in one enterprise: <em>knowing things reliably</em>.</p>
+<nav class="toc" aria-label="In this article">
+<div class="toc-head"><span class="toc-kicker">In this article</span><span class="toc-count">5 sections</span></div>
+<div class="toc-grid">
+<a href="#ladder"><span class="toc-num">01</span><span><span class="toc-t">The ladder that isn't</span><span class="toc-d">Why "hypothesis becomes theory becomes law" is a myth — these are jobs, not ranks.</span></span></a>
+<a href="#words"><span class="toc-num">02</span><span><span class="toc-t">The four words</span><span class="toc-d">Fact, hypothesis, law, theory — each properly defined, each with its own job description.</span></span></a>
+<a href="#method"><span class="toc-num">03</span><span><span class="toc-t">The method</span><span class="toc-d">How the words work together: science as a loop, not a ladder.</span></span></a>
+<a href="#misconceptions"><span class="toc-num">04</span><span><span class="toc-t">The misconceptions</span><span class="toc-d">Four myths that do nearly all the damage — plus a quiz to test yourself.</span></span></a>
+<a href="#sources"><span class="toc-num">05</span><span><span class="toc-t">Sources</span><span class="toc-d">Berkeley's Understanding Science, the National Academies, Popper, and Kuhn.</span></span></a>
+</div>
+</nav>
+<div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>7 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
+</div>
         </div>
       </section>      <section class="section reveal " id="ladder" aria-labelledby="ladder-h">
         <div class="section-head">
@@ -479,7 +544,7 @@ h1, h2, h3 { text-wrap: balance; }
           </aside>
           <div class="framework-content"><p>Theories explain <strong>why</strong>, and they do it broadly: germ theory unifies hygiene, vaccination, and antibiotics; evolution unifies fossils, DNA, and finch beaks; general relativity unifies falling apples and bending starlight. A theory is not a hypothesis that got promoted — it is a different kind of thing: not one testable claim, but a framework that generates thousands of them.</p>
             <div class="split">
-              <div class="text-block"><h4>A theory must</h4><ul><li><strong>Explain known facts:</strong> all of them, not the convenient subset.</li><li><strong>Predict new ones:</strong> Einstein predicted starlight bending; Eddington measured it.</li><li><strong>Survive attacks:</strong> every generation of scientists tries to break it.</li></ul></div>
+              <div class="text-block"><h4>A theory must</h4><ul><li><strong>Explain known facts:</strong> all of them, not the convenient subset.</li><li><strong>Predict new ones:</strong> Einstein predicted starlight bending; <a class="xlink" href="https://en.wikipedia.org/wiki/Eddington_experiment" target="_blank" rel="noopener noreferrer">Eddington measured it</a> during the 1919 eclipse.</li><li><strong>Survive attacks:</strong> every generation of scientists tries to break it.</li></ul></div>
               <div class="text-block"><h4>A theory never</h4><ul><li><strong>Becomes a law:</strong> explanation and description are different jobs, not ranks.</li><li><strong>Claims absolute proof:</strong> no such status exists in science.</li><li><strong>Gets 'demoted':</strong> superseded theories still work in their domain — Newton still builds bridges.</li></ul></div>
             </div>
             <div class="callout-line" style="color:#7650e6">“Just a theory” gets it exactly backwards.<small>When someone says evolution is “only a theory,” they are accidentally placing it at the highest rank of human knowledge — alongside gravity and germs.</small></div></div>
@@ -531,11 +596,25 @@ h1, h2, h3 { text-wrap: balance; }
 </div><p class="combo-line"><strong>One sentence to keep:</strong> laws tell you what nature does; theories tell you why; hypotheses are how we find out; facts are what we found.</p>
       </div>
     </section>
+    <section id="sources" class="section reveal" aria-labelledby="sources-h">
+      <div class="wrap">
+        <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span class="kicker-sep">—</span>Grounding</div>
+        <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+        <p class="body-copy">The definitions here are not my invention — they follow the standard references below, and the framework follows Berkeley's Understanding Science project.</p>
+        <ol class="sources-list">
+          <li id="src-1"><strong>UC Museum of Paleontology, University of California, Berkeley.</strong> <em>Understanding Science: How Science Really Works.</em> The NSF-funded reference this page's framework follows: science as a dynamic, social, revisable loop — not a linear textbook recipe. <a class="xlink" href="https://undsci.berkeley.edu/" target="_blank" rel="noopener noreferrer">undsci.berkeley.edu</a></li>
+          <li id="src-2"><strong>National Academy of Sciences and Institute of Medicine (2008).</strong> <em>Science, Evolution, and Creationism.</em> Washington, DC: The National Academies Press. The canonical definitions: a fact is a confirmed observation, a hypothesis a tentative testable statement, a law a descriptive generalization, and a theory "a comprehensive explanation of some aspect of nature that is supported by a vast body of evidence." <a class="xlink" href="https://doi.org/10.17226/11876" target="_blank" rel="noopener noreferrer">doi.org/10.17226/11876</a></li>
+          <li id="src-3"><strong>Popper, K. (1959).</strong> <em>The Logic of Scientific Discovery.</em> Routledge. (First published in German, 1934.) The falsifiability criterion behind the "try to kill it" section: an idea no test could refute explains nothing. <a class="xlink" href="https://en.wikipedia.org/wiki/The_Logic_of_Scientific_Discovery" target="_blank" rel="noopener noreferrer">en.wikipedia.org/wiki/The_Logic_of_Scientific_Discovery</a></li>
+          <li id="src-4"><strong>Kuhn, T. S. (1962).</strong> <em>The Structure of Scientific Revolutions.</em> University of Chicago Press. Why science "updates without apology": normal science, anomalies, and the paradigm shifts that revise yesterday's facts. <a class="xlink" href="https://en.wikipedia.org/wiki/The_Structure_of_Scientific_Revolutions" target="_blank" rel="noopener noreferrer">en.wikipedia.org/wiki/The_Structure_of_Scientific_Revolutions</a></li>
+          <li id="src-5"><strong>Dyson, F. W., Eddington, A. S., &amp; Davidson, C. (1920).</strong> "A Determination of the Deflection of Light by the Sun's Gravitational Field, from Observations Made at the Total Eclipse of May 29, 1919." <em>Philosophical Transactions of the Royal Society A</em>, 220, 291–333. The expedition that measured starlight bending and put general relativity on the map. <a class="xlink" href="https://en.wikipedia.org/wiki/Eddington_experiment" target="_blank" rel="noopener noreferrer">en.wikipedia.org/wiki/Eddington_experiment</a></li>
+        </ol>
+      </div>
+    </section>
     <div class="wrap">
             <footer>
         <div class="footer-title">Hypothesis · Law · Theory</div>
         <div>Laws tell you what nature does; theories tell you why.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the Thinking Clearly series · Updated 5 August 2026. Framework after Berkeley's Understanding Science; the radar chart is an illustrative character profile, not a measurement.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the Thinking Clearly series · Updated 6 August 2026. Framework after Berkeley's Understanding Science; the radar chart is an illustrative character profile, not a measurement.</div>
       </footer>
     </div>
   </main>

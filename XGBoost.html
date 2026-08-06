@@ -17,10 +17,10 @@
   "headline": "XGBoost: The Kaggle King",
   "description": "Why XGBoost remains the first model trained on any new table: boosting explained with a house price, honest optimization curves, domain fit, and the rules that matter.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -325,6 +325,59 @@ h1, h2, h3 { text-wrap: balance; }
 .xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
 .section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
 .section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
+/* external reference links */
+.xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
+.xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
+.section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
+.section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+
 </style>
 </head>
 <body>
@@ -335,7 +388,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span><a class="xlink" href="https://arxiv.org/abs/1603.02754" target="_blank" rel="noopener noreferrer">XGBoost</a>: The <a class="xlink" href="https://www.kaggle.com/" target="_blank" rel="noopener noreferrer">Kaggle</a> King</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#arena">The arena</a><a href="#reasons">The reasons</a><a href="#rules">The rules</a><a href="#choosing">Choosing</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#arena">The arena</a><a href="#reasons">The reasons</a><a href="#rules">The rules</a><a href="#choosing">Choosing</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -353,7 +406,19 @@ h1, h2, h3 { text-wrap: balance; }
             <p class="lead">While brain-inspired deep learning wins the headlines, the quiet trophy case of tabular prediction belongs to XGBoost — eXtreme Gradient Boosting. It is fast, regularized, and unfussy about messy data. This is why it remains the first model serious practitioners train on a new table.</p>
             <div class="hero-links"><a href="#reasons">↓ <span>Why it wins</span></a><a href="#rules">↓ <span>Skip to the rules</span></a></div>
           </div>
-          <div class="hero-note"><p>A decade after its release — and well into the 3.x era with GPU and external-memory training — the crown is contested by <a class="xlink" href="https://lightgbm.readthedocs.io/" target="_blank" rel="noopener noreferrer">LightGBM</a> and <a class="xlink" href="https://catboost.ai/" target="_blank" rel="noopener noreferrer">CatBoost</a>, but never quite taken. <em>High speed. Smart logic. Robust by default.</em></p></div>
+          <div class="hero-note"><p>A decade after its release — and well into the 3.x era with GPU and external-memory training — the crown is contested by <a class="xlink" href="https://lightgbm.readthedocs.io/" target="_blank" rel="noopener noreferrer">LightGBM</a> and <a class="xlink" href="https://catboost.ai/" target="_blank" rel="noopener noreferrer">CatBoost</a>, but never quite taken. <em>High speed. Smart logic. Robust by default.</em></p>
+<nav class="toc" aria-label="In this article">
+<div class="toc-head"><span class="toc-kicker">In this article</span><span class="toc-count">5 sections</span></div>
+<div class="toc-grid">
+<a href="#arena"><span class="toc-num">01</span><span><span class="toc-t">The arena</span><span class="toc-d">The digital olympics of tables — and the recurring winner.</span></span></a>
+<a href="#reasons"><span class="toc-num">02</span><span><span class="toc-t">The reasons</span><span class="toc-d">Speed, second-order logic, regularization, and missing-value instincts.</span></span></a>
+<a href="#rules"><span class="toc-num">03</span><span><span class="toc-t">The rules</span><span class="toc-d">How to actually use it: tuning order, pitfalls, and honest expectations.</span></span></a>
+<a href="#choosing"><span class="toc-num">04</span><span><span class="toc-t">Choosing</span><span class="toc-d">When to reach for XGBoost, when for LightGBM or CatBoost, when for a neural net.</span></span></a>
+<a href="#sources"><span class="toc-num">05</span><span><span class="toc-t">Sources</span><span class="toc-d">From Friedman's 2001 paper to the 2022 tabular benchmark.</span></span></a>
+</div>
+</nav>
+<div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>7 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
+</div>
         </div>
       </section>      <section class="section reveal " id="arena" aria-labelledby="arena-h">
         <div class="section-head">
@@ -563,11 +628,25 @@ h1, h2, h3 { text-wrap: balance; }
 </div><p class="combo-line"><strong>The honest crown:</strong> XGBoost wins not because it is brilliant, but because it is disciplined — fast enough to iterate, regularized enough to trust, and simple enough to debug at 3 a.m.</p>
       </div>
     </section>
+    <section id="sources" class="section reveal" aria-labelledby="sources-h">
+      <div class="wrap">
+        <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span class="kicker-sep">—</span>Grounding</div>
+        <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+        <p class="body-copy">The family tree is real: every claim in this piece descends from one of these papers. The charts are illustrative profiles, as marked.</p>
+        <ol class="sources-list">
+          <li id="src-1"><strong>Friedman, J. H. (2001).</strong> "Greedy Function Approximation: A Gradient Boosting Machine." <em>The Annals of Statistics</em>, 29(5), 1189–1232. The origin of gradient boosting itself — fitting each new tree to the residual errors of the ensemble so far. <a class="xlink" href="https://doi.org/10.1214/aos/1013203451" target="_blank" rel="noopener noreferrer">doi.org/10.1214/aos/1013203451</a></li>
+          <li id="src-2"><strong>Chen, T., &amp; Guestrin, C. (2016).</strong> "XGBoost: A Scalable Tree Boosting System." <em>KDD '16</em>, pp. 785–794. The paper behind the library: second-order gradients, built-in regularization, sparsity-aware split finding, and the systems engineering that made it fast. <a class="xlink" href="https://arxiv.org/abs/1603.02754" target="_blank" rel="noopener noreferrer">arxiv.org/abs/1603.02754</a></li>
+          <li id="src-3"><strong>Ke, G., Meng, Q., Finley, T., Wang, T., Chen, W., Ma, W., Ye, Q., &amp; Liu, T.-Y. (2017).</strong> "LightGBM: A Highly Efficient Gradient Boosting Decision Tree." <em>NeurIPS 2017</em>, 3146–3154. The strongest challenger — histogram-based training that wins on speed at large scale. <a class="xlink" href="https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree" target="_blank" rel="noopener noreferrer">papers.nips.cc</a></li>
+          <li id="src-4"><strong>Prokhorenkova, L., Gusev, G., Vorobev, A., Dorogush, A. V., &amp; Gulin, A. (2018).</strong> "CatBoost: Unbiased Boosting with Categorical Features." <em>NeurIPS 2018</em>, 6638–6648. The other challenger — ordered boosting and native categorical handling. <a class="xlink" href="https://papers.nips.cc/paper/7898-catboost-unbiased-boosting-with-categorical-features" target="_blank" rel="noopener noreferrer">papers.nips.cc</a></li>
+          <li id="src-5"><strong>Grinsztajn, L., Oyallon, E., &amp; Varoquaux, G. (2022).</strong> "Why Do Tree-Based Models Still Outperform Deep Learning on Typical Tabular Data?" <em>NeurIPS 2022 Datasets and Benchmarks.</em> The evidence behind the Choosing section: on medium-sized tabular data, tuned gradient-boosted trees remain the benchmark to beat. <a class="xlink" href="https://arxiv.org/abs/2207.08815" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2207.08815</a></li>
+        </ol>
+      </div>
+    </section>
     <div class="wrap">
             <footer>
         <div class="footer-title">XGBoost: The Kaggle King</div>
         <div>The quiet champion of structured data.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of Data Science Fundamentals · Updated 5 August 2026. Charts are illustrative profiles.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of Data Science Fundamentals · Updated 6 August 2026. Charts are illustrative profiles.</div>
       </footer>
     </div>
   </main>

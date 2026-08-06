@@ -17,8 +17,8 @@
   "headline": "Data-Driven Decisions",
   "description": "Why data-driven cultures win: the four benefits, the four-step loop to get started, and the classic traps — Goodhart's law, correlation vs causation, metric theater.",
   "datePublished": "2026-08-05",
-  "dateModified": "2026-08-05",
-  "author": { "@type": "Person", "name": "Ali Reza" }
+  "dateModified": "2026-08-06",
+  "author": { "@type": "Person", "name": "Ali Reza Rashidi" }
 }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,10 +41,7 @@ html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,
 ::-webkit-scrollbar-track { background: transparent; }
 body {
   margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif;
-  background:
-    radial-gradient(circle at 12% 8%, rgba(52,104,245,0.10), transparent 26%),
-    radial-gradient(circle at 86% 8%, rgba(118,80,230,0.10), transparent 25%),
-    linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+  background: linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
   line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
 ::selection { background: var(--ink); color: var(--paper); }
@@ -65,7 +62,7 @@ svg { max-width: 100%; height: auto; display: block; }
 .site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
 .topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
 .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
-.brand-dot { width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg, var(--blue), var(--purple)); box-shadow: 0 0 0 8px rgba(52,104,245,.08); }
+.brand-dot { width:12px; height:12px; border-radius:50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
 .nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
 .nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
 .nav a::before { content:""; position:absolute; left:-13px; top:50%; margin-top:-3px; width:6px; height:6px; border-radius:50%; background: var(--spy, var(--ink)); opacity:0; transition: opacity .2s ease; }
@@ -316,6 +313,52 @@ h1, h2, h3 { text-wrap: balance; }
   .swipe-hint { transition: none; }
 }
 
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
 /* external reference links */
 .xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
 .xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
@@ -332,7 +375,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Data-Driven Decisions</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#why">The case</a><a href="#loop">The loop</a><a href="#traps">The traps</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#why">The case</a><a href="#loop">The loop</a><a href="#traps">The traps</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -347,9 +390,19 @@ h1, h2, h3 { text-wrap: balance; }
         </h1>
         <div class="hero-grid">
           <p class="lead">Organizations that make data central to decisions navigate uncertainty better &mdash; not because the numbers decide, but because evidence disciplines the argument. Here is the case, the loop, and the traps.</p>
-          <div class="hero-note">The benefits, the starting loop, and the failure modes &mdash; in one page.</div>
+          <div class="hero-note">The benefits, the starting loop, and the failure modes &mdash; in one page.
+            <div class="toc" aria-label="Table of contents">
+              <div class="toc-title">In this piece</div>
+              <ol>
+                <li><a href="#why">The case</a> — why evidence beats instinct</li>
+                <li><a href="#loop">The loop</a> — how to actually start</li>
+                <li><a href="#traps">The traps</a> — where it goes wrong</li>
+                <li><a href="#sources">Sources</a> — the receipts</li>
+              </ol>
+            </div></div>
         </div>
         <div class="hero-links"><a href="#why"><span>&darr;</span> The case</a><a href="#loop"><span>&darr;</span> The loop</a></div>
+        <div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>5 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div>
       </section>
 
       <section class="section reveal" id="why" aria-labelledby="why-h">
@@ -358,9 +411,9 @@ h1, h2, h3 { text-wrap: balance; }
             <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">01</span><span class="kicker-sep">&mdash;</span>The case</div>
             <h2 id="why-h">Why evidence beats instinct<a class="anchor" href="#why" aria-label="Link to this section">#</a></h2>
           </div>
-          <p class="body-copy">A data-driven culture is not about dashboards. It is about replacing arguments-by-seniority with arguments-by-evidence.</p>
+          <p class="body-copy">A data-driven culture is not about dashboards. It is about replacing arguments-by-seniority with arguments-by-evidence. The seniority version has a name: the HiPPO &mdash; the Highest Paid Person's Opinion.<a class="xref" href="#src-1">[1]</a></p>
         </div>
-<p class="intro-copy">Every click and transaction leaves a trace. Organizations that treat those traces as evidence cut through bias and guesswork: they plan with confidence, measure progress, and course-correct when reality disagrees with the plan. The mindset matters more than the tooling &mdash; teams experiment, evaluate, and adapt, instead of defending last year&rsquo;s hunch.</p><div class="mini-compare">
+<p class="intro-copy">Every click and transaction leaves a trace. Organizations that treat those traces as evidence cut through bias and guesswork: they plan with confidence, measure progress, and course-correct when reality disagrees with the plan. The mindset matters more than the tooling &mdash; teams experiment, evaluate, and adapt, instead of defending last year&rsquo;s hunch. The payoff is not folklore: across 179 large public firms, the ones emphasizing data-driven decision making showed 5&ndash;6% higher output and productivity than their IT spending alone could explain.<a class="xref" href="#src-2">[2]</a></p><div class="mini-compare">
 <div class="mini-item"><span class="mini-dot" style="background:#3468f5"></span><strong>Sharper insights</strong><span>Clear metrics reveal how customers behave and which products perform &mdash; opportunities surface sooner.</span></div>
 <div class="mini-item"><span class="mini-dot" style="background:#14a9c5"></span><strong>Greater efficiency</strong><span>Facts expose bottlenecks and misallocated effort; resources move to where impact is provable.</span></div>
 <div class="mini-item"><span class="mini-dot" style="background:#7650e6"></span><strong>Predictive power</strong><span>History, read carefully, anticipates seasonal swings and trend breaks before they hurt.</span></div>
@@ -397,13 +450,41 @@ h1, h2, h3 { text-wrap: balance; }
 <div class="mini-item"><span class="mini-dot" style="background:#eb8237"></span><strong>Correlation &ne; causation</strong><span>Dashboards show co-movement; decisions need mechanisms. <a class="xlink" href="https://en.wikipedia.org/wiki/Correlation_does_not_imply_causation" target="_blank" rel="noopener noreferrer">The oldest trap</a> is still the most expensive.</span></div>
 <div class="mini-item"><span class="mini-dot" style="background:#5b6b7a"></span><strong>Metric theater</strong><span>Dashboards nobody opens, reports nobody reads &mdash; measurement as ritual instead of input.</span></div>
 <div class="mini-item"><span class="mini-dot" style="background:#7650e6"></span><strong>Survivorship bias</strong><span>You analyze the customers who stayed. <a class="xlink" href="https://en.wikipedia.org/wiki/Survivorship_bias" target="_blank" rel="noopener noreferrer">The missing data</a> usually holds the answer.</span></div>
+</div><div class="quiz quiz-light" role="group" aria-labelledby="quizTitle">
+<div class="quiz-head">
+<h3 class="quiz-title" id="quizTitle">How data-driven are you, really?</h3>
+<div class="quiz-progress" aria-hidden="true">
+<span class="quiz-step" id="quizStep">01 / 03</span>
+<span class="quiz-track"><span class="quiz-fill" id="quizFill"></span></span>
+</div>
+</div>
+<noscript><p class="quiz-noscript">This matcher needs JavaScript &mdash; the traps above are the self-test.</p></noscript>
+<div class="quiz-app">
+<div class="quiz-body" id="quizBody"></div>
+<div class="quiz-result" id="quizResult" aria-live="polite"></div>
+</div>
 </div><p class="quote-line">Data-driven does not mean the data decides. It means the humans deciding can no longer pretend not to know.</p>
+      </section>
+
+      <section class="section reveal" id="sources" aria-labelledby="sources-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span class="kicker-sep">&mdash;</span>Grounding</div>
+            <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Two anchor claims are on the record; the traps are linked inline where they appear.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><strong>Avinash Kaushik — the HiPPO.</strong> The “Highest Paid Person's Opinion” and the case for depersonalizing decision making, from “Seven Steps to Creating a Data Driven Decision Making Culture.” <a class="xlink" href="https://www.kaushik.net/avinash/seven-steps-to-creating-a-data-driven-decision-making-culture/" target="_blank" rel="noopener noreferrer">Essay</a></li>
+          <li id="src-2"><strong>Brynjolfsson, Hitt &amp; Kim (2011) — “Strength in Numbers.”</strong> Survey of 179 large publicly traded firms: firms adopting data-driven decision making show output and productivity 5&ndash;6% higher than expected given their other investments and IT usage. <a class="xlink" href="https://aisel.aisnet.org/icis2011/proceedings/economicvalueIS/13/" target="_blank" rel="noopener noreferrer">Paper (ICIS 2011)</a></li>
+          <li id="src-3"><strong>The traps, defined:</strong> <a class="xlink" href="https://en.wikipedia.org/wiki/Goodhart%27s_law" target="_blank" rel="noopener noreferrer">Goodhart's law</a>, <a class="xlink" href="https://en.wikipedia.org/wiki/Correlation_does_not_imply_causation" target="_blank" rel="noopener noreferrer">correlation vs causation</a>, and <a class="xlink" href="https://en.wikipedia.org/wiki/Survivorship_bias" target="_blank" rel="noopener noreferrer">survivorship bias</a>.</li>
+        </ol>
       </section>
 
       <footer>
         <div class="footer-title">Data-Driven Decisions</div>
         <div>The loop is the product.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of the Data Fundamentals series &middot; Updated 5 August 2026. Charts marked editorial are illustrative syntheses, not measurements; cited figures link to their sources inline.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the Data Fundamentals series &middot; Updated 6 August 2026. Charts marked editorial are illustrative syntheses, not measurements; cited figures link to their sources inline.</div>
       </footer>
     </div>
   </main>
@@ -512,21 +593,7 @@ h1, h2, h3 { text-wrap: balance; }
     });
   }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
   document.querySelectorAll('main section[id]').forEach(function (s) { spy.observe(s); });
-  var FW_COLORS = {"anatomy": {"loop": "#3468f5", "worker": "#23956f", "system": "#eb8237", "governance": "#db6478"}};
-  Object.keys(FW_COLORS).forEach(function (navId) {
-    var link = linkFor(navId);
-    if (!link) return;
-    var fwSpy = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting && FW_COLORS[navId][entry.target.id]) {
-          link.style.setProperty('--spy', FW_COLORS[navId][entry.target.id]);
-        }
-      });
-    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
-    document.querySelectorAll('.framework').forEach(function (f) { fwSpy.observe(f); });
-  });
-
-  var QUIZ = {"title": "What do you actually need?", "noscript": "This matcher needs JavaScript \u2014 the comparison table above reaches the same answer.", "resultKicker": "Start here", "order": ["agent", "agentic", "neither"], "fw": {"agent": {"name": "An AI agent", "color": "#3468f5", "anchor": "#worker", "linkText": "Read the task-worker section", "why": "A defined task, executed reliably, inside rules you control.", "pairing": "Ship one agent for one job well. Add orchestration only when jobs start chaining."}, "agentic": {"name": "Agentic AI", "color": "#eb8237", "anchor": "#system", "linkText": "Read the system section", "why": "An open-ended objective where the path can't be pre-scripted.", "pairing": "Budget for oversight from day one: logs, checkpoints, evals, and a kill switch."}, "neither": {"name": "Neither \u2014 yet", "color": "#5b6b7a", "anchor": "#distinction", "linkText": "Re-read the distinction", "why": "You need a better answer, not an autonomous worker.", "pairing": "A well-prompted model or a plain RAG pipeline beats an agent you don't need."}}, "questions": [{"q": "What shape is your problem?", "answers": [{"t": "A recurring task with clear rules", "f": "agent"}, {"t": "An open-ended process with shifting context", "f": "agentic"}, {"t": "Honestly, I just want better answers from a model", "f": "neither"}]}, {"q": "Who should decide the next step?", "answers": [{"t": "Rules and workflows we write ourselves", "f": "agent"}, {"t": "The system figures it out toward the goal", "f": "agentic"}, {"t": "A human, every time \u2014 for now", "f": "neither"}]}, {"q": "Your tolerance for autonomy?", "answers": [{"t": "Approve each consequential action", "f": "agent"}, {"t": "Hands-off inside well-tested guardrails", "f": "agentic"}, {"t": "Zero \u2014 suggestions only, humans execute", "f": "neither"}]}]};
+  var QUIZ = {"title": "How data-driven are you, really?", "noscript": "This matcher needs JavaScript \u2014 the traps above are the self-test.", "resultKicker": "Your culture, roughly", "order": ["loop", "ritual", "hippo"], "fw": {"loop": {"name": "A working evidence loop", "color": "#23956f", "anchor": "#loop", "linkText": "Revisit the four steps", "why": "Decisions change when the data does \u2014 that is the whole game.", "pairing": "Protect it: interrogate assumptions, watch for gaming, keep the loop short."}, "ritual": {"name": "Metric theater", "color": "#db6478", "anchor": "#traps", "linkText": "See the traps", "why": "You have the rituals of measurement without the consequences.", "pairing": "Kill one dashboard nobody opens; tie one surviving metric to one real decision."}, "hippo": {"name": "A HiPPO culture", "color": "#eb8237", "anchor": "#why", "linkText": "Re-read the case", "why": "The Highest Paid Person's Opinion still outranks the evidence.", "pairing": "Start small: one decision, criteria agreed in advance, outcome reviewed in public."}}, "questions": [{"q": "The number and the boss disagree. What wins?", "answers": [{"t": "A test, if we can run one", "f": "loop"}, {"t": "The number \u2014 but nobody acts on it anyway", "f": "ritual"}, {"t": "The boss. It is their meeting.", "f": "hippo"}]}, {"q": "What happens when a metric becomes a target?", "answers": [{"t": "It informs for a while, then gets re-examined", "f": "loop"}, {"t": "It gets gamed until it lies", "f": "ritual"}, {"t": "Targets? We mostly go on experience", "f": "hippo"}]}, {"q": "Who can challenge a number in a meeting?", "answers": [{"t": "Anyone with evidence", "f": "loop"}, {"t": "The analytics team, on paper", "f": "ritual"}, {"t": "Rank decides", "f": "hippo"}]}]};
   var quizBody = document.getElementById('quizBody');
   var quizResult = document.getElementById('quizResult');
   var quizStepEl = document.getElementById('quizStep');

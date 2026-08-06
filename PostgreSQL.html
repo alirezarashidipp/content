@@ -17,10 +17,10 @@
   "headline": "PostgreSQL",
   "description": "Why the elephant keeps winning: ACID guarantees, JSONB, the extension ecosystem, and what's new in PostgreSQL 18 \u2014 async I/O, virtual generated columns, temporal constraints, UUIDv7.",
   "datePublished": "2026-08-04",
-  "dateModified": "2026-08-05",
+  "dateModified": "2026-08-06",
   "author": {
     "@type": "Person",
-    "name": "Ali Reza"
+    "name": "Ali Reza Rashidi"
   }
 }
   </script>
@@ -44,10 +44,7 @@ html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,
 ::-webkit-scrollbar-track { background: transparent; }
 body {
   margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif;
-  background:
-    radial-gradient(circle at 12% 8%, rgba(52,104,245,0.10), transparent 26%),
-    radial-gradient(circle at 86% 8%, rgba(118,80,230,0.10), transparent 25%),
-    linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+  background: linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
   line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
 ::selection { background: var(--ink); color: var(--paper); }
@@ -68,7 +65,7 @@ svg { max-width: 100%; height: auto; display: block; }
 .site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
 .topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
 .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
-.brand-dot { width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg, var(--blue), var(--purple)); box-shadow: 0 0 0 8px rgba(52,104,245,.08); }
+.brand-dot { width:12px; height:12px; border-radius:50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
 .nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
 .nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
 .nav a::before { content:""; position:absolute; left:-13px; top:50%; margin-top:-3px; width:6px; height:6px; border-radius:50%; background: var(--spy, var(--ink)); opacity:0; transition: opacity .2s ease; }
@@ -319,6 +316,52 @@ h1, h2, h3 { text-wrap: balance; }
   .swipe-hint { transition: none; }
 }
 
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
 /* external reference links */
 .xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
 .xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
@@ -335,7 +378,7 @@ h1, h2, h3 { text-wrap: balance; }
   <header class="site-head">
     <div class="wrap topbar">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>PostgreSQL</span></div>
-      <nav class="nav" aria-label="Primary navigation"><a href="#engine">The engine</a><a href="#evolution">Evolution</a><a href="#depth">The depth</a><a href="#when">When to use what</a><a href="#choosing">Choosing</a></nav>
+      <nav class="nav" aria-label="Primary navigation"><a href="#engine">The engine</a><a href="#evolution">Evolution</a><a href="#depth">The depth</a><a href="#when">When to use what</a><a href="#choosing">Choosing</a><a href="#sources">Sources</a></nav>
     </div>
   </header>
 
@@ -353,7 +396,7 @@ h1, h2, h3 { text-wrap: balance; }
             <p class="lead">In a world of specialized tools — one DB for cache, one for documents, one for spatial — PostgreSQL is the Swiss Army knife that actually cuts steel. It started in academia at UC Berkeley and took over the enterprise, because you don't just store data in Postgres: you program it.</p>
             <div class="hero-links"><a href="#evolution">↓ <span>See the evolution</span></a><a href="#pg18">↓ <span>What's new in PG 18</span></a></div>
           </div>
-          <div class="hero-note"><p>New data types, new index methods, functions in a dozen languages, vectors for AI — all inside the engine that already holds your rows. <em>ACID compliant. Open source. Extensible.</em></p></div>
+          <div class="hero-note"><p>New data types, new index methods, functions in a dozen languages, vectors for AI — all inside the engine that already holds your rows. <em>ACID compliant. Open source. Extensible.</em></p><div class="toc" aria-label="Table of contents"><div class="toc-title">In this piece</div><ol><li><a href="#engine">The universal engine</a></li><li><a href="#evolution">Faster every single year</a></li><li><a href="#depth">Four reasons it keeps winning</a></li><li><a href="#when">Honest boundaries</a></li><li><a href="#choosing">How I would choose</a></li><li><a href="#sources">Sources</a></li></ol></div><div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>6 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div></div>
         </div>
       </section>      <section class="section reveal " id="engine" aria-labelledby="engine-h">
         <div class="section-head">
@@ -410,7 +453,7 @@ h1, h2, h3 { text-wrap: balance; }
           <p class="diagram-caption"><strong>How to read this:</strong> PostgreSQL didn't win by being fashionable — it won by compounding. Each survey, more developers use it and more developers who use it refuse to leave.</p>
         </div><div class="stat-strip" id="pgstats" data-stats>
 <div class="stat">
-            <span class="stat-num" data-count="38" data-decimals="0" data-suffix="" data-prefix="" data-delay="0">38</span>
+            <span class="stat-num" data-count="40" data-decimals="0" data-suffix="" data-prefix="" data-delay="0">40</span>
             <span class="stat-label">years of active development since the 1986 POSTGRES project</span>
           </div>
 <div class="stat">
@@ -649,10 +692,28 @@ h1, h2, h3 { text-wrap: balance; }
       </div>
     </section>
     <div class="wrap">
+      <section class="section reveal" id="sources" aria-labelledby="sources-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">06</span><span class="kicker-sep">—</span>Grounding</div>
+            <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">The adoption chart is an editorial synthesis of survey trends; the version claims are not. Here is what they rest on.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><strong>PostgreSQL 18 — Release Notes.</strong> The canonical feature list: asynchronous I/O subsystem, virtual generated columns (default), temporal constraints (WITHOUT OVERLAPS), uuidv7(), OLD/NEW in RETURNING, skip scans on multicolumn B-tree indexes, MD5 password deprecation. <a class="xlink" href="https://www.postgresql.org/docs/18/release-18.html" target="_blank" rel="noopener noreferrer">postgresql.org</a></li>
+          <li id="src-2"><strong>“PostgreSQL 18 Released!” — official announcement, 25 September 2025.</strong> Source of the “up to 3× faster storage reads” figure and the pg_upgrade improvements (statistics preservation, parallel checks, --swap). Also the project’s own “over 40 years” framing of its Berkeley history. <a class="xlink" href="https://www.postgresql.org/about/news/postgresql-18-released-3142/" target="_blank" rel="noopener noreferrer">postgresql.org</a></li>
+          <li id="src-3"><strong>“PostgreSQL 19 Beta 2 Released!” — 16 July 2026.</strong> Feature-frozen preview; GA expected around September–October 2026. SQL/PGQ property-graph queries, REPACK CONCURRENTLY, parallel autovacuum. <a class="xlink" href="https://www.postgresql.org/about/news/postgresql-19-beta-2-released-3350/" target="_blank" rel="noopener noreferrer">postgresql.org</a></li>
+          <li id="src-4"><strong>Stack Overflow Developer Survey 2025.</strong> Basis for the adoption chart: PostgreSQL has led the “most popular databases” ranking among professional developers for several consecutive surveys; the 2026 point is extrapolated and labelled as such. <a class="xlink" href="https://survey.stackoverflow.co/2025/" target="_blank" rel="noopener noreferrer">survey.stackoverflow.co</a></li>
+          <li id="src-5"><strong>pgvector — open-source vector similarity search for Postgres.</strong> The extension behind the “AI semantic search in your primary database” claim; HNSW and IVFFlat indexes, half-precision and sparse vectors. <a class="xlink" href="https://github.com/pgvector/pgvector" target="_blank" rel="noopener noreferrer">github.com/pgvector</a></li>
+          <li id="src-6"><strong>PostgreSQL Documentation — JSON Types.</strong> Reference for JSONB storage, the containment operator (@&gt;) and jsonb_set used in the code example. <a class="xlink" href="https://www.postgresql.org/docs/current/datatype-json.html" target="_blank" rel="noopener noreferrer">postgresql.org</a></li>
+          <li id="src-7"><strong>PostGIS.</strong> The spatial extension that made PostgreSQL the de-facto standard open-source GIS database. <a class="xlink" href="https://postgis.net/" target="_blank" rel="noopener noreferrer">postgis.net</a></li>
+        </ol>
+      </section>
             <footer>
         <div class="footer-title">PostgreSQL</div>
         <div>The relational data platform that survives every hype cycle.</div>
-        <div style="margin-top:8px;font-size:.86rem;">Part of Ali's Infrastructure Series · Updated 5 August 2026. Survey trend from <a class="xlink" href="https://survey.stackoverflow.co/2025/" target="_blank" rel="noopener noreferrer">Stack Overflow</a> data; benchmark indices are illustrative.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of Ali's Infrastructure Series · Updated 6 August 2026. Survey trend from <a class="xlink" href="https://survey.stackoverflow.co/2025/" target="_blank" rel="noopener noreferrer">Stack Overflow</a> data; benchmark indices are illustrative.</div>
       </footer>
     </div>
   </main>
