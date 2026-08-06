@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="One road trip, three instruments: CSFs are the car, KPIs are the dashboard, OKRs are the GPS. A calm guide with a radar, a gauge, and a cheat sheet." />
+  <title>OKR vs KPI vs CSF — The Friendliest Guide to the Acronym Soup</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='6' fill='%233468f5'/%3E%3Ccircle cx='23' cy='9' r='6' fill='%23eb8237'/%3E%3Ccircle cx='9' cy='23' r='6' fill='%2323956f'/%3E%3Ccircle cx='23' cy='23' r='6' fill='%237650e6'/%3E%3C/svg%3E" />
+  <meta property="og:title" content="OKR vs KPI vs CSF — The Friendliest Guide to the Acronym Soup" />
+  <meta property="og:description" content="One road trip, three instruments: CSFs are the car, KPIs are the dashboard, OKRs are the GPS. A calm guide with a radar, a gauge, and a cheat sheet." />
+  <meta property="og:type" content="article" />
+  <meta name="twitter:card" content="summary" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The Acronym Soup",
+  "description": "One road trip, three instruments: CSFs are the car, KPIs are the dashboard, OKRs are the GPS. A calm guide with a radar, a gauge, and a cheat sheet.",
+  "datePublished": "2026-08-04",
+  "dateModified": "2026-08-05",
+  "author": {
+    "@type": "Person",
+    "name": "Ali Reza"
+  }
+}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Roboto+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add('js');</script>
+  <style>
+:root {
+  --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898;
+  --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+  --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+  --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+  --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+  --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,23,23,.35) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; border: 2px solid var(--bg); }
+::-webkit-scrollbar-track { background: transparent; }
+body {
+  margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(52,104,245,0.10), transparent 26%),
+    radial-gradient(circle at 86% 8%, rgba(118,80,230,0.10), transparent 25%),
+    linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+  line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+::selection { background: var(--ink); color: var(--paper); }
+.grain {
+  position: fixed; inset: 0; pointer-events: none; opacity: .08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply; z-index: 0;
+}
+a { color: inherit; text-decoration: none; }
+svg { max-width: 100%; height: auto; display: block; }
+.wrap { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; position: relative; z-index: 1; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 2px; }
+.skip-link { position: absolute; left: -9999px; top: 0; z-index: 300; background: var(--ink); color: var(--paper); padding: 10px 16px; font-weight: 700; font-size: .95rem; }
+.skip-link:focus { left: 12px; top: 12px; }
+.progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 200; pointer-events: none; }
+.progress span { display: block; height: 100%; width: 0; background: var(--ink); }
+.site-head { position: sticky; top: 0; z-index: 100; transition: background .25s ease, box-shadow .25s ease; }
+.site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
+.brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
+.brand-dot { width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg, var(--blue), var(--purple)); box-shadow: 0 0 0 8px rgba(52,104,245,.08); }
+.nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
+.nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
+.nav a::before { content:""; position:absolute; left:-13px; top:50%; margin-top:-3px; width:6px; height:6px; border-radius:50%; background: var(--spy, var(--ink)); opacity:0; transition: opacity .2s ease; }
+.nav a::after { content:""; position:absolute; left:0; bottom:-2px; width:0; height:1px; background:var(--ink); transition: width .22s ease; }
+.nav a:hover::after, .nav a.active::after { width:100%; }
+.nav a:hover, .nav a.active { color:var(--ink); }
+.nav a.active::before { opacity:1; }
+.hero { padding: 58px 0 50px; border-bottom:1px solid var(--line); }
+.eyebrow { display:inline-flex; align-items:center; gap:10px; font-size:.8rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+.eyebrow::before { content:""; width:24px; height:1px; background:var(--line-strong); }
+h1,h2,h3,h4 { margin:0; letter-spacing:-.045em; }
+.hero h1 { margin-top:18px; max-width:1000px; font-family:"Space Grotesk", sans-serif; font-size: clamp(3rem, 8.4vw, 6.8rem); line-height:.94; }
+.hero h1 em { font-family:"Instrument Serif", serif; font-style:italic; font-weight:400; letter-spacing:-.02em; color:#535353; }
+.hero h1 .line { display:block; overflow:hidden; padding-bottom:.08em; margin-bottom:-.08em; }
+.hero h1 .line-inner { display:inline-block; }
+.js .hero h1 .line-inner { transform: translateY(115%); animation: lineUp .5s ease-out forwards; }
+.js .hero h1 .line:nth-of-type(2) .line-inner { animation-delay: .09s; }
+.js .hero h1 .line:nth-of-type(3) .line-inner { animation-delay: .18s; }
+@keyframes lineUp { to { transform: translateY(0); } }
+.hero-grid { display:grid; grid-template-columns: 1.12fr .88fr; gap:48px; margin-top:26px; }
+.lead { font-size: clamp(1.08rem,1.8vw,1.28rem); color:#3f3f3f; margin:0; max-width:760px; }
+.hero-note { color:var(--muted); font-size:1rem; padding-top:10px; }
+.hero-links { display:flex; gap:18px; flex-wrap:wrap; margin-top:26px; font-weight:700; }
+.hero-links a { display:inline-flex; align-items:center; gap:8px; }
+.hero-links a span { color:var(--muted); font-weight:500; }
+.hero-links a:hover span { color:var(--ink); }
+.section { padding: 88px 0; border-bottom:1px solid var(--line); }
+.section-head { display:grid; grid-template-columns: .9fr 1.1fr; gap:30px; align-items:start; margin-bottom: 34px; }
+.kicker { display:flex; align-items:center; gap:10px; font-size:.82rem; text-transform:uppercase; letter-spacing:.16em; color:var(--soft); margin-bottom:16px; font-weight:700; }
+.kicker-mark { width:8px; height:8px; background:var(--ink); flex:0 0 8px; }
+.kicker-num { font-family:"Roboto Mono", monospace; font-weight:500; letter-spacing:.06em; }
+.kicker-sep { color:var(--soft); font-weight:400; }
+.section-head h2 { font-family:"Space Grotesk", sans-serif; font-size: clamp(2rem,4.4vw,4rem); line-height:.98; }
+.section-head p, .body-copy, .intro-copy { color:#4d4d4d; font-size:1.05rem; margin:0; max-width: 42rem; }
+[id] { scroll-margin-top: 96px; }
+.anchor { opacity: 0; margin-left: 12px; font-family:"DM Sans", sans-serif; font-weight: 500; font-size: .5em; color: var(--soft); vertical-align: middle; letter-spacing: 0; transition: opacity .2s ease; text-decoration: none; }
+h2:hover .anchor, h3:hover .anchor, .anchor:focus-visible { opacity: 1; }
+.anchor:hover { color: var(--ink); }
+.mini-compare { display:grid; grid-template-columns: repeat(4,1fr); gap:18px; margin-top:34px; }
+.mini-compare.three { grid-template-columns: repeat(3,1fr); }
+.mini-item { padding-top:10px; border-top:1px solid var(--line-strong); }
+.mini-item strong { display:block; font-family:"Space Grotesk", sans-serif; font-size:1.08rem; margin-bottom:6px; }
+.mini-item span { color:var(--muted); font-size:.94rem; }
+.mini-item .mini-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-bottom:10px; }
+.diagram-block { margin-top: 36px; }
+.diagram-title { font-family:"Space Grotesk", sans-serif; font-size:1.15rem; margin-bottom: 14px; }
+.diagram-caption { font-size:1.02rem; color:var(--muted); margin-top:16px; max-width:44rem; }
+.chart-scroll { overflow-x: auto; }
+.chart-scroll[data-chart="radar"] svg, .chart-scroll[data-chart="donut"] svg { display:block; max-width:540px; margin:0 auto; }
+.legend { display:flex; flex-wrap:wrap; gap:18px; margin-top:16px; color:var(--muted); font-size:.94rem; }
+.legend span { display:inline-flex; align-items:center; gap:8px; }
+.legend i { width:12px; height:12px; border-radius:50%; display:inline-block; }
+.js .bar-rect { transform-box: fill-box; transform-origin: left center; transform: scaleX(0); }
+.js .bars-in .bar-rect { transform: scaleX(1); transition: transform 1s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js .vbar-rect { transform-box: fill-box; transform-origin: center bottom; transform: scaleY(0); }
+.js .bars-in .vbar-rect { transform: scaleY(1); transition: transform .9s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js .sdot circle, .js .sdot .dot { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.js .scatter-in .sdot circle, .js .scatter-in .sdot .dot { transform: scale(1); transition: transform .55s cubic-bezier(.34,1.56,.64,1); transition-delay: var(--d, 0s); }
+.js .sdot text { opacity: 0; }
+.js .scatter-in .sdot text { opacity: 1; transition: opacity .45s ease; transition-delay: var(--ld, .35s); }
+.js .line-path { stroke-dasharray: var(--len, 3000); stroke-dashoffset: var(--len, 3000); }
+.js .lines-in .line-path { stroke-dashoffset: 0; transition: stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js .line-dot { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.js .lines-in .line-dot { transform: scale(1); transition: transform .45s cubic-bezier(.34,1.56,.64,1); transition-delay: var(--d, 0s); }
+.js .fit-line { opacity: 0; }
+.js .lines-in .fit-line { opacity: 1; transition: opacity .8s ease .5s; }
+.js .donut-seg { transition: stroke-dashoffset 1.2s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js .donut-wrap { transform-box: fill-box; transform-origin: center; }
+.js .radar-shape { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.js .radar-in .radar-shape { transform: scale(1); transition: transform .8s cubic-bezier(.34,1.3,.64,1); transition-delay: var(--d, 0s); }
+.js .radar-lab { opacity: 0; }
+.js .radar-in .radar-lab { opacity: 1; transition: opacity .5s ease; transition-delay: var(--d, .2s); }
+.js .vbar-val { opacity: 0; }
+.js .bars-in .vbar-val { opacity: 1; transition: opacity .45s ease; transition-delay: var(--d, .5s); }
+.js .donut-center { opacity: 0; }
+.js .donut-in .donut-center { opacity: 1; transition: opacity .6s ease .55s; }
+.stat-strip { display:grid; grid-template-columns: repeat(4,1fr); gap:24px; margin-top:40px; padding-top:30px; border-top:1px solid var(--line); }
+.stat-strip.three { grid-template-columns: repeat(3,1fr); }
+.stat-num { display:block; font-family:"Roboto Mono", monospace; font-weight:500; font-size: clamp(1.7rem, 3vw, 2.4rem); letter-spacing:-.03em; line-height:1.1; }
+.stat-label { display:block; margin-top:8px; color:var(--muted); font-size:.9rem; line-height:1.45; }
+.framework { display:grid; grid-template-columns: 260px 1fr; gap:38px; padding:48px 0; border-top:1px solid var(--line); }
+.framework:first-of-type { border-top:none; padding-top:14px; }
+.framework-aside { position:sticky; top:110px; align-self:start; }
+.framework-name { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+.mark { width:14px; height:14px; border-radius:50%; flex:0 0 14px; }
+.framework-name h3 { font-family:"Space Grotesk", sans-serif; font-size: clamp(1.8rem,3.2vw,2.5rem); line-height:1; }
+.framework-role { color:var(--muted); font-size:.97rem; margin-bottom:18px; }
+.framework-summary { font-size:1rem; color:#454545; max-width:220px; }
+.framework-content > p { margin:0 0 18px; color:#454545; font-size:1.05rem; max-width: 44rem; }
+.split { display:grid; grid-template-columns:1fr 1fr; gap:28px; margin:24px 0; }
+.text-block h4 { font-family:"Space Grotesk", sans-serif; font-size:1rem; margin-bottom:10px; }
+.text-block ul, .project-list, .avoid-list { margin:0; padding-left:18px; }
+.text-block li, .project-list li, .avoid-list li { margin-bottom:10px; color:#4d4d4d; }
+.callout-line { margin:20px 0 18px; padding-left:16px; border-left:2px solid currentColor; font-weight:700; letter-spacing:-.02em; }
+.callout-line small { display:block; margin-top:5px; font-weight:500; color:var(--muted); letter-spacing:0; }
+.section-label { font-size:.8rem; letter-spacing:.14em; text-transform:uppercase; color:var(--soft); font-weight:700; margin:26px 0 12px; }
+.project-list li strong, .avoid-list li strong, .text-block li strong { color:var(--ink); }
+.avoid-list .redir { color:var(--muted); font-weight:500; }
+.tbl { width:100%; border-collapse: collapse; margin-top:26px; font-size:.99rem; }
+.tbl th { font-family:"Space Grotesk", sans-serif; text-align:left; font-size:.86rem; letter-spacing:.12em; text-transform:uppercase; color:var(--soft); padding:0 14px 12px 0; border-bottom:1px solid var(--line-strong); }
+.tbl td { padding:13px 14px 13px 0; border-bottom:1px solid var(--line); color:#4d4d4d; vertical-align:top; }
+.tbl td:first-child { font-weight:700; color:var(--ink); white-space:nowrap; }
+.tbl .tdot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:9px; }
+.code { margin:24px 0; background: var(--dark); color:#e8e6dd; border-radius:14px; overflow:hidden; }
+.code-head { display:flex; align-items:center; gap:8px; padding:12px 18px; border-bottom:1px solid rgba(245,243,236,.1); font-family:"Roboto Mono", monospace; font-size:.8rem; color:rgba(245,243,236,.55); }
+.code-head i { width:9px; height:9px; border-radius:50%; display:inline-block; }
+.code pre { margin:0; padding:18px 20px; overflow-x:auto; font-family:"Roboto Mono", monospace; font-size:.88rem; line-height:1.65; }
+.code .cm { color: rgba(245,243,236,.42); }
+.code .kw { color:#a18aea; }
+.code .st { color:#67bda0; }
+.formula { margin:20px 0; padding:18px 22px; background:#f3f1e9; border-radius:12px; font-family:"Roboto Mono", monospace; font-size:1.02rem; color:#33312b; overflow-x:auto; }
+.flow { display:grid; grid-template-columns: repeat(4,1fr); gap:18px; margin-top:26px; }
+.flow .fstep { padding-top:12px; border-top:2px solid var(--ac, var(--ink)); }
+.flow .fstep .fnum { font-family:"Roboto Mono", monospace; font-size:.85rem; color:var(--ac, var(--muted)); }
+.flow .fstep strong { display:block; font-family:"Space Grotesk", sans-serif; margin:6px 0 6px; font-size:1.05rem; }
+.flow .fstep span { color:var(--muted); font-size:.93rem; }
+.decision-flow { margin-top:26px; display:grid; gap:20px; }
+.decision-step { display:grid; grid-template-columns: 42px 1fr; gap:16px; align-items:start; }
+.decision-step .num { width:42px; height:42px; border-radius:50%; display:grid; place-items:center; font-family:"Roboto Mono", monospace; font-weight:500; background:#f0eee8; color: var(--ac, var(--ink)); }
+.decision-step strong { display:block; margin-bottom:4px; font-size:1.02rem; }
+.decision-step p { margin:0; color:#4d4d4d; }
+.combo-line { margin-top:30px; font-size:1.06rem; color:#424242; max-width: 44rem; }
+.combo-line strong { color:var(--ink); }
+.quote-line { margin:34px 0 0; padding:6px 0 6px 22px; border-left:3px solid var(--ink); font-family:"Instrument Serif", serif; font-style:italic; font-size:clamp(1.3rem,2.4vw,1.7rem); color:#2e2e2e; max-width:46rem; line-height:1.45; }
+.section-dark { background: var(--dark); color: var(--dark-paper); border-bottom: none; position: relative; overflow: hidden; }
+.section-dark::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.05; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E"); }
+.section-dark ::selection { background: var(--dark-paper); color: var(--dark); }
+.section-dark :focus-visible { outline-color: var(--dark-paper); }
+.section-dark .kicker { color: rgba(245,243,236,.5); }
+.section-dark .kicker-mark { background: var(--dark-paper); }
+.section-dark .kicker-sep { color: rgba(245,243,236,.4); }
+.section-dark h2 { color: var(--dark-paper); }
+.section-dark .body-copy { color: rgba(245,243,236,.72); }
+.section-dark .anchor { color: rgba(245,243,236,.45); }
+.section-dark .anchor:hover { color: var(--dark-paper); }
+.section-dark .decision-step .num { background: rgba(245,243,236,.1); }
+.section-dark .decision-step strong { color: var(--dark-paper); }
+.section-dark .decision-step p { color: rgba(245,243,236,.65); }
+.section-dark .combo-line { color: rgba(245,243,236,.78); }
+.section-dark .combo-line strong { color: var(--dark-paper); }
+.section-dark .tbl th { color: rgba(245,243,236,.45); border-bottom-color: rgba(245,243,236,.3); }
+.section-dark .tbl td { border-bottom-color: rgba(245,243,236,.12); color: rgba(245,243,236,.72); }
+.section-dark .tbl td:first-child { color: var(--dark-paper); }
+.quiz { margin: 48px 0 12px; padding-top: 40px; border-top: 1px solid var(--dark-line); position: relative; }
+.quiz-head { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom: 30px; }
+.quiz-title { font-family:"Space Grotesk", sans-serif; font-size: clamp(1.5rem,2.6vw,2.1rem); color: var(--dark-paper); }
+.quiz-progress { display:flex; align-items:center; gap:14px; }
+.quiz-step { font-family:"Roboto Mono", monospace; font-size:.85rem; color: rgba(245,243,236,.65); letter-spacing:.06em; }
+.quiz-track { width: 130px; height: 2px; background: rgba(245,243,236,.18); }
+.quiz-fill { display:block; height:100%; width:0; background: var(--dark-paper); transition: width .3s ease; }
+.quiz-q { font-family:"Space Grotesk", sans-serif; font-size:1.25rem; margin:0 0 20px; color: var(--dark-paper); letter-spacing:-.02em; }
+.quiz-answers { display:grid; }
+.quiz-a { display:flex; align-items:center; gap:14px; width:100%; text-align:left; background:none; border:none; border-left:2px solid rgba(245,243,236,.14); padding:16px 18px; color: rgba(245,243,236,.85); font-family:"DM Sans", sans-serif; font-size:1.03rem; line-height:1.5; cursor:pointer; transition: background .18s ease, border-color .18s ease; }
+.quiz-a:hover, .quiz-a:focus-visible { background: rgba(255,255,255,.06); border-left-color: var(--ac, var(--dark-paper)); }
+.quiz-dot { width:10px; height:10px; border-radius:50%; background: var(--ac); flex:0 0 10px; }
+.quiz-back { margin-top:20px; background:none; border:none; padding:6px 0; color: rgba(245,243,236,.6); font-family:"Roboto Mono", monospace; font-size:.85rem; cursor:pointer; border-bottom:1px solid transparent; }
+.quiz-back:hover { color: var(--dark-paper); border-bottom-color: rgba(245,243,236,.4); }
+.quiz-kicker { font-family:"Roboto Mono", monospace; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; color: rgba(245,243,236,.5); margin-bottom:12px; }
+.quiz-result-name { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+.quiz-result-dot { width:14px; height:14px; border-radius:50%; flex:0 0 14px; }
+.quiz-result-name h4 { font-family:"Space Grotesk", sans-serif; font-size: clamp(1.7rem,3vw,2.3rem); color: var(--dark-paper); }
+.quiz-why { color: rgba(245,243,236,.88); font-size:1.07rem; margin:0 0 10px; max-width: 44rem; }
+.quiz-pair { color: rgba(245,243,236,.6); margin:0 0 22px; max-width: 44rem; }
+.quiz-actions { display:flex; align-items:center; gap:22px; flex-wrap:wrap; margin:0; }
+.quiz-link { color: var(--dark-paper); font-weight:700; border-bottom:1px solid rgba(245,243,236,.4); padding-bottom:2px; }
+.quiz-link:hover { border-bottom-color: var(--dark-paper); }
+.quiz-retake { background:none; border:1px solid rgba(245,243,236,.3); color: rgba(245,243,236,.75); padding:8px 18px; border-radius:999px; cursor:pointer; font-family:"DM Sans", sans-serif; font-size:.9rem; transition: border-color .18s ease, color .18s ease; }
+.quiz-retake:hover { border-color: var(--dark-paper); color: var(--dark-paper); }
+.quiz-noscript { color: rgba(245,243,236,.7); font-style: italic; max-width: 44rem; }
+.quiz-app { display:none; }
+.js .quiz-app { display:block; }
+footer { padding:48px 0 64px; color:var(--muted); font-size:.98rem; }
+.footer-title { font-family:"Space Grotesk", sans-serif; font-size:1.2rem; color:var(--ink); margin-bottom:6px; }
+.to-top { position: fixed; right: 22px; bottom: 22px; width: 46px; height: 46px; border-radius: 50%; background: var(--ink); color: var(--paper); border: none; cursor: pointer; display: grid; place-items: center; font-size: 1.15rem; line-height: 1; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .25s ease, transform .25s ease; z-index: 110; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+.to-top.show { opacity: 1; pointer-events: auto; transform: none; }
+.to-top:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.js .reveal { opacity:0; transform: translateY(18px); transition: opacity .65s ease, transform .65s ease; }
+.js .reveal.visible { opacity:1; transform:none; }
+@media (max-width: 980px) {
+  .hero-grid, .section-head, .framework, .split { grid-template-columns:1fr; }
+  .framework-aside { position:static; }
+  .mini-compare, .mini-compare.three { grid-template-columns: 1fr 1fr; }
+  .flow { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px) {
+  .wrap { width: min(var(--max), calc(100% - 26px)); }
+  .topbar { flex-wrap: wrap; padding-top:14px; gap: 10px 18px; }
+  .nav { max-width: 100%; overflow-x: auto; gap: 16px; font-size:.92rem; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 4px; }
+  .nav::-webkit-scrollbar { display: none; }
+  .hero { padding-top:34px; }
+  .hero h1 { font-size: clamp(2.5rem, 14vw, 4.6rem); }
+  .mini-compare, .mini-compare.three { grid-template-columns:1fr; }
+  .flow { grid-template-columns:1fr; }
+  .section { padding: 60px 0; }
+  .chart-scroll svg { min-width: 640px; }
+  .chart-scroll[data-chart="radar"] svg, .chart-scroll[data-chart="donut"] svg { min-width: 0; }
+  .stat-strip, .stat-strip.three { grid-template-columns: 1fr 1fr; gap: 22px 16px; }
+  .quiz-head { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .to-top { right: 16px; bottom: 16px; }
+  .tbl { display:block; overflow-x:auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior:auto; }
+  .js .reveal { opacity:1; transform:none; transition:none; }
+  .js .hero h1 .line-inner { transform:none; animation:none; }
+  .js .bar-rect, .js .vbar-rect { transform:none; transition:none; }
+  .js .bars-in .bar-rect, .js .bars-in .vbar-rect { transition:none; }
+  .js .sdot circle, .js .sdot .dot, .js .line-dot, .js .radar-shape { transform:none; transition:none; }
+  .js .scatter-in .sdot circle, .js .lines-in .line-dot, .js .radar-in .radar-shape { transition:none; }
+  .js .sdot text, .js .radar-lab, .js .fit-line, .js .vbar-val, .js .donut-center { opacity:1; transition:none; }
+  .js .line-path { stroke-dasharray:none; stroke-dashoffset:0; }
+  .js .lines-in .line-path { transition:none; }
+  .nav a::after, .quiz-fill, .quiz-a, .to-top { transition:none; }
+}
+
+/* ── Aug 2026 upgrade: mobile ergonomics & swipe hints ── */
+:root { color-scheme: light; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { -webkit-tap-highlight-color: transparent; }
+h1, h2, h3 { text-wrap: balance; }
+.section-head p, .body-copy, .intro-copy, .diagram-caption { text-wrap: pretty; }
+.chart-scroll { -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+.nav.has-more { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent); }
+.swipe-hint { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 10px; padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; font-family: "Roboto Mono", monospace; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: rgba(127,127,127,.07); transition: opacity .4s ease; }
+.section-dark .swipe-hint { border-color: var(--dark-line); color: rgba(245,243,236,.6); }
+.swipe-hint-off { opacity: 0; }
+@media (hover: none) {
+  .anchor { opacity: .45; }
+  .nav a { padding: 8px 0; }
+}
+@media (max-width: 720px) {
+  .to-top { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+  footer { padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-width: 430px) {
+  .hero h1 { font-size: clamp(2.15rem, 12.5vw, 3rem); }
+  .section { padding: 48px 0; }
+  .stat-strip, .stat-strip.three { gap: 18px 14px; }
+  .stat-num { font-size: clamp(1.35rem, 7.5vw, 1.7rem); }
+  .quiz-a { padding: 14px 12px; }
+  .decision-step { grid-template-columns: 34px 1fr; gap: 12px; }
+  .decision-step .num { width: 34px; height: 34px; font-size: .85rem; }
+  .formula { font-size: .9rem; padding: 14px 16px; }
+  .code pre { font-size: .8rem; }
+  .chart-scroll svg { min-width: 560px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .swipe-hint { transition: none; }
+}
+
+/* external reference links */
+.xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
+.xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
+.section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
+.section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+</style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span id="progressFill"></span></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-head">
+    <div class="wrap topbar">
+      <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>The Acronym Soup</span></div>
+      <nav class="nav" aria-label="Primary navigation"><a href="#trip">The road trip</a><a href="#trio">The trio</a><a href="#cheatsheet">Cheat sheet</a><a href="#choosing">Choosing</a></nav>
+    </div>
+  </header>
+
+  <main id="content">
+    <div class="wrap">
+
+      <section class="hero" aria-label="Introduction">
+        <div class="eyebrow">Strategy Fundamentals</div>
+        <h1>
+          <span class="line"><span class="line-inner">The acronym</span></span>
+<span class="line"><span class="line-inner"><em>soup, </em>clarified.</span></span>
+        </h1>
+        <div class="hero-grid">
+          <div>
+            <p class="lead"><a class="xlink" href="https://en.wikipedia.org/wiki/Objectives_and_key_results" target="_blank" rel="noopener noreferrer">OKR</a> vs. <a class="xlink" href="https://en.wikipedia.org/wiki/Performance_indicator" target="_blank" rel="noopener noreferrer">KPI</a> vs. <a class="xlink" href="https://en.wikipedia.org/wiki/Critical_success_factor" target="_blank" rel="noopener noreferrer">CSF</a> — business jargon designed to sound complicated. It isn't. Imagine a road trip to a beach you've never visited: you need a car that works, a dashboard that tells you if you're speeding, and a GPS that tells you where to go. That's the whole soup.</p>
+            <div class="hero-links"><a href="#trio">↓ <span>Meet the trio</span></a><a href="#cheatsheet">↓ <span>Skip to the cheat sheet</span></a></div>
+          </div>
+          <div class="hero-note"><p>The friendliest guide to what matters, what works, and — let's be honest — <em>what gets you promoted.</em></p></div>
+        </div>
+      </section>      <section class="section reveal " id="trip" aria-labelledby="trip-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">01</span><span class="kicker-sep">—</span>The road trip</div>
+            <h2 id="trip-h">One car, three instruments<a class="anchor" href="#trip" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Every healthy organization runs all three at once — confusing them is how strategies die in slide decks.</p>
+        </div>
+        <div class="flow">
+<div class="fstep" style="--ac:#3468f5"><span class="fnum">1</span><strong>CSF · The car</strong><span>Fuel, tires, engine. What must be true for the trip to exist at all.</span></div>
+<div class="fstep" style="--ac:#eb8237"><span class="fnum">2</span><strong>KPI · The dashboard</strong><span>Speedometer, fuel gauge. Is the machine healthy right now?</span></div>
+<div class="fstep" style="--ac:#23956f"><span class="fnum">3</span><strong>OKR · The GPS</strong><span>The destination and the route. Where are we going this quarter?</span></div>
+<div class="fstep" style="--ac:#7650e6"><span class="fnum">→</span><strong>Together</strong><span>CSFs keep you alive, KPIs keep you honest, OKRs keep you moving.</span></div>
+</div><div class="diagram-block">
+          <div class="diagram-title">Focus comparison</div>
+          <div class="chart-scroll" id="focusRadar" data-chart="radar"><svg viewBox="-70 -8 780 696" role="img" aria-label="Radar chart: OKRs score high on ambition, KPIs score high on maintenance and review rhythm.">
+<polygon points="320.0,272.0 365.7,305.2 348.2,358.8 291.8,358.8 274.3,305.2" fill="none" stroke="rgba(23,23,23,.07)"/>
+<polygon points="320.0,224.0 411.3,290.3 376.4,397.7 263.6,397.7 228.7,290.3" fill="none" stroke="rgba(23,23,23,.07)"/>
+<polygon points="320.0,176.0 457.0,275.5 404.6,436.5 235.4,436.5 183.0,275.5" fill="none" stroke="rgba(23,23,23,.07)"/>
+<polygon points="320.0,128.0 502.6,260.7 432.9,475.3 207.1,475.3 137.4,260.7" fill="none" stroke="rgba(23,23,23,.07)"/>
+<line x1="320.0" y1="320.0" x2="320.0" y2="128.0" stroke="rgba(23,23,23,.07)"/>
+<line x1="320.0" y1="320.0" x2="502.6" y2="260.7" stroke="rgba(23,23,23,.07)"/>
+<line x1="320.0" y1="320.0" x2="432.9" y2="475.3" stroke="rgba(23,23,23,.07)"/>
+<line x1="320.0" y1="320.0" x2="207.1" y2="475.3" stroke="rgba(23,23,23,.07)"/>
+<line x1="320.0" y1="320.0" x2="137.4" y2="260.7" stroke="rgba(23,23,23,.07)"/>
+<polygon class="radar-shape" style="--d:0.00s" points="320.0,128.0 356.5,308.1 410.3,444.3 263.6,397.7 210.4,284.4" fill="#23956f" fill-opacity="0.16" stroke="#23956f" stroke-width="3" stroke-linejoin="round"/>
+<circle class="radar-shape" style="--d:0.30s" cx="320.0" cy="128.0" r="5" fill="#23956f" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.35s" cx="356.5" cy="308.1" r="5" fill="#23956f" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.40s" cx="410.3" cy="444.3" r="5" fill="#23956f" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.45s" cx="263.6" cy="397.7" r="5" fill="#23956f" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.50s" cx="210.4" cy="284.4" r="5" fill="#23956f" stroke="#fcfbf8" stroke-width="2"/>
+<polygon class="radar-shape" style="--d:0.20s" points="320.0,262.4 502.6,260.7 432.9,475.3 229.7,444.3 155.7,266.6" fill="#eb8237" fill-opacity="0.16" stroke="#eb8237" stroke-width="3" stroke-linejoin="round"/>
+<circle class="radar-shape" style="--d:0.50s" cx="320.0" cy="262.4" r="5" fill="#eb8237" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.55s" cx="502.6" cy="260.7" r="5" fill="#eb8237" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.60s" cx="432.9" cy="475.3" r="5" fill="#eb8237" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.65s" cx="229.7" cy="444.3" r="5" fill="#eb8237" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.70s" cx="155.7" cy="266.6" r="5" fill="#eb8237" stroke="#fcfbf8" stroke-width="2"/>
+<text class="radar-lab" style="--d:0.40s" x="320" y="99" text-anchor="middle" fill="#555" font-family="DM Sans" font-weight="500" font-size="14">Ambition</text>
+<text class="radar-lab" style="--d:0.46s" x="535" y="255" text-anchor="start" fill="#555" font-family="DM Sans" font-weight="500" font-size="14">Maintenance</text>
+<text class="radar-lab" style="--d:0.52s" x="453" y="508" text-anchor="start" fill="#555" font-family="DM Sans" font-weight="500" font-size="14">Review rhythm</text>
+<text class="radar-lab" style="--d:0.58s" x="187" y="508" text-anchor="end" fill="#555" font-family="DM Sans" font-weight="500" font-size="14">Criticality</text>
+<text class="radar-lab" style="--d:0.64s" x="105" y="255" text-anchor="end" fill="#555" font-family="DM Sans" font-weight="500" font-size="14">Simplicity</text>
+<text x="30" y="664" fill="#777" font-family="DM Sans" font-size="14">Where each instrument spends its energy — illustrative profile.</text>
+</svg></div><div class="legend"><span><i style="background:#23956f"></i>OKR</span><span><i style="background:#eb8237"></i>KPI</span></div>
+          <p class="diagram-caption"><strong>How to read this:</strong> an OKR spends its energy on ambition; a KPI spends it on maintenance and rhythm. Asking one to do the other's job is how you get neither.</p>
+        </div>
+      </section>      <section class="section reveal " id="trio" aria-labelledby="trio-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">02</span><span class="kicker-sep">—</span>The trio</div>
+            <h2 id="trio-h">Three instruments, three jobs<a class="anchor" href="#trio" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Permanent vs. ongoing vs. temporary. Existence vs. health vs. change.</p>
+        </div>
+        <article class="framework" id="csf" aria-labelledby="csf-h">
+          <aside class="framework-aside">
+            <div class="framework-name"><span class="mark" style="background:#3468f5"></span><h3 id="csf-h">CSF<a class="anchor" href="#csf" aria-label="Link to this section">#</a></h3></div>
+            <div class="framework-role">Critical Success Factors</div>
+            <div class="framework-summary">“What MUST go right?” — the non-negotiables. If one fails, the business stops.</div>
+          </aside>
+          <div class="framework-content"><p>CSFs aren't usually numbers; they are <strong>states of being</strong>. In the road-trip analogy, a CSF is “the car has an engine.” If you don't have an engine, it doesn't matter what the GPS says.</p>
+            <div class="section-label">Example — an airline</div>
+            <div class="section-label">Must be true, always</div><ul class="project-list"><li><strong>Safety certification:</strong> non-negotiable, unscoreable, existential.</li><li><strong>Operational fleet:</strong> must have planes that fly.</li><li><strong>Skilled pilots:</strong> must have people who can fly them.</li></ul>
+            <div class="callout-line" style="color:#3468f5">CSFs are permanent, binary, and boring — by design.<small>You don't improve a CSF. You defend it.</small></div></div>
+        </article><article class="framework" id="kpi" aria-labelledby="kpi-h">
+          <aside class="framework-aside">
+            <div class="framework-name"><span class="mark" style="background:#eb8237"></span><h3 id="kpi-h">KPI<a class="anchor" href="#kpi" aria-label="Link to this section">#</a></h3></div>
+            <div class="framework-role">Key Performance Indicators</div>
+            <div class="framework-summary">“Are we healthy right now?” — the dashboard, not the destination.</div>
+          </aside>
+          <div class="framework-content"><p>KPIs monitor the <strong>steady-state health</strong> of the business. You don't necessarily maximize them; you keep them in the green zone. You don't want engine temperature at 0° or 500° — you want it stable.</p>
+            <div class="diagram-block">
+          <div class="diagram-title">The health gauge</div>
+          <div class="chart-scroll" id="healthChart" data-chart="donut"><svg viewBox="0 0 520 578" role="img" aria-label="Donut chart: 98 percent health, 2 percent gap, illustrating a KPI gauge.">
+<circle cx="260.0" cy="260.0" r="150" fill="none" stroke="#efede5" stroke-width="58"/>
+<circle class="donut-seg" style="--d:0.00s" cx="260.0" cy="260.0" r="150" fill="none" stroke="#eb8237" stroke-width="58" stroke-dasharray="919.6 22.8" stroke-dashoffset="1155.2" data-off="235.6" transform="rotate(0.0 260.0 260.0)"/>
+<circle class="donut-seg" style="--d:0.10s" cx="260.0" cy="260.0" r="150" fill="none" stroke="#db6478" stroke-width="58" stroke-dasharray="14.8 927.6" stroke-dashoffset="250.5" data-off="235.6" transform="rotate(352.8 260.0 260.0)"/>
+<text class="donut-center" x="260.0" y="256.0" text-anchor="middle" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="34">99.98%</text>
+<text class="donut-center" x="260.0" y="284.0" text-anchor="middle" fill="#8a8a8a" font-family="DM Sans" font-size="13">uptime target</text>
+<text x="30" y="544" fill="#777" font-family="DM Sans" font-size="14">A KPI monitors a steady state — you don't maximize it, you keep it in</text>
+<text x="30" y="562" fill="#777" font-family="DM Sans" font-size="14">the green.</text>
+</svg></div><div class="legend"><span><i style="background:#eb8237"></i>Healthy zone · 98</span><span><i style="background:#db6478"></i>Gap · 2</span></div>
+          <p class="diagram-caption"><strong>How to read this:</strong> a KPI is a monitor. The win is not a bigger number — it is a number that stays inside its healthy band while everything around it changes.</p>
+        </div>
+            <div class="section-label">Classic KPIs</div><ul class="project-list"><li><strong>Customer satisfaction (CSAT) &gt; 4.5:</strong> watched weekly, acted on when it dips.</li><li><strong>Website uptime &gt; 99.9%:</strong> green means invisible; red means all hands.</li><li><strong>Employee turnover:</strong> a lagging indicator of everything management got wrong.</li></ul></div>
+        </article><article class="framework" id="okr" aria-labelledby="okr-h">
+          <aside class="framework-aside">
+            <div class="framework-name"><span class="mark" style="background:#23956f"></span><h3 id="okr-h">OKR<a class="anchor" href="#okr" aria-label="Link to this section">#</a></h3></div>
+            <div class="framework-role">Objectives &amp; Key Results</div>
+            <div class="framework-summary">“Where are we going next?” — aggressive, temporary goals of change.</div>
+          </aside>
+          <div class="framework-content"><p>OKRs are the GPS setting a destination. You don't <em>maintain</em> an OKR; you <strong>achieve</strong> it and set a new one. An Objective is the qualitative “where”; Key Results are the measurable proof you're arriving.</p>
+            <p><strong>Objective:</strong> Dominate the European market.</p>
+            <div class="diagram-block">
+          <div class="diagram-title">Scoring the key results</div>
+          <div class="chart-scroll" id="krChart" data-chart="bars"><svg viewBox="0 0 1080 320" role="img" aria-label="Bar chart: key result one at 80 percent, key result two at 40 percent.">
+<defs>
+<linearGradient id="bgkr0" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#23956f"/><stop offset="1" stop-color="#67bda0"/></linearGradient>
+<linearGradient id="bgkr1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#23956f"/><stop offset="1" stop-color="#67bda0"/></linearGradient>
+</defs>
+<text x="295" y="38" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="14">0</text>
+<line x1="295" y1="55" x2="295" y2="260" stroke="rgba(23,23,23,.18)"/>
+<text x="458" y="38" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="14">25</text>
+<line x1="458" y1="55" x2="458" y2="260" stroke="rgba(23,23,23,.07)"/>
+<text x="620" y="38" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="14">50</text>
+<line x1="620" y1="55" x2="620" y2="260" stroke="rgba(23,23,23,.07)"/>
+<text x="782" y="38" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="14">75</text>
+<line x1="782" y1="55" x2="782" y2="260" stroke="rgba(23,23,23,.07)"/>
+<text x="945" y="38" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="14">100</text>
+<line x1="945" y1="55" x2="945" y2="260" stroke="rgba(23,23,23,.07)"/>
+<text x="20" y="116" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="21">KR1 · Launch in Germany</text>
+<rect class="bar-rect" style="--d:0.00s" x="295" y="82" width="520" height="54" rx="12" fill="url(#bgkr0)"/>
+<text class="bar-val" data-count="80" data-decimals="0" data-suffix="%" data-delay="0" x="829" y="114" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">80%</text>
+<text x="20" y="216" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="21">KR2 · Hire 5 sales reps</text>
+<rect class="bar-rect" style="--d:0.12s" x="295" y="182" width="260" height="54" rx="12" fill="url(#bgkr1)"/>
+<text class="bar-val" data-count="40" data-decimals="0" data-suffix="%" data-delay="120" x="569" y="216" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">40%</text>
+<text x="295" y="302" fill="#777" font-family="DM Sans" font-size="14">Key results are scored, time-boxed, and then retired or converted.</text>
+</svg></div>
+          <p class="diagram-caption"><strong>How to read this:</strong> KRs are graded honestly — 70% on an ambitious KR is often better than 100% on a sandbagged one.</p>
+        </div>
+            <div class="callout-line" style="color:#23956f">Once you launch in Germany, that OKR is done.<small>It may be demoted to a KPI — 'maintain German sales' — and that's a promotion for the business.</small></div></div>
+        </article>
+      </section>      <section class="section reveal " id="cheatsheet" aria-labelledby="cheatsheet-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">03</span><span class="kicker-sep">—</span>Cheat sheet</div>
+            <h2 id="cheatsheet-h">The cheat sheet<a class="anchor" href="#cheatsheet" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Screenshot this for your next planning meeting.</p>
+        </div>
+        <table class="tbl"><thead><tr><th>Feature</th><th>CSF</th><th>KPI</th><th>OKR</th></tr></thead><tbody><tr><td><span class="tdot" style="background:#3468f5"></span><strong>Analogy</strong></td><td>The car</td><td>Dashboard</td><td>GPS</td></tr><tr><td><span class="tdot" style="background:#3468f5"></span><strong>Duration</strong></td><td>Permanent</td><td>Ongoing</td><td>Temporary</td></tr><tr><td><span class="tdot" style="background:#eb8237"></span><strong>Goal</strong></td><td>Existence</td><td>Health</td><td>Change</td></tr><tr><td><span class="tdot" style="background:#23956f"></span><strong>Question</strong></td><td>What must go right?</td><td>Are we healthy now?</td><td>Where are we going?</td></tr><tr><td><span class="tdot" style="background:#5b6b7a"></span><strong>Example</strong></td><td>“Have funding”</td><td>“Revenue &gt; $1M”</td><td>“Launch the app”</td></tr></tbody></table>
+      </section>
+    </div>
+    <section class="section section-dark reveal" id="choosing" aria-labelledby="choosing-h">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span class="kicker-sep">—</span>Choosing</div>
+            <h2 id="choosing-h">How I would use them<a class="anchor" href="#choosing" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Most strategy pain comes from using one instrument for another's job: OKRs as maintenance, KPIs as inspiration, CSFs discovered only after they fail.</p>
+        </div>
+        <div class="quiz" role="group" aria-labelledby="quizTitle">
+          <div class="quiz-head">
+            <h3 class="quiz-title" id="quizTitle">What are you actually trying to say?</h3>
+            <div class="quiz-progress" aria-hidden="true">
+              <span class="quiz-step" id="quizStep">01 / 03</span>
+              <span class="quiz-track"><span class="quiz-fill" id="quizFill"></span></span>
+            </div>
+          </div>
+          <noscript><p class="quiz-noscript">This quiz needs JavaScript — the cheat sheet above gets you to the same place.</p></noscript>
+          <div class="quiz-app">
+            <div class="quiz-body" id="quizBody"></div>
+            <div class="quiz-result" id="quizResult" aria-live="polite"></div>
+          </div>
+        </div><div class="decision-flow">
+<div class="decision-step" style="--ac:#3468f5"><div class="num">1</div><div><strong>List what would kill you if it failed. Those are CSFs.</strong><p>Usually three to five. Fund them first, mention them rarely.</p></div></div>
+<div class="decision-step" style="--ac:#eb8237"><div class="num">2</div><div><strong>Pick the vital signs worth watching. Those are KPIs.</strong><p>Five to seven, each with a green zone and an owner.</p></div></div>
+<div class="decision-step" style="--ac:#23956f"><div class="num">3</div><div><strong>Choose one direction for the quarter. That's the OKR.</strong><p>One objective, a few honest key results, then reset.</p></div></div>
+</div><p class="combo-line"><strong>The full loop:</strong> defend the CSFs, watch the KPIs, chase the OKRs — and when an OKR lands, let it retire into a KPI. That quiet demotion is what progress actually looks like.</p>
+      </div>
+    </section>
+    <div class="wrap">
+            <footer>
+        <div class="footer-title">The Acronym Soup</div>
+        <div>Strategy jargon, translated into a road trip.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the Strategy Guides Series · Updated 5 August 2026. Charts are illustrative profiles.</div>
+      </footer>
+    </div>
+  </main>
+
+  <button class="to-top" id="toTop" type="button" aria-label="Back to top">↑</button>
+  <script>
+(function () {
+  'use strict';
+  var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var revealEls = document.querySelectorAll('.reveal');
+  if (RM) {
+    revealEls.forEach(function (el) { el.classList.add('visible'); });
+  } else {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); }
+      });
+    }, { threshold: 0.01, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function (el) { revealObserver.observe(el); });
+  }
+
+  function animateCount(el) {
+    var target = parseFloat(el.getAttribute('data-count'));
+    var dec = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    var suffix = el.getAttribute('data-suffix') || '';
+    var prefix = el.getAttribute('data-prefix') || '';
+    var delay = parseInt(el.getAttribute('data-delay') || '0', 10);
+    var final = prefix + target.toFixed(dec) + suffix;
+    if (RM) { el.textContent = final; return; }
+    var dur = 900;
+    window.setTimeout(function () {
+      var t0 = performance.now();
+      function tick(t) {
+        var p = Math.min((t - t0) / dur, 1);
+        var e = 1 - Math.pow(1 - p, 3);
+        el.textContent = prefix + (target * e).toFixed(dec) + suffix;
+        if (p < 1) { requestAnimationFrame(tick); } else { el.textContent = final; }
+      }
+      requestAnimationFrame(tick);
+    }, delay);
+  }
+
+  function triggerOnce(el, cls, onTrigger) {
+    if (!el) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          el.classList.add(cls);
+          if (onTrigger) onTrigger();
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    io.observe(el);
+  }
+
+  document.querySelectorAll('[data-chart]').forEach(function (chart) {
+    var kind = chart.getAttribute('data-chart');
+    var cls = { bars: 'bars-in', scatter: 'scatter-in', lines: 'lines-in', radar: 'radar-in', donut: 'donut-in' }[kind] || (kind + '-in');
+    triggerOnce(chart, cls, function () {
+      chart.querySelectorAll('[data-count]').forEach(animateCount);
+      if (kind === 'donut') {
+        chart.querySelectorAll('.donut-seg').forEach(function (seg) {
+          seg.style.strokeDashoffset = seg.getAttribute('data-off');
+        });
+      }
+    });
+  });
+  document.querySelectorAll('[data-stats]').forEach(function (strip) {
+    triggerOnce(strip, 'stats-in', function () {
+      strip.querySelectorAll('[data-count]').forEach(animateCount);
+    });
+  });
+
+  document.querySelectorAll('.line-path').forEach(function (p) {
+    try { var L = p.getTotalLength(); p.style.setProperty('--len', L + 40); } catch (e) {}
+  });
+
+  var head = document.querySelector('.site-head');
+  var progressFill = document.getElementById('progressFill');
+  var toTop = document.getElementById('toTop');
+  function onScroll() {
+    var y = window.scrollY || window.pageYOffset;
+    head.classList.toggle('scrolled', y > 10);
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    progressFill.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+    toTop.classList.toggle('show', y > 600);
+  }
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (!ticking) { requestAnimationFrame(function () { onScroll(); ticking = false; }); ticking = true; }
+  }, { passive: true });
+  onScroll();
+  toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' }); });
+
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav a'));
+  function linkFor(id) { return navLinks.find(function (a) { return a.getAttribute('href') === '#' + id; }) || null; }
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        navLinks.forEach(function (a) { a.classList.remove('active'); });
+        var link = linkFor(entry.target.id);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+  document.querySelectorAll('main section[id]').forEach(function (s) { spy.observe(s); });
+  var FW_COLORS = {"trio": {"csf": "#3468f5", "kpi": "#eb8237", "okr": "#23956f"}};
+  Object.keys(FW_COLORS).forEach(function (navId) {
+    var link = linkFor(navId);
+    if (!link) return;
+    var fwSpy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting && FW_COLORS[navId][entry.target.id]) {
+          link.style.setProperty('--spy', FW_COLORS[navId][entry.target.id]);
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+    document.querySelectorAll('.framework').forEach(function (f) { fwSpy.observe(f); });
+  });
+
+  var QUIZ = {"title": "What are you actually trying to say?", "noscript": "This quiz needs JavaScript \u2014 the cheat sheet above gets you to the same place.", "resultKicker": "You need a\u2026", "order": ["csf", "kpi", "okr"], "fw": {"csf": {"name": "CSF", "color": "#3468f5", "anchor": "#csf", "linkText": "Read the CSF section", "why": "You're describing something that must exist or everything else is irrelevant.", "pairing": "Write it down, fund it, defend it. No targets, no percentages \u2014 just non-negotiable."}, "kpi": {"name": "KPI", "color": "#eb8237", "anchor": "#kpi", "linkText": "Read the KPI section", "why": "You're trying to monitor the health of something that already exists.", "pairing": "Define the green zone, watch it on a rhythm, act when it leaves the band."}, "okr": {"name": "OKR", "color": "#23956f", "anchor": "#okr", "linkText": "Read the OKR section", "why": "You're driving a change \u2014 a destination you haven't reached yet.", "pairing": "One inspiring objective, 2\u20134 measurable key results, one quarter. Then reset."}}, "questions": [{"q": "Finish the sentence: \u201cWe need to\u2026\u201d", "answers": [{"t": "\u2026keep the lights on, no matter what", "f": "csf"}, {"t": "\u2026know if we're healthy right now", "f": "kpi"}, {"t": "\u2026get somewhere new this quarter", "f": "okr"}]}, {"q": "How long does this thing live?", "answers": [{"t": "Forever \u2014 it's existential", "f": "csf"}, {"t": "Ongoing \u2014 as long as the business runs", "f": "kpi"}, {"t": "Until we achieve it \u2014 then it's done", "f": "okr"}]}, {"q": "What does failure look like?", "answers": [{"t": "The business stops", "f": "csf"}, {"t": "The dashboard goes red", "f": "kpi"}, {"t": "We score 40% and learn why", "f": "okr"}]}]};
+  var quizBody = document.getElementById('quizBody');
+  var quizResult = document.getElementById('quizResult');
+  var quizStepEl = document.getElementById('quizStep');
+  var quizFillEl = document.getElementById('quizFill');
+  var qStep = 0;
+  var qPicks = [];
+  function pad2(n) { return String(n).padStart(2, '0'); }
+  function renderQuestion(focusHeading) {
+    var q = QUIZ.questions[qStep];
+    quizStepEl.textContent = pad2(qStep + 1) + ' / ' + pad2(QUIZ.questions.length);
+    quizFillEl.style.width = (qStep / QUIZ.questions.length) * 100 + '%';
+    var html = '<h4 class="quiz-q" tabindex="-1">' + q.q + '</h4><div class="quiz-answers">';
+    q.answers.forEach(function (a) {
+      var fw = QUIZ.fw[a.f];
+      html += '<button type="button" class="quiz-a" data-fw="' + a.f + '" style="--ac:' + fw.color + '">' +
+              '<span class="quiz-dot" aria-hidden="true"></span><span>' + a.t + '</span></button>';
+    });
+    html += '</div>';
+    if (qStep > 0) { html += '<button type="button" class="quiz-back" id="quizBack">← Back</button>'; }
+    quizBody.innerHTML = html;
+    quizResult.innerHTML = '';
+    quizBody.querySelectorAll('.quiz-a').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        qPicks[qStep] = btn.getAttribute('data-fw');
+        qStep++;
+        if (qStep < QUIZ.questions.length) { renderQuestion(true); } else { showResult(); }
+      });
+    });
+    var back = document.getElementById('quizBack');
+    if (back) { back.addEventListener('click', function () { qStep--; renderQuestion(true); }); }
+    if (focusHeading) { var qh = quizBody.querySelector('.quiz-q'); if (qh) qh.focus({ preventScroll: true }); }
+  }
+  function quizWinner() {
+    var scores = {};
+    QUIZ.order.forEach(function (f) { scores[f] = 0; });
+    qPicks.forEach(function (f) { scores[f]++; });
+    return QUIZ.order.reduce(function (best, f) { return scores[f] > scores[best] ? f : best; }, QUIZ.order[0]);
+  }
+  function showResult() {
+    quizStepEl.textContent = pad2(QUIZ.questions.length) + ' / ' + pad2(QUIZ.questions.length);
+    quizFillEl.style.width = '100%';
+    var fw = QUIZ.fw[quizWinner()];
+    quizBody.innerHTML = '';
+    quizResult.innerHTML =
+      '<div class="quiz-kicker">' + QUIZ.resultKicker + '</div>' +
+      '<div class="quiz-result-name" id="quizResultName" tabindex="-1">' +
+        '<span class="quiz-result-dot" style="background:' + fw.color + '" aria-hidden="true"></span>' +
+        '<h4>' + fw.name + '</h4>' +
+      '</div>' +
+      '<p class="quiz-why">' + fw.why + '</p>' +
+      '<p class="quiz-pair">' + fw.pairing + '</p>' +
+      '<p class="quiz-actions">' +
+        (fw.anchor ? '<a class="quiz-link" href="' + fw.anchor + '">' + fw.linkText + ' ↓</a>' : '') +
+        '<button class="quiz-retake" type="button" id="quizRetake">Retake</button>' +
+      '</p>';
+    document.getElementById('quizRetake').addEventListener('click', function () { qStep = 0; qPicks = []; renderQuestion(true); });
+    var name = document.getElementById('quizResultName');
+    if (name) name.focus({ preventScroll: true });
+  }
+  if (quizBody) renderQuestion(false);
+})();
+</script>
+<script>
+(function () {
+  var nav = document.querySelector('.nav');
+  function navEdge() {
+    if (!nav) return;
+    nav.classList.toggle('has-more', nav.scrollWidth - nav.clientWidth - nav.scrollLeft > 6);
+  }
+  if (nav) {
+    navEdge();
+    nav.addEventListener('scroll', navEdge, { passive: true });
+    window.addEventListener('resize', navEdge);
+  }
+  var touch = window.matchMedia && (matchMedia('(hover: none)').matches || matchMedia('(max-width: 720px)').matches);
+  if (!touch) return;
+  document.querySelectorAll('.chart-scroll, .tbl').forEach(function (el) {
+    if (el.scrollWidth - el.clientWidth < 24) return;
+    var hint = document.createElement('div');
+    hint.className = 'swipe-hint';
+    hint.setAttribute('aria-hidden', 'true');
+    hint.innerHTML = '&#10231; swipe';
+    el.parentNode.insertBefore(hint, el);
+    var off = function () { hint.classList.add('swipe-hint-off'); el.removeEventListener('scroll', off); };
+    el.addEventListener('scroll', off, { passive: true });
+  });
+})();
+</script>
+</body>
+</html>

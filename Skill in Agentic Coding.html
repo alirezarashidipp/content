@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The four crafts of agentic coding: briefing, context files, verification loops, and session hygiene — plus the five failure modes that quietly waste the gains." />
+  <title>Skill in Agentic Coding — The Agent Types, You Steer</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='6' fill='%233468f5'/%3E%3Ccircle cx='23' cy='9' r='6' fill='%2323956f'/%3E%3Ccircle cx='9' cy='23' r='6' fill='%23eb8237'/%3E%3Ccircle cx='23' cy='23' r='6' fill='%237650e6'/%3E%3C/svg%3E" />
+  <meta property="og:title" content="Skill in Agentic Coding — The Agent Types, You Steer" />
+  <meta property="og:description" content="The four crafts of agentic coding: briefing, context files, verification loops, and session hygiene — plus the five failure modes that quietly waste the gains." />
+  <meta property="og:type" content="article" />
+  <meta name="twitter:card" content="summary" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Agentic Coding",
+  "description": "The four crafts of agentic coding: briefing, context files, verification loops, and session hygiene \u2014 plus the five failure modes that quietly waste the gains.",
+  "datePublished": "2026-08-04",
+  "dateModified": "2026-08-05",
+  "author": {
+    "@type": "Person",
+    "name": "Ali Reza"
+  }
+}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Roboto+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add('js');</script>
+  <style>
+:root {
+  --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898;
+  --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+  --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+  --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+  --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+  --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,23,23,.35) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; border: 2px solid var(--bg); }
+::-webkit-scrollbar-track { background: transparent; }
+body {
+  margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(52,104,245,0.10), transparent 26%),
+    radial-gradient(circle at 86% 8%, rgba(118,80,230,0.10), transparent 25%),
+    linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+  line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+::selection { background: var(--ink); color: var(--paper); }
+.grain {
+  position: fixed; inset: 0; pointer-events: none; opacity: .08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply; z-index: 0;
+}
+a { color: inherit; text-decoration: none; }
+svg { max-width: 100%; height: auto; display: block; }
+.wrap { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; position: relative; z-index: 1; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 2px; }
+.skip-link { position: absolute; left: -9999px; top: 0; z-index: 300; background: var(--ink); color: var(--paper); padding: 10px 16px; font-weight: 700; font-size: .95rem; }
+.skip-link:focus { left: 12px; top: 12px; }
+.progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 200; pointer-events: none; }
+.progress span { display: block; height: 100%; width: 0; background: var(--ink); }
+.site-head { position: sticky; top: 0; z-index: 100; transition: background .25s ease, box-shadow .25s ease; }
+.site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
+.brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
+.brand-dot { width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg, var(--blue), var(--purple)); box-shadow: 0 0 0 8px rgba(52,104,245,.08); }
+.nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
+.nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
+.nav a::before { content:""; position:absolute; left:-13px; top:50%; margin-top:-3px; width:6px; height:6px; border-radius:50%; background: var(--spy, var(--ink)); opacity:0; transition: opacity .2s ease; }
+.nav a::after { content:""; position:absolute; left:0; bottom:-2px; width:0; height:1px; background:var(--ink); transition: width .22s ease; }
+.nav a:hover::after, .nav a.active::after { width:100%; }
+.nav a:hover, .nav a.active { color:var(--ink); }
+.nav a.active::before { opacity:1; }
+.hero { padding: 58px 0 50px; border-bottom:1px solid var(--line); }
+.eyebrow { display:inline-flex; align-items:center; gap:10px; font-size:.8rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+.eyebrow::before { content:""; width:24px; height:1px; background:var(--line-strong); }
+h1,h2,h3,h4 { margin:0; letter-spacing:-.045em; }
+.hero h1 { margin-top:18px; max-width:1000px; font-family:"Space Grotesk", sans-serif; font-size: clamp(3rem, 8.4vw, 6.8rem); line-height:.94; }
+.hero h1 em { font-family:"Instrument Serif", serif; font-style:italic; font-weight:400; letter-spacing:-.02em; color:#535353; }
+.hero h1 .line { display:block; overflow:hidden; padding-bottom:.08em; margin-bottom:-.08em; }
+.hero h1 .line-inner { display:inline-block; }
+.js .hero h1 .line-inner { transform: translateY(115%); animation: lineUp .5s ease-out forwards; }
+.js .hero h1 .line:nth-of-type(2) .line-inner { animation-delay: .09s; }
+.js .hero h1 .line:nth-of-type(3) .line-inner { animation-delay: .18s; }
+@keyframes lineUp { to { transform: translateY(0); } }
+.hero-grid { display:grid; grid-template-columns: 1.12fr .88fr; gap:48px; margin-top:26px; }
+.lead { font-size: clamp(1.08rem,1.8vw,1.28rem); color:#3f3f3f; margin:0; max-width:760px; }
+.hero-note { color:var(--muted); font-size:1rem; padding-top:10px; }
+.hero-links { display:flex; gap:18px; flex-wrap:wrap; margin-top:26px; font-weight:700; }
+.hero-links a { display:inline-flex; align-items:center; gap:8px; }
+.hero-links a span { color:var(--muted); font-weight:500; }
+.hero-links a:hover span { color:var(--ink); }
+.section { padding: 88px 0; border-bottom:1px solid var(--line); }
+.section-head { display:grid; grid-template-columns: .9fr 1.1fr; gap:30px; align-items:start; margin-bottom: 34px; }
+.kicker { display:flex; align-items:center; gap:10px; font-size:.82rem; text-transform:uppercase; letter-spacing:.16em; color:var(--soft); margin-bottom:16px; font-weight:700; }
+.kicker-mark { width:8px; height:8px; background:var(--ink); flex:0 0 8px; }
+.kicker-num { font-family:"Roboto Mono", monospace; font-weight:500; letter-spacing:.06em; }
+.kicker-sep { color:var(--soft); font-weight:400; }
+.section-head h2 { font-family:"Space Grotesk", sans-serif; font-size: clamp(2rem,4.4vw,4rem); line-height:.98; }
+.section-head p, .body-copy, .intro-copy { color:#4d4d4d; font-size:1.05rem; margin:0; max-width: 42rem; }
+[id] { scroll-margin-top: 96px; }
+.anchor { opacity: 0; margin-left: 12px; font-family:"DM Sans", sans-serif; font-weight: 500; font-size: .5em; color: var(--soft); vertical-align: middle; letter-spacing: 0; transition: opacity .2s ease; text-decoration: none; }
+h2:hover .anchor, h3:hover .anchor, .anchor:focus-visible { opacity: 1; }
+.anchor:hover { color: var(--ink); }
+.mini-compare { display:grid; grid-template-columns: repeat(4,1fr); gap:18px; margin-top:34px; }
+.mini-compare.three { grid-template-columns: repeat(3,1fr); }
+.mini-item { padding-top:10px; border-top:1px solid var(--line-strong); }
+.mini-item strong { display:block; font-family:"Space Grotesk", sans-serif; font-size:1.08rem; margin-bottom:6px; }
+.mini-item span { color:var(--muted); font-size:.94rem; }
+.mini-item .mini-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-bottom:10px; }
+.diagram-block { margin-top: 36px; }
+.diagram-title { font-family:"Space Grotesk", sans-serif; font-size:1.15rem; margin-bottom: 14px; }
+.diagram-caption { font-size:1.02rem; color:var(--muted); margin-top:16px; max-width:44rem; }
+.chart-scroll { overflow-x: auto; }
+.chart-scroll[data-chart="radar"] svg, .chart-scroll[data-chart="donut"] svg { display:block; max-width:540px; margin:0 auto; }
+.legend { display:flex; flex-wrap:wrap; gap:18px; margin-top:16px; color:var(--muted); font-size:.94rem; }
+.legend span { display:inline-flex; align-items:center; gap:8px; }
+.legend i { width:12px; height:12px; border-radius:50%; display:inline-block; }
+.js .bar-rect { transform-box: fill-box; transform-origin: left center; transform: scaleX(0); }
+.js .bars-in .bar-rect { transform: scaleX(1); transition: transform 1s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js .vbar-rect { transform-box: fill-box; transform-origin: center bottom; transform: scaleY(0); }
+.js .bars-in .vbar-rect { transform: scaleY(1); transition: transform .9s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js .sdot circle, .js .sdot .dot { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.js .scatter-in .sdot circle, .js .scatter-in .sdot .dot { transform: scale(1); transition: transform .55s cubic-bezier(.34,1.56,.64,1); transition-delay: var(--d, 0s); }
+.js .sdot text { opacity: 0; }
+.js .scatter-in .sdot text { opacity: 1; transition: opacity .45s ease; transition-delay: var(--ld, .35s); }
+.js .line-path { stroke-dasharray: var(--len, 3000); stroke-dashoffset: var(--len, 3000); }
+.js .lines-in .line-path { stroke-dashoffset: 0; transition: stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js .line-dot { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.js .lines-in .line-dot { transform: scale(1); transition: transform .45s cubic-bezier(.34,1.56,.64,1); transition-delay: var(--d, 0s); }
+.js .fit-line { opacity: 0; }
+.js .lines-in .fit-line { opacity: 1; transition: opacity .8s ease .5s; }
+.js .donut-seg { transition: stroke-dashoffset 1.2s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js .donut-wrap { transform-box: fill-box; transform-origin: center; }
+.js .radar-shape { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.js .radar-in .radar-shape { transform: scale(1); transition: transform .8s cubic-bezier(.34,1.3,.64,1); transition-delay: var(--d, 0s); }
+.js .radar-lab { opacity: 0; }
+.js .radar-in .radar-lab { opacity: 1; transition: opacity .5s ease; transition-delay: var(--d, .2s); }
+.js .vbar-val { opacity: 0; }
+.js .bars-in .vbar-val { opacity: 1; transition: opacity .45s ease; transition-delay: var(--d, .5s); }
+.js .donut-center { opacity: 0; }
+.js .donut-in .donut-center { opacity: 1; transition: opacity .6s ease .55s; }
+.stat-strip { display:grid; grid-template-columns: repeat(4,1fr); gap:24px; margin-top:40px; padding-top:30px; border-top:1px solid var(--line); }
+.stat-strip.three { grid-template-columns: repeat(3,1fr); }
+.stat-num { display:block; font-family:"Roboto Mono", monospace; font-weight:500; font-size: clamp(1.7rem, 3vw, 2.4rem); letter-spacing:-.03em; line-height:1.1; }
+.stat-label { display:block; margin-top:8px; color:var(--muted); font-size:.9rem; line-height:1.45; }
+.framework { display:grid; grid-template-columns: 260px 1fr; gap:38px; padding:48px 0; border-top:1px solid var(--line); }
+.framework:first-of-type { border-top:none; padding-top:14px; }
+.framework-aside { position:sticky; top:110px; align-self:start; }
+.framework-name { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+.mark { width:14px; height:14px; border-radius:50%; flex:0 0 14px; }
+.framework-name h3 { font-family:"Space Grotesk", sans-serif; font-size: clamp(1.8rem,3.2vw,2.5rem); line-height:1; }
+.framework-role { color:var(--muted); font-size:.97rem; margin-bottom:18px; }
+.framework-summary { font-size:1rem; color:#454545; max-width:220px; }
+.framework-content > p { margin:0 0 18px; color:#454545; font-size:1.05rem; max-width: 44rem; }
+.split { display:grid; grid-template-columns:1fr 1fr; gap:28px; margin:24px 0; }
+.text-block h4 { font-family:"Space Grotesk", sans-serif; font-size:1rem; margin-bottom:10px; }
+.text-block ul, .project-list, .avoid-list { margin:0; padding-left:18px; }
+.text-block li, .project-list li, .avoid-list li { margin-bottom:10px; color:#4d4d4d; }
+.callout-line { margin:20px 0 18px; padding-left:16px; border-left:2px solid currentColor; font-weight:700; letter-spacing:-.02em; }
+.callout-line small { display:block; margin-top:5px; font-weight:500; color:var(--muted); letter-spacing:0; }
+.section-label { font-size:.8rem; letter-spacing:.14em; text-transform:uppercase; color:var(--soft); font-weight:700; margin:26px 0 12px; }
+.project-list li strong, .avoid-list li strong, .text-block li strong { color:var(--ink); }
+.avoid-list .redir { color:var(--muted); font-weight:500; }
+.tbl { width:100%; border-collapse: collapse; margin-top:26px; font-size:.99rem; }
+.tbl th { font-family:"Space Grotesk", sans-serif; text-align:left; font-size:.86rem; letter-spacing:.12em; text-transform:uppercase; color:var(--soft); padding:0 14px 12px 0; border-bottom:1px solid var(--line-strong); }
+.tbl td { padding:13px 14px 13px 0; border-bottom:1px solid var(--line); color:#4d4d4d; vertical-align:top; }
+.tbl td:first-child { font-weight:700; color:var(--ink); white-space:nowrap; }
+.tbl .tdot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:9px; }
+.code { margin:24px 0; background: var(--dark); color:#e8e6dd; border-radius:14px; overflow:hidden; }
+.code-head { display:flex; align-items:center; gap:8px; padding:12px 18px; border-bottom:1px solid rgba(245,243,236,.1); font-family:"Roboto Mono", monospace; font-size:.8rem; color:rgba(245,243,236,.55); }
+.code-head i { width:9px; height:9px; border-radius:50%; display:inline-block; }
+.code pre { margin:0; padding:18px 20px; overflow-x:auto; font-family:"Roboto Mono", monospace; font-size:.88rem; line-height:1.65; }
+.code .cm { color: rgba(245,243,236,.42); }
+.code .kw { color:#a18aea; }
+.code .st { color:#67bda0; }
+.formula { margin:20px 0; padding:18px 22px; background:#f3f1e9; border-radius:12px; font-family:"Roboto Mono", monospace; font-size:1.02rem; color:#33312b; overflow-x:auto; }
+.flow { display:grid; grid-template-columns: repeat(4,1fr); gap:18px; margin-top:26px; }
+.flow .fstep { padding-top:12px; border-top:2px solid var(--ac, var(--ink)); }
+.flow .fstep .fnum { font-family:"Roboto Mono", monospace; font-size:.85rem; color:var(--ac, var(--muted)); }
+.flow .fstep strong { display:block; font-family:"Space Grotesk", sans-serif; margin:6px 0 6px; font-size:1.05rem; }
+.flow .fstep span { color:var(--muted); font-size:.93rem; }
+.decision-flow { margin-top:26px; display:grid; gap:20px; }
+.decision-step { display:grid; grid-template-columns: 42px 1fr; gap:16px; align-items:start; }
+.decision-step .num { width:42px; height:42px; border-radius:50%; display:grid; place-items:center; font-family:"Roboto Mono", monospace; font-weight:500; background:#f0eee8; color: var(--ac, var(--ink)); }
+.decision-step strong { display:block; margin-bottom:4px; font-size:1.02rem; }
+.decision-step p { margin:0; color:#4d4d4d; }
+.combo-line { margin-top:30px; font-size:1.06rem; color:#424242; max-width: 44rem; }
+.combo-line strong { color:var(--ink); }
+.quote-line { margin:34px 0 0; padding:6px 0 6px 22px; border-left:3px solid var(--ink); font-family:"Instrument Serif", serif; font-style:italic; font-size:clamp(1.3rem,2.4vw,1.7rem); color:#2e2e2e; max-width:46rem; line-height:1.45; }
+.section-dark { background: var(--dark); color: var(--dark-paper); border-bottom: none; position: relative; overflow: hidden; }
+.section-dark::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.05; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E"); }
+.section-dark ::selection { background: var(--dark-paper); color: var(--dark); }
+.section-dark :focus-visible { outline-color: var(--dark-paper); }
+.section-dark .kicker { color: rgba(245,243,236,.5); }
+.section-dark .kicker-mark { background: var(--dark-paper); }
+.section-dark .kicker-sep { color: rgba(245,243,236,.4); }
+.section-dark h2 { color: var(--dark-paper); }
+.section-dark .body-copy { color: rgba(245,243,236,.72); }
+.section-dark .anchor { color: rgba(245,243,236,.45); }
+.section-dark .anchor:hover { color: var(--dark-paper); }
+.section-dark .decision-step .num { background: rgba(245,243,236,.1); }
+.section-dark .decision-step strong { color: var(--dark-paper); }
+.section-dark .decision-step p { color: rgba(245,243,236,.65); }
+.section-dark .combo-line { color: rgba(245,243,236,.78); }
+.section-dark .combo-line strong { color: var(--dark-paper); }
+.section-dark .tbl th { color: rgba(245,243,236,.45); border-bottom-color: rgba(245,243,236,.3); }
+.section-dark .tbl td { border-bottom-color: rgba(245,243,236,.12); color: rgba(245,243,236,.72); }
+.section-dark .tbl td:first-child { color: var(--dark-paper); }
+.quiz { margin: 48px 0 12px; padding-top: 40px; border-top: 1px solid var(--dark-line); position: relative; }
+.quiz-head { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom: 30px; }
+.quiz-title { font-family:"Space Grotesk", sans-serif; font-size: clamp(1.5rem,2.6vw,2.1rem); color: var(--dark-paper); }
+.quiz-progress { display:flex; align-items:center; gap:14px; }
+.quiz-step { font-family:"Roboto Mono", monospace; font-size:.85rem; color: rgba(245,243,236,.65); letter-spacing:.06em; }
+.quiz-track { width: 130px; height: 2px; background: rgba(245,243,236,.18); }
+.quiz-fill { display:block; height:100%; width:0; background: var(--dark-paper); transition: width .3s ease; }
+.quiz-q { font-family:"Space Grotesk", sans-serif; font-size:1.25rem; margin:0 0 20px; color: var(--dark-paper); letter-spacing:-.02em; }
+.quiz-answers { display:grid; }
+.quiz-a { display:flex; align-items:center; gap:14px; width:100%; text-align:left; background:none; border:none; border-left:2px solid rgba(245,243,236,.14); padding:16px 18px; color: rgba(245,243,236,.85); font-family:"DM Sans", sans-serif; font-size:1.03rem; line-height:1.5; cursor:pointer; transition: background .18s ease, border-color .18s ease; }
+.quiz-a:hover, .quiz-a:focus-visible { background: rgba(255,255,255,.06); border-left-color: var(--ac, var(--dark-paper)); }
+.quiz-dot { width:10px; height:10px; border-radius:50%; background: var(--ac); flex:0 0 10px; }
+.quiz-back { margin-top:20px; background:none; border:none; padding:6px 0; color: rgba(245,243,236,.6); font-family:"Roboto Mono", monospace; font-size:.85rem; cursor:pointer; border-bottom:1px solid transparent; }
+.quiz-back:hover { color: var(--dark-paper); border-bottom-color: rgba(245,243,236,.4); }
+.quiz-kicker { font-family:"Roboto Mono", monospace; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; color: rgba(245,243,236,.5); margin-bottom:12px; }
+.quiz-result-name { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+.quiz-result-dot { width:14px; height:14px; border-radius:50%; flex:0 0 14px; }
+.quiz-result-name h4 { font-family:"Space Grotesk", sans-serif; font-size: clamp(1.7rem,3vw,2.3rem); color: var(--dark-paper); }
+.quiz-why { color: rgba(245,243,236,.88); font-size:1.07rem; margin:0 0 10px; max-width: 44rem; }
+.quiz-pair { color: rgba(245,243,236,.6); margin:0 0 22px; max-width: 44rem; }
+.quiz-actions { display:flex; align-items:center; gap:22px; flex-wrap:wrap; margin:0; }
+.quiz-link { color: var(--dark-paper); font-weight:700; border-bottom:1px solid rgba(245,243,236,.4); padding-bottom:2px; }
+.quiz-link:hover { border-bottom-color: var(--dark-paper); }
+.quiz-retake { background:none; border:1px solid rgba(245,243,236,.3); color: rgba(245,243,236,.75); padding:8px 18px; border-radius:999px; cursor:pointer; font-family:"DM Sans", sans-serif; font-size:.9rem; transition: border-color .18s ease, color .18s ease; }
+.quiz-retake:hover { border-color: var(--dark-paper); color: var(--dark-paper); }
+.quiz-noscript { color: rgba(245,243,236,.7); font-style: italic; max-width: 44rem; }
+.quiz-app { display:none; }
+.js .quiz-app { display:block; }
+footer { padding:48px 0 64px; color:var(--muted); font-size:.98rem; }
+.footer-title { font-family:"Space Grotesk", sans-serif; font-size:1.2rem; color:var(--ink); margin-bottom:6px; }
+.to-top { position: fixed; right: 22px; bottom: 22px; width: 46px; height: 46px; border-radius: 50%; background: var(--ink); color: var(--paper); border: none; cursor: pointer; display: grid; place-items: center; font-size: 1.15rem; line-height: 1; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .25s ease, transform .25s ease; z-index: 110; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+.to-top.show { opacity: 1; pointer-events: auto; transform: none; }
+.to-top:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.js .reveal { opacity:0; transform: translateY(18px); transition: opacity .65s ease, transform .65s ease; }
+.js .reveal.visible { opacity:1; transform:none; }
+@media (max-width: 980px) {
+  .hero-grid, .section-head, .framework, .split { grid-template-columns:1fr; }
+  .framework-aside { position:static; }
+  .mini-compare, .mini-compare.three { grid-template-columns: 1fr 1fr; }
+  .flow { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px) {
+  .wrap { width: min(var(--max), calc(100% - 26px)); }
+  .topbar { flex-wrap: wrap; padding-top:14px; gap: 10px 18px; }
+  .nav { max-width: 100%; overflow-x: auto; gap: 16px; font-size:.92rem; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 4px; }
+  .nav::-webkit-scrollbar { display: none; }
+  .hero { padding-top:34px; }
+  .hero h1 { font-size: clamp(2.5rem, 14vw, 4.6rem); }
+  .mini-compare, .mini-compare.three { grid-template-columns:1fr; }
+  .flow { grid-template-columns:1fr; }
+  .section { padding: 60px 0; }
+  .chart-scroll svg { min-width: 640px; }
+  .chart-scroll[data-chart="radar"] svg, .chart-scroll[data-chart="donut"] svg { min-width: 0; }
+  .stat-strip, .stat-strip.three { grid-template-columns: 1fr 1fr; gap: 22px 16px; }
+  .quiz-head { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .to-top { right: 16px; bottom: 16px; }
+  .tbl { display:block; overflow-x:auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior:auto; }
+  .js .reveal { opacity:1; transform:none; transition:none; }
+  .js .hero h1 .line-inner { transform:none; animation:none; }
+  .js .bar-rect, .js .vbar-rect { transform:none; transition:none; }
+  .js .bars-in .bar-rect, .js .bars-in .vbar-rect { transition:none; }
+  .js .sdot circle, .js .sdot .dot, .js .line-dot, .js .radar-shape { transform:none; transition:none; }
+  .js .scatter-in .sdot circle, .js .lines-in .line-dot, .js .radar-in .radar-shape { transition:none; }
+  .js .sdot text, .js .radar-lab, .js .fit-line, .js .vbar-val, .js .donut-center { opacity:1; transition:none; }
+  .js .line-path { stroke-dasharray:none; stroke-dashoffset:0; }
+  .js .lines-in .line-path { transition:none; }
+  .nav a::after, .quiz-fill, .quiz-a, .to-top { transition:none; }
+}
+
+/* ── Aug 2026 upgrade: mobile ergonomics & swipe hints ── */
+:root { color-scheme: light; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { -webkit-tap-highlight-color: transparent; }
+h1, h2, h3 { text-wrap: balance; }
+.section-head p, .body-copy, .intro-copy, .diagram-caption { text-wrap: pretty; }
+.chart-scroll { -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+.nav.has-more { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent); }
+.swipe-hint { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 10px; padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; font-family: "Roboto Mono", monospace; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: rgba(127,127,127,.07); transition: opacity .4s ease; }
+.section-dark .swipe-hint { border-color: var(--dark-line); color: rgba(245,243,236,.6); }
+.swipe-hint-off { opacity: 0; }
+@media (hover: none) {
+  .anchor { opacity: .45; }
+  .nav a { padding: 8px 0; }
+}
+@media (max-width: 720px) {
+  .to-top { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+  footer { padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-width: 430px) {
+  .hero h1 { font-size: clamp(2.15rem, 12.5vw, 3rem); }
+  .section { padding: 48px 0; }
+  .stat-strip, .stat-strip.three { gap: 18px 14px; }
+  .stat-num { font-size: clamp(1.35rem, 7.5vw, 1.7rem); }
+  .quiz-a { padding: 14px 12px; }
+  .decision-step { grid-template-columns: 34px 1fr; gap: 12px; }
+  .decision-step .num { width: 34px; height: 34px; font-size: .85rem; }
+  .formula { font-size: .9rem; padding: 14px 16px; }
+  .code pre { font-size: .8rem; }
+  .chart-scroll svg { min-width: 560px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .swipe-hint { transition: none; }
+}
+
+/* external reference links */
+.xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
+.xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
+.section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
+.section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+</style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span id="progressFill"></span></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-head">
+    <div class="wrap topbar">
+      <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Agentic Coding</span></div>
+      <nav class="nav" aria-label="Primary navigation"><a href="#loop">The working loop</a><a href="#crafts">The four crafts</a><a href="#tooling">The tooling</a><a href="#failuremodes">Failure modes</a></nav>
+    </div>
+  </header>
+
+  <main id="content">
+    <div class="wrap">
+
+      <section class="hero" aria-label="Introduction">
+        <div class="eyebrow">Engineering Craft</div>
+        <h1>
+          <span class="line"><span class="line-inner">The agent types.</span></span>
+<span class="line"><span class="line-inner"><em>You </em>steer.</span></span>
+        </h1>
+        <div class="hero-grid">
+          <div>
+            <p class="lead">Agentic coding tools can explore a codebase, plan a change, write the code, and run the tests. The developers getting outsized returns from them aren't the ones with better models — they're the ones with better steering.</p>
+            <div class="hero-links"><a href="#loop">↓ <span>The working loop</span></a><a href="#failuremodes">↓ <span>Skip to failure modes</span></a></div>
+          </div>
+          <div class="hero-note"><p>Skill in agentic coding is not typing faster prompts. It is briefing, constraining, verifying, and cleaning up — <em>four crafts nobody warns you about</em>.</p></div>
+        </div>
+      </section>      <section class="section reveal " id="loop" aria-labelledby="loop-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">01</span><span class="kicker-sep">—</span>The working loop</div>
+            <h2 id="loop-h">Explore → plan → code → verify<a class="anchor" href="#loop" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">The biggest unlock is treating the agent like a strong junior colleague: you don't hand them “fix the app” — you walk them through discovery, agree on a plan, and review their work like a pull request.</p>
+        </div>
+        <div class="flow">
+<div class="fstep" style="--ac:#3468f5"><span class="fnum">01</span><strong>Explore</strong><span>Let the agent map the codebase before it touches anything. Read first, edit second.</span></div>
+<div class="fstep" style="--ac:#23956f"><span class="fnum">02</span><strong>Plan</strong><span>Agree on the approach in words. A plan you approved beats code you didn't expect.</span></div>
+<div class="fstep" style="--ac:#eb8237"><span class="fnum">03</span><strong>Code</strong><span>Small, reviewable steps — checkpoint before anything risky or multi-file.</span></div>
+<div class="fstep" style="--ac:#db6478"><span class="fnum">04</span><strong>Verify</strong><span>Tests, builds, and your own eyes. Unverified agent output is a liability, not a deliverable.</span></div>
+</div><div class="stat-strip" id="craftstats" data-stats>
+<div class="stat">
+            <span class="stat-num" data-count="55" data-decimals="0" data-suffix="%" data-prefix="" data-delay="0">55%</span>
+            <span class="stat-label">faster task completion in controlled trials of AI pair programmers — GitHub</span>
+          </div>
+<div class="stat">
+            <span class="stat-num" data-count="59" data-decimals="0" data-suffix="%" data-prefix="" data-delay="120">59%</span>
+            <span class="stat-label">of developers now use three or more AI coding tools — <a class="xlink" href="https://www.qodo.ai/" target="_blank" rel="noopener noreferrer">Qodo</a>, 2025</span>
+          </div>
+<div class="stat">
+            <span class="stat-num" data-count="28" data-decimals="0" data-suffix="%" data-prefix="" data-delay="240">28%</span>
+            <span class="stat-label">shipping confidence among developers juggling six or more tools — Qodo, 2025</span>
+          </div>
+<div class="stat">
+            <span class="stat-num" data-count="4" data-decimals="0" data-suffix="" data-prefix="" data-delay="360">4</span>
+            <span class="stat-label">phases in every healthy agentic session: explore, plan, code, verify</span>
+          </div>
+</div><div class="diagram-block">
+          <div class="diagram-title">Where agentic sessions die</div>
+          <div class="chart-scroll" id="dieChart" data-chart="bars"><svg viewBox="0 0 1080 460" role="img" aria-label="Horizontal bar chart of five root causes that derail agentic coding sessions, led by context pollution.">
+<defs>
+<linearGradient id="bgdie0" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3468f5"/><stop offset="1" stop-color="#6e91ff"/></linearGradient>
+<linearGradient id="bgdie1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#db6478"/><stop offset="1" stop-color="#ea97a6"/></linearGradient>
+<linearGradient id="bgdie2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#eb8237"/><stop offset="1" stop-color="#f3a46c"/></linearGradient>
+<linearGradient id="bgdie3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7650e6"/><stop offset="1" stop-color="#a18aea"/></linearGradient>
+<linearGradient id="bgdie4" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5b6b7a"/><stop offset="1" stop-color="#8d9aa7"/></linearGradient>
+</defs>
+<text x="230" y="38" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="14">0</text>
+<line x1="230" y1="55" x2="230" y2="400" stroke="rgba(23,23,23,.18)"/>
+<text x="490" y="38" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="14">10</text>
+<line x1="490" y1="55" x2="490" y2="400" stroke="rgba(23,23,23,.07)"/>
+<text x="750" y="38" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="14">20</text>
+<line x1="750" y1="55" x2="750" y2="400" stroke="rgba(23,23,23,.07)"/>
+<text x="1010" y="38" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="14">30</text>
+<line x1="1010" y1="55" x2="1010" y2="400" stroke="rgba(23,23,23,.07)"/>
+<text x="20" y="99" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="21">Context pollution</text>
+<rect class="bar-rect" style="--d:0.00s" x="230" y="75" width="780" height="34" rx="12" fill="url(#bgdie0)"/>
+<text class="bar-val" data-count="30" data-decimals="0" data-suffix="%" data-delay="0" x="1024" y="98" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">30%</text>
+<text x="20" y="168" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="21">No verification</text>
+<rect class="bar-rect" style="--d:0.12s" x="230" y="143" width="650" height="34" rx="12" fill="url(#bgdie1)"/>
+<text class="bar-val" data-count="25" data-decimals="0" data-suffix="%" data-delay="120" x="894" y="167" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">25%</text>
+<text x="20" y="236" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="21">Vague briefs</text>
+<rect class="bar-rect" style="--d:0.24s" x="230" y="212" width="520" height="34" rx="12" fill="url(#bgdie2)"/>
+<text class="bar-val" data-count="20" data-decimals="0" data-suffix="%" data-delay="240" x="764" y="235" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">20%</text>
+<text x="20" y="304" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="21">Endless exploring</text>
+<rect class="bar-rect" style="--d:0.36s" x="230" y="280" width="390" height="34" rx="12" fill="url(#bgdie3)"/>
+<text class="bar-val" data-count="15" data-decimals="0" data-suffix="%" data-delay="360" x="634" y="303" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">15%</text>
+<text x="20" y="373" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="21">Bloated config</text>
+<rect class="bar-rect" style="--d:0.48s" x="230" y="349" width="260" height="34" rx="12" fill="url(#bgdie4)"/>
+<text class="bar-val" data-count="10" data-decimals="0" data-suffix="%" data-delay="480" x="504" y="372" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">10%</text>
+<text x="230" y="442" fill="#777" font-family="DM Sans" font-size="14">Share of derailed agentic sessions by root cause — illustrative editorial model, synthesized from practitioner reports.</text>
+</svg></div>
+          <p class="diagram-caption"><strong>How to read this:</strong> notice what is <em>not</em> on this chart — model intelligence. Sessions die from steering failures: polluted context, skipped verification, vague briefs.</p>
+        </div>
+      </section>      <section class="section reveal " id="crafts" aria-labelledby="crafts-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">02</span><span class="kicker-sep">—</span>The four crafts</div>
+            <h2 id="crafts-h">What “skill” actually means<a class="anchor" href="#crafts" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Four learnable disciplines separate the developers who swear by agents from the ones who swear at them.</p>
+        </div>
+        <article class="framework" id="brief" aria-labelledby="brief-h">
+          <aside class="framework-aside">
+            <div class="framework-name"><span class="mark" style="background:#3468f5"></span><h3 id="brief-h">The Brief<a class="anchor" href="#brief" aria-label="Link to this section">#</a></h3></div>
+            <div class="framework-role">Prompts as specs</div>
+            <div class="framework-summary">The quality ceiling of the whole session is set before the agent writes a line.</div>
+          </aside>
+          <div class="framework-content"><p>“Fix the app” buys you plausible garbage. A strong brief reads like a ticket you'd give a sharp new colleague: the goal in one sentence, the constraints, and — most skipped of all — <strong>what done looks like</strong>.</p>
+            <div class="split">
+              <div class="text-block"><h4>Weak brief</h4><ul><li>“Make the checkout faster.”</li><li>“Add auth to the app.”</li><li>“Clean up this file.”</li></ul></div>
+              <div class="text-block"><h4>Strong brief</h4><ul><li>“Checkout p95 is 2.3 s; profile `payments.py`, cut the N+1 query, keep the API shape unchanged.”</li><li>“Add GitHub OAuth to `auth/`, mirror the existing session flow, tests in `test_auth.py` must pass.”</li><li>“Extract the three date helpers into `utils/dates.py`; no behavior change; run the suite.”</li></ul></div>
+            </div>
+            <div class="section-label">Every strong brief names</div><ol class="project-list"><li><strong>Goal:</strong> one sentence, observable.</li><li><strong>Constraints:</strong> versions, style, files that are off-limits.</li><li><strong>Definition of done:</strong> which tests pass, which behavior changes.</li><li><strong>Context pointers:</strong> the files, commits, or docs that matter.</li></ol>
+            <div class="callout-line" style="color:#3468f5">If a competent colleague couldn't start from your prompt, neither can the agent.<small>The model is not the bottleneck. The brief is.</small></div></div>
+        </article><article class="framework" id="context" aria-labelledby="context-h">
+          <aside class="framework-aside">
+            <div class="framework-name"><span class="mark" style="background:#23956f"></span><h3 id="context-h">The Context File<a class="anchor" href="#context" aria-label="Link to this section">#</a></h3></div>
+            <div class="framework-role">CLAUDE.md and friends</div>
+            <div class="framework-summary">Every agent has an onboarding doc. Most teams fill it like a junk drawer.</div>
+          </aside>
+          <div class="framework-content"><p>CLAUDE.md, <a class="xlink" href="https://agents.md/" target="_blank" rel="noopener noreferrer">AGENTS.md</a>, <code>.cursor/rules</code>, <code>copilot-instructions.md</code> — different logos, same idea: a file the agent reads before every session. It should contain what a new hire couldn't guess: commands, conventions, gotchas. It should <em>not</em> contain your architecture memoirs.</p>
+            <div class="code">
+            <div class="code-head"><i style="background:#db6478"></i><i style="background:#eb8237"></i><i style="background:#23956f"></i><span style="margin-left:8px">CLAUDE.md</span></div>
+            <pre><span class="cm"># Project context for the agent</span>
+<span class="kw">## Commands</span>
+- test: `pytest -x` · build: `npm run build`
+<span class="kw">## Conventions</span>
+- TypeScript strict, no default exports
+- never edit applied DB migrations
+<span class="kw">## Gotchas</span>
+- auth tokens live in sessionStorage, not cookies
+- billing retries are NOT idempotent</pre>
+          </div>
+            <div class="split">
+              <div class="text-block"><h4>Keep</h4><ul><li><strong>Commands:</strong> how to test, build, lint — exactly.</li><li><strong>Conventions:</strong> the rules a reviewer would enforce.</li><li><strong>Gotchas:</strong> the traps that cost you a day to learn.</li></ul></div>
+              <div class="text-block"><h4>Cut</h4><ul><li><strong>Anything obvious from the code:</strong> the agent can read.</li><li><strong>Rules it keeps ignoring:</strong> sharpen or delete — dead rules tax every session.</li><li><strong>History and rationale:</strong> that belongs in docs, not in the prompt budget.</li></ul></div>
+            </div>
+            <div class="callout-line" style="color:#23956f">A 400-token context file beats a 4,000-token one.<small>Every line you add is paid for in attention — in every future session, forever. AGENTS.md is emerging as the cross-tool standard: write it once, keep it honest.</small></div></div>
+        </article><article class="framework" id="loop" aria-labelledby="loop-h">
+          <aside class="framework-aside">
+            <div class="framework-name"><span class="mark" style="background:#eb8237"></span><h3 id="loop-h">The Loop<a class="anchor" href="#loop" aria-label="Link to this section">#</a></h3></div>
+            <div class="framework-role">Verification is the job</div>
+            <div class="framework-summary">Agents are confident, not correct. The workflow needs gates that don't care about confidence.</div>
+          </aside>
+          <div class="framework-content"><p>The failure that costs you is rarely the loud crash — it is the <strong>silent wrong answer</strong>: code that runs, looks right, and computes the wrong thing for three weeks. Verification is not a personality trait; it is infrastructure.</p>
+            <div class="section-label">Three layers of gate</div><ol class="project-list"><li><strong>Automated:</strong> tests, typecheck, lint — wired as hooks that run after every agent edit, not when you remember.</li><li><strong>Structural:</strong> checkpoints before risky multi-file edits; git worktrees so parallel attempts never collide.</li><li><strong>Human:</strong> read the diff like a PR from a talented intern. If you won't review it, don't generate it.</li></ol>
+            <div class="code">
+            <div class="code-head"><i style="background:#db6478"></i><i style="background:#eb8237"></i><i style="background:#23956f"></i><span style="margin-left:8px">verify.sh</span></div>
+            <pre><span class="cm"># after every agent edit, before you even look</span>
+npm run typecheck && npm run lint && npm test
+<span class="cm"># green = review the diff · red = the agent fixes, not you</span></pre>
+          </div>
+            <div class="callout-line" style="color:#eb8237">A silent wrong answer costs more than a loud crash.<small>Agents produce both with identical confidence. Tests, diffs, and checkpoints are the seatbelt — wear them on short trips too.</small></div></div>
+        </article><article class="framework" id="hygiene" aria-labelledby="hygiene-h">
+          <aside class="framework-aside">
+            <div class="framework-name"><span class="mark" style="background:#7650e6"></span><h3 id="hygiene-h">The Hygiene<a class="anchor" href="#hygiene" aria-label="Link to this section">#</a></h3></div>
+            <div class="framework-role">Context is a budget</div>
+            <div class="framework-summary">Long sessions degrade. The pros spend context like money — and reset before bankruptcy.</div>
+          </aside>
+          <div class="framework-content"><p>An agent that re-reads files it already read, repeats a mistake you corrected, or proposes a plan contradicting its own earlier decision is not broken — its context is polluted. Every dead end, every abandoned approach, every correction is still sitting in the window, taxing attention.</p>
+            <div class="split">
+              <div class="text-block"><h4>Signs of context rot</h4><ul><li><strong>Re-reading</strong> files it already summarized.</li><li><strong>Repeating</strong> mistakes you already corrected.</li><li><strong>Contradicting</strong> decisions it made an hour ago.</li></ul></div>
+              <div class="text-block"><h4>The fixes</h4><ul><li><strong>Compact or clear:</strong> cheaper than debugging a confused agent.</li><li><strong>Subagents for side quests:</strong> keep the parent's context clean.</li><li><strong>One task, one session:</strong> a fresh session with a good brief beats a long session with a polluted one.</li></ul></div>
+            </div>
+            <div class="callout-line" style="color:#7650e6">Correcting an agent in circles is a context problem, not an intelligence problem.<small>If you've told it three times, stop arguing with autocomplete. Reset with a sharper brief.</small></div></div>
+        </article>
+      </section>      <section class="section reveal " id="tooling" aria-labelledby="tooling-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">03</span><span class="kicker-sep">—</span>The tooling</div>
+            <h2 id="tooling-h">Same skill, different logos<a class="anchor" href="#tooling" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">The crafts transfer; only the filenames change. Wherever your agent lives, it has a context file, a way to checkpoint, and a way to run checks.</p>
+        </div>
+        <table class="tbl"><thead><tr><th>Tool</th><th>Context file</th><th>Standout steering feature</th></tr></thead><tbody><tr><td><span class="tdot" style="background:#3468f5"></span><strong><a class="xlink" href="https://docs.claude.com/en/docs/claude-code/overview" target="_blank" rel="noopener noreferrer">Claude Code</a></strong></td><td>CLAUDE.md</td><td>Subagents, hooks, and skills as structured extensions</td></tr><tr><td><span class="tdot" style="background:#23956f"></span><strong><a class="xlink" href="https://cursor.com/" target="_blank" rel="noopener noreferrer">Cursor</a></strong></td><td>.cursor/rules (*.mdc)</td><td>Inline edit + chat split over a repo-indexed context</td></tr><tr><td><span class="tdot" style="background:#eb8237"></span><strong><a class="xlink" href="https://github.com/features/copilot" target="_blank" rel="noopener noreferrer">GitHub Copilot</a></strong></td><td>copilot-instructions.md</td><td>Inline completions plus agent mode inside the IDE</td></tr><tr><td><span class="tdot" style="background:#7650e6"></span><strong><a class="xlink" href="https://windsurf.com/" target="_blank" rel="noopener noreferrer">Windsurf</a></strong></td><td>AGENTS.md / .windsurfrules</td><td>Cascade flow with persistent codebase awareness</td></tr><tr><td><span class="tdot" style="background:#14a9c5"></span><strong>Open-source agents</strong></td><td>AGENTS.md / CONVENTIONS.md</td><td>Model-agnostic, terminal-native, scriptable</td></tr></tbody></table><div class="callout-line" style="color:#14a9c5">Write the context file once, keep it honest.<small>AGENTS.md is emerging as the cross-tool standard — one file every agent reads. Treat it like a Makefile for behavior: short, current, and enforced.</small></div>
+      </section>
+    </div>
+    <section class="section section-dark reveal" id="failuremodes" aria-labelledby="failuremodes-h">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span class="kicker-sep">—</span>The failure modes</div>
+            <h2 id="failuremodes-h">Five ways smart people get dumb results<a class="anchor" href="#failuremodes" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">None of these are model failures. They are steering failures — which is good news, because steering is learnable.</p>
+        </div>
+        <div class="decision-flow">
+<div class="decision-step" style="--ac:#3468f5"><div class="num">1</div><div><strong>The kitchen-sink session.</strong><p>One endless thread for every task. Context rots, the agent contradicts itself, and the savings evaporate in debugging. One task, one session.</p></div></div>
+<div class="decision-step" style="--ac:#23956f"><div class="num">2</div><div><strong>Correcting in circles.</strong><p>If you've told it three times, the context is the problem. Reset with a sharper brief instead of arguing with autocomplete.</p></div></div>
+<div class="decision-step" style="--ac:#eb8237"><div class="num">3</div><div><strong>The bloated context file.</strong><p>A 2,000-line CLAUDE.md is a tax on every session. Keep what changes behavior; delete the rest.</p></div></div>
+<div class="decision-step" style="--ac:#db6478"><div class="num">4</div><div><strong>Trust without verification.</strong><p>The agent is confident, not correct. Tests, diffs, and checkpoints are the seatbelt — wear them on short trips too.</p></div></div>
+<div class="decision-step" style="--ac:#7650e6"><div class="num">5</div><div><strong>Infinite exploration.</strong><p>Exploring feels productive and writes nothing. Timebox discovery, then demand a plan.</p></div></div>
+</div><p class="combo-line"><strong>The skill was never typing.</strong> It is judgment — briefing well, constraining wisely, verifying ruthlessly, and knowing when to start over.</p>
+      </div>
+    </section>
+    <div class="wrap">
+            <footer>
+        <div class="footer-title">Agentic Coding</div>
+        <div>The skill was never typing. It's judgment.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of the Engineering Craft series · Updated 5 August 2026. Tool features as documented by vendors; the session-failure chart is an illustrative editorial model, and survey figures are cited inline.</div>
+      </footer>
+    </div>
+  </main>
+
+  <button class="to-top" id="toTop" type="button" aria-label="Back to top">↑</button>
+  <script>
+(function () {
+  'use strict';
+  var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var revealEls = document.querySelectorAll('.reveal');
+  if (RM) {
+    revealEls.forEach(function (el) { el.classList.add('visible'); });
+  } else {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); }
+      });
+    }, { threshold: 0.01, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function (el) { revealObserver.observe(el); });
+  }
+
+  function animateCount(el) {
+    var target = parseFloat(el.getAttribute('data-count'));
+    var dec = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    var suffix = el.getAttribute('data-suffix') || '';
+    var prefix = el.getAttribute('data-prefix') || '';
+    var delay = parseInt(el.getAttribute('data-delay') || '0', 10);
+    var final = prefix + target.toFixed(dec) + suffix;
+    if (RM) { el.textContent = final; return; }
+    var dur = 900;
+    window.setTimeout(function () {
+      var t0 = performance.now();
+      function tick(t) {
+        var p = Math.min((t - t0) / dur, 1);
+        var e = 1 - Math.pow(1 - p, 3);
+        el.textContent = prefix + (target * e).toFixed(dec) + suffix;
+        if (p < 1) { requestAnimationFrame(tick); } else { el.textContent = final; }
+      }
+      requestAnimationFrame(tick);
+    }, delay);
+  }
+
+  function triggerOnce(el, cls, onTrigger) {
+    if (!el) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          el.classList.add(cls);
+          if (onTrigger) onTrigger();
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    io.observe(el);
+  }
+
+  document.querySelectorAll('[data-chart]').forEach(function (chart) {
+    var kind = chart.getAttribute('data-chart');
+    var cls = { bars: 'bars-in', scatter: 'scatter-in', lines: 'lines-in', radar: 'radar-in', donut: 'donut-in' }[kind] || (kind + '-in');
+    triggerOnce(chart, cls, function () {
+      chart.querySelectorAll('[data-count]').forEach(animateCount);
+      if (kind === 'donut') {
+        chart.querySelectorAll('.donut-seg').forEach(function (seg) {
+          seg.style.strokeDashoffset = seg.getAttribute('data-off');
+        });
+      }
+    });
+  });
+  document.querySelectorAll('[data-stats]').forEach(function (strip) {
+    triggerOnce(strip, 'stats-in', function () {
+      strip.querySelectorAll('[data-count]').forEach(animateCount);
+    });
+  });
+
+  document.querySelectorAll('.line-path').forEach(function (p) {
+    try { var L = p.getTotalLength(); p.style.setProperty('--len', L + 40); } catch (e) {}
+  });
+
+  var head = document.querySelector('.site-head');
+  var progressFill = document.getElementById('progressFill');
+  var toTop = document.getElementById('toTop');
+  function onScroll() {
+    var y = window.scrollY || window.pageYOffset;
+    head.classList.toggle('scrolled', y > 10);
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    progressFill.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+    toTop.classList.toggle('show', y > 600);
+  }
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (!ticking) { requestAnimationFrame(function () { onScroll(); ticking = false; }); ticking = true; }
+  }, { passive: true });
+  onScroll();
+  toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' }); });
+
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav a'));
+  function linkFor(id) { return navLinks.find(function (a) { return a.getAttribute('href') === '#' + id; }) || null; }
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        navLinks.forEach(function (a) { a.classList.remove('active'); });
+        var link = linkFor(entry.target.id);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+  document.querySelectorAll('main section[id]').forEach(function (s) { spy.observe(s); });
+  var FW_COLORS = {"crafts": {"brief": "#3468f5", "context": "#23956f", "loop": "#eb8237", "hygiene": "#7650e6"}};
+  Object.keys(FW_COLORS).forEach(function (navId) {
+    var link = linkFor(navId);
+    if (!link) return;
+    var fwSpy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting && FW_COLORS[navId][entry.target.id]) {
+          link.style.setProperty('--spy', FW_COLORS[navId][entry.target.id]);
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+    document.querySelectorAll('.framework').forEach(function (f) { fwSpy.observe(f); });
+  });
+})();
+</script>
+<script>
+(function () {
+  var nav = document.querySelector('.nav');
+  function navEdge() {
+    if (!nav) return;
+    nav.classList.toggle('has-more', nav.scrollWidth - nav.clientWidth - nav.scrollLeft > 6);
+  }
+  if (nav) {
+    navEdge();
+    nav.addEventListener('scroll', navEdge, { passive: true });
+    window.addEventListener('resize', navEdge);
+  }
+  var touch = window.matchMedia && (matchMedia('(hover: none)').matches || matchMedia('(max-width: 720px)').matches);
+  if (!touch) return;
+  document.querySelectorAll('.chart-scroll, .tbl').forEach(function (el) {
+    if (el.scrollWidth - el.clientWidth < 24) return;
+    var hint = document.createElement('div');
+    hint.className = 'swipe-hint';
+    hint.setAttribute('aria-hidden', 'true');
+    hint.innerHTML = '&#10231; swipe';
+    el.parentNode.insertBefore(hint, el);
+    var off = function () { hint.classList.add('swipe-hint-off'); el.removeEventListener('scroll', off); };
+    el.addEventListener('scroll', off, { passive: true });
+  });
+})();
+</script>
+</body>
+</html>
