@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Why the elephant keeps winning: ACID guarantees, JSONB, the extension ecosystem, and what's new in PostgreSQL 18 — async I/O, virtual generated columns, temporal constraints, UUIDv7." />
+  <title>PostgreSQL — The World's Most Advanced Open Source Database</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='6' fill='%233468f5'/%3E%3Ccircle cx='23' cy='9' r='6' fill='%2323956f'/%3E%3Ccircle cx='9' cy='23' r='6' fill='%23eb8237'/%3E%3Ccircle cx='23' cy='23' r='6' fill='%237650e6'/%3E%3C/svg%3E" />
+  <meta property="og:title" content="PostgreSQL — The World's Most Advanced Open Source Database" />
+  <meta property="og:description" content="Why the elephant keeps winning: ACID guarantees, JSONB, the extension ecosystem, and what's new in PostgreSQL 18 — async I/O, virtual generated columns, temporal constraints, UUIDv7." />
+  <meta property="og:type" content="article" />
+  <meta name="twitter:card" content="summary" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "PostgreSQL",
+  "description": "Why the elephant keeps winning: ACID guarantees, JSONB, the extension ecosystem, and what's new in PostgreSQL 18 \u2014 async I/O, virtual generated columns, temporal constraints, UUIDv7.",
+  "datePublished": "2026-08-04",
+  "dateModified": "2026-08-06",
+  "author": {
+    "@type": "Person",
+    "name": "Ali Reza Rashidi"
+  }
+}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Roboto+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add('js');</script>
+  <style>
+:root {
+  --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898;
+  --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+  --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+  --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+  --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+  --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,23,23,.35) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; border: 2px solid var(--bg); }
+::-webkit-scrollbar-track { background: transparent; }
+body {
+  margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif;
+  background: linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+  line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+::selection { background: var(--ink); color: var(--paper); }
+.grain {
+  position: fixed; inset: 0; pointer-events: none; opacity: .08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply; z-index: 0;
+}
+a { color: inherit; text-decoration: none; }
+svg { max-width: 100%; height: auto; display: block; }
+.wrap { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; position: relative; z-index: 1; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 2px; }
+.skip-link { position: absolute; left: -9999px; top: 0; z-index: 300; background: var(--ink); color: var(--paper); padding: 10px 16px; font-weight: 700; font-size: .95rem; }
+.skip-link:focus { left: 12px; top: 12px; }
+.progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 200; pointer-events: none; }
+.progress span { display: block; height: 100%; width: 0; background: var(--ink); }
+.site-head { position: sticky; top: 0; z-index: 100; transition: background .25s ease, box-shadow .25s ease; }
+.site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
+.brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
+.brand-dot { width:12px; height:12px; border-radius:50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
+.nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
+.nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
+.nav a::before { content:""; position:absolute; left:-13px; top:50%; margin-top:-3px; width:6px; height:6px; border-radius:50%; background: var(--spy, var(--ink)); opacity:0; transition: opacity .2s ease; }
+.nav a::after { content:""; position:absolute; left:0; bottom:-2px; width:0; height:1px; background:var(--ink); transition: width .22s ease; }
+.nav a:hover::after, .nav a.active::after { width:100%; }
+.nav a:hover, .nav a.active { color:var(--ink); }
+.nav a.active::before { opacity:1; }
+.hero { padding: 58px 0 50px; border-bottom:1px solid var(--line); }
+.eyebrow { display:inline-flex; align-items:center; gap:10px; font-size:.8rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+.eyebrow::before { content:""; width:24px; height:1px; background:var(--line-strong); }
+h1,h2,h3,h4 { margin:0; letter-spacing:-.045em; }
+.hero h1 { margin-top:18px; max-width:1000px; font-family:"Space Grotesk", sans-serif; font-size: clamp(3rem, 8.4vw, 6.8rem); line-height:.94; }
+.hero h1 em { font-family:"Instrument Serif", serif; font-style:italic; font-weight:400; letter-spacing:-.02em; color:#535353; }
+.hero h1 .line { display:block; overflow:hidden; padding-bottom:.08em; margin-bottom:-.08em; }
+.hero h1 .line-inner { display:inline-block; }
+.js .hero h1 .line-inner { transform: translateY(115%); animation: lineUp .5s ease-out forwards; }
+.js .hero h1 .line:nth-of-type(2) .line-inner { animation-delay: .09s; }
+.js .hero h1 .line:nth-of-type(3) .line-inner { animation-delay: .18s; }
+@keyframes lineUp { to { transform: translateY(0); } }
+.hero-grid { display:grid; grid-template-columns: 1.12fr .88fr; gap:48px; margin-top:26px; }
+.lead { font-size: clamp(1.08rem,1.8vw,1.28rem); color:#3f3f3f; margin:0; max-width:760px; }
+.hero-note { color:var(--muted); font-size:1rem; padding-top:10px; }
+.hero-links { display:flex; gap:18px; flex-wrap:wrap; margin-top:26px; font-weight:700; }
+.hero-links a { display:inline-flex; align-items:center; gap:8px; }
+.hero-links a span { color:var(--muted); font-weight:500; }
+.hero-links a:hover span { color:var(--ink); }
+.section { padding: 88px 0; border-bottom:1px solid var(--line); }
+.section-head { display:grid; grid-template-columns: .9fr 1.1fr; gap:30px; align-items:start; margin-bottom: 34px; }
+.kicker { display:flex; align-items:center; gap:10px; font-size:.82rem; text-transform:uppercase; letter-spacing:.16em; color:var(--soft); margin-bottom:16px; font-weight:700; }
+.kicker-mark { width:8px; height:8px; background:var(--ink); flex:0 0 8px; }
+.kicker-num { font-family:"Roboto Mono", monospace; font-weight:500; letter-spacing:.06em; }
+.kicker-sep { color:var(--soft); font-weight:400; }
+.section-head h2 { font-family:"Space Grotesk", sans-serif; font-size: clamp(2rem,4.4vw,4rem); line-height:.98; }
+.section-head p, .body-copy, .intro-copy { color:#4d4d4d; font-size:1.05rem; margin:0; max-width: 42rem; }
+[id] { scroll-margin-top: 96px; }
+.anchor { opacity: 0; margin-left: 12px; font-family:"DM Sans", sans-serif; font-weight: 500; font-size: .5em; color: var(--soft); vertical-align: middle; letter-spacing: 0; transition: opacity .2s ease; text-decoration: none; }
+h2:hover .anchor, h3:hover .anchor, .anchor:focus-visible { opacity: 1; }
+.anchor:hover { color: var(--ink); }
+.mini-compare { display:grid; grid-template-columns: repeat(4,1fr); gap:18px; margin-top:34px; }
+.mini-compare.three { grid-template-columns: repeat(3,1fr); }
+.mini-item { padding-top:10px; border-top:1px solid var(--line-strong); }
+.mini-item strong { display:block; font-family:"Space Grotesk", sans-serif; font-size:1.08rem; margin-bottom:6px; }
+.mini-item span { color:var(--muted); font-size:.94rem; }
+.mini-item .mini-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-bottom:10px; }
+.diagram-block { margin-top: 36px; }
+.diagram-title { font-family:"Space Grotesk", sans-serif; font-size:1.15rem; margin-bottom: 14px; }
+.diagram-caption { font-size:1.02rem; color:var(--muted); margin-top:16px; max-width:44rem; }
+.chart-scroll { overflow-x: auto; }
+.chart-scroll[data-chart="radar"] svg, .chart-scroll[data-chart="donut"] svg { display:block; max-width:540px; margin:0 auto; }
+.legend { display:flex; flex-wrap:wrap; gap:18px; margin-top:16px; color:var(--muted); font-size:.94rem; }
+.legend span { display:inline-flex; align-items:center; gap:8px; }
+.legend i { width:12px; height:12px; border-radius:50%; display:inline-block; }
+.js .bar-rect { transform-box: fill-box; transform-origin: left center; transform: scaleX(0); }
+.js .bars-in .bar-rect { transform: scaleX(1); transition: transform 1s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js .vbar-rect { transform-box: fill-box; transform-origin: center bottom; transform: scaleY(0); }
+.js .bars-in .vbar-rect { transform: scaleY(1); transition: transform .9s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js .sdot circle, .js .sdot .dot { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.js .scatter-in .sdot circle, .js .scatter-in .sdot .dot { transform: scale(1); transition: transform .55s cubic-bezier(.34,1.56,.64,1); transition-delay: var(--d, 0s); }
+.js .sdot text { opacity: 0; }
+.js .scatter-in .sdot text { opacity: 1; transition: opacity .45s ease; transition-delay: var(--ld, .35s); }
+.js .line-path { stroke-dasharray: var(--len, 3000); stroke-dashoffset: var(--len, 3000); }
+.js .lines-in .line-path { stroke-dashoffset: 0; transition: stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js .line-dot { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.js .lines-in .line-dot { transform: scale(1); transition: transform .45s cubic-bezier(.34,1.56,.64,1); transition-delay: var(--d, 0s); }
+.js .fit-line { opacity: 0; }
+.js .lines-in .fit-line { opacity: 1; transition: opacity .8s ease .5s; }
+.js .donut-seg { transition: stroke-dashoffset 1.2s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js .donut-wrap { transform-box: fill-box; transform-origin: center; }
+.js .radar-shape { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.js .radar-in .radar-shape { transform: scale(1); transition: transform .8s cubic-bezier(.34,1.3,.64,1); transition-delay: var(--d, 0s); }
+.js .radar-lab { opacity: 0; }
+.js .radar-in .radar-lab { opacity: 1; transition: opacity .5s ease; transition-delay: var(--d, .2s); }
+.js .vbar-val { opacity: 0; }
+.js .bars-in .vbar-val { opacity: 1; transition: opacity .45s ease; transition-delay: var(--d, .5s); }
+.js .donut-center { opacity: 0; }
+.js .donut-in .donut-center { opacity: 1; transition: opacity .6s ease .55s; }
+.stat-strip { display:grid; grid-template-columns: repeat(4,1fr); gap:24px; margin-top:40px; padding-top:30px; border-top:1px solid var(--line); }
+.stat-strip.three { grid-template-columns: repeat(3,1fr); }
+.stat-num { display:block; font-family:"Roboto Mono", monospace; font-weight:500; font-size: clamp(1.7rem, 3vw, 2.4rem); letter-spacing:-.03em; line-height:1.1; }
+.stat-label { display:block; margin-top:8px; color:var(--muted); font-size:.9rem; line-height:1.45; }
+.framework { display:grid; grid-template-columns: 260px 1fr; gap:38px; padding:48px 0; border-top:1px solid var(--line); }
+.framework:first-of-type { border-top:none; padding-top:14px; }
+.framework-aside { position:sticky; top:110px; align-self:start; }
+.framework-name { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+.mark { width:14px; height:14px; border-radius:50%; flex:0 0 14px; }
+.framework-name h3 { font-family:"Space Grotesk", sans-serif; font-size: clamp(1.8rem,3.2vw,2.5rem); line-height:1; }
+.framework-role { color:var(--muted); font-size:.97rem; margin-bottom:18px; }
+.framework-summary { font-size:1rem; color:#454545; max-width:220px; }
+.framework-content > p { margin:0 0 18px; color:#454545; font-size:1.05rem; max-width: 44rem; }
+.split { display:grid; grid-template-columns:1fr 1fr; gap:28px; margin:24px 0; }
+.text-block h4 { font-family:"Space Grotesk", sans-serif; font-size:1rem; margin-bottom:10px; }
+.text-block ul, .project-list, .avoid-list { margin:0; padding-left:18px; }
+.text-block li, .project-list li, .avoid-list li { margin-bottom:10px; color:#4d4d4d; }
+.callout-line { margin:20px 0 18px; padding-left:16px; border-left:2px solid currentColor; font-weight:700; letter-spacing:-.02em; }
+.callout-line small { display:block; margin-top:5px; font-weight:500; color:var(--muted); letter-spacing:0; }
+.section-label { font-size:.8rem; letter-spacing:.14em; text-transform:uppercase; color:var(--soft); font-weight:700; margin:26px 0 12px; }
+.project-list li strong, .avoid-list li strong, .text-block li strong { color:var(--ink); }
+.avoid-list .redir { color:var(--muted); font-weight:500; }
+.tbl { width:100%; border-collapse: collapse; margin-top:26px; font-size:.99rem; }
+.tbl th { font-family:"Space Grotesk", sans-serif; text-align:left; font-size:.86rem; letter-spacing:.12em; text-transform:uppercase; color:var(--soft); padding:0 14px 12px 0; border-bottom:1px solid var(--line-strong); }
+.tbl td { padding:13px 14px 13px 0; border-bottom:1px solid var(--line); color:#4d4d4d; vertical-align:top; }
+.tbl td:first-child { font-weight:700; color:var(--ink); white-space:nowrap; }
+.tbl .tdot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:9px; }
+.code { margin:24px 0; background: var(--dark); color:#e8e6dd; border-radius:14px; overflow:hidden; }
+.code-head { display:flex; align-items:center; gap:8px; padding:12px 18px; border-bottom:1px solid rgba(245,243,236,.1); font-family:"Roboto Mono", monospace; font-size:.8rem; color:rgba(245,243,236,.55); }
+.code-head i { width:9px; height:9px; border-radius:50%; display:inline-block; }
+.code pre { margin:0; padding:18px 20px; overflow-x:auto; font-family:"Roboto Mono", monospace; font-size:.88rem; line-height:1.65; }
+.code .cm { color: rgba(245,243,236,.42); }
+.code .kw { color:#a18aea; }
+.code .st { color:#67bda0; }
+.formula { margin:20px 0; padding:18px 22px; background:#f3f1e9; border-radius:12px; font-family:"Roboto Mono", monospace; font-size:1.02rem; color:#33312b; overflow-x:auto; }
+.flow { display:grid; grid-template-columns: repeat(4,1fr); gap:18px; margin-top:26px; }
+.flow .fstep { padding-top:12px; border-top:2px solid var(--ac, var(--ink)); }
+.flow .fstep .fnum { font-family:"Roboto Mono", monospace; font-size:.85rem; color:var(--ac, var(--muted)); }
+.flow .fstep strong { display:block; font-family:"Space Grotesk", sans-serif; margin:6px 0 6px; font-size:1.05rem; }
+.flow .fstep span { color:var(--muted); font-size:.93rem; }
+.decision-flow { margin-top:26px; display:grid; gap:20px; }
+.decision-step { display:grid; grid-template-columns: 42px 1fr; gap:16px; align-items:start; }
+.decision-step .num { width:42px; height:42px; border-radius:50%; display:grid; place-items:center; font-family:"Roboto Mono", monospace; font-weight:500; background:#f0eee8; color: var(--ac, var(--ink)); }
+.decision-step strong { display:block; margin-bottom:4px; font-size:1.02rem; }
+.decision-step p { margin:0; color:#4d4d4d; }
+.combo-line { margin-top:30px; font-size:1.06rem; color:#424242; max-width: 44rem; }
+.combo-line strong { color:var(--ink); }
+.quote-line { margin:34px 0 0; padding:6px 0 6px 22px; border-left:3px solid var(--ink); font-family:"Instrument Serif", serif; font-style:italic; font-size:clamp(1.3rem,2.4vw,1.7rem); color:#2e2e2e; max-width:46rem; line-height:1.45; }
+.section-dark { background: var(--dark); color: var(--dark-paper); border-bottom: none; position: relative; overflow: hidden; }
+.section-dark::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.05; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E"); }
+.section-dark ::selection { background: var(--dark-paper); color: var(--dark); }
+.section-dark :focus-visible { outline-color: var(--dark-paper); }
+.section-dark .kicker { color: rgba(245,243,236,.5); }
+.section-dark .kicker-mark { background: var(--dark-paper); }
+.section-dark .kicker-sep { color: rgba(245,243,236,.4); }
+.section-dark h2 { color: var(--dark-paper); }
+.section-dark .body-copy { color: rgba(245,243,236,.72); }
+.section-dark .anchor { color: rgba(245,243,236,.45); }
+.section-dark .anchor:hover { color: var(--dark-paper); }
+.section-dark .decision-step .num { background: rgba(245,243,236,.1); }
+.section-dark .decision-step strong { color: var(--dark-paper); }
+.section-dark .decision-step p { color: rgba(245,243,236,.65); }
+.section-dark .combo-line { color: rgba(245,243,236,.78); }
+.section-dark .combo-line strong { color: var(--dark-paper); }
+.section-dark .tbl th { color: rgba(245,243,236,.45); border-bottom-color: rgba(245,243,236,.3); }
+.section-dark .tbl td { border-bottom-color: rgba(245,243,236,.12); color: rgba(245,243,236,.72); }
+.section-dark .tbl td:first-child { color: var(--dark-paper); }
+.quiz { margin: 48px 0 12px; padding-top: 40px; border-top: 1px solid var(--dark-line); position: relative; }
+.quiz-head { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom: 30px; }
+.quiz-title { font-family:"Space Grotesk", sans-serif; font-size: clamp(1.5rem,2.6vw,2.1rem); color: var(--dark-paper); }
+.quiz-progress { display:flex; align-items:center; gap:14px; }
+.quiz-step { font-family:"Roboto Mono", monospace; font-size:.85rem; color: rgba(245,243,236,.65); letter-spacing:.06em; }
+.quiz-track { width: 130px; height: 2px; background: rgba(245,243,236,.18); }
+.quiz-fill { display:block; height:100%; width:0; background: var(--dark-paper); transition: width .3s ease; }
+.quiz-q { font-family:"Space Grotesk", sans-serif; font-size:1.25rem; margin:0 0 20px; color: var(--dark-paper); letter-spacing:-.02em; }
+.quiz-answers { display:grid; }
+.quiz-a { display:flex; align-items:center; gap:14px; width:100%; text-align:left; background:none; border:none; border-left:2px solid rgba(245,243,236,.14); padding:16px 18px; color: rgba(245,243,236,.85); font-family:"DM Sans", sans-serif; font-size:1.03rem; line-height:1.5; cursor:pointer; transition: background .18s ease, border-color .18s ease; }
+.quiz-a:hover, .quiz-a:focus-visible { background: rgba(255,255,255,.06); border-left-color: var(--ac, var(--dark-paper)); }
+.quiz-dot { width:10px; height:10px; border-radius:50%; background: var(--ac); flex:0 0 10px; }
+.quiz-back { margin-top:20px; background:none; border:none; padding:6px 0; color: rgba(245,243,236,.6); font-family:"Roboto Mono", monospace; font-size:.85rem; cursor:pointer; border-bottom:1px solid transparent; }
+.quiz-back:hover { color: var(--dark-paper); border-bottom-color: rgba(245,243,236,.4); }
+.quiz-kicker { font-family:"Roboto Mono", monospace; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; color: rgba(245,243,236,.5); margin-bottom:12px; }
+.quiz-result-name { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+.quiz-result-dot { width:14px; height:14px; border-radius:50%; flex:0 0 14px; }
+.quiz-result-name h4 { font-family:"Space Grotesk", sans-serif; font-size: clamp(1.7rem,3vw,2.3rem); color: var(--dark-paper); }
+.quiz-why { color: rgba(245,243,236,.88); font-size:1.07rem; margin:0 0 10px; max-width: 44rem; }
+.quiz-pair { color: rgba(245,243,236,.6); margin:0 0 22px; max-width: 44rem; }
+.quiz-actions { display:flex; align-items:center; gap:22px; flex-wrap:wrap; margin:0; }
+.quiz-link { color: var(--dark-paper); font-weight:700; border-bottom:1px solid rgba(245,243,236,.4); padding-bottom:2px; }
+.quiz-link:hover { border-bottom-color: var(--dark-paper); }
+.quiz-retake { background:none; border:1px solid rgba(245,243,236,.3); color: rgba(245,243,236,.75); padding:8px 18px; border-radius:999px; cursor:pointer; font-family:"DM Sans", sans-serif; font-size:.9rem; transition: border-color .18s ease, color .18s ease; }
+.quiz-retake:hover { border-color: var(--dark-paper); color: var(--dark-paper); }
+.quiz-noscript { color: rgba(245,243,236,.7); font-style: italic; max-width: 44rem; }
+.quiz-app { display:none; }
+.js .quiz-app { display:block; }
+footer { padding:48px 0 64px; color:var(--muted); font-size:.98rem; }
+.footer-title { font-family:"Space Grotesk", sans-serif; font-size:1.2rem; color:var(--ink); margin-bottom:6px; }
+.to-top { position: fixed; right: 22px; bottom: 22px; width: 46px; height: 46px; border-radius: 50%; background: var(--ink); color: var(--paper); border: none; cursor: pointer; display: grid; place-items: center; font-size: 1.15rem; line-height: 1; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .25s ease, transform .25s ease; z-index: 110; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+.to-top.show { opacity: 1; pointer-events: auto; transform: none; }
+.to-top:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.js .reveal { opacity:0; transform: translateY(18px); transition: opacity .65s ease, transform .65s ease; }
+.js .reveal.visible { opacity:1; transform:none; }
+@media (max-width: 980px) {
+  .hero-grid, .section-head, .framework, .split { grid-template-columns:1fr; }
+  .framework-aside { position:static; }
+  .mini-compare, .mini-compare.three { grid-template-columns: 1fr 1fr; }
+  .flow { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px) {
+  .wrap { width: min(var(--max), calc(100% - 26px)); }
+  .topbar { flex-wrap: wrap; padding-top:14px; gap: 10px 18px; }
+  .nav { max-width: 100%; overflow-x: auto; gap: 16px; font-size:.92rem; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 4px; }
+  .nav::-webkit-scrollbar { display: none; }
+  .hero { padding-top:34px; }
+  .hero h1 { font-size: clamp(2.5rem, 14vw, 4.6rem); }
+  .mini-compare, .mini-compare.three { grid-template-columns:1fr; }
+  .flow { grid-template-columns:1fr; }
+  .section { padding: 60px 0; }
+  .chart-scroll svg { min-width: 640px; }
+  .chart-scroll[data-chart="radar"] svg, .chart-scroll[data-chart="donut"] svg { min-width: 0; }
+  .stat-strip, .stat-strip.three { grid-template-columns: 1fr 1fr; gap: 22px 16px; }
+  .quiz-head { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .to-top { right: 16px; bottom: 16px; }
+  .tbl { display:block; overflow-x:auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior:auto; }
+  .js .reveal { opacity:1; transform:none; transition:none; }
+  .js .hero h1 .line-inner { transform:none; animation:none; }
+  .js .bar-rect, .js .vbar-rect { transform:none; transition:none; }
+  .js .bars-in .bar-rect, .js .bars-in .vbar-rect { transition:none; }
+  .js .sdot circle, .js .sdot .dot, .js .line-dot, .js .radar-shape { transform:none; transition:none; }
+  .js .scatter-in .sdot circle, .js .lines-in .line-dot, .js .radar-in .radar-shape { transition:none; }
+  .js .sdot text, .js .radar-lab, .js .fit-line, .js .vbar-val, .js .donut-center { opacity:1; transition:none; }
+  .js .line-path { stroke-dasharray:none; stroke-dashoffset:0; }
+  .js .lines-in .line-path { transition:none; }
+  .nav a::after, .quiz-fill, .quiz-a, .to-top { transition:none; }
+}
+
+/* ── Aug 2026 upgrade: mobile ergonomics & swipe hints ── */
+:root { color-scheme: light; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { -webkit-tap-highlight-color: transparent; }
+h1, h2, h3 { text-wrap: balance; }
+.section-head p, .body-copy, .intro-copy, .diagram-caption { text-wrap: pretty; }
+.chart-scroll { -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+.nav.has-more { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent); }
+.swipe-hint { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 10px; padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; font-family: "Roboto Mono", monospace; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: rgba(127,127,127,.07); transition: opacity .4s ease; }
+.section-dark .swipe-hint { border-color: var(--dark-line); color: rgba(245,243,236,.6); }
+.swipe-hint-off { opacity: 0; }
+@media (hover: none) {
+  .anchor { opacity: .45; }
+  .nav a { padding: 8px 0; }
+}
+@media (max-width: 720px) {
+  .to-top { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+  footer { padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-width: 430px) {
+  .hero h1 { font-size: clamp(2.15rem, 12.5vw, 3rem); }
+  .section { padding: 48px 0; }
+  .stat-strip, .stat-strip.three { gap: 18px 14px; }
+  .stat-num { font-size: clamp(1.35rem, 7.5vw, 1.7rem); }
+  .quiz-a { padding: 14px 12px; }
+  .decision-step { grid-template-columns: 34px 1fr; gap: 12px; }
+  .decision-step .num { width: 34px; height: 34px; font-size: .85rem; }
+  .formula { font-size: .9rem; padding: 14px 16px; }
+  .code pre { font-size: .8rem; }
+  .chart-scroll svg { min-width: 560px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .swipe-hint { transition: none; }
+}
+
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:22px; padding:18px 20px; background:#f3f1e9; border-radius:12px; font-size:.95rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
+/* external reference links */
+.xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
+.xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
+.section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
+.section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+</style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span id="progressFill"></span></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-head">
+    <div class="wrap topbar">
+      <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>PostgreSQL</span></div>
+      <nav class="nav" aria-label="Primary navigation"><a href="#engine">The engine</a><a href="#evolution">Evolution</a><a href="#depth">The depth</a><a href="#when">When to use what</a><a href="#choosing">Choosing</a><a href="#sources">Sources</a></nav>
+    </div>
+  </header>
+
+  <main id="content">
+    <div class="wrap">
+
+      <section class="hero" aria-label="Introduction">
+        <div class="eyebrow">The Architect's Choice</div>
+        <h1>
+          <span class="line"><span class="line-inner">Not just a database.</span></span>
+<span class="line"><span class="line-inner"><em>A </em>platform.</span></span>
+        </h1>
+        <div class="hero-grid">
+          <div>
+            <p class="lead">In a world of specialized tools — one DB for cache, one for documents, one for spatial — PostgreSQL is the Swiss Army knife that actually cuts steel. It started in academia at UC Berkeley and took over the enterprise, because you don't just store data in Postgres: you program it.</p>
+            <div class="hero-links"><a href="#evolution">↓ <span>See the evolution</span></a><a href="#pg18">↓ <span>What's new in PG 18</span></a></div>
+          </div>
+          <div class="hero-note"><p>New data types, new index methods, functions in a dozen languages, vectors for AI — all inside the engine that already holds your rows. <em>ACID compliant. Open source. Extensible.</em></p><div class="toc" aria-label="Table of contents"><div class="toc-title">In this piece</div><ol><li><a href="#engine">The universal engine</a></li><li><a href="#evolution">Faster every single year</a></li><li><a href="#depth">Four reasons it keeps winning</a></li><li><a href="#when">Honest boundaries</a></li><li><a href="#choosing">How I would choose</a></li><li><a href="#sources">Sources</a></li></ol></div><div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>6 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 6 August 2026</span></div></div>
+        </div>
+      </section>      <section class="section reveal " id="engine" aria-labelledby="engine-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">01</span><span class="kicker-sep">—</span>The universal engine</div>
+            <h2 id="engine-h">The database that outlived the hype cycle<a class="anchor" href="#engine" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Every year a new database promises to replace it. Every year, the survey says the same thing: developers keep choosing the elephant.</p>
+        </div>
+        <div class="diagram-block">
+          <div class="diagram-title">Developer adoption, 2018 → 2026</div>
+          <div class="chart-scroll" id="soChart" data-chart="lines"><svg viewBox="0 0 1080 560" role="img" aria-label="Line chart: PostgreSQL usage share climbs past MySQL from 2018 to 2026.">
+<line x1="105" y1="450" x2="1010" y2="450" stroke="rgba(23,23,23,.18)"/>
+<text x="89" y="455" text-anchor="end" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">0%</text>
+<line x1="105" y1="320" x2="1010" y2="320" stroke="rgba(23,23,23,.07)"/>
+<text x="89" y="325" text-anchor="end" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">20%</text>
+<line x1="105" y1="190" x2="1010" y2="190" stroke="rgba(23,23,23,.07)"/>
+<text x="89" y="195" text-anchor="end" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">40%</text>
+<line x1="105" y1="60" x2="1010" y2="60" stroke="rgba(23,23,23,.07)"/>
+<text x="89" y="65" text-anchor="end" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">60%</text>
+<line x1="105" y1="60" x2="105" y2="450" stroke="rgba(23,23,23,.18)"/>
+<text x="105" y="478" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">2018</text>
+<text x="218" y="478" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">2019</text>
+<text x="331" y="478" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">2020</text>
+<text x="444" y="478" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">2021</text>
+<text x="558" y="478" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">2022</text>
+<text x="671" y="478" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">2023</text>
+<text x="784" y="478" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">2024</text>
+<text x="897" y="478" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">2025</text>
+<text x="1010" y="478" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">2026</text>
+<text x="30" y="255" text-anchor="middle" fill="#666" font-family="DM Sans" font-size="15" transform="rotate(-90 30 255)">Usage share (%)</text>
+<polyline class="line-path" style="--d:0.00s" points="105,236 218,229 331,216 444,190 558,170 671,158 784,132 897,118 1010,99" fill="none" stroke="#3468f5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle class="line-dot" style="--d:0.50s" cx="105" cy="236" r="6" fill="#3468f5" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:0.56s" cx="218" cy="229" r="6" fill="#3468f5" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:0.62s" cx="331" cy="216" r="6" fill="#3468f5" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:0.68s" cx="444" cy="190" r="6" fill="#3468f5" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:0.74s" cx="558" cy="170" r="6" fill="#3468f5" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:0.80s" cx="671" cy="158" r="6" fill="#3468f5" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:0.86s" cx="784" cy="132" r="6" fill="#3468f5" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:0.92s" cx="897" cy="118" r="6" fill="#3468f5" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:0.98s" cx="1010" cy="99" r="6" fill="#3468f5" stroke="#fcfbf8" stroke-width="2.5"/>
+<polyline class="line-path" style="--d:0.25s" points="105,112 218,125 331,138 444,144 558,158 671,184 784,190 897,196 1010,203" fill="none" stroke="#5b6b7a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 7"/>
+<circle class="line-dot" style="--d:0.75s" cx="105" cy="112" r="6" fill="#5b6b7a" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:0.81s" cx="218" cy="125" r="6" fill="#5b6b7a" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:0.87s" cx="331" cy="138" r="6" fill="#5b6b7a" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:0.93s" cx="444" cy="144" r="6" fill="#5b6b7a" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:0.99s" cx="558" cy="158" r="6" fill="#5b6b7a" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:1.05s" cx="671" cy="184" r="6" fill="#5b6b7a" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:1.11s" cx="784" cy="190" r="6" fill="#5b6b7a" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:1.17s" cx="897" cy="196" r="6" fill="#5b6b7a" stroke="#fcfbf8" stroke-width="2.5"/>
+<circle class="line-dot" style="--d:1.23s" cx="1010" cy="203" r="6" fill="#5b6b7a" stroke="#fcfbf8" stroke-width="2.5"/>
+<text x="105" y="548" fill="#777" font-family="DM Sans" font-size="14">Stack Overflow developer surveys 2018–2025; 2026 extrapolated. Direction is real — the crossing already happened.</text>
+</svg></div><div class="legend"><span><i style="background:#3468f5"></i>PostgreSQL</span><span><i style="background:#5b6b7a"></i>MySQL</span></div>
+          <p class="diagram-caption"><strong>How to read this:</strong> PostgreSQL didn't win by being fashionable — it won by compounding. Each survey, more developers use it and more developers who use it refuse to leave.</p>
+        </div><div class="stat-strip" id="pgstats" data-stats>
+<div class="stat">
+            <span class="stat-num" data-count="40" data-decimals="0" data-suffix="" data-prefix="" data-delay="0">40</span>
+            <span class="stat-label">years of active development since the 1986 POSTGRES project</span>
+          </div>
+<div class="stat">
+            <span class="stat-num" data-count="18" data-decimals="0" data-suffix="" data-prefix="" data-delay="120">18</span>
+            <span class="stat-label">current major version — released September 2025</span>
+          </div>
+<div class="stat">
+            <span class="stat-num" data-count="3" data-decimals="0" data-suffix="×" data-prefix="" data-delay="240">3×</span>
+            <span class="stat-label">faster storage reads with PG 18's new async I/O subsystem</span>
+          </div>
+<div class="stat">
+            <span class="stat-num" data-count="400" data-decimals="0" data-suffix="+" data-prefix="" data-delay="360">400+</span>
+            <span class="stat-label">production-grade extensions in the ecosystem</span>
+          </div>
+</div>
+      </section>      <section class="section reveal " id="evolution" aria-labelledby="evolution-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">02</span><span class="kicker-sep">—</span>Evolution</div>
+            <h2 id="evolution-h">Faster every single year<a class="anchor" href="#evolution" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Unlike legacy systems, Postgres gets significantly faster with every major release — and the upgrades keep getting easier to take.</p>
+        </div>
+        <div class="diagram-block">
+          <div class="diagram-title">Performance per release</div>
+          <div class="chart-scroll" id="tpsChart" data-chart="bars"><svg viewBox="0 0 1080 460" role="img" aria-label="Bar chart: read throughput index rises each release, peaking at PostgreSQL 18.">
+<defs>
+<linearGradient id="vgtps0" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#23956f"/><stop offset="1" stop-color="#67bda0"/></linearGradient>
+</defs>
+<line x1="90" y1="370" x2="1030" y2="370" stroke="rgba(23,23,23,.18)"/>
+<text x="78" y="375" text-anchor="end" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">0</text>
+<line x1="90" y1="295" x2="1030" y2="295" stroke="rgba(23,23,23,.07)"/>
+<text x="78" y="300" text-anchor="end" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">50</text>
+<line x1="90" y1="220" x2="1030" y2="220" stroke="rgba(23,23,23,.07)"/>
+<text x="78" y="225" text-anchor="end" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">100</text>
+<line x1="90" y1="145" x2="1030" y2="145" stroke="rgba(23,23,23,.07)"/>
+<text x="78" y="150" text-anchor="end" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">150</text>
+<line x1="90" y1="70" x2="1030" y2="70" stroke="rgba(23,23,23,.07)"/>
+<text x="78" y="75" text-anchor="end" fill="#8a8a8a" font-family="Roboto Mono" font-size="13">200</text>
+<text x="184" y="402" text-anchor="middle" fill="#666" font-family="DM Sans" font-size="14">PG 14</text>
+<rect class="vbar-rect" style="--d:0.00s" x="157" y="220" width="54" height="150" rx="8" fill="url(#vgtps0)"/>
+<text class="vbar-val" style="--d:0.55s" x="184" y="210" text-anchor="middle" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="13">100</text>
+<text x="372" y="402" text-anchor="middle" fill="#666" font-family="DM Sans" font-size="14">PG 15</text>
+<rect class="vbar-rect" style="--d:0.10s" x="345" y="193" width="54" height="177" rx="8" fill="url(#vgtps0)"/>
+<text class="vbar-val" style="--d:0.65s" x="372" y="183" text-anchor="middle" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="13">118</text>
+<text x="560" y="402" text-anchor="middle" fill="#666" font-family="DM Sans" font-size="14">PG 16</text>
+<rect class="vbar-rect" style="--d:0.20s" x="533" y="169" width="54" height="201" rx="8" fill="url(#vgtps0)"/>
+<text class="vbar-val" style="--d:0.75s" x="560" y="159" text-anchor="middle" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="13">134</text>
+<text x="748" y="402" text-anchor="middle" fill="#666" font-family="DM Sans" font-size="14">PG 17</text>
+<rect class="vbar-rect" style="--d:0.30s" x="721" y="145" width="54" height="225" rx="8" fill="url(#vgtps0)"/>
+<text class="vbar-val" style="--d:0.85s" x="748" y="135" text-anchor="middle" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="13">150</text>
+<text x="936" y="402" text-anchor="middle" fill="#666" font-family="DM Sans" font-size="14">PG 18</text>
+<rect class="vbar-rect" style="--d:0.40s" x="909" y="112" width="54" height="258" rx="8" fill="url(#vgtps0)"/>
+<text class="vbar-val" style="--d:0.95s" x="936" y="102" text-anchor="middle" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="13">172</text>
+<text x="90" y="446" fill="#777" font-family="DM Sans" font-size="14">Relative index per major release (PG 14 = 100) — illustrative; PG 18 adds async I/O, up to 3× on storage reads.</text>
+</svg></div><div class="legend"><span><i style="background:#23956f"></i>Read throughput index</span></div>
+          <p class="diagram-caption"><strong>How to read this:</strong> vacuum efficiency, parallel queries, and now async I/O mean the same hardware serves more traffic each year. Upgrading is a performance strategy, not just hygiene.</p>
+        </div><div class="diagram-block">
+          <div class="diagram-title">Capability radar</div>
+          <div class="chart-scroll" id="capRadar" data-chart="radar"><svg viewBox="-70 -8 780 696" role="img" aria-label="Radar chart: PostgreSQL leads on reliability, JSON, spatial and features.">
+<polygon points="320.0,272.0 361.6,296.0 361.6,344.0 320.0,368.0 278.4,344.0 278.4,296.0" fill="none" stroke="rgba(23,23,23,.07)"/>
+<polygon points="320.0,224.0 403.1,272.0 403.1,368.0 320.0,416.0 236.9,368.0 236.9,272.0" fill="none" stroke="rgba(23,23,23,.07)"/>
+<polygon points="320.0,176.0 444.7,248.0 444.7,392.0 320.0,464.0 195.3,392.0 195.3,248.0" fill="none" stroke="rgba(23,23,23,.07)"/>
+<polygon points="320.0,128.0 486.3,224.0 486.3,416.0 320.0,512.0 153.7,416.0 153.7,224.0" fill="none" stroke="rgba(23,23,23,.07)"/>
+<line x1="320.0" y1="320.0" x2="320.0" y2="128.0" stroke="rgba(23,23,23,.07)"/>
+<line x1="320.0" y1="320.0" x2="486.3" y2="224.0" stroke="rgba(23,23,23,.07)"/>
+<line x1="320.0" y1="320.0" x2="486.3" y2="416.0" stroke="rgba(23,23,23,.07)"/>
+<line x1="320.0" y1="320.0" x2="320.0" y2="512.0" stroke="rgba(23,23,23,.07)"/>
+<line x1="320.0" y1="320.0" x2="153.7" y2="416.0" stroke="rgba(23,23,23,.07)"/>
+<line x1="320.0" y1="320.0" x2="153.7" y2="224.0" stroke="rgba(23,23,23,.07)"/>
+<polygon class="radar-shape" style="--d:0.00s" points="320.0,128.0 469.6,233.6 486.3,416.0 320.0,473.6 203.6,387.2 153.7,224.0" fill="#3468f5" fill-opacity="0.16" stroke="#3468f5" stroke-width="3" stroke-linejoin="round"/>
+<circle class="radar-shape" style="--d:0.30s" cx="320.0" cy="128.0" r="5" fill="#3468f5" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.35s" cx="469.6" cy="233.6" r="5" fill="#3468f5" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.40s" cx="486.3" cy="416.0" r="5" fill="#3468f5" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.45s" cx="320.0" cy="473.6" r="5" fill="#3468f5" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.50s" cx="203.6" cy="387.2" r="5" fill="#3468f5" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.55s" cx="153.7" cy="224.0" r="5" fill="#3468f5" stroke="#fcfbf8" stroke-width="2"/>
+<polygon class="radar-shape" style="--d:0.20s" points="320.0,166.4 403.1,272.0 386.5,358.4 320.0,492.8 187.0,396.8 220.2,262.4" fill="#5b6b7a" fill-opacity="0.16" stroke="#5b6b7a" stroke-width="3" stroke-linejoin="round"/>
+<circle class="radar-shape" style="--d:0.50s" cx="320.0" cy="166.4" r="5" fill="#5b6b7a" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.55s" cx="403.1" cy="272.0" r="5" fill="#5b6b7a" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.60s" cx="386.5" cy="358.4" r="5" fill="#5b6b7a" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.65s" cx="320.0" cy="492.8" r="5" fill="#5b6b7a" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.70s" cx="187.0" cy="396.8" r="5" fill="#5b6b7a" stroke="#fcfbf8" stroke-width="2"/>
+<circle class="radar-shape" style="--d:0.75s" cx="220.2" cy="262.4" r="5" fill="#5b6b7a" stroke="#fcfbf8" stroke-width="2"/>
+<text class="radar-lab" style="--d:0.40s" x="320" y="99" text-anchor="middle" fill="#555" font-family="DM Sans" font-weight="500" font-size="14">Reliability</text>
+<text class="radar-lab" style="--d:0.46s" x="516" y="212" text-anchor="start" fill="#555" font-family="DM Sans" font-weight="500" font-size="14">JSON/NoSQL</text>
+<text class="radar-lab" style="--d:0.52s" x="516" y="438" text-anchor="start" fill="#555" font-family="DM Sans" font-weight="500" font-size="14">GIS/Spatial</text>
+<text class="radar-lab" style="--d:0.58s" x="320" y="551" text-anchor="middle" fill="#555" font-family="DM Sans" font-weight="500" font-size="14">Read speed</text>
+<text class="radar-lab" style="--d:0.64s" x="124" y="438" text-anchor="end" fill="#555" font-family="DM Sans" font-weight="500" font-size="14">Write speed</text>
+<text class="radar-lab" style="--d:0.70s" x="124" y="212" text-anchor="end" fill="#555" font-family="DM Sans" font-weight="500" font-size="14">Features</text>
+<text x="30" y="664" fill="#777" font-family="DM Sans" font-size="14">Capability profile versus a generic relational database — illustrative.</text>
+</svg></div><div class="legend"><span><i style="background:#3468f5"></i>PostgreSQL</span><span><i style="background:#5b6b7a"></i>Typical RDBMS</span></div>
+          <p class="diagram-caption"><strong>How to read this:</strong> a generic relational database wins nothing here except maybe raw write speed on narrow benchmarks — and gives up JSON, spatial, and extensibility to get it.</p>
+        </div>
+      </section>      <section class="section reveal " id="depth" aria-labelledby="depth-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">03</span><span class="kicker-sep">—</span>The depth</div>
+            <h2 id="depth-h">Four reasons it keeps winning<a class="anchor" href="#depth" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Reliability you can build a bank on, documents without a second database, an extension ecosystem with no rival, and a current release that actually matters.</p>
+        </div>
+        <article class="framework" id="fortress" aria-labelledby="fortress-h">
+          <aside class="framework-aside">
+            <div class="framework-name"><span class="mark" style="background:#3468f5"></span><h3 id="fortress-h">The Fortress<a class="anchor" href="#fortress" aria-label="Link to this section">#</a></h3></div>
+            <div class="framework-role">ACID · <a class="xlink" href="https://www.postgresql.org/docs/current/mvcc-intro.html" target="_blank" rel="noopener noreferrer">MVCC</a> · <a class="xlink" href="https://www.postgresql.org/docs/current/wal-intro.html" target="_blank" rel="noopener noreferrer">WAL</a></div>
+            <div class="framework-summary">Postgres is famous for one thing above all: it does not lose your data.</div>
+          </aside>
+          <div class="framework-content"><p>Three mechanisms make that promise structural rather than aspirational:</p>
+            <div class="split">
+              <div class="text-block"><h4>The guarantees</h4><ul><li><strong>ACID:</strong> Atomicity, Consistency, Isolation, Durability. If a transaction says “Commit,” it is written to disk. No “maybe.”</li><li><strong>MVCC:</strong> Multi-Version Concurrency Control — readers don't block writers, writers don't block readers.</li></ul></div>
+              <div class="text-block"><h4>The insurance policy</h4><ul><li><strong>WAL:</strong> Write-Ahead Logging records every change before it touches the table. If power fails, the log replays the truth.</li><li><strong>Point-in-time recovery:</strong> rewind the database to any second before the mistake happened.</li></ul></div>
+            </div>
+            <div class="callout-line" style="color:#3468f5">Boring is a feature when it holds your money.<small>This is why banks, governments, and hospitals keep choosing the elephant.</small></div></div>
+        </article><article class="framework" id="jsonb" aria-labelledby="jsonb-h">
+          <aside class="framework-aside">
+            <div class="framework-name"><span class="mark" style="background:#23956f"></span><h3 id="jsonb-h">JSONB<a class="anchor" href="#jsonb" aria-label="Link to this section">#</a></h3></div>
+            <div class="framework-role">NoSQL inside SQL</div>
+            <div class="framework-summary">Historically you chose: strict tables or flexible documents. Postgres said “why not both?”</div>
+          </aside>
+          <div class="framework-content"><p>With <a class="xlink" href="https://www.postgresql.org/docs/current/datatype-json.html" target="_blank" rel="noopener noreferrer">JSONB</a> you store binary JSON, index specific keys, and query it as fast as a document store — inside the same engine that runs your relational schema, with the same transactions and backups.</p>
+            <div class="code">
+            <div class="code-head"><i style="background:#db6478"></i><i style="background:#eb8237"></i><i style="background:#23956f"></i><span style="margin-left:8px">query.sql</span></div>
+            <pre><span class="cm">-- Find users who have "admin" role in JSON</span>
+<span class="kw">SELECT</span> id, email <span class="kw">FROM</span> users
+<span class="kw">WHERE</span> metadata @&gt; <span class="st">'{"role": "admin"}'</span>;
+
+<span class="cm">-- Update a specific key inside the JSON</span>
+<span class="kw">UPDATE</span> users
+<span class="kw">SET</span> metadata = jsonb_set(metadata, <span class="st">'{login}'</span>, <span class="st">'42'</span>)
+<span class="kw">WHERE</span> id = <span class="st">101</span>;</pre>
+          </div>
+            <div class="diagram-block">
+          <div class="diagram-title">One engine, four workloads</div>
+          <div class="chart-scroll" id="jsonChart" data-chart="donut"><svg viewBox="0 0 520 560" role="img" aria-label="Donut chart: 60 percent structured tables, 25 JSONB documents, 10 geospatial, 5 other workloads.">
+<circle cx="260.0" cy="260.0" r="150" fill="none" stroke="#efede5" stroke-width="58"/>
+<circle class="donut-seg" style="--d:0.00s" cx="260.0" cy="260.0" r="150" fill="none" stroke="#3468f5" stroke-width="58" stroke-dasharray="561.5 381.0" stroke-dashoffset="797.1" data-off="235.6" transform="rotate(0.0 260.0 260.0)"/>
+<circle class="donut-seg" style="--d:0.10s" cx="260.0" cy="260.0" r="150" fill="none" stroke="#23956f" stroke-width="58" stroke-dasharray="231.6 710.9" stroke-dashoffset="467.2" data-off="235.6" transform="rotate(216.0 260.0 260.0)"/>
+<circle class="donut-seg" style="--d:0.20s" cx="260.0" cy="260.0" r="150" fill="none" stroke="#eb8237" stroke-width="58" stroke-dasharray="90.2 852.2" stroke-dashoffset="325.9" data-off="235.6" transform="rotate(306.0 260.0 260.0)"/>
+<circle class="donut-seg" style="--d:0.30s" cx="260.0" cy="260.0" r="150" fill="none" stroke="#7650e6" stroke-width="58" stroke-dasharray="43.1 899.4" stroke-dashoffset="278.7" data-off="235.6" transform="rotate(342.0 260.0 260.0)"/>
+<text class="donut-center" x="260.0" y="256.0" text-anchor="middle" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="34">1 DB</text>
+<text class="donut-center" x="260.0" y="284.0" text-anchor="middle" fill="#8a8a8a" font-family="DM Sans" font-size="13">four workloads</text>
+<text x="30" y="544" fill="#777" font-family="DM Sans" font-size="14">Common data usage in modern applications — illustrative mix.</text>
+</svg></div><div class="legend"><span><i style="background:#3468f5"></i>Structured (tables) · 60</span><span><i style="background:#23956f"></i>JSONB (documents) · 25</span><span><i style="background:#eb8237"></i>Geospatial · 10</span><span><i style="background:#7650e6"></i>Arrays / other · 5</span></div>
+          <p class="diagram-caption"><strong>How to read this:</strong> most production apps are mostly relational with islands of documents, maps, and arrays. Postgres covers all four without a second database to babysit.</p>
+        </div></div>
+        </article><article class="framework" id="extensions" aria-labelledby="extensions-h">
+          <aside class="framework-aside">
+            <div class="framework-name"><span class="mark" style="background:#7650e6"></span><h3 id="extensions-h">Extensions<a class="anchor" href="#extensions" aria-label="Link to this section">#</a></h3></div>
+            <div class="framework-role">The Superpower</div>
+            <div class="framework-summary">Postgres is designed to be extended — plug-ins turn it into a completely different beast.</div>
+          </aside>
+          <div class="framework-content"><p>The extension API is the deepest moat in databases: new data types, index methods, and entire subsystems, without forking the core.</p>
+            <div class="diagram-block">
+          <div class="diagram-title">The extension ecosystem</div>
+          <div class="chart-scroll" id="extChart" data-chart="bars"><svg viewBox="0 0 1080 500" role="img" aria-label="Bar chart: PostGIS and pgvector lead the PostgreSQL extension ecosystem.">
+<defs>
+<linearGradient id="bgext0" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#eb8237"/><stop offset="1" stop-color="#f3a46c"/></linearGradient>
+<linearGradient id="bgext1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7650e6"/><stop offset="1" stop-color="#a18aea"/></linearGradient>
+<linearGradient id="bgext2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3468f5"/><stop offset="1" stop-color="#6e91ff"/></linearGradient>
+<linearGradient id="bgext3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#23956f"/><stop offset="1" stop-color="#67bda0"/></linearGradient>
+<linearGradient id="bgext4" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#14a9c5"/><stop offset="1" stop-color="#5fc8db"/></linearGradient>
+</defs>
+<text x="270" y="38" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="14">0</text>
+<line x1="270" y1="55" x2="270" y2="440" stroke="rgba(23,23,23,.18)"/>
+<text x="438" y="38" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="14">25</text>
+<line x1="438" y1="55" x2="438" y2="440" stroke="rgba(23,23,23,.07)"/>
+<text x="606" y="38" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="14">50</text>
+<line x1="606" y1="55" x2="606" y2="440" stroke="rgba(23,23,23,.07)"/>
+<text x="775" y="38" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="14">75</text>
+<line x1="775" y1="55" x2="775" y2="440" stroke="rgba(23,23,23,.07)"/>
+<text x="943" y="38" text-anchor="middle" fill="#8a8a8a" font-family="Roboto Mono" font-size="14">100</text>
+<line x1="943" y1="55" x2="943" y2="440" stroke="rgba(23,23,23,.07)"/>
+<text x="20" y="103" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="21">PostGIS</text>
+<rect class="bar-rect" style="--d:0.00s" x="270" y="75" width="639" height="42" rx="12" fill="url(#bgext0)"/>
+<text class="bar-val" data-count="95" data-decimals="0" data-suffix="" data-delay="0" x="923" y="102" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">95</text>
+<text x="20" y="180" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="21">pgvector</text>
+<rect class="bar-rect" style="--d:0.12s" x="270" y="151" width="592" height="42" rx="12" fill="url(#bgext1)"/>
+<text class="bar-val" data-count="88" data-decimals="0" data-suffix="" data-delay="120" x="876" y="179" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">88</text>
+<text x="20" y="256" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="21">pg_stat_statements</text>
+<rect class="bar-rect" style="--d:0.24s" x="270" y="228" width="538" height="42" rx="12" fill="url(#bgext2)"/>
+<text class="bar-val" data-count="80" data-decimals="0" data-suffix="" data-delay="240" x="822" y="255" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">80</text>
+<text x="20" y="332" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="21">TimescaleDB</text>
+<rect class="bar-rect" style="--d:0.36s" x="270" y="304" width="404" height="42" rx="12" fill="url(#bgext3)"/>
+<text class="bar-val" data-count="60" data-decimals="0" data-suffix="" data-delay="360" x="688" y="331" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">60</text>
+<text x="20" y="409" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="21">pg_cron</text>
+<rect class="bar-rect" style="--d:0.48s" x="270" y="381" width="303" height="42" rx="12" fill="url(#bgext4)"/>
+<text class="bar-val" data-count="45" data-decimals="0" data-suffix="" data-delay="480" x="587" y="408" fill="#171717" font-family="Roboto Mono" font-weight="500" font-size="17">45</text>
+<text x="270" y="482" fill="#777" font-family="DM Sans" font-size="14">Ecosystem adoption index — illustrative; pgvector's rise is the AI effect.</text>
+</svg></div>
+          <p class="diagram-caption"><strong>How to read this:</strong> PostGIS made Postgres the world's GIS standard; <a class="xlink" href="https://github.com/pgvector/pgvector" target="_blank" rel="noopener noreferrer">pgvector</a> made it the default vector store for a generation of AI apps that didn't want another moving part.</p>
+        </div>
+            <div class="split">
+              <div class="text-block"><h4>The classics</h4><ul><li><strong>PostGIS — the spatial standard:</strong> distances, areas, and intersections on a globe. Nothing else is close.</li><li><strong>TimescaleDB — time-series:</strong> high-frequency IoT, crypto, and metrics data, optimized.</li></ul></div>
+              <div class="text-block"><h4>The AI upgrade</h4><ul><li><strong>pgvector:</strong> vector embeddings for semantic search, directly in your primary database. No separate vector DB required for most workloads.</li><li><strong>pg_stat_statements:</strong> the query-level truth about what your database actually does all day.</li></ul></div>
+            </div></div>
+        </article><article class="framework" id="pg18" aria-labelledby="pg18-h">
+          <aside class="framework-aside">
+            <div class="framework-name"><span class="mark" style="background:#eb8237"></span><h3 id="pg18-h">PostgreSQL 18<a class="anchor" href="#pg18" aria-label="Link to this section">#</a></h3></div>
+            <div class="framework-role">September 2025 · The latest</div>
+            <div class="framework-summary">Async I/O, virtual generated columns, temporal constraints, and UUIDv7 — a genuine leap, not a maintenance release.</div>
+          </aside>
+          <div class="framework-content"><p>Released <strong>25 September 2025</strong>, <a class="xlink" href="https://www.postgresql.org/docs/18/release-18.html" target="_blank" rel="noopener noreferrer">PostgreSQL 18</a> is the current major version, and PG 19 is already in beta (<a class="xlink" href="https://www.postgresql.org/about/news/postgresql-19-beta-2-released-3350/" target="_blank" rel="noopener noreferrer">Beta 2</a> shipped July 2026) with GA expected September&#8211;October 2026. The headline features:</p>
+            <div class="split">
+              <div class="text-block"><h4>Performance</h4><ul><li><strong>Async I/O (AIO):</strong> up to 3× faster reads from storage — sequential scans, bitmap heap scans, and VACUUM all benefit.</li><li><strong>Skip scans:</strong> multicolumn B-tree indexes now serve DISTINCT and selective queries far more often.</li><li><strong>Faster pg_upgrade:</strong> planner statistics survive the upgrade; parallel checks and --swap cut maintenance windows.</li></ul></div>
+              <div class="text-block"><h4>Developer features</h4><ul><li><strong>Virtual generated columns (default):</strong> computed at read time — no storage, no write overhead.</li><li><strong>Temporal constraints:</strong> WITHOUT OVERLAPS prevents double-bookings at the database level.</li><li><strong>UUIDv7:</strong> timestamp-ordered UUIDs via uuidv7() — better index locality than v4.</li><li><strong>OLD/NEW in RETURNING:</strong> audit trails without triggers.</li></ul></div>
+            </div>
+            <div class="callout-line" style="color:#eb8237">Also note: MD5 password auth is deprecated — move to SCRAM-SHA-256, which is now the default.<small>OAuth 2.0 authentication support landed too.</small></div></div>
+        </article>
+      </section>      <section class="section reveal " id="when" aria-labelledby="when-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span class="kicker-sep">—</span>When to use what</div>
+            <h2 id="when-h">Honest boundaries<a class="anchor" href="#when" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Postgres is the default answer — not the universal one.</p>
+        </div>
+        <table class="tbl"><thead><tr><th>Use case</th><th>Why Postgres?</th><th>Alternative</th></tr></thead><tbody><tr><td><span class="tdot" style="background:#3468f5"></span>Core banking / finance</td><td>Strict ACID compliance, accuracy</td><td>Oracle (costly)</td></tr><tr><td><span class="tdot" style="background:#23956f"></span>General web app (SaaS)</td><td>JSONB flexibility + relations for users</td><td>MySQL (fewer features)</td></tr><tr><td><span class="tdot" style="background:#eb8237"></span>Geospatial / maps</td><td>PostGIS is the industry standard</td><td>None close</td></tr><tr><td><span class="tdot" style="background:#7650e6"></span>AI semantic search</td><td>pgvector inside the primary DB</td><td>Dedicated vector DB (at huge scale)</td></tr><tr><td><span class="tdot" style="background:#5b6b7a"></span>Simple caching / queues</td><td>(Overkill)</td><td>Redis / Valkey</td></tr></tbody></table>
+      </section>
+    </div>
+    <section class="section section-dark reveal" id="choosing" aria-labelledby="choosing-h">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span class="kicker-sep">—</span>Choosing</div>
+            <h2 id="choosing-h">How I would choose<a class="anchor" href="#choosing" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Default to Postgres until the workload proves you wrong. The exceptions are real but rarer than the hype suggests.</p>
+        </div>
+        <div class="decision-flow">
+<div class="decision-step" style="--ac:#3468f5"><div class="num">1</div><div><strong>Start every new application on Postgres.</strong><p>Relational core, JSONB islands, one backup story.</p></div></div>
+<div class="decision-step" style="--ac:#eb8237"><div class="num">2</div><div><strong>Maps or location? Add PostGIS, not a new database.</strong><p>It is the standard the specialists measure against.</p></div></div>
+<div class="decision-step" style="--ac:#7650e6"><div class="num">3</div><div><strong>AI features? Add pgvector before shopping for a vector DB.</strong><p>One less system to operate is worth more than benchmark points.</p></div></div>
+<div class="decision-step" style="--ac:#23956f"><div class="num">4</div><div><strong>Caching and ephemeral queues? That's when you leave.</strong><p>Redis and friends exist for a reason — use them for that reason.</p></div></div>
+</div><p class="combo-line"><strong>The quiet truth:</strong> most “we outgrew Postgres” stories are actually “we never tuned Postgres” stories. Master the elephant first; specialize only where it genuinely hurts.</p>
+      </div>
+    </section>
+    <div class="wrap">
+      <section class="section reveal" id="sources" aria-labelledby="sources-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">06</span><span class="kicker-sep">—</span>Grounding</div>
+            <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">The adoption chart is an editorial synthesis of survey trends; the version claims are not. Here is what they rest on.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><strong>PostgreSQL 18 — Release Notes.</strong> The canonical feature list: asynchronous I/O subsystem, virtual generated columns (default), temporal constraints (WITHOUT OVERLAPS), uuidv7(), OLD/NEW in RETURNING, skip scans on multicolumn B-tree indexes, MD5 password deprecation. <a class="xlink" href="https://www.postgresql.org/docs/18/release-18.html" target="_blank" rel="noopener noreferrer">postgresql.org</a></li>
+          <li id="src-2"><strong>“PostgreSQL 18 Released!” — official announcement, 25 September 2025.</strong> Source of the “up to 3× faster storage reads” figure and the pg_upgrade improvements (statistics preservation, parallel checks, --swap). Also the project’s own “over 40 years” framing of its Berkeley history. <a class="xlink" href="https://www.postgresql.org/about/news/postgresql-18-released-3142/" target="_blank" rel="noopener noreferrer">postgresql.org</a></li>
+          <li id="src-3"><strong>“PostgreSQL 19 Beta 2 Released!” — 16 July 2026.</strong> Feature-frozen preview; GA expected around September–October 2026. SQL/PGQ property-graph queries, REPACK CONCURRENTLY, parallel autovacuum. <a class="xlink" href="https://www.postgresql.org/about/news/postgresql-19-beta-2-released-3350/" target="_blank" rel="noopener noreferrer">postgresql.org</a></li>
+          <li id="src-4"><strong>Stack Overflow Developer Survey 2025.</strong> Basis for the adoption chart: PostgreSQL has led the “most popular databases” ranking among professional developers for several consecutive surveys; the 2026 point is extrapolated and labelled as such. <a class="xlink" href="https://survey.stackoverflow.co/2025/" target="_blank" rel="noopener noreferrer">survey.stackoverflow.co</a></li>
+          <li id="src-5"><strong>pgvector — open-source vector similarity search for Postgres.</strong> The extension behind the “AI semantic search in your primary database” claim; HNSW and IVFFlat indexes, half-precision and sparse vectors. <a class="xlink" href="https://github.com/pgvector/pgvector" target="_blank" rel="noopener noreferrer">github.com/pgvector</a></li>
+          <li id="src-6"><strong>PostgreSQL Documentation — JSON Types.</strong> Reference for JSONB storage, the containment operator (@&gt;) and jsonb_set used in the code example. <a class="xlink" href="https://www.postgresql.org/docs/current/datatype-json.html" target="_blank" rel="noopener noreferrer">postgresql.org</a></li>
+          <li id="src-7"><strong>PostGIS.</strong> The spatial extension that made PostgreSQL the de-facto standard open-source GIS database. <a class="xlink" href="https://postgis.net/" target="_blank" rel="noopener noreferrer">postgis.net</a></li>
+        </ol>
+      </section>
+            <footer>
+        <div class="footer-title">PostgreSQL</div>
+        <div>The relational data platform that survives every hype cycle.</div>
+        <div style="margin-top:8px;font-size:.86rem;">Part of Ali's Infrastructure Series · Updated 6 August 2026. Survey trend from <a class="xlink" href="https://survey.stackoverflow.co/2025/" target="_blank" rel="noopener noreferrer">Stack Overflow</a> data; benchmark indices are illustrative.</div>
+      </footer>
+    </div>
+  </main>
+
+  <button class="to-top" id="toTop" type="button" aria-label="Back to top">↑</button>
+  <script>
+(function () {
+  'use strict';
+  var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var revealEls = document.querySelectorAll('.reveal');
+  if (RM) {
+    revealEls.forEach(function (el) { el.classList.add('visible'); });
+  } else {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); }
+      });
+    }, { threshold: 0.01, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function (el) { revealObserver.observe(el); });
+  }
+
+  function animateCount(el) {
+    var target = parseFloat(el.getAttribute('data-count'));
+    var dec = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    var suffix = el.getAttribute('data-suffix') || '';
+    var prefix = el.getAttribute('data-prefix') || '';
+    var delay = parseInt(el.getAttribute('data-delay') || '0', 10);
+    var final = prefix + target.toFixed(dec) + suffix;
+    if (RM) { el.textContent = final; return; }
+    var dur = 900;
+    window.setTimeout(function () {
+      var t0 = performance.now();
+      function tick(t) {
+        var p = Math.min((t - t0) / dur, 1);
+        var e = 1 - Math.pow(1 - p, 3);
+        el.textContent = prefix + (target * e).toFixed(dec) + suffix;
+        if (p < 1) { requestAnimationFrame(tick); } else { el.textContent = final; }
+      }
+      requestAnimationFrame(tick);
+    }, delay);
+  }
+
+  function triggerOnce(el, cls, onTrigger) {
+    if (!el) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          el.classList.add(cls);
+          if (onTrigger) onTrigger();
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    io.observe(el);
+  }
+
+  document.querySelectorAll('[data-chart]').forEach(function (chart) {
+    var kind = chart.getAttribute('data-chart');
+    var cls = { bars: 'bars-in', scatter: 'scatter-in', lines: 'lines-in', radar: 'radar-in', donut: 'donut-in' }[kind] || (kind + '-in');
+    triggerOnce(chart, cls, function () {
+      chart.querySelectorAll('[data-count]').forEach(animateCount);
+      if (kind === 'donut') {
+        chart.querySelectorAll('.donut-seg').forEach(function (seg) {
+          seg.style.strokeDashoffset = seg.getAttribute('data-off');
+        });
+      }
+    });
+  });
+  document.querySelectorAll('[data-stats]').forEach(function (strip) {
+    triggerOnce(strip, 'stats-in', function () {
+      strip.querySelectorAll('[data-count]').forEach(animateCount);
+    });
+  });
+
+  document.querySelectorAll('.line-path').forEach(function (p) {
+    try { var L = p.getTotalLength(); p.style.setProperty('--len', L + 40); } catch (e) {}
+  });
+
+  var head = document.querySelector('.site-head');
+  var progressFill = document.getElementById('progressFill');
+  var toTop = document.getElementById('toTop');
+  function onScroll() {
+    var y = window.scrollY || window.pageYOffset;
+    head.classList.toggle('scrolled', y > 10);
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    progressFill.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+    toTop.classList.toggle('show', y > 600);
+  }
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (!ticking) { requestAnimationFrame(function () { onScroll(); ticking = false; }); ticking = true; }
+  }, { passive: true });
+  onScroll();
+  toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' }); });
+
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav a'));
+  function linkFor(id) { return navLinks.find(function (a) { return a.getAttribute('href') === '#' + id; }) || null; }
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        navLinks.forEach(function (a) { a.classList.remove('active'); });
+        var link = linkFor(entry.target.id);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+  document.querySelectorAll('main section[id]').forEach(function (s) { spy.observe(s); });
+  var FW_COLORS = {"depth": {"fortress": "#3468f5", "jsonb": "#23956f", "extensions": "#7650e6", "pg18": "#eb8237"}};
+  Object.keys(FW_COLORS).forEach(function (navId) {
+    var link = linkFor(navId);
+    if (!link) return;
+    var fwSpy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting && FW_COLORS[navId][entry.target.id]) {
+          link.style.setProperty('--spy', FW_COLORS[navId][entry.target.id]);
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+    document.querySelectorAll('.framework').forEach(function (f) { fwSpy.observe(f); });
+  });
+})();
+</script>
+<script>
+(function () {
+  var nav = document.querySelector('.nav');
+  function navEdge() {
+    if (!nav) return;
+    nav.classList.toggle('has-more', nav.scrollWidth - nav.clientWidth - nav.scrollLeft > 6);
+  }
+  if (nav) {
+    navEdge();
+    nav.addEventListener('scroll', navEdge, { passive: true });
+    window.addEventListener('resize', navEdge);
+  }
+  var touch = window.matchMedia && (matchMedia('(hover: none)').matches || matchMedia('(max-width: 720px)').matches);
+  if (!touch) return;
+  document.querySelectorAll('.chart-scroll, .tbl').forEach(function (el) {
+    if (el.scrollWidth - el.clientWidth < 24) return;
+    var hint = document.createElement('div');
+    hint.className = 'swipe-hint';
+    hint.setAttribute('aria-hidden', 'true');
+    hint.innerHTML = '&#10231; swipe';
+    el.parentNode.insertBefore(hint, el);
+    var off = function () { hint.classList.add('swipe-hint-off'); el.removeEventListener('scroll', off); };
+    el.addEventListener('scroll', off, { passive: true });
+  });
+})();
+</script>
+</body>
+</html>
