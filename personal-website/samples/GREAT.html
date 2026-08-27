@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Candidate Classification</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #f8f9fa;
+    color: #1a1a2e;
+    padding: 40px 20px;
+    line-height: 1.6;
+  }
+
+  .chart {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 32px;
+    text-align: center;
+    color: #333;
+  }
+
+  .node {
+    background: #fff;
+    border: 1.5px solid #ddd;
+    border-radius: 12px;
+    padding: 14px 20px;
+    text-align: center;
+    font-size: 0.95rem;
+    margin: 0 auto;
+    max-width: 320px;
+  }
+
+  .node strong { font-weight: 600; }
+
+  .node small {
+    display: block;
+    color: #777;
+    font-size: 0.8rem;
+    margin-top: 4px;
+  }
+
+  .node.decision { border-color: #e2b93b; background: #fffdf0; }
+  .node.result   { border-color: #4caf7d; background: #f0faf4; }
+  .node.alert    { border-color: #e05252; background: #fff5f5; }
+
+  .arrow {
+    text-align: center;
+    color: #aaa;
+    font-size: 1.2rem;
+    padding: 6px 0;
+  }
+
+  .branches {
+    display: flex;
+    gap: 16px;
+    margin: 0 auto;
+    max-width: 560px;
+  }
+
+  .branches > div { flex: 1; }
+
+  .label {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #888;
+    margin-bottom: 8px;
+  }
+
+  .tags {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    background: #eef2f7;
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #444;
+  }
+
+  .sub {
+    margin-top: 12px;
+    padding-left: 16px;
+    border-left: 2px dashed #ddd;
+  }
+
+  hr.sep {
+    border: none;
+    border-top: 1px dashed #ddd;
+    margin: 32px 0;
+  }
+
+  .final-branches {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .final-branches > div {
+    flex: 1;
+    text-align: center;
+  }
+
+  .final-branches .node {
+    max-width: 100%;
+    font-size: 0.85rem;
+    padding: 12px 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="chart">
+  <h1>Candidate Classification Flow</h1>
+
+  <!-- Start -->
+  <div class="node"><strong>Candidate registered in QMIO</strong></div>
+  <div class="arrow">↓</div>
+
+  <div class="node decision"><strong>Is the user sure?</strong></div>
+  <div class="arrow">↓</div>
+
+  <!-- Yes / No -->
+  <div class="branches">
+    <div>
+      <div class="label">Yes</div>
+      <div class="node result">
+        <strong>Direct classification</strong>
+        <div class="tags"><span class="tag">Model</span><span class="tag">DQM</span><span class="tag">NMND</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="label">No</div>
+      <div class="node"><strong>Identification Function</strong><small>Answer questions</small></div>
+
+      <div class="sub">
+        <div class="branches">
+          <div>
+            <div class="label">All definite</div>
+            <div class="node result">
+              <strong>Tool proposes</strong>
+              <div class="tags"><span class="tag">Model</span><span class="tag">DQM</span><span class="tag">NMND</span></div>
+            </div>
+          </div>
+          <div>
+            <div class="label">≥ 1 unsure</div>
+            <div class="node"><strong>Not Determined</strong></div>
+            <div class="arrow">↓</div>
+            <div class="node alert"><strong>Mandatory MRL review</strong></div>
+            <div class="arrow">↓</div>
+            <div class="node">
+              <strong>MRL decides</strong>
+              <small>Disagreement → MRS final call</small>
+            </div>
+            <div class="arrow">↓</div>
+            <div class="node result">
+              <strong>Final classification</strong>
+              <div class="tags"><span class="tag">Model</span><span class="tag">DQM</span><span class="tag">NMND</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- After classification -->
+  <div class="node"><strong>After final classification</strong></div>
+  <div class="arrow">↓</div>
+
+  <div class="final-branches">
+    <div>
+      <div class="label">Model</div>
+      <div class="node result">Lifecycle<small>Onboarding, Tiering, Validation…</small></div>
+    </div>
+    <div>
+      <div class="label">DQM</div>
+      <div class="node result">Lifecycle<small>Onboarding, Governance, Monitoring…</small></div>
+    </div>
+    <div>
+      <div class="label">NMND</div>
+      <div class="node">End<small>Document if needed</small></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
