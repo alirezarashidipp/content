@@ -1,0 +1,149 @@
+Sub BuildAIMindMap()
+    Dim N As Integer: N = 51
+    Dim txt() As String: ReDim txt(0 To N - 1)
+    Dim par() As Integer: ReDim par(0 To N - 1)
+
+    txt(0) = "Gen AI and Agentic AI Monitoring Guidance": par(0) = -1
+    txt(1) = "Governance Framework": par(1) = 0
+    txt(2) = "Document Purpose": par(2) = 1
+    txt(3) = "Risk-based Approach": par(3) = 1
+    txt(4) = "Model Risk Management (MRM) Oversight": par(4) = 1
+    txt(5) = "1LOD and 2LOD Responsibilities": par(5) = 1
+    txt(6) = "Monitoring Plan Components": par(6) = 0
+    txt(7) = "Metrics and Objectives": par(7) = 6
+    txt(8) = "Data Sources and Methodology": par(8) = 6
+    txt(9) = "Thresholds and RAG Indicators": par(9) = 6
+    txt(10) = "Usage Controls": par(10) = 6
+    txt(11) = "Action and Escalation Plans": par(11) = 6
+    txt(12) = "Governance Roles": par(12) = 6
+    txt(13) = "Frequency and Reporting": par(13) = 6
+    txt(14) = "Gen AI Performance Dimensions": par(14) = 0
+    txt(15) = "AI Usage and Purpose": par(15) = 14
+    txt(16) = "Reliance (Human-in-the-loop)": par(16) = 14
+    txt(17) = "Accuracy and Completeness": par(17) = 14
+    txt(18) = "Context and Answer Relevance": par(18) = 14
+    txt(19) = "Fairness, Consistency and Bias": par(19) = 14
+    txt(20) = "Groundedness (Hallucination)": par(20) = 14
+    txt(21) = "Toxicity and Guardrail Adherence": par(21) = 14
+    txt(22) = "Fluency and Efficiency": par(22) = 14
+    txt(23) = "Latency and Load": par(23) = 14
+    txt(24) = "Agentic AI Specifics": par(24) = 0
+    txt(25) = "Classifications": par(25) = 24
+    txt(26) = "Tool-Invoked": par(26) = 25
+    txt(27) = "Task-Oriented": par(27) = 25
+    txt(28) = "Autonomous Systems": par(28) = 25
+    txt(29) = "Agentic Performance Metrics": par(29) = 24
+    txt(30) = "Use Case Success Rate": par(30) = 29
+    txt(31) = "Orchestrator Accuracy": par(31) = 29
+    txt(32) = "Collaboration Effectiveness": par(32) = 29
+    txt(33) = "Step Completion": par(33) = 29
+    txt(34) = "Tool Selection Accuracy": par(34) = 29
+    txt(35) = "Agent-to-tool Communication": par(35) = 29
+    txt(36) = "Autonomy Appropriateness": par(36) = 29
+    txt(37) = "Final State Verification": par(37) = 29
+    txt(38) = "AI Lifecycle Approvals": par(38) = 0
+    txt(39) = "Pilot Approval": par(39) = 38
+    txt(40) = "Comprehensive Plan Submission": par(40) = 39
+    txt(41) = "Data Quality Controls": par(41) = 39
+    txt(42) = "Sample Size Justification": par(42) = 39
+    txt(43) = "Production Approval": par(43) = 38
+    txt(44) = "Monitoring Dashboard Review": par(44) = 43
+    txt(45) = "Weighted Average Metric (Models)": par(45) = 43
+    txt(46) = "Validation of Pilot Results": par(46) = 43
+    txt(47) = "Post-Production Go-Live": par(47) = 38
+    txt(48) = "Ongoing Monitoring": par(48) = 47
+    txt(49) = "GMIS Aggregated Results": par(49) = 47
+    txt(50) = "Periodic Tiered Monitoring": par(50) = 47
+
+    ' --- compute levels ---
+    Dim lvl() As Integer: ReDim lvl(0 To N - 1)
+    Dim i As Integer, j As Integer
+    For i = 0 To N - 1: lvl(i) = -1: Next i
+    lvl(0) = 0
+    Dim changed As Boolean: changed = True
+    Do While changed
+        changed = False
+        For i = 1 To N - 1
+            If lvl(i) = -1 And lvl(par(i)) >= 0 Then
+                lvl(i) = lvl(par(i)) + 1
+                changed = True
+            End If
+        Next i
+    Loop
+
+    ' --- layout (tidy tree) ---
+    Dim yPos() As Single: ReDim yPos(0 To N - 1)
+    Dim nextRow As Single: nextRow = 0
+    Dim rowH As Single: rowH = 30
+    Call ComputeY(0, par, N, yPos, nextRow, rowH)
+
+    ' --- slide size (points) ---
+    ActivePresentation.PageSetup.SlideWidth = 970
+    ActivePresentation.PageSetup.SlideHeight = nextRow + 90
+
+    Dim sld As Slide
+    Set sld = ActivePresentation.Slides.Add(ActivePresentation.Slides.Count + 1, ppLayoutBlank)
+
+    ' --- columns geometry ---
+    Dim colX(0 To 3) As Single, wid(0 To 3) As Single
+    colX(0) = 18: wid(0) = 245
+    colX(1) = 288: wid(1) = 195
+    colX(2) = 505: wid(2) = 195
+    colX(3) = 722: wid(3) = 230
+
+    ' --- create node shapes ---
+    Dim shp() As Shape: ReDim shp(0 To N - 1)
+    Dim h As Single, L As Single, T As Single, W As Single
+    For i = 0 To N - 1
+        If lvl(i) = 0 Then h = 42 Else h = 27
+        L = colX(lvl(i)): W = wid(lvl(i))
+        T = yPos(i) + 45 - h / 2
+        Set shp(i) = sld.Shapes.AddShape(msoShapeRoundedRectangle, L, T, W, h)
+        With shp(i)
+            .TextFrame2.TextRange.Text = txt(i)
+            If lvl(i) = 0 Then .TextFrame2.TextRange.Font.Size = 9 Else .TextFrame2.TextRange.Font.Size = 8
+            .TextFrame2.VerticalAnchor = msoAnchorMiddle
+            .TextFrame2.WordWrap = msoTrue
+            .TextFrame2.MarginLeft = 4: .TextFrame2.MarginRight = 4
+            .TextFrame2.MarginTop = 1: .TextFrame2.MarginBottom = 1
+            .Line.Visible = msoFalse
+            Select Case lvl(i)
+                Case 0: .Fill.ForeColor.RGB = RGB(197, 187, 241)
+                Case 1: .Fill.ForeColor.RGB = RGB(169, 189, 233)
+                Case Else: .Fill.ForeColor.RGB = RGB(152, 217, 180)
+            End Select
+        End With
+    Next i
+
+    ' --- create connectors ---
+    Dim con As Shape
+    For i = 1 To N - 1
+        Dim p As Integer: p = par(i)
+        Set con = sld.Shapes.AddConnector(msoConnectorCurve, _
+            colX(lvl(p)) + wid(lvl(p)), yPos(p) + 45, _
+            colX(lvl(i)), yPos(i) + 45)
+        con.Line.ForeColor.RGB = RGB(90, 110, 200)
+        con.Line.Weight = 1
+    Next i
+
+    MsgBox "Mind map created. All shapes are separate and editable.", vbInformation
+End Sub
+
+Function ComputeY(ByVal i As Integer, par() As Integer, ByVal N As Integer, _
+                  yPos() As Single, ByRef nextRow As Single, ByVal rowH As Single) As Single
+    Dim j As Integer, sum As Single, cnt As Integer
+    sum = 0: cnt = 0
+    For j = 0 To N - 1
+        If par(j) = i Then
+            sum = sum + ComputeY(j, par, N, yPos, nextRow, rowH)
+            cnt = cnt + 1
+        End If
+    Next j
+    If cnt > 0 Then
+        yPos(i) = sum / cnt
+    Else
+        yPos(i) = nextRow
+        nextRow = nextRow + rowH
+    End If
+    ComputeY = yPos(i)
+End Function
