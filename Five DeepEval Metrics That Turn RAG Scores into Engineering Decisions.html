@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A failure-first guide to five DeepEval metrics that separate retrieval, generation, and policy defects in production RAG systems.">
+  <title>Five DeepEval Metrics That Turn RAG Scores into Engineering Decisions</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='6' fill='%233468f5'/%3E%3Ccircle cx='23' cy='9' r='6' fill='%2323956f'/%3E%3Ccircle cx='9' cy='23' r='6' fill='%23eb8237'/%3E%3Ccircle cx='23' cy='23' r='6' fill='%23db6478'/%3E%3C/svg%3E">
+  <meta property="og:title" content="Five DeepEval Metrics That Turn RAG Scores into Engineering Decisions">
+  <meta property="og:description" content="Do not collect RAG scores. Use them to identify the broken component.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Five DeepEval Metrics That Turn RAG Scores into Engineering Decisions",
+    "description": "A failure-first guide to five DeepEval metrics for production RAG systems.",
+    "datePublished": "2026-08-30",
+    "dateModified": "2026-08-30",
+    "author": {
+      "@type": "Person",
+      "name": "Ali Reza Rashidi"
+    }
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Roboto+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add('js');</script>
+  <style>
+    :root {
+      --bg: #fcfbf8;
+      --paper: #fffdfa;
+      --ink: #171717;
+      --muted: #656565;
+      --soft: #929292;
+      --line: rgba(23, 23, 23, 0.12);
+      --line-strong: rgba(23, 23, 23, 0.24);
+      --blue: #3468f5;
+      --green: #23956f;
+      --orange: #eb8237;
+      --red: #db6478;
+      --purple: #7650e6;
+      --dark: #161614;
+      --dark-paper: #f5f3ec;
+      --max: 1160px;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+    }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "DM Sans", sans-serif;
+      line-height: 1.7;
+      background:
+        radial-gradient(circle at 10% 5%, rgba(52, 104, 245, 0.09), transparent 24%),
+        radial-gradient(circle at 90% 6%, rgba(35, 149, 111, 0.08), transparent 22%),
+        linear-gradient(180deg, #fffdfa 0%, var(--bg) 100%);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    ::selection {
+      color: var(--paper);
+      background: var(--ink);
+    }
+    a {
+      color: inherit;
+    }
+    svg {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+    code,
+    pre {
+      font-family: "Roboto Mono", monospace;
+    }
+    .wrap {
+      position: relative;
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      z-index: 300;
+      padding: 10px 16px;
+      color: var(--paper);
+      background: var(--ink);
+      font-weight: 700;
+    }
+    .skip-link:focus {
+      left: 12px;
+      top: 12px;
+    }
+    :focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 3px;
+    }
+    .progress {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 200;
+      height: 2px;
+      pointer-events: none;
+    }
+    .progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: var(--ink);
+    }
+    .site-head {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: background 0.2s ease, box-shadow 0.2s ease;
+    }
+    .site-head.scrolled {
+      background: rgba(252, 251, 248, 0.9);
+      box-shadow: 0 1px 0 var(--line);
+      backdrop-filter: blur(10px);
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px 0 12px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .brand-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      box-shadow: 0 0 0 8px rgba(52, 104, 245, 0.08);
+    }
+    .nav {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      color: var(--muted);
+      scrollbar-width: none;
+    }
+    .nav::-webkit-scrollbar {
+      display: none;
+    }
+    .nav a {
+      position: relative;
+      padding-bottom: 3px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav a::after {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 1px;
+      background: var(--ink);
+      content: "";
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.2s ease;
+    }
+    .nav a:hover,
+    .nav a.active {
+      color: var(--ink);
+    }
+    .nav a:hover::after,
+    .nav a.active::after {
+      transform: scaleX(1);
+    }
+    .hero {
+      padding: 64px 0 58px;
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      width: 24px;
+      height: 1px;
+      background: var(--line-strong);
+      content: "";
+    }
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: "Space Grotesk", sans-serif;
+      letter-spacing: -0.045em;
+    }
+    .hero h1 {
+      max-width: 1050px;
+      margin-top: 18px;
+      font-size: clamp(3rem, 7.8vw, 6.6rem);
+      line-height: 0.95;
+    }
+    .hero h1 em {
+      color: #565656;
+      font-family: "Instrument Serif", serif;
+      font-weight: 400;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 52px;
+      margin-top: 30px;
+    }
+    .lead {
+      max-width: 760px;
+      margin: 0;
+      color: #3f3f3f;
+      font-size: clamp(1.08rem, 1.8vw, 1.3rem);
+    }
+    .hero-note {
+      margin: 0;
+      color: var(--muted);
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .pill {
+      padding: 5px 10px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+    }
+    .section {
+      padding: 86px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .section-head {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 36px;
+      align-items: start;
+      margin-bottom: 38px;
+    }
+    .kicker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: var(--soft);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .kicker-mark {
+      width: 8px;
+      height: 8px;
+      background: var(--ink);
+    }
+    .kicker-num {
+      font-family: "Roboto Mono", monospace;
+    }
+    .section-head h2 {
+      font-size: clamp(2.2rem, 4.6vw, 4.3rem);
+      line-height: 0.98;
+    }
+    .body-copy {
+      max-width: 44rem;
+      margin: 0;
+      color: #4d4d4d;
+      font-size: 1.06rem;
+    }
+    .body-copy + .body-copy {
+      margin-top: 16px;
+    }
+    .thesis {
+      max-width: 900px;
+      margin: 34px 0 0;
+      padding: 24px 0 24px 24px;
+      border-left: 3px solid var(--blue);
+      color: #2c2c2c;
+      font-family: "Instrument Serif", serif;
+      font-size: clamp(1.35rem, 2.6vw, 2rem);
+      font-style: italic;
+      line-height: 1.4;
+    }
+    .fault-table {
+      width: 100%;
+      margin-top: 34px;
+      border-collapse: collapse;
+      font-size: 0.98rem;
+    }
+    .fault-table th {
+      padding: 0 16px 12px 0;
+      border-bottom: 1px solid var(--line-strong);
+      color: var(--soft);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.11em;
+      text-align: left;
+      text-transform: uppercase;
+    }
+    .fault-table td {
+      padding: 16px 18px 16px 0;
+      border-bottom: 1px solid var(--line);
+      color: #4d4d4d;
+      vertical-align: top;
+    }
+    .fault-table td:first-child {
+      color: var(--ink);
+      font-weight: 700;
+    }
+    .figure {
+      margin: 48px 0 0;
+    }
+    .figure h3 {
+      margin-bottom: 16px;
+      font-size: 1.28rem;
+    }
+    .diagram-scroll {
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .diagram-scroll svg {
+      min-width: 760px;
+      margin: 0 auto;
+    }
+    .figure figcaption {
+      max-width: 760px;
+      margin-top: 14px;
+      color: var(--muted);
+    }
+    .metric-list {
+      display: grid;
+      gap: 0;
+    }
+    .metric {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 42px;
+      padding: 42px 0;
+      border-top: 1px solid var(--line);
+    }
+    .metric:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+    .metric-index {
+      color: var(--metric-color);
+      font-family: "Roboto Mono", monospace;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .metric h3 {
+      margin: 5px 0 8px;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      line-height: 1;
+    }
+    .metric-question {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .metric-body p {
+      max-width: 48rem;
+      margin: 0 0 16px;
+      color: #454545;
+    }
+    .formula {
+      margin: 20px 0;
+      padding: 17px 20px;
+      overflow-x: auto;
+      border-radius: 10px;
+      background: #f2f0e9;
+      color: #33312b;
+      font-size: 0.9rem;
+    }
+    .fields {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .fields code {
+      padding: 5px 9px;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      background: var(--paper);
+      font-size: 0.8rem;
+    }
+    .case-grid {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 34px;
+      align-items: start;
+    }
+    .case-card {
+      padding: 28px;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      background: rgba(255, 253, 250, 0.7);
+    }
+    .case-card h3 {
+      margin-bottom: 14px;
+      font-size: 1.35rem;
+    }
+    .case-card p {
+      margin: 0 0 14px;
+      color: #4b4b4b;
+    }
+    .case-card dl {
+      margin: 0;
+    }
+    .case-card dt {
+      margin-top: 16px;
+      color: var(--soft);
+      font-family: "Roboto Mono", monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .case-card dd {
+      margin: 4px 0 0;
+      color: #3f3f3f;
+    }
+    .code {
+      overflow: hidden;
+      border-radius: 12px;
+      background: var(--dark);
+      color: #e8e6dd;
+    }
+    .code-head {
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(245, 243, 236, 0.12);
+      color: rgba(245, 243, 236, 0.58);
+      font-family: "Roboto Mono", monospace;
+      font-size: 0.78rem;
+    }
+    .code pre {
+      margin: 0;
+      padding: 20px;
+      overflow-x: auto;
+      color: #e8e6dd;
+      background: var(--dark);
+      font-size: 0.84rem;
+      line-height: 1.65;
+    }
+    .code .kw {
+      color: #aa96ee;
+    }
+    .code .st {
+      color: #72c4a8;
+    }
+    .code .cm {
+      color: rgba(245, 243, 236, 0.45);
+    }
+    .result-stack {
+      display: grid;
+      gap: 14px;
+      margin-top: 34px;
+    }
+    .result {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 22px;
+      padding: 18px 0;
+      border-top: 1px solid var(--line);
+    }
+    .result strong {
+      font-family: "Space Grotesk", sans-serif;
+    }
+    .result p {
+      margin: 0;
+      color: #4d4d4d;
+    }
+    .section-dark {
+      color: var(--dark-paper);
+      background: var(--dark);
+    }
+    .section-dark .section-head h2 {
+      color: var(--dark-paper);
+    }
+    .section-dark .kicker {
+      color: rgba(245, 243, 236, 0.5);
+    }
+    .section-dark .kicker-mark {
+      background: var(--dark-paper);
+    }
+    .section-dark .body-copy {
+      color: rgba(245, 243, 236, 0.72);
+    }
+    .rule-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      margin-top: 38px;
+      background: rgba(245, 243, 236, 0.14);
+      border: 1px solid rgba(245, 243, 236, 0.14);
+    }
+    .rule {
+      padding: 28px;
+      background: var(--dark);
+    }
+    .rule-num {
+      color: #8aa8ff;
+      font-family: "Roboto Mono", monospace;
+      font-size: 0.8rem;
+    }
+    .rule h3 {
+      margin: 8px 0 10px;
+      font-size: 1.25rem;
+    }
+    .rule p {
+      margin: 0;
+      color: rgba(245, 243, 236, 0.65);
+    }
+    .sources-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: sources;
+    }
+    .sources-list li {
+      position: relative;
+      padding: 20px 0 20px 48px;
+      border-top: 1px solid var(--line);
+      color: #4d4d4d;
+      counter-increment: sources;
+    }
+    .sources-list li::before {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      color: var(--soft);
+      font-family: "Roboto Mono", monospace;
+      content: counter(sources, decimal-leading-zero);
+    }
+    .sources-list strong {
+      color: var(--ink);
+    }
+    .sources-list a {
+      color: #234ebd;
+      text-underline-offset: 3px;
+    }
+    .to-top {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 110;
+      display: grid;
+      width: 46px;
+      height: 46px;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      color: var(--paper);
+      background: var(--ink);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+    }
+    .js .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    .js .reveal.visible {
+      opacity: 1;
+      transform: none;
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    @media (max-width: 900px) {
+      .hero-grid,
+      .section-head,
+      .case-grid {
+        grid-template-columns: 1fr;
+      }
+      .metric {
+        grid-template-columns: 190px 1fr;
+        gap: 28px;
+      }
+    }
+    @media (max-width: 720px) {
+      .wrap {
+        width: min(100% - 28px, var(--max));
+      }
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .nav {
+        width: 100%;
+        padding-bottom: 5px;
+      }
+      .hero {
+        padding-top: 42px;
+      }
+      .hero h1 {
+        font-size: clamp(2.7rem, 14vw, 4.7rem);
+      }
+      .section {
+        padding: 66px 0;
+      }
+      .metric,
+      .result {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .rule-grid {
+        grid-template-columns: 1fr;
+      }
+      .fault-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      .to-top {
+        right: 16px;
+        bottom: 16px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .js .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span id="progressFill"></span></div>
+  <header class="site-head" id="siteHead">
+    <div class="wrap topbar">
+      <a class="brand" href="#top"><span class="brand-dot" aria-hidden="true"></span>Ali Reza Rashidi</a>
+      <nav class="nav" aria-label="Article navigation">
+        <a href="#diagnose">Diagnose</a>
+        <a href="#five-metrics">Five metrics</a>
+        <a href="#case-study">Case study</a>
+        <a href="#thresholds">Thresholds</a>
+        <a href="#sources">Sources</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap" id="top">
+      <section class="hero" aria-label="Introduction">
+        <div class="eyebrow">DeepEval · RAG evaluation · QA practice</div>
+        <h1>Five metrics.<br><em>Three broken components.</em><br>One useful diagnosis.</h1>
+        <div class="hero-grid">
+          <p class="lead">A metric deserves a place in your suite only when its failure changes what an engineer does next. These five separate retrieval defects, generation defects, and product-policy defects without turning the dashboard into a catalog.</p>
+          <p class="hero-note">Verified against DeepEval <strong>4.2.0</strong> on 30 August 2026. The framework recommends no more than five metrics; this exact set is our support-RAG choice, not an official preset.</p>
+        </div>
+        <div class="hero-meta" role="group" aria-label="Article metadata">
+          <span class="pill">8 min read</span>
+          <span class="pill">Failure-first</span>
+          <span class="pill">Single-turn RAG</span>
+        </div>
+      </section>
+
+      <section class="section reveal" id="diagnose" aria-labelledby="diagnose-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">01</span> Diagnose first</div>
+            <h2 id="diagnose-h">A score is not a finding</h2>
+          </div>
+          <div>
+            <p class="body-copy">“Quality dropped to 0.68” is not actionable. Did retrieval miss the policy? Did the re-ranker bury it? Did the model ignore it? Or did the answer violate a business rule that generic RAG metrics do not know?</p>
+            <p class="body-copy">The useful unit of evaluation is therefore not the metric. It is the <strong>metric → component → next action</strong> chain.</p>
+          </div>
+        </div>
+        <p class="thesis">Do not ask which metric is most impressive. Ask which failure it isolates—and whether your team knows what to change when it turns red.</p>
+
+        <table class="fault-table">
+          <thead>
+            <tr><th>Observed pattern</th><th>Likely component</th><th>First engineering move</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Recall falls</td><td>Retriever coverage</td><td>Inspect top-k, chunk boundaries, filters, and embeddings.</td></tr>
+            <tr><td>Recall holds; precision falls</td><td>Ranking</td><td>Inspect ordering, duplicate chunks, and the re-ranker.</td></tr>
+            <tr><td>Retriever metrics hold; faithfulness falls</td><td>Generator grounding</td><td>Inspect the prompt, context use, and model behavior.</td></tr>
+            <tr><td>Faithfulness holds; relevancy falls</td><td>Generator focus</td><td>Remove tangents, boilerplate, and unnecessary caveats.</td></tr>
+            <tr><td>Generic metrics hold; policy score falls</td><td>Product contract</td><td>Inspect the rubric, expected answer, and application logic.</td></tr>
+          </tbody>
+        </table>
+
+        <figure class="figure">
+          <h3>Route the failure before tuning anything</h3>
+          <div class="diagram-scroll">
+            <svg viewBox="0 0 960 560" role="img" aria-labelledby="metric-route-title metric-route-desc">
+              <title id="metric-route-title">RAG metric failure routing</title>
+              <desc id="metric-route-desc">A decision flow that routes weak retrieval scores to retrieval work, weak generation scores to prompt or model work, and remaining policy failures to a custom G-Eval rubric.</desc>
+              <defs>
+                <marker id="metric-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                  <polygon points="0 0, 8 3, 0 6" fill="#656565"></polygon>
+                </marker>
+                <marker id="metric-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                  <polygon points="0 0, 8 3, 0 6" fill="#eb8237"></polygon>
+                </marker>
+              </defs>
+              <rect width="960" height="560" fill="#fffdfa"></rect>
+
+              <path d="M480 72 V100" fill="none" stroke="#656565" stroke-width="2" marker-end="url(#metric-arrow)"></path>
+              <path d="M480 164 V196" fill="none" stroke="#656565" stroke-width="2" marker-end="url(#metric-arrow)"></path>
+              <path d="M544 248 H680" fill="none" stroke="#656565" stroke-width="2" marker-end="url(#metric-arrow)"></path>
+              <path d="M480 300 V332" fill="none" stroke="#656565" stroke-width="2" marker-end="url(#metric-arrow)"></path>
+              <path d="M544 384 H680" fill="none" stroke="#656565" stroke-width="2" marker-end="url(#metric-arrow)"></path>
+              <path d="M480 436 V472" fill="none" stroke="#eb8237" stroke-width="2" marker-end="url(#metric-arrow-accent)"></path>
+
+              <rect x="430" y="225" width="40" height="18" rx="4" fill="#fffdfa"></rect>
+              <text x="450" y="238" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="#656565">NO</text>
+              <rect x="592" y="225" width="44" height="18" rx="4" fill="#fffdfa"></rect>
+              <text x="614" y="238" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="#656565">YES</text>
+              <rect x="430" y="361" width="40" height="18" rx="4" fill="#fffdfa"></rect>
+              <text x="450" y="374" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="#656565">NO</text>
+              <rect x="592" y="361" width="44" height="18" rx="4" fill="#fffdfa"></rect>
+              <text x="614" y="374" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="#656565">YES</text>
+
+              <rect x="376" y="24" width="208" height="48" rx="24" fill="#f0eee8" stroke="#656565"></rect>
+              <text x="480" y="53" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="15" font-weight="700" fill="#171717">A regression appears</text>
+
+              <rect x="340" y="104" width="280" height="60" rx="6" fill="#ffffff" stroke="#171717"></rect>
+              <text x="480" y="130" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="15" font-weight="700" fill="#171717">Read metric reasons and traces</text>
+              <text x="480" y="150" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="#656565">never tune from the aggregate alone</text>
+
+              <polygon points="480,196 544,248 480,300 416,248" fill="#f7f6f1" stroke="#171717"></polygon>
+              <text x="480" y="244" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="13" font-weight="700" fill="#171717">Recall or precision</text>
+              <text x="480" y="262" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="13" font-weight="700" fill="#171717">weak?</text>
+
+              <rect x="680" y="216" width="232" height="64" rx="6" fill="#ffffff" stroke="#3468f5"></rect>
+              <text x="796" y="244" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="15" font-weight="700" fill="#171717">Fix retrieval</text>
+              <text x="796" y="264" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="#656565">coverage or ordering</text>
+
+              <polygon points="480,332 544,384 480,436 416,384" fill="#f7f6f1" stroke="#171717"></polygon>
+              <text x="480" y="380" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="13" font-weight="700" fill="#171717">Faithfulness or</text>
+              <text x="480" y="398" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="13" font-weight="700" fill="#171717">relevancy weak?</text>
+
+              <rect x="680" y="352" width="232" height="64" rx="6" fill="#ffffff" stroke="#23956f"></rect>
+              <text x="796" y="380" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="15" font-weight="700" fill="#171717">Fix generation</text>
+              <text x="796" y="400" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="#656565">grounding or focus</text>
+
+              <rect x="340" y="476" width="280" height="64" rx="6" fill="rgba(235,130,55,0.08)" stroke="#eb8237"></rect>
+              <text x="480" y="504" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="15" font-weight="700" fill="#171717">Inspect the product contract</text>
+              <text x="480" y="524" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="#656565">custom G-Eval rubric</text>
+            </svg>
+          </div>
+          <figcaption>The diagram is intentionally asymmetric: generic RAG metrics isolate plumbing; the custom metric checks the rule that makes your product yours.</figcaption>
+        </figure>
+      </section>
+
+      <section class="section reveal" id="five-metrics" aria-labelledby="five-metrics-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">02</span> The five metrics</div>
+            <h2 id="five-metrics-h">Each metric owns one question</h2>
+          </div>
+          <p class="body-copy">The first four form a diagnostic set for RAG. The fifth encodes the business requirement the generic set cannot infer. More metrics are justified only when they expose a new failure mode.</p>
+        </div>
+
+        <div class="metric-list">
+          <article class="metric" style="--metric-color:#23956f">
+            <div>
+              <div class="metric-index">01 · Generator grounding</div>
+              <h3>Faithfulness</h3>
+              <div class="metric-question">Did the answer stay inside the retrieved evidence?</div>
+            </div>
+            <div class="metric-body">
+              <p>DeepEval extracts claims from the answer and checks whether each claim is supported by the retrieval context. A low result is a generator finding: the evidence that reached the model did not justify what it said.</p>
+              <div class="formula">supported claims ÷ total claims</div>
+              <p>A true statement can still be unfaithful when the retrieved context does not contain it. That is the point: this metric tests grounding, not world knowledge.</p>
+              <div class="fields" role="group" aria-label="Required test case fields"><code>input</code><code>actual_output</code><code>retrieval_context</code></div>
+            </div>
+          </article>
+
+          <article class="metric" style="--metric-color:#7650e6">
+            <div>
+              <div class="metric-index">02 · Generator focus</div>
+              <h3>Answer Relevancy</h3>
+              <div class="metric-question">Did the answer address the user’s request?</div>
+            </div>
+            <div class="metric-body">
+              <p>This referenceless metric evaluates statements in the output against the input. It does not inspect retrieval context and does not establish factual correctness.</p>
+              <div class="formula">relevant answer statements ÷ total answer statements</div>
+              <p>Long preambles, unrelated caveats, and friendly-but-useless filler can reduce the score. Pair it with Faithfulness: one catches drift from the question; the other catches drift from the evidence.</p>
+              <div class="fields" role="group" aria-label="Required test case fields"><code>input</code><code>actual_output</code></div>
+            </div>
+          </article>
+
+          <article class="metric" style="--metric-color:#3468f5">
+            <div>
+              <div class="metric-index">03 · Ranking</div>
+              <h3>Contextual Precision</h3>
+              <div class="metric-question">Did useful chunks appear before noise?</div>
+            </div>
+            <div class="metric-body">
+              <p>Contextual Precision judges each retrieved node for relevance and computes a weighted cumulative precision. Relevant nodes earn more credit when they appear near the top of the ranked context.</p>
+              <div class="formula">average of precision@k at positions where the retrieved node is relevant</div>
+              <p>High recall with low precision means the answer material exists, but ordering is weak. Inspect the re-ranker, duplicate chunks, filters, and top-k—not the answer prompt.</p>
+              <div class="fields" role="group" aria-label="Required test case fields"><code>input</code><code>actual_output</code><code>expected_output</code><code>retrieval_context</code></div>
+            </div>
+          </article>
+
+          <article class="metric" style="--metric-color:#3468f5">
+            <div>
+              <div class="metric-index">04 · Coverage</div>
+              <h3>Contextual Recall</h3>
+              <div class="metric-question">Did retrieval fetch enough for the ideal answer?</div>
+            </div>
+            <div class="metric-body">
+              <p>DeepEval breaks the expected output into statements and checks which statements can be attributed to the retrieval context. It deliberately evaluates retrieval against the ideal answer, not the answer your generator happened to produce.</p>
+              <div class="formula">expected-output statements attributable to context ÷ all expected-output statements</div>
+              <p>Low recall points toward coverage: top-k, chunk boundaries, metadata filters, or embeddings. The generator cannot produce a complete grounded answer from evidence it never received.</p>
+              <div class="fields" role="group" aria-label="Required test case fields"><code>input</code><code>actual_output</code><code>expected_output</code><code>retrieval_context</code></div>
+            </div>
+          </article>
+
+          <article class="metric" style="--metric-color:#eb8237">
+            <div>
+              <div class="metric-index">05 · Product contract</div>
+              <h3>G-Eval</h3>
+              <div class="metric-question">Did the answer obey the rule our business cares about?</div>
+            </div>
+            <div class="metric-body">
+              <p>G-Eval is the custom slot. Use it for correctness, completeness, tone, or policy behavior that the four generic metrics do not define. Give it explicit evaluation steps and only the test-case fields those steps need.</p>
+              <div class="formula">0–10 raw judge score, optionally probability-weighted, then normalized to 0–1</div>
+              <p>DeepEval recommends supplying stable <code>evaluation_steps</code> when you have them. If your criteria can be expressed as a rigid decision tree and repeatability matters more than nuance, investigate the DAG metric instead.</p>
+              <div class="fields" role="group" aria-label="Required test case fields"><code>actual_output</code><code>expected_output</code></div>
+            </div>
+          </article>
+        </div>
+        <p class="thesis">Evaluating an agent? Replace slots; do not simply add more. Task Completion covers the trajectory, while Tool Correctness diagnoses tool selection. A five-slot budget still forces ownership.</p>
+      </section>
+
+      <section class="section reveal" id="case-study" aria-labelledby="case-study-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">03</span> One case, end to end</div>
+            <h2 id="case-study-h">Ticket 7319</h2>
+          </div>
+          <p class="body-copy">A customer received a cracked ceramic bottle. They ask whether it can be replaced and whether return shipping costs extra. One case is enough to see why five separate verdicts beat one blended “quality” score.</p>
+        </div>
+
+        <div class="case-grid">
+          <article class="case-card">
+            <h3>The golden case</h3>
+            <dl>
+              <dt>Input</dt>
+              <dd>“My ceramic bottle arrived cracked. Can I get a replacement, and do I pay return shipping?”</dd>
+              <dt>Expected output</dt>
+              <dd>Report the damage within 14 days for a free replacement. The company covers return shipping.</dd>
+              <dt>Retrieved context</dt>
+              <dd>Chunk 1: damaged-item reports are accepted within 14 days. Chunk 2: replacement and return shipping are free. Chunk 3: unrelated loyalty-points policy.</dd>
+              <dt>Actual output</dt>
+              <dd>“Yes. Contact support within 30 days. We will replace it, but you may need to pay return shipping.”</dd>
+            </dl>
+          </article>
+
+          <section class="code" aria-label="DeepEval example code">
+            <div class="code-head">test_ticket_7319.py</div>
+            <pre><span class="kw">from</span> deepeval.metrics <span class="kw">import</span> (
+    AnswerRelevancyMetric,
+    ContextualPrecisionMetric,
+    ContextualRecallMetric,
+    FaithfulnessMetric,
+    GEval,
+)
+<span class="kw">from</span> deepeval.test_case <span class="kw">import</span> LLMTestCase, SingleTurnParams
+
+case = LLMTestCase(
+    input=<span class="st">"My ceramic bottle arrived cracked..."</span>,
+    actual_output=<span class="st">"Contact support within 30 days..."</span>,
+    expected_output=<span class="st">"Report it within 14 days..."</span>,
+    retrieval_context=[policy_a, policy_b, loyalty_policy],
+)
+
+policy_correctness = GEval(
+    name=<span class="st">"Damage policy correctness"</span>,
+    evaluation_steps=[
+        <span class="st">"Compare the deadline in actual and expected output."</span>,
+        <span class="st">"Check who pays return shipping."</span>,
+        <span class="st">"Fail answers that reverse either policy fact."</span>,
+    ],
+    evaluation_params=[
+        SingleTurnParams.ACTUAL_OUTPUT,
+        SingleTurnParams.EXPECTED_OUTPUT,
+    ],
+    threshold=0.8,
+)
+
+metrics = [
+    FaithfulnessMetric(threshold=0.8),
+    AnswerRelevancyMetric(threshold=0.7),
+    ContextualPrecisionMetric(threshold=0.7),
+    ContextualRecallMetric(threshold=0.7),
+    policy_correctness,
+]</pre>
+          </section>
+        </div>
+
+        <div class="result-stack">
+          <div class="result"><strong>Recall may pass.</strong><p>The retrieved context contains both facts needed for the ideal answer.</p></div>
+          <div class="result"><strong>Precision may be imperfect.</strong><p>The loyalty chunk adds noise, but the useful chunks still rank ahead of it.</p></div>
+          <div class="result"><strong>Relevancy may pass.</strong><p>The response stays on the customer’s question. On-topic does not mean correct.</p></div>
+          <div class="result"><strong>Faithfulness should fail.</strong><p>The 30-day deadline and customer-paid shipping contradict the retrieved policy.</p></div>
+          <div class="result"><strong>G-Eval should fail.</strong><p>The product-specific rubric makes both policy reversals explicit and reviewable.</p></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="section section-dark reveal" id="thresholds" aria-labelledby="thresholds-h">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span> Thresholds</div>
+            <h2 id="thresholds-h">Calibrate a gate; do not invent one</h2>
+          </div>
+          <p class="body-copy">DeepEval defaults most metric thresholds to 0.5, but a framework default is not your release policy. The example thresholds above are starting points for calibration, not universal standards.</p>
+        </div>
+
+        <div class="rule-grid">
+          <article class="rule">
+            <div class="rule-num">01</div>
+            <h3>Start with score-only observation</h3>
+            <p>Use <code>threshold=None</code> while collecting a healthy baseline. Scores and reasons are recorded, but the metric has no pass/fail opinion.</p>
+          </article>
+          <article class="rule">
+            <div class="rule-num">02</div>
+            <h3>Label failures before gating</h3>
+            <p>Compare metric judgments with human QA labels. If the judge disagrees on cases that matter, repair the rubric, examples, or evaluation model first.</p>
+          </article>
+          <article class="rule">
+            <div class="rule-num">03</div>
+            <h3>Set thresholds from the healthy band</h3>
+            <p>Choose a boundary that catches meaningful regressions without making ordinary judge variance look like a production incident.</p>
+          </article>
+          <article class="rule">
+            <div class="rule-num">04</div>
+            <h3>Use strict mode only for invariants</h3>
+            <p><code>strict_mode=True</code> requires perfection, makes the score binary, and sets the threshold to 1. Reserve it for rules that truly allow no partial credit.</p>
+          </article>
+          <article class="rule">
+            <div class="rule-num">05</div>
+            <h3>Monitor known-noisy metrics</h3>
+            <p>A metric marked <code>flaky=True</code> still produces its score, reason, and verdict, but its failure does not fail the test case.</p>
+          </article>
+          <article class="rule">
+            <div class="rule-num">06</div>
+            <h3>Read reasons and traces</h3>
+            <p>A score is a locator, not a confidence percentage. Review which claim, statement, or chunk produced the judgment before tuning the system.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="section reveal" id="sources" aria-labelledby="sources-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span> Grounding</div>
+            <h2 id="sources-h">Sources</h2>
+          </div>
+          <p class="body-copy">The article uses official DeepEval documentation and source metadata. Metric counts and defaults change; the component boundaries and required inputs below were checked on 30 August 2026.</p>
+        </div>
+        <ol class="sources-list">
+          <li><strong>DeepEval — Introduction to LLM Evaluation Metrics.</strong> Shared score direction, threshold behavior, strict mode, flaky metrics, score-only mode, and the current metric categories. <a href="https://deepeval.com/docs/metrics-introduction" target="_blank" rel="noopener noreferrer">deepeval.com/docs/metrics-introduction</a></li>
+          <li><strong>DeepEval — Faithfulness.</strong> Required fields, grounding scope, calculation, and the distinction between generation and retrieval failure. <a href="https://deepeval.com/docs/metrics-faithfulness" target="_blank" rel="noopener noreferrer">deepeval.com/docs/metrics-faithfulness</a></li>
+          <li><strong>DeepEval — Answer Relevancy.</strong> Referenceless inputs, statement-level relevance, and why factuality must be evaluated separately. <a href="https://deepeval.com/docs/metrics-answer-relevancy" target="_blank" rel="noopener noreferrer">deepeval.com/docs/metrics-answer-relevancy</a></li>
+          <li><strong>DeepEval — Contextual Precision.</strong> Weighted cumulative precision, order sensitivity, required fields, and its role in diagnosing ranking. <a href="https://deepeval.com/docs/metrics-contextual-precision" target="_blank" rel="noopener noreferrer">deepeval.com/docs/metrics-contextual-precision</a></li>
+          <li><strong>DeepEval — Contextual Recall.</strong> Expected-output attribution, required fields, and its role in diagnosing retrieval coverage. <a href="https://deepeval.com/docs/metrics-contextual-recall" target="_blank" rel="noopener noreferrer">deepeval.com/docs/metrics-contextual-recall</a></li>
+          <li><strong>DeepEval — G-Eval.</strong> Evaluation steps, selected test-case parameters, score normalization, limitations, and the DAG alternative. <a href="https://deepeval.com/docs/metrics-llm-evals" target="_blank" rel="noopener noreferrer">deepeval.com/docs/metrics-llm-evals</a></li>
+          <li><strong>Confident AI — DeepEval 4.2.0 release and source.</strong> Official release metadata for the higher-is-better score contract and the version used for this article. <a href="https://github.com/confident-ai/deepeval/releases/tag/python-v4.2.0" target="_blank" rel="noopener noreferrer">github.com/confident-ai/deepeval</a></li>
+        </ol>
+      </section>
+    </div>
+  </main>
+
+  <button class="to-top" id="toTop" type="button" aria-label="Back to top">↑</button>
+  <script>
+    (function () {
+      'use strict';
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var header = document.getElementById('siteHead');
+      var progress = document.getElementById('progressFill');
+      var toTop = document.getElementById('toTop');
+      var reveals = document.querySelectorAll('.reveal');
+
+      if (reduceMotion || !('IntersectionObserver' in window)) {
+        reveals.forEach(function (element) { element.classList.add('visible'); });
+      } else {
+        var revealObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.04, rootMargin: '0px 0px -32px 0px' });
+        reveals.forEach(function (element) { revealObserver.observe(element); });
+      }
+
+      function updateScroll() {
+        var y = window.scrollY || window.pageYOffset;
+        var available = document.documentElement.scrollHeight - window.innerHeight;
+        header.classList.toggle('scrolled', y > 10);
+        toTop.classList.toggle('show', y > 600);
+        progress.style.width = (available > 0 ? (y / available) * 100 : 0) + '%';
+      }
+
+      var ticking = false;
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          window.requestAnimationFrame(function () {
+            updateScroll();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+
+      toTop.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+      });
+
+      var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav a'));
+      if ('IntersectionObserver' in window) {
+        var sectionObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            navLinks.forEach(function (link) {
+              link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+            });
+          });
+        }, { rootMargin: '-42% 0px -52% 0px', threshold: 0 });
+        document.querySelectorAll('main section[id]').forEach(function (section) {
+          sectionObserver.observe(section);
+        });
+      }
+
+      updateScroll();
+    })();
+  </script>
+</body>
+</html>

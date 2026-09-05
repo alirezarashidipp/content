@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="A practical guide to how Superpowers and custom Codex skills trigger, compose, conflict, and divide responsibility in professional development workflows." />
+  <title>Superpowers Plus Your Own Skills — Who Triggers, Who Wins, and When to Write Your Own</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='6' fill='%237650e6'/%3E%3Ccircle cx='23' cy='9' r='6' fill='%2323956f'/%3E%3Ccircle cx='9' cy='23' r='6' fill='%23eb8237'/%3E%3Ccircle cx='23' cy='23' r='6' fill='%233468f5'/%3E%3C/svg%3E" />
+  <meta property="og:title" content="Superpowers Plus Your Own Skills — Who Triggers, Who Wins, and When to Write Your Own" />
+  <meta property="og:description" content="A practical guide to how Superpowers and custom Codex skills trigger, compose, conflict, and divide responsibility in professional development workflows." />
+  <meta property="og:type" content="article" />
+  <meta name="twitter:card" content="summary" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Superpowers Plus Your Own Skills",
+  "description": "A practical guide to how Superpowers and custom Codex skills trigger, compose, conflict, and divide responsibility in professional development workflows.",
+  "datePublished": "2026-08-12",
+  "dateModified": "2026-08-12",
+  "author": { "@type": "Person", "name": "Ali Reza Rashidi" }
+}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Roboto+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add('js');</script>
+  <style>
+/* Hallmark · genre: editorial · macrostructure: Long Document · theme: project-locked article system · enrichment: hand-built SVG · nav: project sticky header · footer: mast-headed · contrast: pass (40–41) · mobile: pass (34,49–57) */
+/* Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V4 */
+:root {
+  --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898;
+  --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+  --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+  --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+  --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+  --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+}
+* { box-sizing: border-box; }
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(23,23,23,.35) transparent;
+  color-scheme: light;
+  overflow-x: clip;
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; border: 2px solid var(--bg); }
+::-webkit-scrollbar-track { background: transparent; }
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: "DM Sans", sans-serif;
+  background: linear-gradient(180deg, #fffdfa, #fcfbf8);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: clip;
+}
+::selection { background: var(--ink); color: var(--paper); }
+a { color: inherit; text-decoration: none; }
+svg { display: block; max-width: 100%; height: auto; }
+button { color: inherit; }
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+  z-index: 0;
+}
+.wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; position: relative; z-index: 1; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 2px; }
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 300;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 10px 16px;
+  font-weight: 700;
+}
+.skip-link:focus { left: 12px; top: 12px; }
+.progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 200; pointer-events: none; }
+.progress span { display: block; height: 100%; width: 0; background: var(--ink); transform-origin: left center; }
+.site-head { position: sticky; top: 0; z-index: 100; transition: background .25s, box-shadow .25s; }
+.site-head.scrolled {
+  background: rgba(252,251,248,.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 1px 0 var(--line);
+}
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
+.brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: -.02em; flex: 0 0 auto; white-space: nowrap; }
+.brand-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
+.nav { display: flex; flex-wrap: nowrap; gap: 20px; color: var(--muted); }
+.nav a { position: relative; padding-bottom: 2px; white-space: nowrap; }
+.nav a::before {
+  content: "";
+  position: absolute;
+  left: -13px;
+  top: 50%;
+  margin-top: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--spy, var(--ink));
+  opacity: 0;
+  transition: opacity .2s;
+}
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .22s;
+}
+.nav a:hover, .nav a.active { color: var(--ink); }
+.nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
+.nav a.active::before { opacity: 1; }
+.hero { padding: 38px 0 54px; border-bottom: 1px solid var(--line); }
+.eyebrow { display: inline-flex; align-items: center; gap: 10px; font-family: "Roboto Mono", monospace; font-size: .78rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--line-strong); }
+h1, h2, h3, h4 { margin: 0; min-width: 0; overflow-wrap: anywhere; text-wrap: balance; }
+.hero h1 {
+  margin-top: 18px;
+  max-width: 1050px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(3rem, 8.4vw, 6.8rem);
+  font-weight: 700;
+  letter-spacing: -.045em;
+  line-height: .94;
+}
+.hero h1.long-title { font-size: clamp(3rem, 7vw, 5.5rem); }
+.hero h1 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; letter-spacing: -.02em; color: #535353; }
+.hero h1 .line { display: block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
+.hero h1 .line-inner { display: inline-block; }
+.js .hero h1 .line-inner { transform: translateY(115%); animation: lineUp .5s ease-out forwards; }
+.js .hero h1 .line:nth-of-type(2) .line-inner { animation-delay: .09s; }
+.js .hero h1 .line:nth-of-type(3) .line-inner { animation-delay: .18s; }
+@keyframes lineUp { to { transform: translateY(0); } }
+.hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 48px; margin-top: 26px; }
+.lead { margin: 0; max-width: 760px; color: #3f3f3f; font-size: clamp(1.08rem, 1.8vw, 1.28rem); text-wrap: pretty; }
+.lead::first-letter { float: left; padding: .04em .14em 0 0; font-family: "Instrument Serif", serif; font-size: 3.3em; font-weight: 400; line-height: .8; color: var(--ink); }
+.hero-links { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 26px; font-weight: 700; }
+.hero-links a { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; border-bottom: 1px solid var(--line-strong); }
+.hero-links a span { color: var(--muted); font-weight: 500; }
+.byline { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 28px; color: var(--muted); font-size: .9rem; }
+.avatar { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--paper); font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: .78rem; }
+.byline strong { color: var(--ink); }
+.byline .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--soft); }
+.hero-note { margin: 0 0 18px; padding-top: 4px; color: var(--muted); font-family: "Instrument Serif", serif; font-style: italic; font-size: 1.15rem; line-height: 1.5; }
+.toc { padding: 22px 24px; border-radius: 12px; background: #f3f1e9; }
+.toc h2 { font-family: "Roboto Mono", monospace; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.toc ol { margin: 14px 0 0; padding: 0; list-style: none; counter-reset: toc; }
+.toc li { counter-increment: toc; border-top: 1px solid var(--line); }
+.toc li:first-child { border-top: 0; }
+.toc a { display: grid; grid-template-columns: 32px 1fr; gap: 8px; padding: 10px 0; line-height: 1.35; }
+.toc a::before { content: "0" counter(toc); font-family: "Roboto Mono", monospace; font-size: .76rem; color: var(--soft); }
+.section { padding: 88px 0; border-bottom: 1px solid var(--line); }
+.section-head { display: grid; grid-template-columns: .9fr 1.1fr; gap: 30px; align-items: start; margin-bottom: 38px; }
+.kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; color: var(--muted); font-family: "Roboto Mono", monospace; font-size: .8rem; letter-spacing: .06em; }
+.kicker::before { content: ""; width: 8px; height: 8px; background: var(--ac, var(--ink)); }
+.section-head h2 { max-width: 610px; font-family: "Space Grotesk", sans-serif; font-size: clamp(2rem, 4.4vw, 4rem); letter-spacing: -.045em; line-height: .98; }
+.section-head p, .body-copy { margin: 0; max-width: 42rem; color: #4d4d4d; font-size: 1.05rem; text-wrap: pretty; }
+.anchor { opacity: 0; margin-left: 12px; font-family: "DM Sans", sans-serif; font-weight: 500; font-size: .5em; color: var(--soft); vertical-align: middle; letter-spacing: 0; transition: opacity .2s; }
+.section-head h2:hover .anchor, .anchor:focus-visible { opacity: 1; }
+.stat-strip { display: grid; grid-template-columns: repeat(3, 1fr); margin: 4px 0 44px; border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line); }
+.stat { padding: 20px 20px 22px 0; border-right: 1px solid var(--line); }
+.stat + .stat { padding-left: 20px; }
+.stat:last-child { border-right: 0; }
+.stat-num { display: block; font-family: "Roboto Mono", monospace; font-weight: 500; font-size: clamp(1.7rem, 3vw, 2.4rem); letter-spacing: -.03em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stat-label { display: block; margin-top: 7px; color: var(--muted); font-size: .92rem; }
+.flow { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 26px; border-top: 1px solid var(--line-strong); }
+.fstep { position: relative; padding: 22px 22px 6px 0; }
+.fstep:not(:last-child)::after { content: ""; position: absolute; right: 14px; top: 31px; width: 28px; height: 1px; background: var(--line-strong); }
+.fnum { font-family: "Roboto Mono", monospace; font-size: .8rem; color: var(--ac, var(--muted)); }
+.fstep strong { display: block; margin: 7px 0 6px; font-family: "Space Grotesk", sans-serif; font-size: 1.05rem; }
+.fstep p { margin: 0; color: var(--muted); font-size: .92rem; line-height: 1.55; }
+.diagram-block { margin: 42px 0 20px; padding: 24px 0 0; border-top: 1px solid var(--line); }
+.diagram-title { margin-bottom: 14px; font-family: "Space Grotesk", sans-serif; font-size: 1.15rem; font-weight: 700; }
+.chart-scroll { overflow-x: auto; padding-bottom: 6px; }
+.diagram-caption { margin: 14px 0 0; max-width: 770px; color: var(--muted); font-size: .9rem; text-wrap: pretty; }
+.diagram-caption strong { color: var(--ink); }
+.node { opacity: 1; transform-box: fill-box; transform-origin: center; }
+.path-line { stroke-dasharray: 520; stroke-dashoffset: 0; }
+.js.diagram-motion-ready .diagram-block:not(.is-visible) .node { opacity: 0; }
+.js.diagram-motion-ready .diagram-block.is-visible .node { animation: nodeIn .42s ease-out forwards; animation-delay: var(--d, 0s); }
+.js.diagram-motion-ready .diagram-block:not(.is-visible) .path-line { stroke-dashoffset: 520; }
+.js.diagram-motion-ready .diagram-block.is-visible .path-line { animation: drawLine .72s ease-out forwards; }
+@keyframes nodeIn { from { opacity: 0; } to { opacity: 1; transform: none; } }
+@keyframes drawLine { from { stroke-dashoffset: 520; } to { stroke-dashoffset: 0; } }
+.framework { display: grid; grid-template-columns: 260px 1fr; gap: 44px; padding: 42px 0; border-top: 1px solid var(--line); }
+.framework-name { position: sticky; top: 92px; align-self: start; }
+.mark { display: block; width: 10px; height: 10px; margin-bottom: 14px; border-radius: 50%; background: var(--ac); }
+.framework-name h3 { font-family: "Space Grotesk", sans-serif; font-size: clamp(1.75rem, 3.2vw, 2.5rem); letter-spacing: -.04em; line-height: 1; }
+.framework-role { margin: 12px 0 4px; color: var(--ac); font-family: "Roboto Mono", monospace; font-size: .78rem; letter-spacing: .05em; text-transform: uppercase; }
+.framework-summary { margin: 0; color: var(--muted); font-size: .93rem; line-height: 1.5; }
+.framework-content { max-width: 730px; }
+.framework-content p { margin: 0 0 18px; color: #414141; text-wrap: pretty; }
+.formula { margin: 22px 0; padding: 18px 22px; overflow-x: auto; border-radius: 12px; background: #f3f1e9; color: #33312b; font-family: "Roboto Mono", monospace; font-size: .94rem; line-height: 1.65; white-space: nowrap; }
+.callout-line { margin: 28px 0; padding: 15px 0 15px 20px; border-left: 3px solid var(--ac, var(--ink)); font-family: "Space Grotesk", sans-serif; font-size: 1.15rem; font-weight: 700; line-height: 1.35; }
+.callout-line small { display: block; margin-top: 6px; color: var(--muted); font-family: "DM Sans", sans-serif; font-size: .84rem; font-weight: 400; line-height: 1.55; }
+.mini-compare { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin: 30px 0 8px; }
+.mini-item { padding-top: 16px; border-top: 2px solid var(--ac, var(--line-strong)); }
+.mini-item strong { display: block; margin-bottom: 6px; font-family: "Space Grotesk", sans-serif; font-size: 1.04rem; }
+.mini-item p { margin: 0; color: var(--muted); font-size: .9rem; line-height: 1.55; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; margin-top: 34px; }
+.split-panel { padding-top: 18px; border-top: 2px solid var(--ac); }
+.split-panel h3 { margin-bottom: 12px; font-family: "Space Grotesk", sans-serif; font-size: 1.35rem; letter-spacing: -.025em; }
+.split-panel p { margin: 0 0 13px; color: #4d4d4d; }
+.decision { margin-top: 36px; }
+.decision-row { display: grid; grid-template-columns: 170px 1fr 1fr; gap: 20px; padding: 18px 0; border-top: 1px solid var(--line); }
+.decision-row:last-child { border-bottom: 1px solid var(--line); }
+.decision-row strong { font-family: "Space Grotesk", sans-serif; }
+.decision-row p { margin: 0; color: var(--muted); font-size: .93rem; line-height: 1.55; }
+.decision-label { color: var(--ac); font-family: "Roboto Mono", monospace; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+.quiz { margin-top: 48px; padding: 34px; border-radius: 14px; background: var(--dark); color: var(--dark-paper); }
+.quiz-kicker { margin: 0 0 10px; color: rgba(245,243,236,.58); font-family: "Roboto Mono", monospace; font-size: .76rem; letter-spacing: .14em; text-transform: uppercase; }
+.quiz h3 { font-family: "Space Grotesk", sans-serif; font-size: clamp(1.6rem, 3vw, 2.25rem); letter-spacing: -.035em; line-height: 1.05; }
+.quiz-progress { height: 2px; margin: 24px 0; background: var(--dark-line); }
+.quiz-progress span { display: block; width: 33.333%; height: 100%; background: var(--dark-paper); transform-origin: left; transition: transform .25s; }
+.quiz-q { margin: 0 0 18px; font-family: "Space Grotesk", sans-serif; font-size: 1.18rem; line-height: 1.45; }
+.answers { display: grid; gap: 8px; }
+.quiz-a { width: 100%; min-height: 48px; padding: 14px 16px; border: 0; border-left: 2px solid rgba(245,243,236,.18); background: transparent; color: rgba(245,243,236,.86); font: inherit; text-align: left; cursor: pointer; transition: background .18s, border-color .18s; }
+.quiz-a:hover, .quiz-a:focus-visible { background: rgba(245,243,236,.07); border-color: var(--dark-paper); }
+.quiz button:focus-visible { outline-color: var(--dark-paper); }
+.quiz-a:active { background: rgba(245,243,236,.11); }
+.quiz-a[disabled] { cursor: default; opacity: .68; }
+.quiz-a.correct { border-color: var(--green); background: rgba(35,149,111,.14); opacity: 1; }
+.quiz-a.wrong { border-color: var(--red); background: rgba(219,100,120,.12); opacity: 1; }
+.quiz-why { min-height: 52px; margin: 18px 0 0; color: rgba(245,243,236,.72); font-size: .92rem; }
+.quiz-next, .quiz-retake { min-height: 44px; margin-top: 16px; padding: 8px 0; border: 0; border-bottom: 1px solid rgba(245,243,236,.5); background: transparent; color: var(--dark-paper); font-family: "Roboto Mono", monospace; font-size: .82rem; cursor: pointer; white-space: nowrap; }
+.quiz-next:hover, .quiz-retake:hover { border-bottom-color: var(--dark-paper); }
+.quiz-next:active, .quiz-retake:active { transform: translateY(1px); }
+.quiz-next:disabled, .quiz-retake:disabled { cursor: not-allowed; opacity: .55; }
+.quiz-next[hidden], .quiz-retake[hidden] { display: none; }
+.quiz-result { display: none; }
+.quiz-result.show { display: block; }
+.quiz-result p { max-width: 650px; color: rgba(245,243,236,.74); }
+a.xref { font-family: "Roboto Mono", monospace; font-size: .62em; vertical-align: super; line-height: 0; color: var(--soft); letter-spacing: .02em; }
+.sources-list { margin: 0; padding: 0; list-style: none; counter-reset: src; }
+.sources-list li { position: relative; counter-increment: src; padding: 18px 0 18px 52px; border-top: 1px solid var(--line); }
+.sources-list li:last-child { border-bottom: 1px solid var(--line); }
+.sources-list li::before { content: counter(src, decimal-leading-zero); position: absolute; left: 0; top: 18px; font-family: "Roboto Mono", monospace; font-size: .82rem; color: var(--soft); }
+.sources-list strong { display: block; margin-bottom: 3px; font-family: "Space Grotesk", sans-serif; }
+.sources-list span { color: var(--muted); font-size: .92rem; }
+.xlink { border-bottom: 1px dashed var(--line-strong); }
+.xlink::after { content: " ↗"; font-size: .8em; }
+.footer { padding: 48px 0 max(48px, env(safe-area-inset-bottom)); }
+.footer-grid { display: flex; justify-content: space-between; align-items: end; gap: 30px; }
+.footer-title { margin-bottom: 6px; font-family: "Space Grotesk", sans-serif; font-size: 1.2rem; font-weight: 700; }
+.footer p { margin: 0; color: var(--muted); }
+.footer-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 16px; }
+.footer-links a { white-space: nowrap; border-bottom: 1px solid var(--line-strong); }
+.to-top { position: fixed; right: max(20px, env(safe-area-inset-right)); bottom: max(20px, env(safe-area-inset-bottom)); z-index: 80; width: 44px; height: 44px; border: 1px solid var(--line-strong); border-radius: 50%; background: rgba(252,251,248,.92); font-family: "Roboto Mono", monospace; cursor: pointer; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .2s, transform .2s; }
+.to-top.show { opacity: 1; pointer-events: auto; transform: none; }
+.to-top:hover { border-color: var(--ink); }
+.to-top:active { transform: translateY(1px); }
+.to-top:disabled { cursor: not-allowed; opacity: .55; }
+.reveal { opacity: 1; transform: none; }
+.js.reveal-motion-ready .reveal { opacity: 0; transform: translateY(14px); transition: opacity .55s ease-out, transform .55s ease-out; }
+.js.reveal-motion-ready .reveal.visible { opacity: 1; transform: none; }
+.hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-row > *, .footer-grid > * { min-width: 0; }
+@media (max-width: 900px) {
+  .hero-grid, .section-head, .framework, .split { grid-template-columns: 1fr; }
+  .framework-name { position: static; }
+  .flow { grid-template-columns: repeat(2, 1fr); }
+  .mini-compare { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 720px) {
+  .wrap { width: min(100% - 28px, 1180px); }
+  .topbar { align-items: flex-start; }
+  .brand { max-width: 185px; white-space: normal; line-height: 1.25; }
+  .nav { gap: 13px; overflow-x: auto; padding-bottom: 6px; }
+  .nav a::before { display: none; }
+  .hero { padding-top: 40px; }
+  .hero-grid { gap: 30px; }
+  .section { padding: 66px 0; }
+  .stat-strip { grid-template-columns: 1fr; }
+  .stat { border-right: 0; border-bottom: 1px solid var(--line); padding: 18px 0; }
+  .stat + .stat { padding-left: 0; }
+  .stat:last-child { border-bottom: 0; }
+  .decision-row { grid-template-columns: 1fr; gap: 7px; }
+  .footer-grid { align-items: flex-start; flex-direction: column; }
+  .footer-links { justify-content: flex-start; }
+}
+@media (max-width: 430px) {
+  .hero h1 { font-size: clamp(2.15rem, 12.5vw, 3rem); }
+  .nav { display: none; }
+  .brand { max-width: none; white-space: nowrap; }
+  .flow, .mini-compare { grid-template-columns: 1fr; }
+  .fstep:not(:last-child)::after { display: none; }
+  .chart-scroll svg { min-width: 560px; }
+  .quiz { padding: 26px 20px; }
+  .byline .dot { display: none; }
+  .byline { gap: 8px 12px; }
+  .formula { font-size: .8rem; }
+}
+@media (hover: none) {
+  .anchor { opacity: .45; }
+  .nav a { padding-block: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .js.reveal-motion-ready .reveal, .js .hero h1 .line-inner, .node { opacity: 1; transform: none; }
+  .path-line { stroke-dashoffset: 0; }
+}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-head" id="siteHead">
+    <div class="wrap topbar">
+      <a class="brand" href="#top" aria-label="Back to article top">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span>Superpowers + Skills</span>
+      </a>
+      <nav class="nav" aria-label="Article sections">
+        <a href="#trigger" style="--spy:var(--blue)">Trigger</a>
+        <a href="#ownership" style="--spy:var(--purple)">Ownership</a>
+        <a href="#collision" style="--spy:var(--orange)">Collision</a>
+        <a href="#decision" style="--spy:var(--green)">Decision</a>
+        <a href="#sources" style="--spy:var(--slate)">Sources</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content">
+    <article id="top">
+      <header class="hero">
+        <div class="wrap">
+          <div class="eyebrow">Agentic Coding Systems</div>
+          <h1 class="long-title">
+            <span class="line"><span class="line-inner">Superpowers + <em>your own</em></span></span>
+            <span class="line"><span class="line-inner">skills</span></span>
+          </h1>
+          <div class="hero-grid">
+            <div>
+              <p class="lead">Professional teams rarely need one universal instruction file. The harder—and more useful—job is deciding where each kind of guidance belongs. Superpowers can supply the development process. A local skill can carry domain knowledge. Project instructions keep repository-wide rules in view.</p>
+              <div class="hero-links">
+                <a href="#collision">Who wins? <span>↓</span></a>
+                <a href="#decision">When to write one <span>↓</span></a>
+              </div>
+              <div class="byline">
+                <span class="avatar" aria-hidden="true">AR</span>
+                <strong>Ali Reza Rashidi</strong>
+                <span class="dot" aria-hidden="true"></span>
+                <span>8 min read</span>
+                <span class="dot" aria-hidden="true"></span>
+                <time datetime="2026-08-12">Updated Aug 12, 2026</time>
+              </div>
+            </div>
+            <div>
+              <p class="hero-note">The useful question is not “Which skill is stronger?” It is “Which layer owns this decision?”</p>
+              <aside class="toc" aria-label="Table of contents">
+                <h2>In this piece</h2>
+                <ol>
+                  <li><a href="#trigger">How skills enter the task</a></li>
+                  <li><a href="#ownership">Process versus domain ownership</a></li>
+                  <li><a href="#collision">What happens when instructions collide</a></li>
+                  <li><a href="#decision">When your own skill is justified</a></li>
+                  <li><a href="#sources">Primary sources</a></li>
+                </ol>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="section reveal" id="trigger" aria-labelledby="trigger-title">
+        <div class="wrap">
+          <div class="section-head" style="--ac:var(--blue)">
+            <div>
+              <div class="kicker">01 — Trigger</div>
+              <h2 id="trigger-title">The description does more than document<a class="anchor" href="#trigger" aria-label="Link to Trigger section">#</a></h2>
+            </div>
+            <p>Codex can activate a skill because you named it or because the task matches its description. The frontmatter is therefore part of the routing mechanism, not administrative decoration. If the description is vague, a relevant skill can be missed without an obvious error.</p>
+          </div>
+
+          <div class="stat-strip" aria-label="Codex skill activation facts">
+            <div class="stat">
+              <span class="stat-num" data-count="2">2</span>
+              <span class="stat-label">activation paths: explicit and implicit</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num" data-count="4">4</span>
+              <span class="stat-label">documented scopes: repo, user, admin, system</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num" data-count="1">1</span>
+              <span class="stat-label">full SKILL.md loaded after selection</span>
+            </div>
+          </div>
+
+          <p class="body-copy">Use one running request: <strong>“Add a tenant-aware invoice export with CSV output and audit logging.”</strong> Superpowers sees new-feature work and may route into brainstorming before implementation. Your own <code>tenant-export</code> skill sees invoice export, tenancy, and audit evidence. Both matches can be legitimate because they answer different questions.<a class="xref" href="#src-1">[1]</a><a class="xref" href="#src-4">[4]</a></p>
+
+          <div class="flow" aria-label="Skill activation sequence">
+            <div class="fstep" style="--ac:var(--blue)">
+              <span class="fnum">01</span>
+              <strong>Read the request</strong>
+              <p>Extract task verbs, objects, constraints, and any explicitly named skill.</p>
+            </div>
+            <div class="fstep" style="--ac:var(--purple)">
+              <span class="fnum">02</span>
+              <strong>Match descriptions</strong>
+              <p>Compare the request with concise trigger boundaries in available skills.</p>
+            </div>
+            <div class="fstep" style="--ac:var(--green)">
+              <span class="fnum">03</span>
+              <strong>Load instructions</strong>
+              <p>Read the complete SKILL.md only for selected skills.</p>
+            </div>
+            <div class="fstep" style="--ac:var(--orange)">
+              <span class="fnum">04</span>
+              <strong>Compose the work</strong>
+              <p>Use process and domain instructions together inside project constraints.</p>
+            </div>
+          </div>
+
+          <figure class="diagram-block observe-diagram">
+            <figcaption class="diagram-title">One prompt, two valid matches</figcaption>
+            <div class="chart-scroll">
+              <svg viewBox="0 0 1000 360" role="img" aria-label="A flow diagram showing one invoice export request matching both the Superpowers brainstorming skill and a custom tenant export skill before the instructions are composed.">
+                <defs>
+                  <linearGradient id="promptGrad" x1="0" x2="1"><stop offset="0" stop-color="#3468f5"/><stop offset="1" stop-color="#14a9c5"/></linearGradient>
+                  <linearGradient id="superGrad" x1="0" x2="1"><stop offset="0" stop-color="#7650e6"/><stop offset="1" stop-color="#db6478"/></linearGradient>
+                  <linearGradient id="ownGrad" x1="0" x2="1"><stop offset="0" stop-color="#23956f"/><stop offset="1" stop-color="#14a9c5"/></linearGradient>
+                </defs>
+                <path class="path-line" d="M310 180 C390 180 404 93 484 93" fill="none" stroke="#7650e6" stroke-width="3"/>
+                <path class="path-line" d="M310 180 C390 180 404 267 484 267" fill="none" stroke="#23956f" stroke-width="3"/>
+                <path class="path-line" d="M716 93 C800 93 790 180 850 180" fill="none" stroke="#7650e6" stroke-width="3"/>
+                <path class="path-line" d="M716 267 C800 267 790 180 850 180" fill="none" stroke="#23956f" stroke-width="3"/>
+                <g class="node" style="--d:.05s">
+                  <rect x="30" y="118" width="280" height="124" rx="12" fill="url(#promptGrad)" opacity=".12" stroke="#3468f5"/>
+                  <text x="54" y="153" fill="#3468f5" font-family="Roboto Mono" font-size="13">REQUEST</text>
+                  <text x="54" y="185" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="21">Tenant-aware export</text>
+                  <text x="54" y="213" fill="#656565" font-family="DM Sans" font-size="15">CSV + audit logging</text>
+                </g>
+                <g class="node" style="--d:.14s">
+                  <rect x="484" y="40" width="232" height="106" rx="12" fill="url(#superGrad)" opacity=".12" stroke="#7650e6"/>
+                  <text x="508" y="76" fill="#7650e6" font-family="Roboto Mono" font-size="13">PROCESS MATCH</text>
+                  <text x="508" y="108" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="20">Superpowers</text>
+                  <text x="508" y="130" fill="#656565" font-family="DM Sans" font-size="14">How should we build?</text>
+                </g>
+                <g class="node" style="--d:.23s">
+                  <rect x="484" y="214" width="232" height="106" rx="12" fill="url(#ownGrad)" opacity=".12" stroke="#23956f"/>
+                  <text x="508" y="250" fill="#23956f" font-family="Roboto Mono" font-size="13">DOMAIN MATCH</text>
+                  <text x="508" y="282" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="20">tenant-export</text>
+                  <text x="508" y="304" fill="#656565" font-family="DM Sans" font-size="14">What must be true?</text>
+                </g>
+                <g class="node" style="--d:.32s">
+                  <rect x="850" y="122" width="120" height="116" rx="58" fill="#171717"/>
+                  <text x="910" y="173" text-anchor="middle" fill="#fffdfa" font-family="Space Grotesk" font-weight="700" font-size="18">Composed</text>
+                  <text x="910" y="197" text-anchor="middle" fill="#bdbbb4" font-family="DM Sans" font-size="13">workflow</text>
+                </g>
+              </svg>
+            </div>
+            <p class="diagram-caption"><strong>How to read this:</strong> the request can activate more than one relevant skill, but the skills do not have to play the same role. Superpowers shapes the development method; <code>tenant-export</code> supplies the tenant and audit constraints.</p>
+          </figure>
+
+          <div class="callout-line" style="--ac:var(--blue)">A match is only the first decision.<small>It answers “Should this skill enter the task?” It does not prove that the skill outranks every other instruction source.</small></div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="ownership" aria-labelledby="ownership-title">
+        <div class="wrap">
+          <div class="section-head" style="--ac:var(--purple)">
+            <div>
+              <div class="kicker">02 — Ownership</div>
+              <h2 id="ownership-title">Separate process from domain rules<a class="anchor" href="#ownership" aria-label="Link to Ownership section">#</a></h2>
+            </div>
+            <p>Superpowers is a development methodology expressed as composable skills. Repeating that methodology in a local skill adds another place for the same rules to drift. Use the local skill for knowledge the generic process cannot have: architecture boundaries, regulated evidence, project commands, and acceptance checks.</p>
+          </div>
+
+          <div class="framework" style="--ac:var(--purple)">
+            <aside class="framework-name">
+              <span class="mark" aria-hidden="true"></span>
+              <h3>Superpowers</h3>
+              <p class="framework-role">Process layer</p>
+              <p class="framework-summary">Controls how the engineering work moves from ambiguity to evidence.</p>
+            </aside>
+            <div class="framework-content">
+              <p>Superpowers starts before code. Its documented workflow moves through brainstorming, worktree isolation, planning, implementation, test-driven development, review, and verification. Its value is procedural consistency across repositories—not knowledge of your invoice schema.<a class="xref" href="#src-4">[4]</a></p>
+              <p>For the running request, it should ask what “tenant-aware” means, surface alternative export designs, get approval, create a plan, and verify the result. Those moves remain useful whether the product is billing software, a medical records system, or a CLI.</p>
+              <div class="formula">Superpowers = reusable engineering process</div>
+            </div>
+          </div>
+
+          <div class="framework" style="--ac:var(--green)">
+            <aside class="framework-name">
+              <span class="mark" aria-hidden="true"></span>
+              <h3>Your skill</h3>
+              <p class="framework-role">Domain layer</p>
+              <p class="framework-summary">Controls what correctness means in your system.</p>
+            </aside>
+            <div class="framework-content">
+              <p>A custom <code>tenant-export</code> skill can require tenant predicates in every query, forbid cross-tenant joins, point to the canonical audit-event schema, name the fixture generator, and run a leakage test. This is reusable expertise, but only inside environments that share those rules.</p>
+              <p>Its description should name the trigger boundary directly: <strong>“Use when creating or changing tenant-scoped exports, CSV downloads, or audit events in the billing service.”</strong> Codex relies on that description for implicit activation, and descriptions may be shortened when many skills compete for the initial context budget.<a class="xref" href="#src-1">[1]</a></p>
+              <div class="formula">Your skill = domain workflow + references + verification</div>
+            </div>
+          </div>
+
+          <div class="framework" style="--ac:var(--orange)">
+            <aside class="framework-name">
+              <span class="mark" aria-hidden="true"></span>
+              <h3>AGENTS.md</h3>
+              <p class="framework-role">Policy layer</p>
+              <p class="framework-summary">Keeps repository-wide guidance in scope even when no skill matches.</p>
+            </aside>
+            <div class="framework-content">
+              <p>Use this layer for repository-wide expectations: “Every data query must include the authenticated tenant ID,” “Never log invoice contents,” or “Run the isolation suite before commit.” Codex reads AGENTS.md before work and combines guidance from the repository root down to the current directory; closer files override earlier guidance in that chain.<a class="xref" href="#src-2">[2]</a></p>
+              <p>If a rule must survive a missed skill trigger, it does not belong only inside that skill. AGENTS.md keeps the guidance in the agent’s working context, but it does not enforce the rule. Tenant isolation still needs authorization code, tests, and CI.</p>
+              <div class="formula">AGENTS.md = always-loaded project guidance</div>
+            </div>
+          </div>
+
+          <div class="mini-compare" aria-label="Responsibility comparison">
+            <div class="mini-item" style="--ac:var(--purple)"><strong>Process</strong><p>Brainstorm, plan, implement, review, verify.</p></div>
+            <div class="mini-item" style="--ac:var(--green)"><strong>Domain</strong><p>Tenant boundaries, audit schema, local evidence.</p></div>
+            <div class="mini-item" style="--ac:var(--orange)"><strong>Policy</strong><p>Rules that cannot depend on a trigger.</p></div>
+            <div class="mini-item" style="--ac:var(--blue)"><strong>Request</strong><p>The concrete outcome and current intent.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="collision" aria-labelledby="collision-title">
+        <div class="wrap">
+          <div class="section-head" style="--ac:var(--orange)">
+            <div>
+              <div class="kicker">03 — Collision</div>
+              <h2 id="collision-title">Conflict is an ownership problem<a class="anchor" href="#collision" aria-label="Link to Collision section">#</a></h2>
+            </div>
+            <p>Codex documents how skills are found and activated. It does not document a universal “closest skill wins” algorithm for conflicting instructions. If two skills share a name, they are not merged; both may appear. Design the boundary between them instead of assuming precedence.<a class="xref" href="#src-1">[1]</a></p>
+          </div>
+
+          <div class="split">
+            <div class="split-panel" style="--ac:var(--red)">
+              <h3>Collision by accident</h3>
+              <p>Superpowers says to stop and clarify. Your custom skill says to infer defaults and implement immediately.</p>
+              <p>Both claim process ownership. The conflict is architectural, not lexical. Renaming either skill will not fix it.</p>
+            </div>
+            <div class="split-panel" style="--ac:var(--green)">
+              <h3>Composition by design</h3>
+              <p>In the responsibility model used here, Superpowers owns clarification, planning, TDD, and review. The custom skill contributes export-specific questions, invariants, fixtures, and checks.</p>
+              <p>That division lets both run without asking either skill to override the other.</p>
+            </div>
+          </div>
+
+          <figure class="diagram-block observe-diagram">
+            <figcaption class="diagram-title">The operating model—not a hidden scheduler</figcaption>
+            <div class="chart-scroll">
+              <svg viewBox="0 0 1000 430" role="img" aria-label="A layered diagram placing the user request and AGENTS instructions above process skills, domain skills, and model defaults, with arrows showing that each lower layer operates inside the constraints above it.">
+                <defs>
+                  <linearGradient id="layerBlue" x1="0" x2="1"><stop offset="0" stop-color="#3468f5"/><stop offset="1" stop-color="#14a9c5"/></linearGradient>
+                  <linearGradient id="layerOrange" x1="0" x2="1"><stop offset="0" stop-color="#eb8237"/><stop offset="1" stop-color="#c9a227"/></linearGradient>
+                </defs>
+                <g class="node" style="--d:.04s">
+                  <rect x="80" y="34" width="840" height="68" rx="10" fill="url(#layerBlue)" opacity=".13" stroke="#3468f5"/>
+                  <text x="112" y="63" fill="#3468f5" font-family="Roboto Mono" font-size="13">INTENT + POLICY</text>
+                  <text x="112" y="87" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="20">Direct request and applicable AGENTS.md instructions</text>
+                </g>
+                <g class="node" style="--d:.12s">
+                  <rect x="140" y="134" width="720" height="68" rx="10" fill="#7650e6" opacity=".11" stroke="#7650e6"/>
+                  <text x="172" y="163" fill="#7650e6" font-family="Roboto Mono" font-size="13">PROCESS</text>
+                  <text x="172" y="187" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="20">Superpowers: how the work proceeds</text>
+                </g>
+                <g class="node" style="--d:.2s">
+                  <rect x="200" y="234" width="600" height="68" rx="10" fill="#23956f" opacity=".11" stroke="#23956f"/>
+                  <text x="232" y="263" fill="#23956f" font-family="Roboto Mono" font-size="13">DOMAIN</text>
+                  <text x="232" y="287" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="20">Your skill: what correctness requires</text>
+                </g>
+                <g class="node" style="--d:.28s">
+                  <rect x="260" y="334" width="480" height="62" rx="10" fill="url(#layerOrange)" opacity=".1" stroke="#eb8237"/>
+                  <text x="292" y="361" fill="#eb8237" font-family="Roboto Mono" font-size="13">DEFAULTS</text>
+                  <text x="292" y="383" fill="#171717" font-family="Space Grotesk" font-weight="700" font-size="19">Model fills only the remaining gaps</text>
+                </g>
+                <path class="path-line" d="M500 102 L500 134 M500 202 L500 234 M500 302 L500 334" fill="none" stroke="#171717" stroke-width="2" stroke-dasharray="5 7"/>
+              </svg>
+            </div>
+            <p class="diagram-caption"><strong>How to read this:</strong> this is a recommended responsibility model, not a claim about an undocumented Codex arbitration engine. Every lower layer should operate inside constraints established above it.</p>
+          </figure>
+
+          <div class="callout-line" style="--ac:var(--orange)">If two skills claim the same decision, their boundary is wrong.<small>Make one procedural and the other domain-specific. If the conflict remains, invoke the intended skill explicitly or state the choice in the request.</small></div>
+
+          <div class="decision" aria-label="Conflict resolution sequence">
+            <div class="decision-row">
+              <span class="decision-label" style="--ac:var(--blue)">First</span>
+              <strong>Honor explicit intent</strong>
+              <p>Direct requests and project instructions define the task envelope. Superpowers itself states that user instructions take precedence over its skills.<a class="xref" href="#src-5">[5]</a></p>
+            </div>
+            <div class="decision-row">
+              <span class="decision-label" style="--ac:var(--purple)">Then</span>
+              <strong>Run process before implementation</strong>
+              <p>Superpowers orders process skills before implementation skills, so brainstorming can shape the approach before domain execution begins.<a class="xref" href="#src-5">[5]</a></p>
+            </div>
+            <div class="decision-row">
+              <span class="decision-label" style="--ac:var(--green)">Finally</span>
+              <strong>Apply domain checks</strong>
+              <p>Your skill supplies the export-specific invariants and verification commands at the relevant steps.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="decision" aria-labelledby="decision-title">
+        <div class="wrap">
+          <div class="section-head" style="--ac:var(--green)">
+            <div>
+              <div class="kicker">04 — Decision</div>
+              <h2 id="decision-title">Write a skill when the workflow repeats<a class="anchor" href="#decision" aria-label="Link to Decision section">#</a></h2>
+            </div>
+            <p>A skill is worth maintaining when the same specialized work keeps returning and you can describe how to recognize, perform, and verify it. A standing repository rule belongs in AGENTS.md. A one-off outcome belongs in the prompt.</p>
+          </div>
+
+          <div class="decision" aria-label="Where different kinds of instructions belong">
+            <div class="decision-row">
+              <span class="decision-label" style="--ac:var(--slate)">Prompt</span>
+              <strong>One task, one outcome</strong>
+              <p>Use for temporary scope, acceptance criteria, and choices that are unlikely to repeat.</p>
+            </div>
+            <div class="decision-row">
+              <span class="decision-label" style="--ac:var(--orange)">AGENTS.md</span>
+              <strong>Repository-wide guidance</strong>
+              <p>Use when every task in a directory should receive the instruction, whether or not a skill activates.</p>
+            </div>
+            <div class="decision-row">
+              <span class="decision-label" style="--ac:var(--purple)">Superpowers</span>
+              <strong>General engineering discipline</strong>
+              <p>Use for reusable process: ideation, planning, TDD, debugging, review, and verification.</p>
+            </div>
+            <div class="decision-row">
+              <span class="decision-label" style="--ac:var(--green)">Own skill</span>
+              <strong>Repeatable domain workflow</strong>
+              <p>Use when trigger words, references, scripts, and evidence checks belong together.</p>
+            </div>
+            <div class="decision-row">
+              <span class="decision-label" style="--ac:var(--blue)">Plugin</span>
+              <strong>Distribution or connected capability</strong>
+              <p>Package skills as a plugin when other people should install them, when multiple skills travel together, or when connectors and tools belong in the same bundle.<a class="xref" href="#src-3">[3]</a></p>
+            </div>
+          </div>
+
+          <div class="split">
+            <div class="split-panel" style="--ac:var(--red)">
+              <h3>Do not write one yet</h3>
+              <p>The workflow has happened once.</p>
+              <p>You cannot state a precise trigger boundary.</p>
+              <p>The content is mostly generic coding advice already covered by Superpowers.</p>
+              <p>There is no verification step—only prose.</p>
+            </div>
+            <div class="split-panel" style="--ac:var(--green)">
+              <h3>Write your own</h3>
+              <p>The same domain task recurs across features or repositories.</p>
+              <p>The trigger can be named with concrete verbs and objects.</p>
+              <p>The workflow needs local references, templates, or scripts.</p>
+              <p>Success can be checked with observable evidence.</p>
+            </div>
+          </div>
+
+          <div class="callout-line" style="--ac:var(--green)">Keep the stack small enough to explain.<small>In practice, one process layer, a few narrow domain skills, and explicit project guidance are easier to maintain than a collection of overlapping instructions.</small></div>
+
+          <section class="quiz" aria-labelledby="quiz-title">
+            <p class="quiz-kicker">Decision check</p>
+            <h3 id="quiz-title">Choose the right owner</h3>
+            <div class="quiz-progress" aria-hidden="true"><span id="quizProgress"></span></div>
+            <div id="quizPanel">
+              <p class="quiz-q" id="quizQuestion"></p>
+              <div class="answers" id="quizAnswers"></div>
+              <p class="quiz-why" id="quizWhy" aria-live="polite"></p>
+              <button class="quiz-next" id="quizNext" type="button" hidden>Next question →</button>
+            </div>
+            <div class="quiz-result" id="quizResult">
+              <h3 id="quizScore"></h3>
+              <p>The goal is not to memorize a hierarchy. It is to assign policy, process, and domain knowledge to layers that can compose without surprise.</p>
+              <button class="quiz-retake" id="quizRetake" type="button" hidden>Retake check</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="section reveal" id="sources" aria-labelledby="sources-title">
+        <div class="wrap">
+          <div class="section-head" style="--ac:var(--slate)">
+            <div>
+              <div class="kicker">05 — Sources</div>
+              <h2 id="sources-title">Primary material<a class="anchor" href="#sources" aria-label="Link to Sources section">#</a></h2>
+            </div>
+            <p>The article separates documented Codex behavior from recommended workflow architecture. Product behavior comes from official OpenAI documentation; Superpowers behavior comes from its maintained repository.</p>
+          </div>
+
+          <ol class="sources-list">
+            <li id="src-1">
+              <strong><a class="xlink" href="https://learn.chatgpt.com/docs/build-skills" target="_blank" rel="noopener noreferrer">Build skills</a></strong>
+              <span>Official OpenAI documentation — activation modes, progressive disclosure, skill scopes, duplicate names, and plugin distribution.</span>
+            </li>
+            <li id="src-2">
+              <strong><a class="xlink" href="https://learn.chatgpt.com/docs/agent-configuration/agents-md" target="_blank" rel="noopener noreferrer">Custom instructions with AGENTS.md</a></strong>
+              <span>Official OpenAI documentation — discovery, instruction chaining, and project-directory precedence.</span>
+            </li>
+            <li id="src-3">
+              <strong><a class="xlink" href="https://learn.chatgpt.com/docs/plugins" target="_blank" rel="noopener noreferrer">Plugins</a></strong>
+              <span>Official OpenAI documentation — plugins as bundles of skills, connectors, MCP servers, hooks, and other capabilities.</span>
+            </li>
+            <li id="src-4">
+              <strong><a class="xlink" href="https://github.com/obra/superpowers" target="_blank" rel="noopener noreferrer">Superpowers repository</a></strong>
+              <span>Obra / Jesse Vincent — project overview, installation paths, methodology, and the documented development workflow.</span>
+            </li>
+            <li id="src-5">
+              <strong><a class="xlink" href="https://github.com/obra/superpowers/blob/main/skills/using-superpowers/SKILL.md" target="_blank" rel="noopener noreferrer">Using Superpowers skill</a></strong>
+              <span>Obra / Superpowers — skill invocation rule, process-before-implementation ordering, and user-instruction priority.</span>
+            </li>
+          </ol>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <button class="to-top" id="toTop" type="button" aria-label="Back to top">↑</button>
+
+  <script>
+  (() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const siteHead = document.getElementById('siteHead');
+    const progressBar = document.getElementById('progressBar');
+    const toTop = document.getElementById('toTop');
+    const sections = [...document.querySelectorAll('section[id]')];
+    const navLinks = [...document.querySelectorAll('.nav a')];
+
+    const updateScrollUI = () => {
+      const y = window.scrollY;
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = scrollable > 0 ? Math.min(1, y / scrollable) : 0;
+      progressBar.style.transform = `scaleX(${progress})`;
+      siteHead.classList.toggle('scrolled', y > 12);
+      toTop.classList.toggle('show', y > 640);
+    };
+
+    updateScrollUI();
+    window.addEventListener('scroll', updateScrollUI, { passive: true });
+    toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' }));
+
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: .08 });
+    document.documentElement.classList.add('reveal-motion-ready');
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    const diagramObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: .25 });
+    document.documentElement.classList.add('diagram-motion-ready');
+    document.querySelectorAll('.observe-diagram').forEach(el => diagramObserver.observe(el));
+
+    const spyObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`));
+      });
+    }, { rootMargin: '-25% 0px -65% 0px' });
+    sections.forEach(section => spyObserver.observe(section));
+
+    if (!reduceMotion) {
+      const countObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const target = Number(el.dataset.count);
+          const start = performance.now();
+          const duration = 650;
+          const tick = now => {
+            const p = Math.min(1, (now - start) / duration);
+            const eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = String(Math.round(target * eased));
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+          observer.unobserve(el);
+        });
+      }, { threshold: .8 });
+      document.querySelectorAll('[data-count]').forEach(el => countObserver.observe(el));
+    }
+
+    const questions = [
+      {
+        q: 'You are adding the tenant-aware invoice export. Which stack is strongest?',
+        a: ['Superpowers alone', 'A custom export skill alone', 'Superpowers + a narrow export skill + AGENTS.md policy'],
+        correct: 2,
+        why: 'Process, domain checks, and non-optional policy belong to different layers. Composition is stronger than asking one layer to impersonate all three.'
+      },
+      {
+        q: 'A rule says every database query must include the authenticated tenant ID. Where should the durable rule live?',
+        a: ['Only inside the custom skill', 'In applicable AGENTS.md guidance', 'Only in the current prompt'],
+        correct: 1,
+        why: 'A safety boundary should not depend on a skill trigger. The custom skill can add tests, but the standing rule belongs in always-on project guidance.'
+      },
+      {
+        q: 'Two skills both prescribe incompatible planning workflows. What is the best fix?',
+        a: ['Assume the repo skill always wins', 'Rename both skills and hope', 'Separate ownership or explicitly choose one'],
+        correct: 2,
+        why: 'Codex does not document a universal collision winner. Remove overlapping ownership, or make the intended choice explicit in the request.'
+      }
+    ];
+
+    let index = 0;
+    let score = 0;
+    let answered = false;
+    const questionEl = document.getElementById('quizQuestion');
+    const answersEl = document.getElementById('quizAnswers');
+    const whyEl = document.getElementById('quizWhy');
+    const nextEl = document.getElementById('quizNext');
+    const panelEl = document.getElementById('quizPanel');
+    const resultEl = document.getElementById('quizResult');
+    const scoreEl = document.getElementById('quizScore');
+    const retakeEl = document.getElementById('quizRetake');
+    const quizProgress = document.getElementById('quizProgress');
+
+    const renderQuestion = () => {
+      answered = false;
+      whyEl.textContent = '';
+      nextEl.hidden = true;
+      questionEl.textContent = questions[index].q;
+      answersEl.replaceChildren();
+      quizProgress.style.transform = `scaleX(${(index + 1) / questions.length})`;
+      questions[index].a.forEach((label, answerIndex) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'quiz-a';
+        button.textContent = label;
+        button.addEventListener('click', () => answer(answerIndex));
+        answersEl.appendChild(button);
+      });
+    };
+
+    const answer = selected => {
+      if (answered) return;
+      answered = true;
+      const current = questions[index];
+      const buttons = [...answersEl.querySelectorAll('button')];
+      buttons.forEach((button, buttonIndex) => {
+        button.disabled = true;
+        if (buttonIndex === current.correct) button.classList.add('correct');
+        if (buttonIndex === selected && selected !== current.correct) button.classList.add('wrong');
+      });
+      if (selected === current.correct) score += 1;
+      whyEl.textContent = current.why;
+      nextEl.textContent = index === questions.length - 1 ? 'See result →' : 'Next question →';
+      nextEl.hidden = false;
+      nextEl.focus();
+    };
+
+    nextEl.addEventListener('click', () => {
+      if (index < questions.length - 1) {
+        index += 1;
+        renderQuestion();
+        questionEl.focus?.({ preventScroll: true });
+        return;
+      }
+      panelEl.hidden = true;
+      resultEl.classList.add('show');
+      scoreEl.textContent = `${score} of ${questions.length} decisions aligned`;
+      retakeEl.hidden = false;
+      retakeEl.focus();
+    });
+
+    retakeEl.addEventListener('click', () => {
+      index = 0;
+      score = 0;
+      panelEl.hidden = false;
+      resultEl.classList.remove('show');
+      retakeEl.hidden = true;
+      renderQuestion();
+    });
+
+    renderQuestion();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A practical distinction between AI agents and agentic AI, including workflow boundaries, agent loops, autonomy, risk, and when not to use an agent." />
+  <title>AI Agent vs Agentic AI — A Useful Distinction, Not a Standard Boundary</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='6' fill='%233468f5'/%3E%3Ccircle cx='23' cy='9' r='6' fill='%23eb8237'/%3E%3Ccircle cx='9' cy='23' r='6' fill='%2323956f'/%3E%3Ccircle cx='23' cy='23' r='6' fill='%23db6478'/%3E%3C/svg%3E" />
+  <meta property="og:title" content="AI Agent vs Agentic AI — A Useful Distinction" />
+  <meta property="og:description" content="What the terms mean, where they overlap, and how to choose the least autonomous system that solves the problem." />
+  <meta property="og:type" content="article" />
+  <meta name="twitter:card" content="summary" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+    "headline": "AI Agent vs Agentic AI: A Useful Distinction, Not a Standard Boundary",
+    "description": "A practical distinction between AI agents and agentic AI, including workflow boundaries, agent loops, autonomy, risk, and when not to use an agent.",
+  "datePublished": "2026-08-04",
+    "dateModified": "2026-08-18",
+  "author": {
+    "@type": "Person",
+    "name": "Ali Reza Rashidi"
+  }
+}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Roboto+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add('js');</script>
+  <style>
+/* Hallmark · pre-emit critique: P5 H4 E4 S5 R5 V4 · genre: editorial · tone: analytical, technical, calm · anchor: cobalt · macrostructure: Split Studio · theme: house editorial · enrichment: Tier-B SVG · nav: N9 house sticky · footer: Ft4 dense colophon · contrast: pass (40–41) · honest: pass (46) · chrome: pass (47) · responsive: pass (49) */
+:root {
+  --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #686868;
+  --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+  --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+  --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+  --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+  --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,23,23,.35) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; border: 2px solid var(--bg); }
+::-webkit-scrollbar-track { background: transparent; }
+body {
+  margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif;
+  background: linear-gradient(180deg, #fffdfa 0%, #fcfbf8 100%);
+  line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+::selection { background: var(--ink); color: var(--paper); }
+.grain {
+  position: fixed; inset: 0; pointer-events: none; opacity: .08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply; z-index: 0;
+}
+a { color: inherit; text-decoration: none; }
+svg { max-width: 100%; height: auto; display: block; }
+.wrap { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; position: relative; z-index: 1; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 2px; }
+.skip-link { position: absolute; left: -9999px; top: 0; z-index: 300; background: var(--ink); color: var(--paper); padding: 10px 16px; font-weight: 700; font-size: .95rem; }
+.skip-link:focus { left: 12px; top: 12px; }
+.progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 200; pointer-events: none; }
+.progress span { display: block; height: 100%; width: 100%; background: var(--ink); transform:scaleX(0); transform-origin:left center; }
+.site-head { position: sticky; top: 0; z-index: 100; transition: background .25s ease, box-shadow .25s ease; }
+.site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0 12px; font-size: .96rem; }
+.brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; flex: 0 0 auto; }
+.brand-dot { width:12px; height:12px; border-radius:50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
+.nav { display:flex; flex-wrap: nowrap; gap:20px; color:var(--muted); }
+.nav a { position:relative; padding-bottom:2px; white-space: nowrap; }
+.nav a::before { content:""; position:absolute; left:-13px; top:50%; margin-top:-3px; width:6px; height:6px; border-radius:50%; background: var(--spy, var(--ink)); opacity:0; transition: opacity .2s ease; }
+.nav a::after { content:""; position:absolute; left:0; bottom:-2px; width:100%; height:1px; background:var(--ink); transform:scaleX(0); transform-origin:left center; transition: transform .22s ease; }
+.nav a:hover::after, .nav a.active::after { transform:scaleX(1); }
+.nav a:hover, .nav a.active { color:var(--ink); }
+.nav a.active::before { opacity:1; }
+.hero { padding: 36px 0 54px; border-bottom:1px solid var(--line); }
+.eyebrow { display:inline-flex; align-items:center; gap:10px; font-size:.8rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+.eyebrow::before { content:""; width:24px; height:1px; background:var(--line-strong); }
+h1,h2,h3,h4 { margin:0; letter-spacing:-.045em; }
+.hero h1 { margin-top:14px; max-width:1000px; font-family:"Space Grotesk", sans-serif; font-size: clamp(3rem, 7vw, 5.6rem); line-height:.98; }
+.hero h1 em { font-family:"Instrument Serif", serif; font-style:normal; font-weight:400; letter-spacing:-.02em; color:#535353; }
+.hero h1 .line { display:block; overflow:hidden; padding-bottom:.08em; margin-bottom:-.08em; }
+.hero h1 .line-inner { display:inline-block; }
+.js .hero h1 .line-inner { transform: translateY(115%); animation: lineUp .5s ease-out forwards; }
+.js .hero h1 .line:nth-of-type(2) .line-inner { animation-delay: .09s; }
+.js .hero h1 .line:nth-of-type(3) .line-inner { animation-delay: .18s; }
+@keyframes lineUp { to { transform: translateY(0); } }
+.hero-grid { display:grid; grid-template-columns: 1.12fr .88fr; gap:48px; margin-top:20px; }
+.lead { font-size: clamp(1.08rem,1.8vw,1.28rem); color:#3f3f3f; margin:0; max-width:760px; }
+.hero-note { color:var(--muted); font-size:1rem; padding-top:10px; }
+.hero-links { display:flex; gap:18px; flex-wrap:wrap; margin-top:18px; font-weight:700; }
+.hero-links a { display:inline-flex; align-items:center; gap:8px; }
+.hero-links a span { color:var(--muted); font-weight:500; }
+.hero-links a:hover span { color:var(--ink); }
+.section { padding: 88px 0; border-bottom:1px solid var(--line); }
+.section-head { display:grid; grid-template-columns: .9fr 1.1fr; gap:30px; align-items:start; margin-bottom: 34px; }
+.kicker { display:flex; align-items:center; gap:10px; font-size:.82rem; text-transform:uppercase; letter-spacing:.16em; color:var(--soft); margin-bottom:16px; font-weight:700; }
+.kicker-mark { width:8px; height:8px; background:var(--ink); flex:0 0 8px; }
+.kicker-num { font-family:"Roboto Mono", monospace; font-weight:500; letter-spacing:.06em; }
+.kicker-sep { color:var(--soft); font-weight:400; }
+.section-head h2 { font-family:"Space Grotesk", sans-serif; font-size: clamp(2rem,4.4vw,4rem); line-height:.98; }
+.section-head p, .body-copy, .intro-copy { color:#4d4d4d; font-size:1.05rem; margin:0; max-width: 42rem; }
+[id] { scroll-margin-top: 96px; }
+.anchor { opacity: 0; margin-left: 12px; font-family:"DM Sans", sans-serif; font-weight: 500; font-size: .5em; color: var(--soft); vertical-align: middle; letter-spacing: 0; transition: opacity .2s ease; text-decoration: none; }
+h2:hover .anchor, h3:hover .anchor, .anchor:focus-visible { opacity: 1; }
+.anchor:hover { color: var(--ink); }
+.mini-compare { display:grid; grid-template-columns: repeat(4,1fr); gap:18px; margin-top:34px; }
+.mini-compare.three { grid-template-columns: repeat(3,1fr); }
+.mini-item { padding-top:10px; border-top:1px solid var(--line-strong); }
+.mini-item strong { display:block; font-family:"Space Grotesk", sans-serif; font-size:1.08rem; margin-bottom:6px; }
+.mini-item span { color:var(--muted); font-size:.94rem; }
+.mini-item .mini-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-bottom:10px; }
+.diagram-block { margin-top: 36px; }
+.diagram-title { font-family:"Space Grotesk", sans-serif; font-size:1.15rem; margin-bottom: 14px; }
+.diagram-caption { font-size:1.02rem; color:var(--muted); margin-top:16px; max-width:44rem; }
+.chart-scroll { overflow-x: auto; }
+.chart-scroll[data-chart="radar"] svg, .chart-scroll[data-chart="donut"] svg { display:block; max-width:540px; margin:0 auto; }
+.legend { display:flex; flex-wrap:wrap; gap:18px; margin-top:16px; color:var(--muted); font-size:.94rem; }
+.legend span { display:inline-flex; align-items:center; gap:8px; }
+.legend i { width:12px; height:12px; border-radius:50%; display:inline-block; }
+.js.diagram-motion-ready .bar-rect { transform-box: fill-box; transform-origin: left center; transform: scaleX(0); }
+.js.diagram-motion-ready .bars-in .bar-rect { transform: scaleX(1); transition: transform 1s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js.diagram-motion-ready .vbar-rect { transform-box: fill-box; transform-origin: center bottom; transform: scaleY(0); }
+.js.diagram-motion-ready .bars-in .vbar-rect { transform: scaleY(1); transition: transform .9s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js.diagram-motion-ready .sdot circle, .js.diagram-motion-ready .sdot .dot { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.js.diagram-motion-ready .scatter-in .sdot circle, .js.diagram-motion-ready .scatter-in .sdot .dot { transform: scale(1); transition: transform .55s cubic-bezier(.34,1.56,.64,1); transition-delay: var(--d, 0s); }
+.js.diagram-motion-ready .sdot text { opacity: 0; }
+.js.diagram-motion-ready .scatter-in .sdot text { opacity: 1; transition: opacity .45s ease; transition-delay: var(--ld, .35s); }
+.js.diagram-motion-ready .line-path { stroke-dasharray: var(--len, 3000); stroke-dashoffset: var(--len, 3000); }
+.js.diagram-motion-ready .lines-in .line-path { stroke-dashoffset: 0; transition: stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js.diagram-motion-ready .line-dot { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.js.diagram-motion-ready .lines-in .line-dot { transform: scale(1); transition: transform .45s cubic-bezier(.34,1.56,.64,1); transition-delay: var(--d, 0s); }
+.js.diagram-motion-ready .fit-line { opacity: 0; }
+.js.diagram-motion-ready .lines-in .fit-line { opacity: 1; transition: opacity .8s ease .5s; }
+.js.diagram-motion-ready .donut-seg { transition: stroke-dashoffset 1.2s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0s); }
+.js.diagram-motion-ready .donut-wrap { transform-box: fill-box; transform-origin: center; }
+.js.diagram-motion-ready .radar-shape { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.js.diagram-motion-ready .radar-in .radar-shape { transform: scale(1); transition: transform .8s cubic-bezier(.34,1.3,.64,1); transition-delay: var(--d, 0s); }
+.js.diagram-motion-ready .radar-lab { opacity: 0; }
+.js.diagram-motion-ready .radar-in .radar-lab { opacity: 1; transition: opacity .5s ease; transition-delay: var(--d, .2s); }
+.js.diagram-motion-ready .vbar-val { opacity: 0; }
+.js.diagram-motion-ready .bars-in .vbar-val { opacity: 1; transition: opacity .45s ease; transition-delay: var(--d, .5s); }
+.js.diagram-motion-ready .donut-center { opacity: 0; }
+.js.diagram-motion-ready .donut-in .donut-center { opacity: 1; transition: opacity .6s ease .55s; }
+.stat-strip { display:grid; grid-template-columns: repeat(4,1fr); gap:24px; margin-top:40px; padding-top:30px; border-top:1px solid var(--line); }
+.stat-strip.three { grid-template-columns: repeat(3,1fr); }
+.stat-num { display:block; font-family:"Roboto Mono", monospace; font-weight:500; font-size: clamp(1.7rem, 3vw, 2.4rem); letter-spacing:-.03em; line-height:1.1; }
+.stat-label { display:block; margin-top:8px; color:var(--muted); font-size:.9rem; line-height:1.45; }
+.framework { display:grid; grid-template-columns: 260px 1fr; gap:38px; padding:48px 0; border-top:1px solid var(--line); }
+.framework:first-of-type { border-top:none; padding-top:14px; }
+.framework-aside { position:sticky; top:110px; align-self:start; }
+.framework-name { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+.mark { width:14px; height:14px; border-radius:50%; flex:0 0 14px; }
+.framework-name h3 { font-family:"Space Grotesk", sans-serif; font-size: clamp(1.8rem,3.2vw,2.5rem); line-height:1; }
+.framework-role { color:var(--muted); font-size:.97rem; margin-bottom:18px; }
+.framework-summary { font-size:1rem; color:#454545; max-width:220px; }
+.framework-content > p { margin:0 0 18px; color:#454545; font-size:1.05rem; max-width: 44rem; }
+.split { display:grid; grid-template-columns:1fr 1fr; gap:28px; margin:24px 0; }
+.text-block h4 { font-family:"Space Grotesk", sans-serif; font-size:1rem; margin-bottom:10px; }
+.text-block ul, .project-list, .avoid-list { margin:0; padding-left:18px; }
+.text-block li, .project-list li, .avoid-list li { margin-bottom:10px; color:#4d4d4d; }
+.callout-line { margin:20px 0 18px; padding-left:16px; border-left:2px solid currentColor; font-weight:700; letter-spacing:-.02em; }
+.callout-line small { display:block; margin-top:5px; font-weight:500; color:var(--muted); letter-spacing:0; }
+.section-label { font-size:.8rem; letter-spacing:.14em; text-transform:uppercase; color:var(--soft); font-weight:700; margin:26px 0 12px; }
+.project-list li strong, .avoid-list li strong, .text-block li strong { color:var(--ink); }
+.avoid-list .redir { color:var(--muted); font-weight:500; }
+.tbl { width:100%; border-collapse: collapse; margin-top:26px; font-size:.99rem; }
+.tbl th { font-family:"Space Grotesk", sans-serif; text-align:left; font-size:.86rem; letter-spacing:.12em; text-transform:uppercase; color:var(--soft); padding:0 14px 12px 0; border-bottom:1px solid var(--line-strong); }
+.tbl td { padding:13px 14px 13px 0; border-bottom:1px solid var(--line); color:#4d4d4d; vertical-align:top; }
+.tbl td:first-child { font-weight:700; color:var(--ink); white-space:nowrap; }
+.tbl .tdot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:9px; }
+.code { margin:24px 0; background: var(--dark); color:#e8e6dd; border-radius:14px; overflow:hidden; }
+.code-head { display:flex; align-items:center; gap:8px; padding:12px 18px; border-bottom:1px solid rgba(245,243,236,.1); font-family:"Roboto Mono", monospace; font-size:.8rem; color:rgba(245,243,236,.55); }
+.code-head i { width:9px; height:9px; border-radius:50%; display:inline-block; }
+.code pre { margin:0; padding:18px 20px; overflow-x:auto; font-family:"Roboto Mono", monospace; font-size:.88rem; line-height:1.65; }
+.code .cm { color: rgba(245,243,236,.42); }
+.code .kw { color:#a18aea; }
+.code .st { color:#67bda0; }
+.formula { margin:20px 0; padding:18px 22px; background:#f3f1e9; border-radius:12px; font-family:"Roboto Mono", monospace; font-size:1.02rem; color:#33312b; overflow-x:auto; }
+.flow { display:grid; grid-template-columns: repeat(4,1fr); gap:18px; margin-top:26px; }
+.flow .fstep { padding-top:12px; border-top:2px solid var(--ac, var(--ink)); }
+.flow .fstep .fnum { font-family:"Roboto Mono", monospace; font-size:.85rem; color:var(--ac, var(--muted)); }
+.flow .fstep strong { display:block; font-family:"Space Grotesk", sans-serif; margin:6px 0 6px; font-size:1.05rem; }
+.flow .fstep span { color:var(--muted); font-size:.93rem; }
+.decision-flow { margin-top:26px; display:grid; gap:20px; }
+.decision-step { display:grid; grid-template-columns: 42px 1fr; gap:16px; align-items:start; }
+.decision-step .num { width:42px; height:42px; border-radius:50%; display:grid; place-items:center; font-family:"Roboto Mono", monospace; font-weight:500; background:#f0eee8; color: var(--ac, var(--ink)); }
+.decision-step strong { display:block; margin-bottom:4px; font-size:1.02rem; }
+.decision-step p { margin:0; color:#4d4d4d; }
+.combo-line { margin-top:30px; font-size:1.06rem; color:#424242; max-width: 44rem; }
+.combo-line strong { color:var(--ink); }
+.quote-line { margin:34px 0 0; padding:6px 0 6px 22px; border-left:3px solid var(--ink); font-family:"Instrument Serif", serif; font-style:italic; font-size:clamp(1.3rem,2.4vw,1.7rem); color:#2e2e2e; max-width:46rem; line-height:1.45; }
+.section-dark { background: var(--dark); color: var(--dark-paper); border-bottom: none; position: relative; overflow: hidden; }
+.section-dark::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.05; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E"); }
+.section-dark ::selection { background: var(--dark-paper); color: var(--dark); }
+.section-dark :focus-visible { outline-color: var(--dark-paper); }
+.section-dark .kicker { color: rgba(245,243,236,.5); }
+.section-dark .kicker-mark { background: var(--dark-paper); }
+.section-dark .kicker-sep { color: rgba(245,243,236,.62); }
+.section-dark h2 { color: var(--dark-paper); }
+.section-dark .body-copy { color: rgba(245,243,236,.72); }
+.section-dark .anchor { color: rgba(245,243,236,.45); }
+.section-dark .anchor:hover { color: var(--dark-paper); }
+.section-dark .decision-step .num { background: rgba(245,243,236,.1); color:var(--dark-paper); border:2px solid var(--ac, var(--dark-paper)); }
+.section-dark .decision-step strong { color: var(--dark-paper); }
+.section-dark .decision-step p { color: rgba(245,243,236,.65); }
+.section-dark .combo-line { color: rgba(245,243,236,.78); }
+.section-dark .combo-line strong { color: var(--dark-paper); }
+.section-dark .tbl th { color: rgba(245,243,236,.45); border-bottom-color: rgba(245,243,236,.3); }
+.section-dark .tbl td { border-bottom-color: rgba(245,243,236,.12); color: rgba(245,243,236,.72); }
+.section-dark .tbl td:first-child { color: var(--dark-paper); }
+.quiz { margin: 48px 0 12px; padding-top: 40px; border-top: 1px solid var(--dark-line); position: relative; }
+.quiz-head { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom: 30px; }
+.quiz-title { font-family:"Space Grotesk", sans-serif; font-size: clamp(1.5rem,2.6vw,2.1rem); color: var(--dark-paper); }
+.quiz-progress { display:flex; align-items:center; gap:14px; }
+.quiz-step { font-family:"Roboto Mono", monospace; font-size:.85rem; color: rgba(245,243,236,.65); letter-spacing:.06em; }
+.quiz-track { width: 130px; height: 2px; background: rgba(245,243,236,.18); }
+.quiz-fill { display:block; height:100%; width:100%; background: var(--dark-paper); transform:scaleX(0); transform-origin:left center; transition: transform .3s ease; }
+.quiz-q { font-family:"Space Grotesk", sans-serif; font-size:1.25rem; margin:0 0 20px; color: var(--dark-paper); letter-spacing:-.02em; }
+.quiz-answers { display:grid; }
+.quiz-a { display:flex; align-items:center; gap:14px; width:100%; text-align:left; background:none; border:none; border-left:2px solid rgba(245,243,236,.14); padding:16px 18px; color: rgba(245,243,236,.85); font-family:"DM Sans", sans-serif; font-size:1.03rem; line-height:1.5; cursor:pointer; transition: background .18s ease, border-color .18s ease; }
+.quiz-a:hover, .quiz-a:focus-visible { background: rgba(255,255,255,.06); border-left-color: var(--ac, var(--dark-paper)); }
+.quiz-a:active { background:rgba(255,255,255,.1); }
+.quiz-a:disabled, .quiz-back:disabled, .quiz-retake:disabled { opacity:.55; cursor:not-allowed; }
+.quiz-dot { width:10px; height:10px; border-radius:50%; background: var(--ac); flex:0 0 10px; }
+.quiz-back { margin-top:20px; background:none; border:none; padding:6px 0; color: rgba(245,243,236,.6); font-family:"Roboto Mono", monospace; font-size:.85rem; cursor:pointer; border-bottom:1px solid transparent; }
+.quiz-back:hover { color: var(--dark-paper); border-bottom-color: rgba(245,243,236,.4); }
+.quiz-back:active { color:rgba(245,243,236,.8); }
+.quiz-kicker { font-family:"Roboto Mono", monospace; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; color: rgba(245,243,236,.5); margin-bottom:12px; }
+.quiz-result-name { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+.quiz-result-dot { width:14px; height:14px; border-radius:50%; flex:0 0 14px; }
+.quiz-result-name h4 { font-family:"Space Grotesk", sans-serif; font-size: clamp(1.7rem,3vw,2.3rem); color: var(--dark-paper); }
+.quiz-why { color: rgba(245,243,236,.88); font-size:1.07rem; margin:0 0 10px; max-width: 44rem; }
+.quiz-pair { color: rgba(245,243,236,.6); margin:0 0 22px; max-width: 44rem; }
+.quiz-actions { display:flex; align-items:center; gap:22px; flex-wrap:wrap; margin:0; }
+.quiz-link { color: var(--dark-paper); font-weight:700; border-bottom:1px solid rgba(245,243,236,.4); padding-bottom:2px; }
+.quiz-link:hover { border-bottom-color: var(--dark-paper); }
+.quiz-retake { background:none; border:1px solid rgba(245,243,236,.3); color: rgba(245,243,236,.75); padding:8px 18px; border-radius:999px; cursor:pointer; font-family:"DM Sans", sans-serif; font-size:.9rem; transition: border-color .18s ease, color .18s ease; }
+.quiz-retake:hover { border-color: var(--dark-paper); color: var(--dark-paper); }
+.quiz-retake:active { background:rgba(245,243,236,.08); }
+.quiz-noscript { color: rgba(245,243,236,.7); font-style: italic; max-width: 44rem; }
+.quiz-fallback { color:rgba(245,243,236,.72); max-width:44rem; }
+.quiz-app { display:none; }
+.js.quiz-ready .quiz-app { display:block; }
+.js.quiz-ready .quiz-fallback { display:none; }
+footer { padding:48px 0 64px; color:var(--muted); font-size:.98rem; }
+.footer-title { font-family:"Space Grotesk", sans-serif; font-size:1.2rem; color:var(--ink); margin-bottom:6px; }
+.to-top { position: fixed; right: 22px; bottom: 22px; width: 46px; height: 46px; border-radius: 50%; background: var(--ink); color: var(--paper); border: none; cursor: pointer; display: grid; place-items: center; font-size: 1.15rem; line-height: 1; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .25s ease, transform .25s ease; z-index: 110; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+.to-top.show { opacity: 1; pointer-events: auto; transform: none; }
+.to-top:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.js.reveal-motion-ready .reveal { opacity:0; transform: translateY(18px); transition: opacity .65s ease, transform .65s ease; }
+.js.reveal-motion-ready .reveal.visible { opacity:1; transform:none; }
+@media (max-width: 980px) {
+  .hero-grid, .section-head, .framework, .split { grid-template-columns:1fr; }
+  .framework-aside { position:static; }
+  .mini-compare, .mini-compare.three { grid-template-columns: 1fr 1fr; }
+  .flow { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px) {
+  .wrap { width: min(var(--max), calc(100% - 26px)); }
+  .topbar { flex-wrap: wrap; padding-top:14px; gap: 10px 18px; }
+  .nav { max-width: 100%; overflow-x: auto; gap: 16px; font-size:.92rem; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 4px; }
+  .nav::-webkit-scrollbar { display: none; }
+  .hero { padding-top:34px; }
+  .hero h1 { font-size: clamp(2.5rem, 14vw, 4.6rem); }
+  .mini-compare, .mini-compare.three { grid-template-columns:1fr; }
+  .flow { grid-template-columns:1fr; }
+  .section { padding: 60px 0; }
+  .chart-scroll svg { min-width: 640px; }
+  .chart-scroll[data-chart="radar"] svg, .chart-scroll[data-chart="donut"] svg { min-width: 0; }
+  .stat-strip, .stat-strip.three { grid-template-columns: 1fr 1fr; gap: 22px 16px; }
+  .quiz-head { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .to-top { right: 16px; bottom: 16px; }
+  .tbl { display:block; overflow-x:auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior:auto; }
+  .js.reveal-motion-ready .reveal { opacity:1; transform:none; transition:none; }
+  .js .hero h1 .line-inner { transform:none; animation:none; }
+  .js.diagram-motion-ready .bar-rect, .js.diagram-motion-ready .vbar-rect { transform:none; transition:none; }
+  .js.diagram-motion-ready .bars-in .bar-rect, .js.diagram-motion-ready .bars-in .vbar-rect { transition:none; }
+  .js.diagram-motion-ready .sdot circle, .js.diagram-motion-ready .sdot .dot, .js.diagram-motion-ready .line-dot, .js.diagram-motion-ready .radar-shape { transform:none; transition:none; }
+  .js.diagram-motion-ready .scatter-in .sdot circle, .js.diagram-motion-ready .lines-in .line-dot, .js.diagram-motion-ready .radar-in .radar-shape { transition:none; }
+  .js.diagram-motion-ready .sdot text, .js.diagram-motion-ready .radar-lab, .js.diagram-motion-ready .fit-line, .js.diagram-motion-ready .vbar-val, .js.diagram-motion-ready .donut-center { opacity:1; transition:none; }
+  .js.diagram-motion-ready .line-path { stroke-dasharray:none; stroke-dashoffset:0; }
+  .js.diagram-motion-ready .lines-in .line-path { transition:none; }
+  .nav a::after, .quiz-fill, .quiz-a, .to-top { transition:none; }
+}
+
+/* ── Aug 2026 upgrade: mobile ergonomics & swipe hints ── */
+:root { color-scheme: light; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { -webkit-tap-highlight-color: transparent; }
+h1, h2, h3 { text-wrap: balance; }
+.section-head p, .body-copy, .intro-copy, .diagram-caption { text-wrap: pretty; }
+.chart-scroll { -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+.nav.has-more { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent); }
+.swipe-hint { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 10px; padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; font-family: "Roboto Mono", monospace; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: rgba(127,127,127,.07); transition: opacity .4s ease; }
+.section-dark .swipe-hint { border-color: var(--dark-line); color: rgba(245,243,236,.6); }
+.swipe-hint-off { opacity: 0; }
+@media (hover: none) {
+  .anchor { opacity: .45; }
+  .nav a { padding: 8px 0; }
+}
+@media (max-width: 720px) {
+  .to-top { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+  footer { padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-width: 430px) {
+  .hero h1 { font-size: clamp(2.15rem, 12.5vw, 3rem); }
+  .section { padding: 48px 0; }
+  .stat-strip, .stat-strip.three { gap: 18px 14px; }
+  .stat-num { font-size: clamp(1.35rem, 7.5vw, 1.7rem); }
+  .quiz-a { padding: 14px 12px; }
+  .decision-step { grid-template-columns: 34px 1fr; gap: 12px; }
+  .decision-step .num { width: 34px; height: 34px; font-size: .85rem; }
+  .formula { font-size: .9rem; padding: 14px 16px; }
+  .code pre { font-size: .8rem; }
+  .chart-scroll svg { min-width: 560px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .swipe-hint { transition: none; }
+}
+
+/* ── Aug 2026: editorial upgrade, grounding & mobile grid fix ── */
+.byline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); font-size:.93rem; color:var(--muted); }
+.byline .avatar { width:36px; height:36px; border-radius:50%; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.02em; }
+.byline strong { color:var(--ink); }
+.byline .bsep { width:3px; height:3px; border-radius:50%; background:var(--soft); flex:0 0 3px; }
+.toc { margin-top:14px; padding:14px 18px; background:#f3f1e9; border-radius:12px; font-size:.93rem; }
+.toc-title { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--soft); margin-bottom:10px; }
+.toc ol { margin:0; padding-left:20px; color:#4d4d4d; }
+.toc li { margin-bottom:5px; }
+.toc li:last-child { margin-bottom:0; }
+.toc a { border-bottom:1px solid transparent; }
+.toc a:hover { color:var(--ink); border-bottom-color:var(--ink); }
+.lead::first-letter { font-family:"Instrument Serif", serif; font-size: 3.3em; line-height: .8; float: left; padding: .04em .14em 0 0; font-weight: 400; color: var(--ink); }
+a.xref { font-family:"Roboto Mono", monospace; font-size:.62em; vertical-align:super; line-height:0; color:var(--soft); letter-spacing:.02em; }
+a.xref:hover { color:var(--ink); }
+.section-dark a.xref { color:rgba(245,243,236,.55); }
+.section-dark a.xref:hover { color:var(--dark-paper); }
+.sources-list { margin:26px 0 0; padding:0; list-style:none; counter-reset:src; max-width:48rem; }
+.sources-list li { counter-increment:src; position:relative; padding:16px 0 16px 54px; border-bottom:1px solid var(--line); color:#4d4d4d; font-size:.98rem; }
+.sources-list li::before { content:counter(src, decimal-leading-zero); position:absolute; left:0; top:18px; font-family:"Roboto Mono", monospace; font-size:.82rem; color:var(--soft); }
+.sources-list strong { color:var(--ink); }
+.quiz.quiz-light { border-top-color: var(--line); }
+.quiz-light .quiz-title, .quiz-light .quiz-q, .quiz-light .quiz-result-name h4 { color: var(--ink); }
+.quiz-light .quiz-kicker { color: var(--soft); }
+.quiz-light .quiz-step { color: var(--muted); }
+.quiz-light .quiz-track { background: rgba(23,23,23,.14); }
+.quiz-light .quiz-fill { background: var(--ink); }
+.quiz-light .quiz-a { color: #3f3f3f; border-left-color: rgba(23,23,23,.14); }
+.quiz-light .quiz-a:hover, .quiz-light .quiz-a:focus-visible { background: rgba(23,23,23,.05); border-left-color: var(--ac, var(--ink)); }
+.quiz-light .quiz-back { color: var(--muted); }
+.quiz-light .quiz-back:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-why { color: #3f3f3f; }
+.quiz-light .quiz-pair { color: var(--muted); }
+.quiz-light .quiz-link { color: var(--ink); border-bottom-color: var(--line-strong); }
+.quiz-light .quiz-link:hover { border-bottom-color: var(--ink); }
+.quiz-light .quiz-retake { border-color: rgba(23,23,23,.3); color: var(--muted); }
+.quiz-light .quiz-retake:hover { border-color: var(--ink); color: var(--ink); }
+.quiz-light .quiz-noscript { color: var(--muted); }
+.topbar > *, .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > *, .stat-strip > *, .decision-step > *, .quiz-head > *, .byline > *, .diagram-block, .framework-content { min-width: 0; }
+.chart-scroll { max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 720px) {
+  .lead::first-letter { font-size: 2.7em; }
+  .sources-list li { padding-left: 44px; }
+}
+
+/* external reference links */
+.xlink { border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px; }
+.xlink:hover, .xlink:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.xlink::after { content: "\2197"; font-size: .68em; margin-left: 3px; opacity: .55; }
+.section-dark .xlink { border-bottom-color: rgba(245,243,236,.4); }
+.section-dark .xlink:hover { border-bottom-color: var(--dark-paper); }
+
+/* Split Studio rhythm: alternating argument and proof */
+.hero-proof { padding-top: 8px; }
+.hero-proof svg { width: 100%; }
+.proof-note { margin: 12px 0 0; color: var(--muted); font-size: .92rem; }
+.studio-block { display:grid; grid-template-columns: minmax(0,.84fr) minmax(0,1.16fr); gap: clamp(28px,5vw,72px); align-items:center; padding:46px 0; border-top:1px solid var(--line); }
+.studio-block:first-of-type { border-top:0; padding-top:14px; }
+.studio-block.flip .studio-copy { order:2; }
+.studio-block.flip .studio-proof { order:1; }
+.studio-copy h3 { font-family:"Space Grotesk",sans-serif; font-size:clamp(1.7rem,3.2vw,2.55rem); line-height:1.04; margin-bottom:14px; }
+.studio-copy p { margin:0 0 16px; color:#454545; font-size:1.04rem; max-width:38rem; }
+.studio-proof { min-width:0; padding:clamp(18px,3vw,32px); background:#f3f1e9; border-radius:12px; }
+.studio-proof.dark-proof { background:var(--dark); color:var(--dark-paper); }
+.dark-proof .diagram-title, .dark-proof .axis-row strong { color:var(--dark-paper); }
+.dark-proof .axis-row { border-color:rgba(245,243,236,.18); }
+.dark-proof .axis-row span { color:rgba(245,243,236,.72); }
+.dark-proof .level span { color:rgba(245,243,236,.72); }
+.term-note { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:24px; }
+.term-note > div { padding-top:12px; border-top:2px solid var(--ac); }
+.term-note strong { display:block; font-family:"Space Grotesk",sans-serif; margin-bottom:5px; }
+.term-note span { color:var(--muted); font-size:.93rem; }
+.quiet-note { margin:24px 0 0; padding:16px 18px; border-left:3px solid var(--orange); color:#454545; background:rgba(235,130,55,.06); }
+.axis-list { display:grid; gap:12px; margin-top:20px; }
+.axis-row { display:grid; grid-template-columns:128px 1fr; gap:14px; padding-top:10px; border-top:1px solid var(--line); }
+.axis-row strong { font-family:"Roboto Mono",monospace; font-size:.82rem; letter-spacing:.04em; }
+.axis-row span { color:var(--muted); font-size:.94rem; }
+.level-strip { display:grid; grid-template-columns:repeat(4,1fr); margin-top:30px; border-top:1px solid var(--line-strong); border-bottom:1px solid var(--line-strong); }
+.level { padding:18px 16px 20px 0; }
+.level + .level { padding-left:16px; border-left:1px solid var(--line); }
+.level b { display:block; font-family:"Roboto Mono",monospace; color:var(--ac); font-size:.82rem; margin-bottom:6px; }
+.level strong { display:block; font-family:"Space Grotesk",sans-serif; margin-bottom:6px; }
+.level span { display:block; color:var(--muted); font-size:.91rem; }
+.risk-key { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:18px; }
+.risk-key span { padding-top:10px; border-top:2px solid var(--line-strong); color:var(--muted); font-size:.92rem; }
+.risk-key strong { color:var(--ink); }
+.colophon { font-family:"Roboto Mono",monospace; font-size:.78rem; line-height:1.8; max-width:96ch; }
+.colophon strong { color:var(--ink); }
+.source-kind { display:inline-block; margin-right:8px; font-family:"Roboto Mono",monospace; font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--soft); }
+@media (max-width: 980px) {
+  .studio-block { grid-template-columns:1fr; }
+  .studio-block.flip .studio-copy, .studio-block.flip .studio-proof { order:initial; }
+  .level-strip { grid-template-columns:1fr 1fr; }
+  .level:nth-child(3) { border-left:0; }
+}
+@media (max-width: 720px) {
+  .term-note, .risk-key, .level-strip { grid-template-columns:1fr; }
+  .level + .level { padding-left:0; border-left:0; border-top:1px solid var(--line); }
+  .axis-row { grid-template-columns:1fr; gap:4px; }
+  .studio-proof { padding:16px; }
+}
+</style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span id="progressFill"></span></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-head">
+    <div class="wrap topbar">
+      <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Agentic AI vs AI Agent</span></div>
+      <nav class="nav" aria-label="Primary navigation"><a href="#distinction">Terms</a><a href="#spectrum">Control</a><a href="#anatomy">Mechanism</a><a href="#choosing">Choosing</a><a href="#sources">Sources</a></nav>
+    </div>
+  </header>
+
+  <main id="content">
+    <div class="wrap">
+
+      <section class="hero" aria-label="Introduction">
+        <div class="eyebrow">AI Architecture</div>
+        <h1>
+          <span class="line"><span class="line-inner">A useful distinction.</span></span>
+          <span class="line"><span class="line-inner">Not a standard boundary.</span></span>
+        </h1>
+        <div class="hero-grid">
+          <div>
+            <p class="lead">“AI agent” names a system that can choose and execute actions toward a goal. “Agentic AI” usually describes a style of AI system in which the model has meaningful control over the next step. The phrases overlap, and vendors draw the line differently. Architecture—not vocabulary—tells you what you are actually deploying.</p>
+            <div class="hero-links"><a href="#distinction">↓ <span>See where the terms overlap</span></a><a href="#choosing">↓ <span>Choose the control pattern</span></a></div>
+            <div class="byline"><span class="avatar" aria-hidden="true">AR</span><span><strong>Ali Reza Rashidi</strong></span><span class="bsep" aria-hidden="true"></span><span>8 min read</span><span class="bsep" aria-hidden="true"></span><span>Updated 18 August 2026</span></div>
+          </div>
+          <aside class="hero-note" aria-label="Reading note">
+            <p><strong>The language problem:</strong> Anthropic groups workflows and agents under “agentic systems,” then separates them by who controls the path. OpenAI uses a narrower agent definition centered on LLM-controlled workflow execution.<a class="xref" href="#src-1">[1]</a><a class="xref" href="#src-2">[2]</a></p>
+            <nav class="toc" aria-label="Table of contents">
+              <div class="toc-title">In this piece</div>
+              <ol>
+                <li><a href="#distinction">Terms</a> — noun, adjective, overlap</li>
+                <li><a href="#spectrum">Control</a> — model, workflow, agent</li>
+                <li><a href="#anatomy">Mechanism</a> — one ticket, four architectures</li>
+                <li><a href="#choosing">Choosing</a> — autonomy and consequence</li>
+                <li><a href="#sources">Sources</a> — primary documentation and research</li>
+              </ol>
+            </nav>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section reveal" id="distinction" aria-labelledby="distinction-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">01</span><span class="kicker-sep">—</span>The terms</div>
+            <h2 id="distinction-h">One is a thing. One describes behavior.<a class="anchor" href="#distinction" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy"><strong>AI agent</strong> is normally a noun: a software system that uses a model to decide how to act toward a goal. <strong>Agentic</strong> is an adjective: it tells you how much the system controls its own process. “Agentic AI” is the loose umbrella built from that adjective.</p>
+        </div>
+        <div class="studio-block">
+          <div class="studio-copy">
+            <h3>The terms overlap by design</h3>
+            <p>An agent can be tightly bounded or highly autonomous. A fixed workflow can still contain model calls and tools. A multi-agent system can follow a rigid script. None of those labels, by itself, tells you who chooses the next step or what the software is allowed to change.</p>
+            <p>This is why “agent versus agentic AI” is not a species comparison. It is closer to comparing a component with a property that component may have to different degrees. Anthropic explicitly notes that customers define “agent” in several ways.<a class="xref" href="#src-1">[1]</a></p>
+            <div class="term-note">
+              <div style="--ac:var(--blue)"><strong>AI agent</strong><span>The implemented system: model, instructions or harness, tools, state, and execution environment.</span></div>
+              <div style="--ac:var(--orange)"><strong>Agentic</strong><span>The degree to which the model selects actions, revises its path, and continues without step-by-step direction.</span></div>
+            </div>
+          </div>
+          <div class="studio-proof">
+            <div class="diagram-title">A language map, not a taxonomy</div>
+            <div class="chart-scroll" id="termMap" data-chart="lines">
+              <svg viewBox="0 0 820 500" role="img" aria-label="Two overlapping fields show that an AI agent is a deployed system while agentic describes a degree of model-directed behavior; an AI agent may sit in their overlap.">
+                <ellipse cx="315" cy="245" rx="225" ry="160" fill="rgba(52,104,245,.12)" stroke="#3468f5" stroke-width="3"/>
+                <ellipse cx="505" cy="245" rx="225" ry="160" fill="rgba(235,130,55,.12)" stroke="#eb8237" stroke-width="3"/>
+                <path class="line-path" style="--d:.08s" d="M410 92V398" fill="none" stroke="rgba(23,23,23,.25)" stroke-width="2" stroke-dasharray="6 8"/>
+                <text x="225" y="175" text-anchor="middle" fill="#244fc7" font-family="Roboto Mono" font-size="15">NOUN</text>
+                <text x="225" y="212" text-anchor="middle" fill="#171717" font-family="Space Grotesk" font-size="28" font-weight="700">AI agent</text>
+                <text x="225" y="244" text-anchor="middle" fill="#666" font-family="DM Sans" font-size="16">a system that acts</text>
+                <text x="595" y="175" text-anchor="middle" fill="#9c4c14" font-family="Roboto Mono" font-size="15">PROPERTY</text>
+                <text x="595" y="212" text-anchor="middle" fill="#171717" font-family="Space Grotesk" font-size="28" font-weight="700">agentic</text>
+                <text x="595" y="244" text-anchor="middle" fill="#666" font-family="DM Sans" font-size="16">model-directed control</text>
+                <circle class="line-dot" style="--d:.32s" cx="410" cy="286" r="42" fill="#171717"/>
+                <text x="410" y="281" text-anchor="middle" fill="#fffdfa" font-family="Space Grotesk" font-size="16" font-weight="700">agent</text>
+                <text x="410" y="302" text-anchor="middle" fill="#d7d7d2" font-family="DM Sans" font-size="13">with agency</text>
+                <text x="410" y="458" text-anchor="middle" fill="#565656" font-family="DM Sans" font-size="14">The overlap is common. The boundary is contextual.</text>
+              </svg>
+            </div>
+            <p class="diagram-caption"><strong>How to read this:</strong> “agentic AI” does not require a separate species of system. It often describes an AI agent—or a workflow containing agents—with more model-directed control.</p>
+          </div>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>Question</th><th>What the label suggests</th><th>What you still need to inspect</th></tr></thead>
+          <tbody>
+            <tr><td><span class="tdot" style="background:#3468f5"></span><strong>Is it an agent?</strong></td><td>The model controls some workflow decisions and can use tools.</td><td>Which decisions, which tools, and which stopping conditions?</td></tr>
+            <tr><td><span class="tdot" style="background:#eb8237"></span><strong>How agentic is it?</strong></td><td>The path is less fully prescribed in code.</td><td>How far may it revise the plan or continue without approval?</td></tr>
+            <tr><td><span class="tdot" style="background:#23956f"></span><strong>Is it multi-agent?</strong></td><td>Several agents or roles communicate.</td><td>Multi-agent coordination does not guarantee useful autonomy or reliability.</td></tr>
+            <tr><td><span class="tdot" style="background:#db6478"></span><strong>Does it learn?</strong></td><td>Nothing, unless an update mechanism is actually implemented.</td><td>Runtime adaptation, stored memory, and model training are different mechanisms.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section reveal" id="spectrum" aria-labelledby="spectrum-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">02</span><span class="kicker-sep">—</span>Control</div>
+            <h2 id="spectrum-h">Ask who chooses the next step<a class="anchor" href="#spectrum" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">The useful boundary is architectural. In a workflow, code prescribes the route. In an agent, the model chooses at least part of the route from the current state. Anthropic uses exactly this distinction; OpenAI similarly excludes LLM applications that do not let the model control workflow execution.<a class="xref" href="#src-1">[1]</a><a class="xref" href="#src-2">[2]</a></p>
+        </div>
+        <div class="studio-block flip">
+          <div class="studio-copy">
+            <h3>Follow one support ticket</h3>
+            <p>A customer says: “I was charged twice. Fix it.” The same request can be handled by four very different systems. The label matters less than where the model is allowed to make a decision.</p>
+            <p>A single model call can classify the ticket. A workflow can follow a fixed refund policy. An agent can decide whether to inspect billing history, search policy, ask a question, or escalate. A more agentic deployment may continue across several uncertain steps—but it still needs explicit authority limits.</p>
+            <div class="quiet-note"><strong>Do not confuse flexibility with learning.</strong> Remembering a prior tool result or changing the current plan is runtime adaptation. It is not model training, and it does not imply that the system improves itself in production.</div>
+          </div>
+          <div class="studio-proof dark-proof">
+            <div class="diagram-title">Four control patterns</div>
+            <div class="level-strip" aria-label="Four increasingly model-directed ways to handle the same support ticket">
+              <div class="level" style="--ac:#989898"><b>01</b><strong>Model call</strong><span>Classify the request. Human or code chooses what happens next.</span></div>
+              <div class="level" style="--ac:#14a9c5"><b>02</b><strong>Workflow</strong><span>Code fixes the route: classify → check → draft → approve.</span></div>
+              <div class="level" style="--ac:#7fa2ff"><b>03</b><strong>Bounded agent</strong><span>The model chooses among approved tools and stopping conditions.</span></div>
+              <div class="level" style="--ac:#eb8237"><b>04</b><strong>More agentic</strong><span>The model revises a longer plan as evidence and exceptions appear.</span></div>
+            </div>
+            <p class="diagram-caption" style="color:rgba(245,243,236,.68)"><strong style="color:var(--dark-paper)">How to read this:</strong> the progression is qualitative, not a universal autonomy score. Systems can mix these patterns at different points in one product.</p>
+          </div>
+        </div>
+        <div class="axis-list" aria-label="Four questions that reveal where control lives">
+          <div class="axis-row"><strong>Route</strong><span>Does code prescribe the next step, or can the model choose it?</span></div>
+          <div class="axis-row"><strong>Tools</strong><span>Is the tool fixed, selected from an allowlist, or discovered dynamically?</span></div>
+          <div class="axis-row"><strong>Stopping</strong><span>Does a rule end the run, or does the model judge whether the goal is complete?</span></div>
+          <div class="axis-row"><strong>Authority</strong><span>Can it only recommend, or can it cause an external change?</span></div>
+</div>
+      </section>
+      <section class="section reveal" id="anatomy" aria-labelledby="anatomy-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">03</span><span class="kicker-sep">—</span>Mechanism</div>
+            <h2 id="anatomy-h">A loop is a pattern, not a definition<a class="anchor" href="#anatomy" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Plan–act–observe is a useful way to inspect an agent. It is not a law of nature, and it does not tell you whether the deployment is safe.</p>
+        </div>
+
+        <div class="studio-block" id="loop">
+          <div class="studio-copy">
+            <h3>Watch decisions, not labels</h3>
+            <p>Return to the duplicate-charge ticket. The system reads the request, chooses whether to inspect billing or policy first, calls an approved tool, examines the result, and either stops, asks for evidence, or takes another step.</p>
+            <p>That loop is common, but implementations differ. Some plans are explicit; some are implicit in model output. Some systems keep memory; others carry only the current run. Agent research offers several component frameworks, but none is a universal specification.<a class="xref" href="#src-3">[3]</a><a class="xref" href="#src-4">[4]</a></p>
+            <div class="quiet-note"><strong>The test:</strong> identify every model-made decision, every external effect, and every condition that can end the run.</div>
+          </div>
+          <div class="studio-proof">
+            <div class="diagram-title">One possible control loop</div>
+            <div class="chart-scroll" id="loopDiagram" data-chart="lines">
+              <svg viewBox="0 0 680 360" role="img" aria-label="A support ticket moves through context, model decision, an approved tool, and verified evidence before stopping or looping.">
+                <defs><marker id="loopArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3468f5"/></marker></defs>
+                <rect x="30" y="90" width="130" height="96" rx="16" fill="#e9efff"/><text x="50" y="122" fill="#244fc7" font-family="Roboto Mono" font-size="13">CONTEXT</text><text x="50" y="151" fill="#171717" font-family="DM Sans" font-size="18" font-weight="700">Ticket + policy</text>
+                <rect x="205" y="90" width="130" height="96" rx="16" fill="#f0eaff"/><text x="225" y="122" fill="#6340c7" font-family="Roboto Mono" font-size="13">DECIDE</text><text x="225" y="151" fill="#171717" font-family="DM Sans" font-size="18" font-weight="700">Next step</text>
+                <rect x="380" y="90" width="130" height="96" rx="16" fill="#e6f4ef"/><text x="400" y="122" fill="#166f51" font-family="Roboto Mono" font-size="13">ACT</text><text x="400" y="151" fill="#171717" font-family="DM Sans" font-size="18" font-weight="700">Approved tool</text>
+                <rect x="555" y="90" width="96" height="96" rx="16" fill="#fff0e5"/><text x="575" y="122" fill="#9c4c14" font-family="Roboto Mono" font-size="13">CHECK</text><text x="575" y="151" fill="#171717" font-family="DM Sans" font-size="18" font-weight="700">Evidence</text>
+                <path class="line-path" d="M160 138 H205 M335 138 H380 M510 138 H555" fill="none" stroke="#3468f5" stroke-width="4" marker-end="url(#loopArrow)"/>
+                <path class="line-path" d="M603 186 C603 285 270 292 270 188" fill="none" stroke="#3468f5" stroke-width="4" stroke-dasharray="8 8" marker-end="url(#loopArrow)"/>
+                <circle class="line-dot" cx="603" cy="235" r="7" fill="#eb8237"/><text x="465" y="320" fill="#666" font-family="DM Sans" font-size="14">If evidence is insufficient, revise the next step.</text>
+              </svg>
+            </div>
+            <p class="diagram-caption"><strong>How to read this:</strong> the model chooses inside a harness. The harness still owns tool exposure, permissions, budgets, validation, and hard stops.</p>
+          </div>
+        </div>
+
+        <div class="studio-block flip" id="system">
+          <div class="studio-copy">
+            <h3>Single-agent and multi-agent are separate choices</h3>
+            <p>An AI agent can be a single model-driven loop. An agentic system can also be a single agent. Adding a planner, reviewer, or specialist agents changes the topology; it does not create the definition.</p>
+            <p>A more useful decomposition is operational: <strong>model</strong>, <strong>harness</strong>, <strong>tools</strong>, and <strong>environment</strong>. The model proposes. The harness supplies context and enforces limits. Tools create capabilities. The environment determines what those capabilities can affect.<a class="xref" href="#src-3">[3]</a></p>
+          </div>
+          <div class="studio-proof dark-proof">
+            <div class="diagram-title">Architecture questions</div>
+            <div class="axis-list">
+              <div class="axis-row"><strong>Model</strong><span>What decisions are delegated?</span></div>
+              <div class="axis-row"><strong>Harness</strong><span>What context, checks, budgets, and stops are enforced?</span></div>
+              <div class="axis-row"><strong>Tools</strong><span>What can be read, written, sent, purchased, or deleted?</span></div>
+              <div class="axis-row"><strong>Environment</strong><span>Which users and systems bear the consequence?</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="studio-block" id="governance">
+          <div class="studio-copy">
+            <h3>Risk follows authority and consequence</h3>
+            <p>“Bounded” does not automatically mean safe. A narrowly scoped refund agent can still do damage if its one tool can move money without a limit. The practical risk rises with tool functionality, permissions, autonomy, and the consequence of a wrong action.<a class="xref" href="#src-2">[2]</a><a class="xref" href="#src-5">[5]</a></p>
+            <p>Use least-privilege tools, deterministic checks around irreversible actions, explicit budgets and stop conditions, complete action logs, and human approval where errors are costly or hard to reverse. These controls belong in the execution path—not in a policy document beside it.</p>
+            <div class="quiet-note"><strong>Author synthesis:</strong> the matrix is a design aid, not a standard or measured risk score.</div>
+          </div>
+          <div class="studio-proof">
+            <div class="diagram-title">Decision freedom × consequence</div>
+            <div class="chart-scroll">
+              <svg id="riskMatrix" viewBox="0 0 680 470" role="img" aria-label="A two by two matrix mapping low and high model decision freedom against low and high action consequence.">
+                <text x="360" y="450" text-anchor="middle" fill="#555" font-family="DM Sans" font-size="15">Model decision freedom →</text>
+                <text x="18" y="235" text-anchor="middle" fill="#555" font-family="DM Sans" font-size="15" transform="rotate(-90 18 235)">Action consequence →</text>
+                <rect x="65" y="230" width="275" height="170" rx="12" fill="#edf5f2"/><rect x="350" y="230" width="275" height="170" rx="12" fill="#eaf0ff"/>
+                <rect x="65" y="50" width="275" height="170" rx="12" fill="#fff2e8"/><rect x="350" y="50" width="275" height="170" rx="12" fill="#f9e9ed"/>
+                <text x="90" y="268" fill="#166f51" font-family="Roboto Mono" font-size="13">LOW / LOW</text><text x="90" y="303" fill="#171717" font-family="DM Sans" font-size="21" font-weight="700">Model call or workflow</text><text x="90" y="336" fill="#555" font-family="DM Sans" font-size="15">Validate outputs; keep the route explicit.</text>
+                <text x="375" y="268" fill="#244fc7" font-family="Roboto Mono" font-size="13">HIGH / LOW</text><text x="375" y="303" fill="#171717" font-family="DM Sans" font-size="21" font-weight="700">Bounded agent</text><text x="375" y="336" fill="#555" font-family="DM Sans" font-size="15">Allow exploration; cap time, tools, and cost.</text>
+                <text x="90" y="88" fill="#9c4c14" font-family="Roboto Mono" font-size="13">LOW / HIGH</text><text x="90" y="123" fill="#171717" font-family="DM Sans" font-size="21" font-weight="700">Fixed path + approval</text><text x="90" y="156" fill="#555" font-family="DM Sans" font-size="15">Prefer deterministic gates before action.</text>
+                <text x="375" y="88" fill="#963449" font-family="Roboto Mono" font-size="13">HIGH / HIGH</text><text x="375" y="123" fill="#171717" font-family="DM Sans" font-size="21" font-weight="700">Isolate or redesign</text><text x="375" y="156" fill="#555" font-family="DM Sans" font-size="15">Require approval; reduce authority first.</text>
+              </svg>
+            </div>
+            <div class="risk-key"><span>Low consequence: easy to detect and reverse.</span><span>High consequence: money, access, safety, or external commitments.</span></div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+    <section class="section section-dark reveal" id="choosing" aria-labelledby="choosing-h">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span class="kicker-sep">—</span>Choosing</div>
+            <h2 id="choosing-h">Choose the least autonomy that works<a class="anchor" href="#choosing" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">Autonomy buys flexibility. It also enlarges the state space you must test, observe, and govern. Start with the smallest architecture that can handle the real uncertainty.</p>
+        </div>
+        <div class="quiz" role="group" aria-labelledby="quizTitle">
+          <div class="quiz-head">
+            <h3 class="quiz-title" id="quizTitle">What does this task actually need?</h3>
+            <div class="quiz-progress" aria-hidden="true">
+              <span class="quiz-step" id="quizStep">01 / 03</span>
+              <span class="quiz-track"><span class="quiz-fill" id="quizFill"></span></span>
+            </div>
+          </div>
+          <p class="quiz-fallback">Use the four-step guide below: start with a model call, move to a workflow when the route is known, and add agentic control only where the next step cannot be prescribed.</p>
+          <div class="quiz-app">
+            <div class="quiz-body" id="quizBody"></div>
+            <div class="quiz-result" id="quizResult" aria-live="polite"></div>
+          </div>
+        </div>
+        <div class="decision-flow">
+          <div class="decision-step" style="--ac:#989898"><div class="num">1</div><div><strong>Model call</strong><p>Use it when you need a classification, extraction, draft, or answer—and code or a person will decide what happens next.</p></div></div>
+          <div class="decision-step" style="--ac:#14a9c5"><div class="num">2</div><div><strong>Workflow</strong><p>Use it when the route is known. Let models fill bounded steps while code owns sequencing, branching, and validation.</p></div></div>
+          <div class="decision-step" style="--ac:#3468f5"><div class="num">3</div><div><strong>Bounded agent</strong><p>Use it when the model must choose the next tool or step from a controlled set. Define permissions, limits, and escalation first.</p></div></div>
+          <div class="decision-step" style="--ac:#eb8237"><div class="num">4</div><div><strong>More agentic system</strong><p>Use it only when the path genuinely cannot be written in advance—and when you can afford the evals, observability, and human controls.</p></div></div>
+        </div>
+        <p class="combo-line"><strong>Design rule:</strong> specify decisions, tools, permissions, stopping conditions, and handoffs. The product label can come later.</p>
+
+      </div>
+    </section>
+    <div class="wrap">
+      <section class="section reveal" id="sources" aria-labelledby="sources-h">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span class="kicker-sep">—</span>Grounding</div>
+            <h2 id="sources-h">Sources<a class="anchor" href="#sources" aria-label="Link to this section">#</a></h2>
+          </div>
+          <p class="body-copy">The terminology is still unsettled. These sources provide working definitions, architecture patterns, and security guidance; the distinctions and matrices above are editorial synthesis.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><span class="source-kind">Official engineering</span><strong>Anthropic — Building effective agents.</strong> Distinguishes predefined workflows from agents that dynamically direct their process and tool use, while treating both as agentic systems. <a class="xlink" href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">Read the article</a></li>
+          <li id="src-2"><span class="source-kind">Official guide</span><strong>OpenAI — A practical guide to building agents.</strong> Defines agents through independent task execution, model-directed workflow control, and tool use; also covers layered guardrails and human intervention. <a class="xlink" href="https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/" target="_blank" rel="noopener noreferrer">Read the guide</a></li>
+          <li id="src-3"><span class="source-kind">Research practice</span><strong>Anthropic — Trustworthy agents in practice.</strong> Frames agent behavior as a model operating through a harness, tools, and an environment, and examines permissions, oversight, and prompt-injection risk. <a class="xlink" href="https://www.anthropic.com/research/trustworthy-agents" target="_blank" rel="noopener noreferrer">Read the article</a></li>
+          <li id="src-4"><span class="source-kind">Research survey</span><strong>Wang et al. — A Survey on Large Language Model based Autonomous Agents.</strong> Reviews autonomous-agent history and proposes a framework spanning profile, memory, planning, and action. <a class="xlink" href="https://arxiv.org/abs/2308.11432" target="_blank" rel="noopener noreferrer">Read the paper</a></li>
+          <li id="src-5"><span class="source-kind">Security guidance</span><strong>OWASP — LLM06:2025 Excessive Agency.</strong> Connects risk to excessive functionality, permissions, and autonomy, including harmful actions induced through prompt injection. <a class="xlink" href="https://genai.owasp.org/llmrisk/llm062025-excessive-agency/" target="_blank" rel="noopener noreferrer">Read the guidance</a></li>
+        </ol>
+      </section>
+    </div>
+  </main>
+
+  <button class="to-top" id="toTop" type="button" aria-label="Back to top">↑</button>
+  <script>
+(function () {
+  'use strict';
+  var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.documentElement.classList.add('reveal-motion-ready');
+
+  var revealEls = document.querySelectorAll('.reveal');
+  if (RM) {
+    revealEls.forEach(function (el) { el.classList.add('visible'); });
+  } else {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); }
+      });
+    }, { threshold: 0.01, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function (el) { revealObserver.observe(el); });
+  }
+
+  function animateCount(el) {
+    var target = parseFloat(el.getAttribute('data-count'));
+    var dec = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    var suffix = el.getAttribute('data-suffix') || '';
+    var prefix = el.getAttribute('data-prefix') || '';
+    var delay = parseInt(el.getAttribute('data-delay') || '0', 10);
+    var final = prefix + target.toFixed(dec) + suffix;
+    if (RM) { el.textContent = final; return; }
+    var dur = 900;
+    window.setTimeout(function () {
+      var t0 = performance.now();
+      function tick(t) {
+        var p = Math.min((t - t0) / dur, 1);
+        var e = 1 - Math.pow(1 - p, 3);
+        el.textContent = prefix + (target * e).toFixed(dec) + suffix;
+        if (p < 1) { requestAnimationFrame(tick); } else { el.textContent = final; }
+      }
+      requestAnimationFrame(tick);
+    }, delay);
+  }
+
+  function triggerOnce(el, cls, onTrigger) {
+    if (!el) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          el.classList.add(cls);
+          if (onTrigger) onTrigger();
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    io.observe(el);
+  }
+
+  document.documentElement.classList.add('diagram-motion-ready');
+  document.querySelectorAll('[data-chart]').forEach(function (chart) {
+    var kind = chart.getAttribute('data-chart');
+    var cls = { bars: 'bars-in', scatter: 'scatter-in', lines: 'lines-in', radar: 'radar-in', donut: 'donut-in' }[kind] || (kind + '-in');
+    triggerOnce(chart, cls, function () {
+      chart.querySelectorAll('[data-count]').forEach(animateCount);
+      if (kind === 'donut') {
+        chart.querySelectorAll('.donut-seg').forEach(function (seg) {
+          seg.style.strokeDashoffset = seg.getAttribute('data-off');
+        });
+      }
+    });
+  });
+  document.querySelectorAll('[data-stats]').forEach(function (strip) {
+    triggerOnce(strip, 'stats-in', function () {
+      strip.querySelectorAll('[data-count]').forEach(animateCount);
+    });
+  });
+
+  document.querySelectorAll('.line-path').forEach(function (p) {
+    try { var L = p.getTotalLength(); p.style.setProperty('--len', L + 40); } catch (e) {}
+  });
+
+  var head = document.querySelector('.site-head');
+  var progressFill = document.getElementById('progressFill');
+  var toTop = document.getElementById('toTop');
+  function onScroll() {
+    var y = window.scrollY || window.pageYOffset;
+    head.classList.toggle('scrolled', y > 10);
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    progressFill.style.transform = 'scaleX(' + (h > 0 ? y / h : 0) + ')';
+    toTop.classList.toggle('show', y > 600);
+  }
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (!ticking) { requestAnimationFrame(function () { onScroll(); ticking = false; }); ticking = true; }
+  }, { passive: true });
+  onScroll();
+  toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' }); });
+
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav a'));
+  function linkFor(id) { return navLinks.find(function (a) { return a.getAttribute('href') === '#' + id; }) || null; }
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        navLinks.forEach(function (a) { a.classList.remove('active'); });
+        var link = linkFor(entry.target.id);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+  document.querySelectorAll('main section[id]').forEach(function (s) { spy.observe(s); });
+  var FW_COLORS = {"anatomy": {"loop": "#3468f5", "worker": "#23956f", "system": "#eb8237", "governance": "#db6478"}};
+  Object.keys(FW_COLORS).forEach(function (navId) {
+    var link = linkFor(navId);
+    if (!link) return;
+    var fwSpy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting && FW_COLORS[navId][entry.target.id]) {
+          link.style.setProperty('--spy', FW_COLORS[navId][entry.target.id]);
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+    document.querySelectorAll('.framework').forEach(function (f) { fwSpy.observe(f); });
+  });
+
+  var QUIZ = {"title":"What does this task actually need?","noscript":"JavaScript is unavailable. Use the four-step decision guide below.","resultKicker":"Best starting point","order":["model","workflow","agent","agentic"],"fw":{"model":{"name":"A model call","color":"#989898","anchor":"#spectrum","linkText":"See the control patterns","why":"The output is information; a person or deterministic code still owns the next step.","pairing":"Keep it simple. Validate the output and avoid adding tools or loops without a concrete need."},"workflow":{"name":"A workflow","color":"#14a9c5","anchor":"#spectrum","linkText":"See the workflow pattern","why":"The route is known, even if a model handles classification, drafting, or extraction inside it.","pairing":"Let code own sequence, branches, retries, and validation. This is often the most reliable production shape."},"agent":{"name":"A bounded agent","color":"#3468f5","anchor":"#anatomy","linkText":"Inspect the control loop","why":"The model must choose a next step or tool, but the available actions and limits can be defined.","pairing":"Specify permissions, budgets, stop conditions, escalation, and action-level evals before deployment."},"agentic":{"name":"A more agentic system","color":"#eb8237","anchor":"#governance","linkText":"Inspect the risk matrix","why":"The path is genuinely uncertain and may need repeated planning as evidence changes.","pairing":"Reduce authority where possible. Budget for traces, evals, isolation, approvals, and incident response."}},"questions":[{"q":"How predictable is the route?","answers":[{"t":"One answer or transformation is enough","f":"model"},{"t":"The steps and branches are known","f":"workflow"},{"t":"The model must choose among approved next steps","f":"agent"},{"t":"The route cannot be mapped in advance","f":"agentic"}]},{"q":"What may the system do?","answers":[{"t":"Return text or structured data only","f":"model"},{"t":"Run a fixed sequence of bounded operations","f":"workflow"},{"t":"Select and call tools from an allowlist","f":"agent"},{"t":"Revise a longer plan across tools and contexts","f":"agentic"}]},{"q":"What happens when it is wrong?","answers":[{"t":"A person reviews the suggestion","f":"model"},{"t":"Code can detect, retry, or reject the step","f":"workflow"},{"t":"Effects are reversible and tightly limited","f":"agent"},{"t":"Consequences vary; approvals and isolation are required","f":"agentic"}]}]};
+  var quizBody = document.getElementById('quizBody');
+  var quizResult = document.getElementById('quizResult');
+  var quizStepEl = document.getElementById('quizStep');
+  var quizFillEl = document.getElementById('quizFill');
+  var qStep = 0;
+  var qPicks = [];
+  function pad2(n) { return String(n).padStart(2, '0'); }
+  function renderQuestion(focusHeading) {
+    var q = QUIZ.questions[qStep];
+    quizStepEl.textContent = pad2(qStep + 1) + ' / ' + pad2(QUIZ.questions.length);
+    quizFillEl.style.transform = 'scaleX(' + (qStep / QUIZ.questions.length) + ')';
+    var html = '<h4 class="quiz-q" tabindex="-1">' + q.q + '</h4><div class="quiz-answers">';
+    q.answers.forEach(function (a) {
+      var fw = QUIZ.fw[a.f];
+      html += '<button type="button" class="quiz-a" data-fw="' + a.f + '" style="--ac:' + fw.color + '">' +
+              '<span class="quiz-dot" aria-hidden="true"></span><span>' + a.t + '</span></button>';
+    });
+    html += '</div>';
+    if (qStep > 0) { html += '<button type="button" class="quiz-back" id="quizBack">← Back</button>'; }
+    quizBody.innerHTML = html;
+    quizResult.innerHTML = '';
+    quizBody.querySelectorAll('.quiz-a').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        qPicks[qStep] = btn.getAttribute('data-fw');
+        qStep++;
+        if (qStep < QUIZ.questions.length) { renderQuestion(true); } else { showResult(); }
+      });
+    });
+    var back = document.getElementById('quizBack');
+    if (back) { back.addEventListener('click', function () { qStep--; renderQuestion(true); }); }
+    if (focusHeading) { var qh = quizBody.querySelector('.quiz-q'); if (qh) qh.focus({ preventScroll: true }); }
+  }
+  function quizWinner() {
+    var scores = {};
+    QUIZ.order.forEach(function (f) { scores[f] = 0; });
+    qPicks.forEach(function (f) { scores[f]++; });
+    return QUIZ.order.reduce(function (best, f) { return scores[f] > scores[best] ? f : best; }, QUIZ.order[0]);
+  }
+  function showResult() {
+    quizStepEl.textContent = pad2(QUIZ.questions.length) + ' / ' + pad2(QUIZ.questions.length);
+    quizFillEl.style.transform = 'scaleX(1)';
+    var fw = QUIZ.fw[quizWinner()];
+    quizBody.innerHTML = '';
+    quizResult.innerHTML =
+      '<div class="quiz-kicker">' + QUIZ.resultKicker + '</div>' +
+      '<div class="quiz-result-name" id="quizResultName" tabindex="-1">' +
+        '<span class="quiz-result-dot" style="background:' + fw.color + '" aria-hidden="true"></span>' +
+        '<h4>' + fw.name + '</h4>' +
+      '</div>' +
+      '<p class="quiz-why">' + fw.why + '</p>' +
+      '<p class="quiz-pair">' + fw.pairing + '</p>' +
+      '<p class="quiz-actions">' +
+        (fw.anchor ? '<a class="quiz-link" href="' + fw.anchor + '">' + fw.linkText + ' ↓</a>' : '') +
+        '<button class="quiz-retake" type="button" id="quizRetake">Retake</button>' +
+      '</p>';
+    document.getElementById('quizRetake').addEventListener('click', function () { qStep = 0; qPicks = []; renderQuestion(true); });
+    var name = document.getElementById('quizResultName');
+    if (name) name.focus({ preventScroll: true });
+  }
+  if (quizBody) {
+    renderQuestion(false);
+    document.documentElement.classList.add('quiz-ready');
+  }
+})();
+(function () {
+  var nav = document.querySelector('.nav');
+  function navEdge() {
+    if (!nav) return;
+    nav.classList.toggle('has-more', nav.scrollWidth - nav.clientWidth - nav.scrollLeft > 6);
+  }
+  if (nav) {
+    navEdge();
+    nav.addEventListener('scroll', navEdge, { passive: true });
+    window.addEventListener('resize', navEdge);
+  }
+  var touch = window.matchMedia && (matchMedia('(hover: none)').matches || matchMedia('(max-width: 720px)').matches);
+  if (!touch) return;
+  document.querySelectorAll('.chart-scroll, .tbl').forEach(function (el) {
+    if (el.scrollWidth - el.clientWidth < 24) return;
+    var hint = document.createElement('div');
+    hint.className = 'swipe-hint';
+    hint.setAttribute('aria-hidden', 'true');
+    hint.innerHTML = '&#10231; swipe';
+    el.parentNode.insertBefore(hint, el);
+    var off = function () { hint.classList.add('swipe-hint-off'); el.removeEventListener('scroll', off); };
+    el.addEventListener('scroll', off, { passive: true });
+  });
+})();
+</script>
+</body>
+</html>

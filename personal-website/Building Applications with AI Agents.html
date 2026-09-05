@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A practical guide to choosing, designing, and operating AI agents without adding more autonomy than the task requires.">
+  <title>Building AI Agents — Choose the Least Autonomy That Works</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='6' fill='%23eb8237'/%3E%3Ccircle cx='23' cy='9' r='6' fill='%2323956f'/%3E%3Ccircle cx='9' cy='23' r='6' fill='%237650e6'/%3E%3Ccircle cx='23' cy='23' r='6' fill='%233468f5'/%3E%3C/svg%3E">
+  <meta property="og:title" content="Building Applications with AI Agents — Choose the Least Autonomous System That Works">
+  <meta property="og:description" content="How to choose an architecture, assemble an agent, control its execution, and define production boundaries.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary">
+  <script>document.documentElement.classList.add('js');</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Building Applications with AI Agents: Choose the Least Autonomous System That Works",
+    "description": "A practical guide to choosing, designing, and operating AI agents without adding more autonomy than the task requires.",
+    "datePublished": "2026-08-23",
+    "dateModified": "2026-08-23",
+    "author": {
+      "@type": "Person",
+      "name": "Ali Reza Rashidi"
+    }
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Roboto+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap">
+  <style>
+    :root { --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898; --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22); --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6; --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a; --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16); --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { color-scheme: light; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,23,23,.25) transparent; overflow-x: clip; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; border: 2px solid var(--bg); }
+    ::-webkit-scrollbar-track { background: transparent; }
+    body { margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif; line-height: 1.7; background: linear-gradient(180deg, #fffdfa, #fcfbf8); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+    ::selection { background: var(--ink); color: var(--paper); }
+    a { color: inherit; text-decoration: none; }
+    svg { display: block; width: 100%; height: auto; }
+    p { text-wrap: pretty; }
+    h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
+    [id] { scroll-margin-top: 96px; }
+    :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 2px; }
+    .wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; position: relative; z-index: 1; }
+    .skip-link { position: fixed; left: 16px; top: 10px; z-index: 400; padding: 9px 14px; background: var(--ink); color: var(--paper); font-weight: 700; transform: translateY(-160%); }
+    .skip-link:focus { transform: none; }
+    .progress { position: fixed; inset: 0 0 auto; height: 2px; z-index: 300; pointer-events: none; }
+    .progress span { display: block; width: 100%; height: 100%; background: var(--ink); transform: scaleX(0); transform-origin: left center; }
+    .grain { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .08; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E"); }
+    .site-head { position: sticky; top: 0; z-index: 200; transition: background .2s ease, box-shadow .2s ease; }
+    .site-head.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 17px 0 13px; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: -.02em; white-space: nowrap; }
+    .brand-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
+    .nav { display: flex; gap: 20px; color: var(--muted); font-size: .94rem; }
+    .nav a { position: relative; padding-bottom: 2px; white-space: nowrap; }
+    .nav a::before { content: ""; position: absolute; left: -12px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--spy, var(--ink)); opacity: 0; }
+    .nav a::after { content: ""; position: absolute; left: 0; bottom: -2px; width: 100%; height: 1px; background: var(--ink); transform: scaleX(0); transform-origin: left center; transition: transform .2s ease; }
+    .nav a:hover, .nav a.active { color: var(--ink); }
+    .nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
+    .nav a.active::before { opacity: 1; }
+    .hero { padding: 48px 0 66px; border-bottom: 1px solid var(--line); }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; font-family: "Roboto Mono", monospace; font-size: .76rem; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); }
+    .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--line-strong); }
+    .hero h1 { max-width: 1050px; margin-top: 17px; font-family: "Space Grotesk", sans-serif; font-size: clamp(3rem, 8.4vw, 6.8rem); line-height: .94; letter-spacing: -.055em; }
+    .hero h1 em { font-family: "Instrument Serif", serif; font-weight: 400; color: #535353; }
+    .line { display: block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
+    .line-inner { display: inline-block; }
+    .js .line-inner { transform: translateY(115%); animation: lineUp .55s ease-out forwards; }
+    .js .line:nth-child(2) .line-inner { animation-delay: .09s; }
+    .js .line:nth-child(3) .line-inner { animation-delay: .18s; }
+    @keyframes lineUp { to { transform: translateY(0); }
+    }
+    .hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 48px; margin-top: 32px; align-items: start; }
+    .lead { margin: 0; max-width: 700px; color: #3f3f3f; font-size: clamp(1.08rem, 1.8vw, 1.28rem); }
+    .lead::first-letter { float: left; margin: .12em .1em 0 0; font-family: "Instrument Serif", serif; font-size: 3.35em; line-height: .75; color: var(--ink); }
+    .hero-links { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 22px; font-weight: 700; }
+    .hero-links span { color: var(--muted); font-weight: 500; }
+    .byline { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 28px; color: var(--muted); font-family: "Roboto Mono", monospace; font-size: .78rem; }
+    .avatar { display: grid; width: 34px; height: 34px; place-items: center; border-radius: 50%; background: var(--ink); color: var(--paper); font-weight: 500; }
+    .byline strong { color: var(--ink); }
+    .meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--soft); }
+    .hero-note { margin: 0 0 18px; color: var(--muted); font-family: "Instrument Serif", serif; font-style: italic; font-size: 1.23rem; line-height: 1.45; }
+    .toc { padding: 22px 24px; border-radius: 12px; background: #f3f1e9; }
+    .toc-label { margin: 0 0 12px; font-family: "Roboto Mono", monospace; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--soft); }
+    .toc ol { margin: 0; padding-left: 25px; }
+    .toc li { padding: 4px 0; color: #4d4d4d; }
+    .toc a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    .section { padding: 88px 0; border-bottom: 1px solid var(--line); }
+    .section-head { display: grid; grid-template-columns: .9fr 1.1fr; gap: 34px; align-items: start; margin-bottom: 38px; }
+    .kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; font-family: "Roboto Mono", monospace; font-size: .78rem; letter-spacing: .13em; text-transform: uppercase; color: var(--soft); }
+    .kicker-mark { width: 8px; height: 8px; background: var(--ink); }
+    .section h2 { font-family: "Space Grotesk", sans-serif; font-size: clamp(2rem, 4.4vw, 4rem); line-height: .98; letter-spacing: -.045em; }
+    .body-copy { max-width: 43rem; margin: 0; color: #4d4d4d; font-size: 1.06rem; }
+    .anchor { margin-left: 11px; color: var(--soft); font-family: "DM Sans", sans-serif; font-size: .48em; font-weight: 500; letter-spacing: 0; opacity: 0; transition: opacity .2s ease; vertical-align: middle; }
+    h2:hover .anchor, h3:hover .anchor, .anchor:focus-visible { opacity: 1; }
+    .framework { display: grid; grid-template-columns: 260px 1fr; gap: 38px; padding: 46px 0; border-top: 1px solid var(--line); }
+    .framework-aside { position: sticky; top: 110px; align-self: start; }
+    .framework-name { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .mark { width: 14px; height: 14px; flex: 0 0 14px; border-radius: 50%; background: var(--ac); }
+    .framework h3 { font-family: "Space Grotesk", sans-serif; font-size: clamp(1.8rem, 3.2vw, 2.5rem); line-height: 1; letter-spacing: -.045em; }
+    .framework-role { margin-bottom: 17px; color: var(--muted); font-family: "Roboto Mono", monospace; font-size: .79rem; }
+    .framework-summary { max-width: 225px; color: #454545; font-size: .98rem; }
+    .framework-content > p { max-width: 45rem; margin: 0 0 18px; color: #454545; font-size: 1.05rem; }
+    .mini-compare { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin: 30px 0 0; }
+    .mini-item { padding-top: 12px; border-top: 1px solid var(--line-strong); }
+    .mini-dot { display: block; width: 10px; height: 10px; margin-bottom: 10px; border-radius: 50%; background: var(--ac); }
+    .mini-item strong { display: block; margin-bottom: 5px; font-family: "Space Grotesk", sans-serif; }
+    .mini-item span { color: var(--muted); font-size: .92rem; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin: 26px 0; }
+    .text-block { padding-top: 13px; border-top: 2px solid var(--ac, var(--ink)); }
+    .text-block h4 { margin-bottom: 10px; font-family: "Space Grotesk", sans-serif; font-size: 1.05rem; }
+    .text-block p, .text-block li { color: #4d4d4d; }
+    .text-block ul { margin: 0; padding-left: 19px; }
+    .text-block li { margin-bottom: 9px; }
+    .callout-line { max-width: 46rem; margin: 26px 0; padding-left: 17px; border-left: 2px solid var(--ac, var(--ink)); font-weight: 700; letter-spacing: -.02em; }
+    .callout-line small { display: block; margin-top: 5px; color: var(--muted); font-weight: 500; letter-spacing: 0; }
+    .formula { max-width: 48rem; margin: 22px 0; padding: 18px 21px; overflow-x: auto; border-radius: 12px; background: #f3f1e9; color: #33312b; font-family: "Roboto Mono", monospace; font-size: .94rem; }
+    .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; }
+    .fstep { padding-top: 12px; border-top: 2px solid var(--ac); }
+    .fnum { color: var(--ac); font-family: "Roboto Mono", monospace; font-size: .8rem; }
+    .fstep strong { display: block; margin: 6px 0; font-family: "Space Grotesk", sans-serif; }
+    .fstep span { color: var(--muted); font-size: .92rem; }
+    .diagram-block { margin: 42px 0 18px; padding-top: 24px; border-top: 1px solid var(--line); }
+    .diagram-title { margin-bottom: 15px; font-family: "Space Grotesk", sans-serif; font-size: 1.18rem; letter-spacing: -.025em; }
+    .chart-scroll { overflow-x: auto; overscroll-behavior-inline: contain; }
+    .diagram-caption { max-width: 48rem; margin-top: 16px; color: var(--muted); font-size: .98rem; }
+    .diagram-caption strong { color: var(--ink); }
+    .axis-label, .svg-tag, .svg-small, .arrow-label { font-family: "Roboto Mono", monospace; }
+    .svg-name { font-family: "Space Grotesk", sans-serif; }
+    .motion-node, .motion-path { opacity: 1; transform: none; stroke-dashoffset: 0; }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .motion-node { opacity: 0; transform: translateY(8px); }
+    .js.diagram-motion-ready .observe-diagram.is-visible .motion-node { opacity: 1; transform: none; transition: opacity .4s ease, transform .4s ease; transition-delay: var(--d, 0s); }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .motion-path { stroke-dasharray: 700; stroke-dashoffset: 700; }
+    .js.diagram-motion-ready .observe-diagram.is-visible .motion-path { stroke-dasharray: 700; stroke-dashoffset: 0; transition: stroke-dashoffset .9s ease; transition-delay: var(--d, 0s); }
+    .section-dark { position: relative; color: var(--dark-paper); background: var(--dark); border-bottom: 0; }
+    .section-dark .kicker, .section-dark .body-copy, .section-dark .framework-role, .section-dark .framework-summary, .section-dark .framework-content > p, .section-dark .text-block li, .section-dark .text-block p, .section-dark .fstep span { color: rgba(245,243,236,.7); }
+    .section-dark .kicker-mark { background: var(--dark-paper); }
+    .section-dark .framework, .section-dark .diagram-block, .section-dark .mini-item { border-color: var(--dark-line); }
+    .section-dark .callout-line small, .section-dark .diagram-caption { color: rgba(245,243,236,.62); }
+    .section-dark .diagram-caption strong { color: var(--dark-paper); }
+    .sources-list { max-width: 52rem; margin: 0; padding: 0; list-style: none; counter-reset: source; }
+    .sources-list li { position: relative; counter-increment: source; padding: 17px 0 17px 54px; border-bottom: 1px solid var(--line); color: #4d4d4d; }
+    .sources-list li::before { content: counter(source, decimal-leading-zero); position: absolute; left: 0; top: 19px; color: var(--soft); font-family: "Roboto Mono", monospace; font-size: .8rem; }
+    .sources-list strong { color: var(--ink); }
+    .xref { margin-left: 2px; color: var(--blue); font-family: "Roboto Mono", monospace; font-size: .7em; vertical-align: super; }
+    .xlink { border-bottom: 1px dashed currentColor; }
+    .xlink::after { content: " ↗"; font-size: .8em; }
+    .to-top { position: fixed; right: max(20px, env(safe-area-inset-right)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); z-index: 150; display: grid; width: 44px; height: 44px; place-items: center; border: 1px solid var(--line-strong); border-radius: 50%; background: rgba(252,251,248,.94); color: var(--ink); font-family: "Roboto Mono", monospace; cursor: pointer; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .2s ease, transform .2s ease; }
+    .to-top.show { opacity: 1; pointer-events: auto; transform: none; }
+    .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > *, .flow > * { min-width: 0; }
+    @media (max-width: 720px) { .topbar { align-items: flex-start; }
+    .nav { max-width: 62vw; gap: 13px; overflow-x: auto; }
+    .hero { padding-top: 34px; }
+    .hero-grid, .section-head, .framework, .split { grid-template-columns: 1fr; }
+    .hero-grid, .section-head { gap: 28px; }
+    .framework-aside { position: static; }
+    .framework-summary { max-width: 34rem; }
+    .mini-compare, .flow { grid-template-columns: repeat(2, 1fr); }
+    .section { padding: 70px 0; }
+    }
+    @media (max-width: 430px) { .wrap { width: min(100% - 28px, var(--max)); }
+    .brand { font-size: .88rem; }
+    .nav { max-width: 54vw; font-size: .82rem; }
+    .hero h1 { font-size: clamp(2.15rem, 12.5vw, 3rem); }
+    .hero-grid { margin-top: 25px; }
+    .mini-compare, .flow { grid-template-columns: 1fr 1fr; gap: 14px; }
+    .chart-scroll svg { min-width: 560px; }
+    .sources-list li { padding-left: 44px; }
+    }
+    @media (hover: none) { .anchor { opacity: .5; }
+    .nav a { padding: 5px 1px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    .js .line-inner, .js.diagram-motion-ready .observe-diagram .motion-node { opacity: 1 !important; transform: none !important; }
+    .js.diagram-motion-ready .observe-diagram .motion-path { stroke-dashoffset: 0 !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span id="progressFill"></span></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-head" id="siteHead">
+    <div class="wrap topbar">
+      <a class="brand" href="#top" aria-label="Back to article beginning">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span>Building AI Agents</span>
+      </a>
+      <nav class="nav" aria-label="Article sections">
+        <a href="#choose" style="--spy:var(--orange)">Choose</a>
+        <a href="#anatomy" style="--spy:var(--purple)">Anatomy</a>
+        <a href="#execution" style="--spy:var(--blue)">Execute</a>
+        <a href="#production" style="--spy:var(--green)">Operate</a>
+        <a href="#sources" style="--spy:var(--slate)">Sources</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content">
+    <div class="wrap" id="top">
+      <section class="hero" aria-label="Introduction">
+        <div class="eyebrow">Agentic Systems Series</div>
+        <h1>
+          <span class="line"><span class="line-inner">Build the system.</span></span>
+          <span class="line"><span class="line-inner"><em>Earn</em> the agent.</span></span>
+        </h1>
+
+        <div class="hero-grid">
+          <div>
+            <p class="lead">An AI agent is not a model with a longer prompt. It is a system that lets a model choose actions inside a controlled loop. That freedom can solve ambiguous work—but it also adds latency, cost, and new ways to fail. Your first design decision is therefore not which model to use. It is how much agency the task has actually earned.</p>
+            <div class="hero-links">
+              <a href="#choose">↓ <span>Choose an architecture</span></a>
+              <a href="#production">↘ <span>Define production boundaries</span></a>
+            </div>
+            <div class="byline">
+              <span class="avatar" aria-hidden="true">AR</span>
+              <strong>Ali Reza Rashidi</strong>
+              <span class="meta-dot" aria-hidden="true"></span>
+              <span>7 min read</span>
+              <span class="meta-dot" aria-hidden="true"></span>
+              <span>Updated Aug 23, 2026</span>
+            </div>
+          </div>
+
+          <div>
+            <p class="hero-note">The best agent architecture often begins by deleting the parts that do not need an agent.</p>
+            <aside class="toc" aria-label="In this piece">
+              <p class="toc-label">In this piece</p>
+              <ol>
+                <li><a href="#choose">Match autonomy to uncertainty</a></li>
+                <li><a href="#anatomy">Assemble the four working parts</a></li>
+                <li><a href="#execution">Run a bounded action loop</a></li>
+                <li><a href="#production">Operate with evidence and limits</a></li>
+              </ol>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="choose" aria-labelledby="choose-title">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark"></span><span>01</span><span>—</span><span>Choose</span></div>
+            <h2 id="choose-title">Start below the agent<a class="anchor" href="#choose" aria-label="Link to Choose section">#</a></h2>
+          </div>
+          <p class="body-copy">Suppose a customer writes: “Order 4821 arrived late and damaged. Refund shipping, replace the item, and make sure it arrives before Friday.” The message is messy. The policy is conditional. Several systems hold the facts. That makes it a useful test—not an automatic argument for autonomy.</p>
+        </div>
+
+        <div class="mini-compare" role="group" aria-label="Architecture comparison">
+          <div class="mini-item" style="--ac:var(--slate)">
+            <span class="mini-dot"></span>
+            <strong>Code</strong>
+            <span>Fixed schema, fixed transformation, exact output.</span>
+          </div>
+          <div class="mini-item" style="--ac:var(--green)">
+            <span class="mini-dot"></span>
+            <strong>Workflow</strong>
+            <span>Known steps and branches, including model calls.</span>
+          </div>
+          <div class="mini-item" style="--ac:var(--blue)">
+            <span class="mini-dot"></span>
+            <strong>RAG</strong>
+            <span>Unstructured question, retrieval, grounded answer.</span>
+          </div>
+          <div class="mini-item" style="--ac:var(--orange)">
+            <span class="mini-dot"></span>
+            <strong>Agent</strong>
+            <span>The system must decide which actions come next.</span>
+          </div>
+        </div>
+
+        <figure class="diagram-block observe-diagram">
+          <figcaption class="diagram-title">Four implementations of the same Order 4821 request</figcaption>
+          <div class="chart-scroll">
+            <svg viewBox="0 0 880 520" role="img" aria-labelledby="choice-title choice-desc">
+              <title id="choice-title">Architecture choice for the Order 4821 support request</title>
+              <desc id="choice-desc">A quadrant positions code, workflow, retrieval augmented generation, and an agent by input variability and reasoning demand, with the agent reserved for the highest uncertainty.</desc>
+              <defs>
+                <marker id="choice-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="#656565"></path>
+                </marker>
+              </defs>
+              <rect width="880" height="520" fill="#fffdfa"></rect>
+              <line class="motion-path" style="--d:.05s" x1="104" y1="424" x2="792" y2="424" stroke="#656565" stroke-width="1.2" marker-end="url(#choice-arrow)"></line>
+              <line class="motion-path" style="--d:.1s" x1="104" y1="424" x2="104" y2="64" stroke="#656565" stroke-width="1.2" marker-end="url(#choice-arrow)"></line>
+              <line x1="448" y1="80" x2="448" y2="424" stroke="rgba(23,23,23,.12)" stroke-width="1"></line>
+              <line x1="104" y1="248" x2="776" y2="248" stroke="rgba(23,23,23,.12)" stroke-width="1"></line>
+              <text class="axis-label" x="812" y="428" fill="#656565" font-size="12" letter-spacing="1.6">VARIABILITY</text>
+              <text class="axis-label" x="104" y="44" fill="#656565" font-size="12" text-anchor="middle" letter-spacing="1.6">REASONING</text>
+              <g class="motion-node quadrant-dot" style="--d:.16s">
+                <circle cx="240" cy="352" r="7" fill="#5b6b7a"></circle>
+                <text class="svg-name" x="256" y="348" fill="#171717" font-size="16" font-weight="700">Code</text>
+                <text class="svg-small" x="256" y="368" fill="#656565" font-size="12">validate a structured claim</text>
+              </g>
+              <g class="motion-node quadrant-dot" style="--d:.23s">
+                <circle cx="328" cy="192" r="7" fill="#23956f"></circle>
+                <text class="svg-name" x="344" y="188" fill="#171717" font-size="16" font-weight="700">Workflow</text>
+                <text class="svg-small" x="344" y="208" fill="#656565" font-size="12">run known refund branches</text>
+              </g>
+              <g class="motion-node quadrant-dot" style="--d:.3s">
+                <circle cx="600" cy="336" r="7" fill="#3468f5"></circle>
+                <text class="svg-name" x="616" y="332" fill="#171717" font-size="16" font-weight="700">RAG</text>
+                <text class="svg-small" x="616" y="352" fill="#656565" font-size="12">explain the return policy</text>
+              </g>
+              <g class="motion-node quadrant-dot" style="--d:.37s">
+                <circle cx="640" cy="144" r="9" fill="#eb8237"></circle>
+                <text class="svg-name" x="660" y="140" fill="#171717" font-size="18" font-weight="700">Agent</text>
+                <text class="svg-small" x="660" y="162" fill="#656565" font-size="12">choose tools and sequence actions</text>
+              </g>
+              <line x1="104" y1="468" x2="776" y2="468" stroke="rgba(23,23,23,.12)" stroke-width="1"></line>
+              <text class="svg-small" x="104" y="492" fill="#989898" font-size="12" letter-spacing="1.2">POSITION IS A DESIGN JUDGMENT, NOT A BENCHMARK SCORE</text>
+            </svg>
+          </div>
+          <div class="diagram-caption"><strong>How to read this:</strong> Move right as inputs become less predictable; move up as the next step depends more on context. Order 4821 may use all four patterns, but only the uncertain action-selection step earns an agent.</div>
+        </figure>
+
+        <article class="framework" style="--ac:var(--orange)">
+          <aside class="framework-aside" aria-label="Agency concept">
+            <div class="framework-name"><span class="mark"></span><h3>Agency<a class="anchor" href="#choose" aria-label="Link to agency discussion">#</a></h3></div>
+            <div class="framework-role">Decision 01 · Control surface</div>
+            <div class="framework-summary">Agency is the freedom to select and sequence actions, not the presence of an LLM.</div>
+          </aside>
+          <div class="framework-content">
+            <p>Anthropic draws a useful line between workflows, where code predetermines the path, and agents, where the model directs its own process and tool use.<a class="xref" href="#src-2">[2]</a> The boundary is practical rather than metaphysical. A system can classify the message with a model, retrieve policy with RAG, and still execute a deterministic refund workflow.</p>
+            <p>Give the model control only where enumerating every branch would be brittle. Keep identity checks, refund ceilings, inventory reservations, and payment mutations in deterministic code. This hybrid is usually easier to test than a loop that asks the model to rediscover business rules on every turn.</p>
+            <div class="callout-line">Choose the least autonomous system that can complete the task reliably.<small>Every additional degree of freedom becomes another behavior you must evaluate, observe, and constrain.</small></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section reveal" id="anatomy" aria-labelledby="anatomy-title">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark"></span><span>02</span><span>—</span><span>Anatomy</span></div>
+            <h2 id="anatomy-title">Separate reasoning from authority<a class="anchor" href="#anatomy" aria-label="Link to Anatomy section">#</a></h2>
+          </div>
+          <p class="body-copy">A production agent is a small control system. The model proposes what to do. Tools expose permitted operations. State carries relevant facts. Orchestration enforces the loop. Policies and humans decide what the model may not decide alone.</p>
+        </div>
+
+        <figure class="diagram-block observe-diagram">
+          <figcaption class="diagram-title">The bounded anatomy of the Order 4821 agent</figcaption>
+          <div class="chart-scroll">
+            <svg viewBox="0 0 880 560" role="img" aria-labelledby="anatomy-svg-title anatomy-svg-desc">
+              <title id="anatomy-svg-title">Bounded architecture for the Order 4821 support agent</title>
+              <desc id="anatomy-svg-desc">A support request enters an orchestrator that consults a model, policy, tools, and state, while high-impact actions pass through human approval.</desc>
+              <defs>
+                <marker id="anatomy-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="#656565"></path>
+                </marker>
+                <marker id="anatomy-accent-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="#eb8237"></path>
+                </marker>
+              </defs>
+              <rect width="880" height="560" fill="#fffdfa"></rect>
+              <rect x="472" y="28" width="232" height="472" rx="8" fill="rgba(23,23,23,.02)" stroke="rgba(23,23,23,.12)" stroke-width="1" stroke-dasharray="4 4"></rect>
+              <rect x="492" y="20" width="104" height="20" rx="2" fill="#fffdfa"></rect>
+              <text class="svg-tag" x="544" y="34" fill="#989898" font-size="8" text-anchor="middle" letter-spacing="1.2">CONTROLLED RUNTIME</text>
+              <line class="motion-path" style="--d:.04s" x1="184" y1="272" x2="256" y2="272" stroke="#656565" stroke-width="1.2" marker-end="url(#anatomy-arrow)"></line>
+              <path class="motion-path" style="--d:.08s" d="M436 236 H452 Q460 236 460 228 V104 Q460 96 468 96 H500" fill="none" stroke="#656565" stroke-width="1.2" marker-end="url(#anatomy-arrow)"></path>
+              <line class="motion-path" style="--d:.12s" x1="436" y1="256" x2="500" y2="256" stroke="#7650e6" stroke-width="1.2" marker-end="url(#anatomy-arrow)"></line>
+              <path class="motion-path" style="--d:.16s" d="M436 280 H452 Q460 280 460 288 V368 Q460 376 468 376 H500" fill="none" stroke="#3468f5" stroke-width="1.2" marker-end="url(#anatomy-arrow)"></path>
+              <path class="motion-path" style="--d:.2s" d="M436 300 H444 Q452 300 452 308 V468 Q452 476 460 476 H500" fill="none" stroke="#656565" stroke-width="1" stroke-dasharray="4 4" marker-end="url(#anatomy-arrow)"></path>
+              <line class="motion-path" style="--d:.24s" x1="660" y1="256" x2="732" y2="256" stroke="#eb8237" stroke-width="1.4" marker-end="url(#anatomy-accent-arrow)"></line>
+
+              <g class="motion-node agent-node" style="--d:.1s">
+                <rect x="40" y="232" width="144" height="80" rx="8" fill="rgba(91,107,122,.08)" stroke="#989898"></rect>
+                <text class="svg-tag" x="56" y="252" fill="#989898" font-size="8" letter-spacing="1">INPUT</text>
+                <text class="svg-name" x="112" y="276" fill="#171717" font-size="16" font-weight="700" text-anchor="middle">Order 4821</text>
+                <text class="svg-small" x="112" y="296" fill="#656565" font-size="12" text-anchor="middle">damaged + late</text>
+              </g>
+              <g class="motion-node agent-node" style="--d:.16s">
+                <rect x="256" y="212" width="180" height="120" rx="8" fill="rgba(235,130,55,.08)" stroke="#eb8237" stroke-width="1.4"></rect>
+                <text class="svg-tag" x="272" y="236" fill="#eb8237" font-size="8" letter-spacing="1">FOCAL</text>
+                <text class="svg-name" x="346" y="268" fill="#171717" font-size="18" font-weight="700" text-anchor="middle">Orchestrator</text>
+                <text class="svg-small" x="346" y="292" fill="#656565" font-size="12" text-anchor="middle">observe → choose → act</text>
+              </g>
+              <g class="motion-node agent-node" style="--d:.22s">
+                <rect x="500" y="64" width="160" height="64" rx="8" fill="#fffdfa" stroke="#171717"></rect>
+                <text class="svg-name" x="580" y="92" fill="#171717" font-size="16" font-weight="700" text-anchor="middle">Model</text>
+                <text class="svg-small" x="580" y="112" fill="#656565" font-size="12" text-anchor="middle">reason + propose</text>
+              </g>
+              <g class="motion-node agent-node" style="--d:.28s">
+                <rect x="500" y="224" width="160" height="64" rx="8" fill="rgba(118,80,230,.06)" stroke="#7650e6"></rect>
+                <text class="svg-name" x="580" y="252" fill="#171717" font-size="16" font-weight="700" text-anchor="middle">Policy</text>
+                <text class="svg-small" x="580" y="272" fill="#656565" font-size="12" text-anchor="middle">limits + permissions</text>
+              </g>
+              <g class="motion-node agent-node" style="--d:.34s">
+                <rect x="500" y="344" width="160" height="64" rx="8" fill="rgba(52,104,245,.06)" stroke="#3468f5"></rect>
+                <text class="svg-name" x="580" y="372" fill="#171717" font-size="16" font-weight="700" text-anchor="middle">Tools</text>
+                <text class="svg-small" x="580" y="388" fill="#656565" font-size="12" text-anchor="middle">orders · refunds</text>
+                <text class="svg-small" x="580" y="404" fill="#656565" font-size="12" text-anchor="middle">stock</text>
+              </g>
+              <g class="motion-node agent-node" style="--d:.4s">
+                <rect x="500" y="444" width="160" height="64" rx="8" fill="rgba(23,23,23,.04)" stroke="#656565"></rect>
+                <text class="svg-name" x="580" y="472" fill="#171717" font-size="16" font-weight="700" text-anchor="middle">State</text>
+                <text class="svg-small" x="580" y="492" fill="#656565" font-size="12" text-anchor="middle">facts for this run</text>
+              </g>
+              <g class="motion-node agent-node" style="--d:.46s">
+                <rect x="732" y="216" width="116" height="80" rx="8" fill="rgba(235,130,55,.08)" stroke="#eb8237" stroke-width="1.4"></rect>
+                <text class="svg-name" x="790" y="248" fill="#171717" font-size="15" font-weight="700" text-anchor="middle">Human</text>
+                <text class="svg-small" x="790" y="268" fill="#656565" font-size="11" text-anchor="middle">approve exception</text>
+                <text class="svg-small" x="790" y="284" fill="#656565" font-size="11" text-anchor="middle">before mutation</text>
+              </g>
+              <line x1="40" y1="532" x2="848" y2="532" stroke="rgba(23,23,23,.12)" stroke-width="1"></line>
+              <text class="svg-small" x="40" y="552" fill="#989898" font-size="11" letter-spacing="1">MODEL PROPOSES · CODE ENFORCES · HUMAN APPROVES EXCEPTIONS</text>
+            </svg>
+          </div>
+          <div class="diagram-caption"><strong>How to read this:</strong> The orchestrator owns sequence, not unlimited authority. For Order 4821, the model can decide which read-only tool to call next; policy code constrains the available operations, and an exception crosses a human approval boundary before money or inventory changes.</div>
+        </figure>
+
+        <article class="framework" style="--ac:var(--purple)">
+          <aside class="framework-aside" aria-label="Model component">
+            <div class="framework-name"><span class="mark"></span><h3>Model<a class="anchor" href="#anatomy" aria-label="Link to model discussion">#</a></h3></div>
+            <div class="framework-role">Component 01 · Decision engine</div>
+            <div class="framework-summary">Choose enough reasoning capability for the hardest decision, then route simpler work elsewhere.</div>
+          </aside>
+          <div class="framework-content">
+            <p>The model interprets the request, weighs available context, and proposes a next action. It should not be your database, policy engine, or permission system. Model selection is an empirical decision: start with a capable baseline, build evaluations, then test whether smaller or faster models preserve the required behavior.<a class="xref" href="#src-1">[1]</a></p>
+            <p>The original draft compared named models with a dated leaderboard. That creates false precision. A benchmark mean does not tell you whether a model will correctly handle your refund policy, tool schemas, error states, or latency budget. Your evaluation set should.</p>
+          </div>
+        </article>
+
+        <article class="framework" style="--ac:var(--blue)">
+          <aside class="framework-aside" aria-label="Tools component">
+            <div class="framework-name"><span class="mark"></span><h3>Tools<a class="anchor" href="#anatomy" aria-label="Link to tools discussion">#</a></h3></div>
+            <div class="framework-role">Component 02 · Controlled action</div>
+            <div class="framework-summary">A tool is a typed capability with a narrow contract, explicit errors, and limited authority.</div>
+          </aside>
+          <div class="framework-content">
+            <p>Tools let the agent fetch Order 4821, read the damage policy, check replacement stock, calculate an allowed refund, or submit an approved mutation. Clear names, precise parameter descriptions, validated inputs, and useful error responses matter because the model sees the interface—not your intent.</p>
+            <p>Model Context Protocol standardizes how hosts connect models to focused servers that expose tools and contextual data, but a common protocol is not a security boundary by itself.<a class="xref" href="#src-3">[3]</a> Authentication, authorization, least privilege, logging, and user consent still belong to your application.</p>
+          </div>
+        </article>
+
+        <article class="framework" style="--ac:var(--green)">
+          <aside class="framework-aside" aria-label="State component">
+            <div class="framework-name"><span class="mark"></span><h3>State<a class="anchor" href="#anatomy" aria-label="Link to state discussion">#</a></h3></div>
+            <div class="framework-role">Component 03 · Relevant memory</div>
+            <div class="framework-summary">Store facts because the next step needs them—not because “agents need memory.”</div>
+          </aside>
+          <div class="framework-content">
+            <p>Short-term state may include the customer’s verified identity, retrieved policy version, tool results, pending actions, and remaining budget for this run. Long-term memory is a separate product decision. Persisting preferences or outcomes can improve continuity, but it creates retention, privacy, deletion, and stale-data obligations.</p>
+            <p>For Order 4821, the durable record should live in the order and support systems. The agent’s working context should reference those sources of truth. A vector store is useful for semantic retrieval; it is not an authoritative ledger.</p>
+          </div>
+        </article>
+      </section>
+    </div>
+
+    <section class="section section-dark reveal" id="execution" aria-labelledby="execution-title">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark"></span><span>03</span><span>—</span><span>Execute</span></div>
+            <h2 id="execution-title">Advance one evidenced step at a time<a class="anchor" href="#execution" aria-label="Link to Execute section">#</a></h2>
+          </div>
+          <p class="body-copy">The useful loop is not “think until done.” It is observe, choose a permitted action, execute it, record the result, and reassess. ReAct research formalized the value of interleaving reasoning and actions; production systems add budgets, structured tool calls, and stop conditions.<a class="xref" href="#src-6">[6]</a></p>
+        </div>
+
+        <div class="flow" role="group" aria-label="Incremental execution stages">
+          <div class="fstep" style="--ac:var(--orange)"><span class="fnum">01</span><strong>Observe</strong><span>Parse the request and current state.</span></div>
+          <div class="fstep" style="--ac:var(--purple)"><span class="fnum">02</span><strong>Choose</strong><span>Select one allowed next action.</span></div>
+          <div class="fstep" style="--ac:var(--blue)"><span class="fnum">03</span><strong>Act</strong><span>Call a tool with validated arguments.</span></div>
+          <div class="fstep" style="--ac:var(--green)"><span class="fnum">04</span><strong>Reassess</strong><span>Use the result or stop safely.</span></div>
+        </div>
+
+        <figure class="diagram-block observe-diagram">
+          <figcaption class="diagram-title">A safe execution path for Order 4821</figcaption>
+          <div class="chart-scroll">
+            <svg viewBox="0 0 880 700" role="img" aria-labelledby="flow-svg-title flow-svg-desc">
+              <title id="flow-svg-title">Incremental execution flow for the Order 4821 agent</title>
+              <desc id="flow-svg-desc">The agent verifies the order, checks policy, checks inventory and delivery evidence, requests human approval for exceptions, and executes only approved actions.</desc>
+              <defs>
+                <marker id="flow-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="#c9c6bc"></path>
+                </marker>
+                <marker id="flow-accent-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="#eb8237"></path>
+                </marker>
+              </defs>
+              <rect width="880" height="700" fill="#161614"></rect>
+              <line class="motion-path" style="--d:.04s" x1="440" y1="88" x2="440" y2="132" stroke="#c9c6bc" stroke-width="1.2" marker-end="url(#flow-arrow)"></line>
+              <line class="motion-path" style="--d:.08s" x1="440" y1="196" x2="440" y2="236" stroke="#c9c6bc" stroke-width="1.2" marker-end="url(#flow-arrow)"></line>
+              <line class="motion-path" style="--d:.12s" x1="440" y1="316" x2="440" y2="360" stroke="#c9c6bc" stroke-width="1.2" marker-end="url(#flow-arrow)"></line>
+              <path class="motion-path" style="--d:.16s" d="M520 400 H632 Q640 400 640 408 V452" fill="none" stroke="#eb8237" stroke-width="1.4" marker-end="url(#flow-accent-arrow)"></path>
+              <path class="motion-path" style="--d:.2s" d="M360 400 H248 Q240 400 240 408 V452" fill="none" stroke="#c9c6bc" stroke-width="1.2" marker-end="url(#flow-arrow)"></path>
+              <path class="motion-path" style="--d:.24s" d="M240 516 V568 Q240 576 248 576 H320" fill="none" stroke="#c9c6bc" stroke-width="1.2" marker-end="url(#flow-arrow)"></path>
+              <path class="motion-path" style="--d:.28s" d="M640 516 V568 Q640 576 632 576 H560" fill="none" stroke="#eb8237" stroke-width="1.2" marker-end="url(#flow-accent-arrow)"></path>
+
+              <g class="motion-node flow-node" style="--d:.08s">
+                <rect x="332" y="36" width="216" height="52" rx="26" fill="rgba(245,243,236,.06)" stroke="rgba(245,243,236,.54)"></rect>
+                <text class="svg-name" x="440" y="68" fill="#f5f3ec" font-size="16" font-weight="700" text-anchor="middle">Receive Order 4821 request</text>
+              </g>
+              <g class="motion-node flow-node" style="--d:.14s">
+                <rect x="332" y="132" width="216" height="64" rx="8" fill="rgba(245,243,236,.04)" stroke="rgba(245,243,236,.54)"></rect>
+                <text class="svg-name" x="440" y="160" fill="#f5f3ec" font-size="16" font-weight="700" text-anchor="middle">Verify order + identity</text>
+                <text class="svg-small" x="440" y="180" fill="rgba(245,243,236,.62)" font-size="12" text-anchor="middle">read-only tool call</text>
+              </g>
+              <g class="motion-node flow-node" style="--d:.2s">
+                <rect x="332" y="236" width="216" height="80" rx="8" fill="rgba(118,80,230,.12)" stroke="#9d84ef"></rect>
+                <text class="svg-name" x="440" y="268" fill="#f5f3ec" font-size="16" font-weight="700" text-anchor="middle">Retrieve applicable policy</text>
+                <text class="svg-small" x="440" y="292" fill="rgba(245,243,236,.62)" font-size="12" text-anchor="middle">versioned source + citations</text>
+              </g>
+              <g class="motion-node flow-node" style="--d:.26s">
+                <path d="M440 360 L520 400 L440 440 L360 400 Z" fill="rgba(235,130,55,.12)" stroke="#eb8237" stroke-width="1.4"></path>
+                <text class="svg-name" x="440" y="396" fill="#f5f3ec" font-size="15" font-weight="700" text-anchor="middle">Within policy</text>
+                <text class="svg-small" x="440" y="416" fill="rgba(245,243,236,.68)" font-size="11" text-anchor="middle">and verifiable?</text>
+              </g>
+              <g class="motion-node" style="--d:.28s">
+                <rect x="548" y="372" width="40" height="20" rx="2" fill="#161614"></rect>
+                <text class="arrow-label" x="568" y="386" fill="#eb8237" font-size="10" text-anchor="middle">NO</text>
+                <rect x="292" y="372" width="44" height="20" rx="2" fill="#161614"></rect>
+                <text class="arrow-label" x="314" y="386" fill="#c9c6bc" font-size="10" text-anchor="middle">YES</text>
+              </g>
+              <g class="motion-node flow-node" style="--d:.32s">
+                <rect x="136" y="452" width="208" height="64" rx="8" fill="rgba(52,104,245,.12)" stroke="#6f93f7"></rect>
+                <text class="svg-name" x="240" y="480" fill="#f5f3ec" font-size="15" font-weight="700" text-anchor="middle">Check stock + delivery ETA</text>
+                <text class="svg-small" x="240" y="500" fill="rgba(245,243,236,.62)" font-size="11" text-anchor="middle">never promise without evidence</text>
+              </g>
+              <g class="motion-node flow-node" style="--d:.38s">
+                <rect x="536" y="452" width="208" height="64" rx="8" fill="rgba(235,130,55,.12)" stroke="#eb8237" stroke-width="1.4"></rect>
+                <text class="svg-name" x="640" y="480" fill="#f5f3ec" font-size="15" font-weight="700" text-anchor="middle">Request human approval</text>
+                <text class="svg-small" x="640" y="500" fill="rgba(245,243,236,.62)" font-size="11" text-anchor="middle">exception or high-impact action</text>
+              </g>
+              <g class="motion-node flow-node" style="--d:.44s">
+                <rect x="320" y="544" width="240" height="64" rx="8" fill="rgba(35,149,111,.12)" stroke="#4ab38f"></rect>
+                <text class="svg-name" x="440" y="572" fill="#f5f3ec" font-size="15" font-weight="700" text-anchor="middle">Execute approved actions</text>
+                <text class="svg-small" x="440" y="592" fill="rgba(245,243,236,.62)" font-size="11" text-anchor="middle">refund · reserve · notify</text>
+              </g>
+              <g class="motion-node flow-node" style="--d:.5s">
+                <rect x="340" y="640" width="200" height="44" rx="22" fill="rgba(245,243,236,.06)" stroke="rgba(245,243,236,.54)"></rect>
+                <text class="svg-name" x="440" y="668" fill="#f5f3ec" font-size="15" font-weight="700" text-anchor="middle">Record outcome and stop</text>
+              </g>
+              <line x1="440" y1="608" x2="440" y2="640" stroke="#c9c6bc" stroke-width="1.2" marker-end="url(#flow-arrow)"></line>
+            </svg>
+          </div>
+          <div class="diagram-caption"><strong>How to read this:</strong> Order 4821 advances only when the previous tool result supports the next action. “Before Friday” is not a conversational flourish: the agent checks stock and delivery data. An unsupported exception pauses for a human instead of improvising authority.</div>
+        </figure>
+
+        <article class="framework" style="--ac:var(--orange)">
+          <aside class="framework-aside" aria-label="Orchestration component">
+            <div class="framework-name"><span class="mark"></span><h3>Orchestration<a class="anchor" href="#execution" aria-label="Link to orchestration discussion">#</a></h3></div>
+            <div class="framework-role">Component 04 · Runtime loop</div>
+            <div class="framework-summary">The loop owns budgets, transitions, retries, pauses, and termination.</div>
+          </aside>
+          <div class="framework-content">
+            <p>Orchestration converts a model response into a controlled transition. It validates the proposed tool call, checks authorization, executes the operation, appends the result to state, and asks what comes next. It also decides when the run is done.<a class="xref" href="#src-7">[7]</a></p>
+            <div class="formula">next_state = transition(current_state, validated_action, tool_result)</div>
+            <p>Set explicit ceilings for turns, wall-clock time, tokens, tool calls, retries, and monetary exposure. A retry should address a transient failure, not repeat the same invalid plan. After the ceiling, return a safe partial result or escalate with the evidence already collected.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="section reveal" id="production" aria-labelledby="production-title">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark"></span><span>04</span><span>—</span><span>Operate</span></div>
+            <h2 id="production-title">Production begins at the boundary<a class="anchor" href="#production" aria-label="Link to Operate section">#</a></h2>
+          </div>
+          <p class="body-copy">A demo proves that a path can work. Production engineering asks what happens when the model chooses the wrong tool, a dependency times out, retrieved text is hostile, the customer changes intent, or the same request is replayed.</p>
+        </div>
+
+        <article class="framework" style="--ac:var(--green)">
+          <aside class="framework-aside" aria-label="Production boundaries">
+            <div class="framework-name"><span class="mark"></span><h3>Boundaries<a class="anchor" href="#production" aria-label="Link to boundaries discussion">#</a></h3></div>
+            <div class="framework-role">Production 01 · Before launch</div>
+            <div class="framework-summary">Constrain authority, then make every consequential transition observable and reversible.</div>
+          </aside>
+          <div class="framework-content">
+            <p>NIST’s Generative AI Profile frames risk management across design, development, deployment, use, and evaluation rather than treating safety as a final filter.<a class="xref" href="#src-4">[4]</a> Apply that lifecycle to the agent’s actual capabilities. A support agent that drafts replies has a different risk surface from one that moves money or reserves inventory.</p>
+            <div class="split">
+              <div class="text-block" style="--ac:var(--green)">
+                <h4>Keep deterministic</h4>
+                <ul>
+                  <li><strong>Authorization:</strong> who may read or mutate Order 4821.</li>
+                  <li><strong>Business invariants:</strong> refund ceilings and inventory consistency.</li>
+                  <li><strong>Idempotency:</strong> a replay must not issue a second refund.</li>
+                  <li><strong>Audit records:</strong> inputs, decisions, approvals, and effects.</li>
+                </ul>
+              </div>
+              <div class="text-block" style="--ac:var(--orange)">
+                <h4>Let the model propose</h4>
+                <ul>
+                  <li><strong>Interpretation:</strong> connect the customer’s language to task intent.</li>
+                  <li><strong>Action selection:</strong> choose among currently permitted tools.</li>
+                  <li><strong>Recovery:</strong> revise a plan after a meaningful tool error.</li>
+                  <li><strong>Communication:</strong> explain the verified outcome clearly.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="callout-line">A human approval screen must show the proposed action, evidence, policy basis, and irreversible effect.<small>“Approve” is not informed oversight if the reviewer must reconstruct the run from raw logs. A robust runtime pauses before the tool call and resumes the same saved run after approve or reject.<a class="xref" href="#src-8">[8]</a></small></div>
+          </div>
+        </article>
+
+        <article class="framework" style="--ac:var(--blue)">
+          <aside class="framework-aside" aria-label="Evaluation evidence">
+            <div class="framework-name"><span class="mark"></span><h3>Evidence<a class="anchor" href="#production" aria-label="Link to evidence discussion">#</a></h3></div>
+            <div class="framework-role">Production 02 · Evaluation</div>
+            <div class="framework-summary">Measure the decisions and effects that matter, not whether the final answer sounds plausible.</div>
+          </aside>
+          <div class="framework-content">
+            <p>Build evaluations from representative tasks, edge cases, and known failures. Grade intermediate behavior: policy retrieval, argument validity, tool choice, refusal, escalation, and final state. OpenAI’s evaluation guidance recommends task-specific evals, logging, automation where possible, and continuous evaluation as the system changes.<a class="xref" href="#src-5">[5]</a></p>
+            <p>For Order 4821, a polished apology is not success if the system refunds twice, invents Friday delivery, or replaces the wrong SKU. Your strongest checks inspect deterministic outcomes: the correct order was accessed, policy version was recorded, the refund stayed within limits, and the reservation actually exists.</p>
+          </div>
+        </article>
+
+        <article class="framework" style="--ac:var(--red)">
+          <aside class="framework-aside" aria-label="Multi-agent complexity">
+            <div class="framework-name"><span class="mark"></span><h3>Complexity<a class="anchor" href="#production" aria-label="Link to complexity discussion">#</a></h3></div>
+            <div class="framework-role">Production 03 · Scale carefully</div>
+            <div class="framework-summary">More agents add coordination work before they add useful specialization.</div>
+          </aside>
+          <div class="framework-content">
+            <p>Start with one agent and a small tool set. OpenAI’s practical guide explicitly recommends maximizing a single agent before splitting work across multiple agents because added agents introduce overhead and complexity.<a class="xref" href="#src-1">[1]</a> Add a specialist only when its separate instructions, tools, context, or evaluation boundary are genuinely easier to maintain.</p>
+            <p>A multi-agent design is not automatically more resilient. It creates more prompts, handoffs, context boundaries, failure modes, and token traffic. Anthropic’s production account finds the pattern strongest for breadth-first, parallelizable research and a poor fit when agents must share context or coordinate dependencies.<a class="xref" href="#src-9">[9]</a> Splitting Order 4821 among five conversational roles would mostly create coordination latency around one shared transaction.</p>
+            <div class="callout-line">Scale the runtime before you scale the cast.<small>Queues, checkpoints, idempotent tools, tracing, and backpressure usually matter sooner than another agent persona.</small></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section reveal" id="sources" aria-labelledby="sources-title">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark"></span><span>05</span><span>—</span><span>Sources</span></div>
+            <h2 id="sources-title">Sources and further reading<a class="anchor" href="#sources" aria-label="Link to Sources section">#</a></h2>
+          </div>
+          <p class="body-copy">The article favors durable architectural guidance over model rankings. These sources define the agent patterns, interface standards, evaluation practices, and risk controls behind the recommendations.</p>
+        </div>
+
+        <ol class="sources-list">
+          <li id="src-1"><strong>OpenAI — A Practical Guide to Building Agents.</strong> Guidance on agent foundations, model and tool selection, orchestration, guardrails, and the recommendation to maximize a single agent before adopting multi-agent complexity. <a class="xlink" href="https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/" target="_blank" rel="noopener noreferrer">Read the guide</a></li>
+          <li id="src-2"><strong>Anthropic — Building Effective Agents.</strong> An engineering distinction between predefined workflows and model-directed agents, with composable patterns and advice to begin with the simplest solution. <a class="xlink" href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">Read the article</a></li>
+          <li id="src-3"><strong>Model Context Protocol — Architecture and Tools, specification 2026-07-28.</strong> The current official protocol specification separates host policy and orchestration from focused servers, and defines discoverable tools with JSON Schema contracts. <a class="xlink" href="https://modelcontextprotocol.io/specification/2026-07-28/architecture" target="_blank" rel="noopener noreferrer">Read architecture</a> · <a class="xlink" href="https://modelcontextprotocol.io/specification/2026-07-28/server/tools" target="_blank" rel="noopener noreferrer">Read tools</a></li>
+          <li id="src-4"><strong>NIST — Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile.</strong> A cross-sector companion to the AI RMF for identifying and managing generative-AI risks across the lifecycle. <a class="xlink" href="https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence" target="_blank" rel="noopener noreferrer">Read NIST AI 600-1</a></li>
+          <li id="src-5"><strong>OpenAI Developers — Evaluation Best Practices.</strong> Official guidance on defining objectives, collecting datasets, choosing task-specific metrics, running comparisons, and continuously evaluating changes. <a class="xlink" href="https://developers.openai.com/api/docs/guides/evaluation-best-practices" target="_blank" rel="noopener noreferrer">Read the documentation</a></li>
+          <li id="src-6"><strong>Yao et al. — ReAct: Synergizing Reasoning and Acting in Language Models.</strong> The original paper describing an interleaved reasoning-and-action pattern for interacting with external environments. <a class="xlink" href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener noreferrer">Read the paper</a></li>
+          <li id="src-7"><strong>OpenAI Agents SDK — Running Agents.</strong> Runtime documentation for the model-call, tool-call, handoff, observation, and termination loop, including turn limits and state-management options. <a class="xlink" href="https://openai.github.io/openai-agents-python/running_agents/" target="_blank" rel="noopener noreferrer">Read the documentation</a></li>
+          <li id="src-8"><strong>OpenAI Agents SDK — Human in the Loop.</strong> A concrete pause, inspect, approve-or-reject, serialize, and resume pattern for sensitive tool calls. <a class="xlink" href="https://openai.github.io/openai-agents-python/human_in_the_loop/" target="_blank" rel="noopener noreferrer">Read the documentation</a></li>
+          <li id="src-9"><strong>Anthropic — How We Built Our Multi-Agent Research System.</strong> A first-party production report on parallel research, separate context windows, coordination cost, token use, evaluation difficulty, and poor-fit conditions. <a class="xlink" href="https://www.anthropic.com/engineering/multi-agent-research-system" target="_blank" rel="noopener noreferrer">Read the report</a></li>
+        </ol>
+      </section>
+    </div>
+  </main>
+
+  <button class="to-top" id="toTop" type="button" aria-label="Back to top">↑</button>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var siteHead = document.getElementById('siteHead');
+      var progressFill = document.getElementById('progressFill');
+      var toTop = document.getElementById('toTop');
+      var navLinks = Array.from(document.querySelectorAll('.nav a'));
+      var sections = Array.from(document.querySelectorAll('main section[id]'));
+
+      function updateScrollUi() {
+        var scrollTop = root.scrollTop || document.body.scrollTop;
+        var scrollable = root.scrollHeight - root.clientHeight;
+        var progress = scrollable > 0 ? scrollTop / scrollable : 0;
+        progressFill.style.transform = 'scaleX(' + Math.min(1, Math.max(0, progress)) + ')';
+        siteHead.classList.toggle('scrolled', scrollTop > 12);
+        toTop.classList.toggle('show', scrollTop > 560);
+      }
+
+      updateScrollUi();
+      window.addEventListener('scroll', updateScrollUi, { passive: true });
+      window.addEventListener('resize', updateScrollUi);
+      toTop.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      if ('IntersectionObserver' in window) {
+        var revealObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: .12 });
+
+        document.querySelectorAll('.reveal, .observe-diagram').forEach(function (element) {
+          revealObserver.observe(element);
+        });
+
+        var spyObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            navLinks.forEach(function (link) {
+              link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+            });
+          });
+        }, { rootMargin: '-28% 0px -58% 0px', threshold: 0 });
+
+        sections.forEach(function (section) {
+          spyObserver.observe(section);
+        });
+
+        root.classList.add('diagram-motion-ready');
+      }
+    }());
+  </script>
+</body>
+</html>
+

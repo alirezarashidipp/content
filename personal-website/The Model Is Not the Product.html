@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A practical framework for choosing and validating an LLM configuration against product quality, latency, cost, legal, and operational constraints.">
+  <title>The Model Is Not the Product — Choosing the Right LLM</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='3' fill='%233468f5'/%3E%3Ccircle cx='23' cy='9' r='3' fill='%23eb8237'/%3E%3Ccircle cx='9' cy='23' r='3' fill='%2323956f'/%3E%3Ccircle cx='23' cy='23' r='3' fill='%23c9a227'/%3E%3C/svg%3E">
+  <meta property="og:title" content="The Model Is Not the Product — A Practical Guide to Choosing the Right LLM">
+  <meta property="og:description" content="Choose an LLM by testing a deployable configuration against the workload that must succeed.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The Model Is Not the Product — A Practical Guide to Choosing the Right LLM",
+    "description": "A practical framework for choosing and validating an LLM configuration against product quality, latency, cost, legal, and operational constraints.",
+    "datePublished": "2026-09-04",
+    "dateModified": "2026-09-04",
+    "author": { "@type": "Person", "name": "Ali Reza Rashidi" }
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Roboto+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add('js');</script>
+  <style>
+    :root {
+      --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898;
+      --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+      --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+      --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+      --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+      --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+    }
+    * { box-sizing: border-box; }
+    html { color-scheme: light; scroll-behavior: smooth; overflow-x: clip; }
+    body {
+      margin: 0; color: var(--ink); background: linear-gradient(180deg, #fffdfa, #fcfbf8);
+      font-family: "DM Sans", sans-serif; font-size: 17px; line-height: 1.7;
+      -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+    }
+    ::selection { background: var(--ink); color: var(--paper); }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; border: 2px solid var(--bg); }
+    a { color: inherit; }
+    p { text-wrap: pretty; }
+    h1, h2, h3, h4 { margin: 0; font-family: "Space Grotesk", sans-serif; text-wrap: balance; }
+    h1, h2 { letter-spacing: -.045em; }
+    h1 { font-size: clamp(3rem, 8.4vw, 6.8rem); line-height: .94; font-weight: 700; }
+    h1 em { color: #535353; font-family: "Instrument Serif", serif; font-weight: 400; }
+    h2 { font-size: clamp(2rem, 4.4vw, 4rem); line-height: .98; }
+    h3 { font-size: 1.45rem; line-height: 1.08; letter-spacing: -.025em; }
+    h4 { font-size: 1.02rem; line-height: 1.25; }
+    code, pre, .mono { font-family: "Roboto Mono", monospace; }
+    :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+    .wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    .grain {
+      position: fixed; inset: 0; z-index: 40; pointer-events: none; opacity: .08; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+    }
+    .skip-link { position: fixed; left: 16px; top: -80px; z-index: 100; padding: 10px 14px; background: var(--ink); color: var(--paper); border-radius: 4px; }
+    .skip-link:focus { top: 16px; }
+    .progress { position: fixed; inset: 0 auto auto 0; z-index: 90; width: 100%; height: 2px; background: transparent; }
+    .progress span { display: block; width: 0; height: 100%; background: var(--ink); }
+    .site-header { position: sticky; top: 0; z-index: 35; transition: background .25s, border-color .25s; border-bottom: 1px solid transparent; }
+    .site-header.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); border-color: var(--line); }
+    .header-inner { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font: 500 13px/1 "Space Grotesk", sans-serif; text-decoration: none; white-space: nowrap; }
+    .brand-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--ink); }
+    .nav { display: flex; align-items: center; gap: 20px; overflow-x: auto; scrollbar-width: none; }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav a { position: relative; padding: 22px 0; color: var(--muted); font: 500 12px/1 "Roboto Mono", monospace; text-decoration: none; white-space: nowrap; }
+    .nav a::before { content: ""; position: absolute; left: -10px; top: 29px; width: 6px; height: 6px; border-radius: 50%; background: var(--spy, var(--ink)); opacity: 0; }
+    .nav a::after { content: ""; position: absolute; inset: auto 0 16px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .2s; }
+    .nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
+    .nav a.active::before { opacity: 1; }
+    .hero { padding: 98px 0 92px; border-bottom: 1px solid var(--line); }
+    .eyebrow, .kicker, .framework-role, .toc-label, .byline-meta, .diagram-caption, .code-label { font-family: "Roboto Mono", monospace; }
+    .eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--ink); }
+    .line { display: block; overflow: hidden; }
+    .line-inner { display: block; }
+    .js .hero .line-inner { animation: lineUp .8s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 90ms); }
+    @keyframes lineUp { from { transform: translateY(115%); } to { transform: translateY(0); } }
+    .hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 72px; margin-top: 56px; align-items: start; }
+    .lead { max-width: 690px; margin: 0; color: #343434; font-size: clamp(1.15rem, 2vw, 1.42rem); line-height: 1.58; }
+    .lead::first-letter { float: left; margin: 6px 8px 0 0; color: var(--ink); font: italic 3.3rem/.72 "Instrument Serif", serif; }
+    .hero-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+    .hero-links a { padding: 8px 11px; border: 1px solid var(--line-strong); border-radius: 999px; font: 500 11px/1 "Roboto Mono", monospace; text-decoration: none; }
+    .hero-links a:hover { background: var(--ink); color: var(--paper); }
+    .byline { display: flex; align-items: center; gap: 12px; margin-top: 34px; }
+    .avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--ink); color: var(--paper); font: 500 11px/1 "Roboto Mono", monospace; }
+    .byline strong { display: block; font-size: 13px; }
+    .byline-meta { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 10px; }
+    .byline-meta span + span::before { content: "·"; margin-right: 8px; }
+    .hero-note { margin: 0 0 18px; padding-left: 18px; border-left: 2px solid var(--orange); color: #505050; font: italic 1.12rem/1.55 "Instrument Serif", serif; }
+    .toc { padding: 24px; background: #f3f1e9; border-radius: 12px; }
+    .toc-label { margin: 0 0 14px; color: var(--muted); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+    .toc ol { margin: 0; padding: 0; list-style: none; counter-reset: toc; }
+    .toc li { counter-increment: toc; border-top: 1px solid var(--line); }
+    .toc a { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 11px 0; font-size: 13px; text-decoration: none; }
+    .toc a::before { content: "0" counter(toc); color: var(--soft); font: 10px/1.7 "Roboto Mono", monospace; }
+    .section { padding: 88px 0; border-bottom: 1px solid var(--line); --spy: var(--blue); }
+    .section-head { display: grid; grid-template-columns: .9fr 1.1fr; gap: 64px; margin-bottom: 64px; align-items: start; }
+    .section-head h2 { position: relative; color: var(--ink); background: transparent; }
+    .kicker { display: flex; align-items: center; gap: 9px; margin-bottom: 18px; color: var(--muted); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+    .kicker-mark { width: 8px; height: 8px; background: var(--spy); }
+    .kicker-num { color: var(--ink); }
+    .body-copy { max-width: 650px; margin: 7px 0 0; color: var(--muted); font-size: 1.04rem; }
+    .anchor { position: absolute; margin-left: 10px; color: var(--soft); font: 400 .45em/1 "Roboto Mono", monospace; text-decoration: none; opacity: 0; transition: opacity .2s; }
+    h2:hover .anchor, h3:hover .anchor, .anchor:focus { opacity: 1; }
+    .framework { display: grid; grid-template-columns: 260px 1fr; gap: 58px; padding: 54px 0; border-top: 1px solid var(--line); }
+    .framework-aside { align-self: start; position: sticky; top: 94px; }
+    .framework-content { min-width: 0; }
+    .framework-name { display: flex; align-items: flex-start; gap: 12px; }
+    .mark { flex: 0 0 auto; width: 11px; height: 11px; margin-top: 6px; border-radius: 50%; background: var(--ac); }
+    .framework-name h3 { position: relative; }
+    .framework-role { margin: 11px 0 0 23px; color: var(--muted); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .framework-summary { margin: 16px 0 0 23px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .framework-content > p:first-child { margin-top: 0; }
+    .framework-content p { max-width: 760px; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin: 30px 0; }
+    .text-block { padding: 20px 0 4px; border-top: 3px solid var(--ac); }
+    .text-block p { margin-bottom: 0; color: var(--muted); font-size: 14px; }
+    .flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 30px 0; }
+    .flow-item { padding: 19px 0; border-top: 2px solid var(--ac); }
+    .fnum { display: block; margin-bottom: 10px; color: var(--ac); font: 500 10px/1 "Roboto Mono", monospace; }
+    .flow-item strong { font-family: "Space Grotesk", sans-serif; }
+    .flow-item p { margin: 7px 0 0; color: var(--muted); font-size: 13px; }
+    .formula { margin: 28px 0; padding: 18px 20px; border: 1px solid var(--line); background: #f6f4ee; font: 500 13px/1.7 "Roboto Mono", monospace; overflow-x: auto; }
+    .callout-line { margin: 28px 0; padding: 15px 0 15px 18px; border-left: 3px solid var(--ac); font-weight: 700; }
+    .callout-line small { display: block; margin-top: 3px; color: var(--muted); font-weight: 400; }
+    .stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 34px 0; padding: 25px 0; border-block: 1px solid var(--line); }
+    .stat strong { display: block; font: 500 clamp(1.7rem, 3vw, 2.4rem)/1 "Roboto Mono", monospace; }
+    .stat span { display: block; margin-top: 8px; color: var(--muted); font-size: 12px; }
+    .code { margin: 28px 0; overflow: hidden; border-radius: 10px; background: var(--dark); }
+    .code-label { padding: 10px 16px; color: #c9c7bf; background: var(--dark); border-bottom: 1px solid var(--dark-line); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .code pre { margin: 0; padding: 20px; color: #f2efe5; background: var(--dark); font-size: 12px; line-height: 1.75; overflow-x: auto; }
+    .diagram-block { margin: 38px 0; padding: 24px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+    .diagram-title { margin-bottom: 18px; font: 700 1.15rem/1.2 "Space Grotesk", sans-serif; }
+    .chart-scroll { width: 100%; max-width: 100%; overflow-x: auto; }
+    .chart-scroll svg { display: block; width: 100%; height: auto; }
+    .diagram-caption { margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; line-height: 1.6; }
+    .diagram-caption strong { color: var(--ink); }
+    .diagram-node, .diagram-path { opacity: 1; transform: none; stroke-dashoffset: 0; }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .diagram-node { opacity: 0; transform: translateY(8px); }
+    .js.diagram-motion-ready .observe-diagram.is-visible .diagram-node { opacity: 1; transform: none; transition: opacity .48s ease var(--d), transform .48s ease var(--d); }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .diagram-path:not(.diagram-path-dashed) { stroke-dasharray: 900; stroke-dashoffset: 900; }
+    .js.diagram-motion-ready .observe-diagram.is-visible .diagram-path:not(.diagram-path-dashed) { stroke-dasharray: 900; stroke-dashoffset: 0; transition: stroke-dashoffset 1s ease var(--d); }
+    .svg-title { font-family: "Space Grotesk", sans-serif; letter-spacing: -.02em; }
+    .svg-mono { font-family: "Roboto Mono", monospace; }
+    .section-dark { --spy: var(--orange); color: var(--dark-paper); background: var(--dark); border-color: var(--dark-line); }
+    .section-dark .section-head h2 { color: var(--dark-paper); background: var(--dark); }
+    .section-dark .body-copy, .section-dark .framework-role, .section-dark .framework-summary, .section-dark .framework-content p, .section-dark .text-block p { color: #c9c7bf; }
+    .section-dark .kicker { color: #b8b6af; }
+    .section-dark .kicker-num, .section-dark h3, .section-dark h4 { color: var(--dark-paper); }
+    .section-dark .framework, .section-dark .text-block { border-color: var(--dark-line); }
+    .section-dark .anchor { color: #aaa79f; }
+    .section-dark .xref { color: #9db8ff; }
+    .section-dark .callout-line small { color: #c9c7bf; }
+    .section-dark .formula { color: var(--dark-paper); background: #232320; border-color: var(--dark-line); }
+    .sources-list { margin: 0; padding: 0; list-style: none; counter-reset: sources; }
+    .sources-list li { counter-increment: sources; display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 18px 0; border-top: 1px solid var(--line); font-size: 14px; }
+    .sources-list li::before { content: counter(sources, decimal-leading-zero); color: var(--soft); font: 10px/1.8 "Roboto Mono", monospace; }
+    .xref { margin-left: 2px; color: var(--blue); font: 500 .68em/1 "Roboto Mono", monospace; text-decoration: none; vertical-align: super; }
+    .xlink { margin-left: 6px; border-bottom: 1px dashed currentColor; color: var(--muted); text-decoration: none; }
+    .xlink::after { content: " ↗"; }
+    .to-top { position: fixed; right: max(18px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); z-index: 30; width: 44px; height: 44px; border: 1px solid var(--line-strong); border-radius: 50%; background: rgba(255,253,250,.9); color: var(--ink); cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .to-top.visible { opacity: 1; pointer-events: auto; }
+    .js.reveal-ready .reveal { opacity: 0; transform: translateY(18px); }
+    .js.reveal-ready .reveal.is-visible { opacity: 1; transform: none; transition: opacity .65s ease, transform .65s ease; }
+    @media (max-width: 720px) {
+      body { font-size: 16px; }
+      .header-inner { align-items: stretch; }
+      .brand { padding: 18px 0; }
+      .nav { max-width: 56%; }
+      .hero { padding: 72px 0 66px; }
+      .hero-grid, .section-head, .framework { grid-template-columns: 1fr; }
+      .hero-grid { gap: 34px; }
+      .section-head { gap: 24px; margin-bottom: 44px; }
+      .framework { gap: 26px; padding: 42px 0; }
+      .framework-aside { position: static; }
+      .flow { grid-template-columns: 1fr; }
+      .stat-strip { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 430px) {
+      .wrap { width: min(100% - 28px, var(--max)); }
+      h1 { font-size: clamp(2.15rem, 12.5vw, 3rem); }
+      .brand { font-size: 11px; }
+      .nav { max-width: 44%; gap: 16px; }
+      .hero { padding-top: 54px; }
+      .section { padding: 66px 0; }
+      .split { grid-template-columns: 1fr; }
+      .diagram-block { margin-inline: -4px; padding: 16px; }
+      .chart-scroll svg { min-width: 560px; }
+      .stat-strip { gap: 12px; }
+      .sources-list li { grid-template-columns: 30px 1fr; gap: 8px; }
+    }
+    @media (hover: none) {
+      .anchor { opacity: .55; }
+      .nav a { padding-inline: 4px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+      .js.reveal-ready .reveal, .js.diagram-motion-ready .observe-diagram .diagram-node { opacity: 1 !important; transform: none !important; }
+      .js.diagram-motion-ready .observe-diagram .diagram-path { stroke-dashoffset: 0 !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span></span></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top"><span class="brand-dot" aria-hidden="true"></span><span>Model Selection</span></a>
+      <nav class="nav" aria-label="Article sections">
+        <a href="#workload" style="--spy:var(--orange)">Workload</a>
+        <a href="#families" style="--spy:var(--blue)">Families</a>
+        <a href="#deployment" style="--spy:var(--purple)">Deployment</a>
+        <a href="#selection" style="--spy:var(--green)">Selection</a>
+        <a href="#sources" style="--spy:var(--gold)">Sources</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content">
+    <section class="hero" id="top" aria-labelledby="article-title">
+      <div class="wrap">
+        <div class="eyebrow">LLM Inference Field Guide</div>
+        <h1 id="article-title">
+          <span class="line"><span class="line-inner" style="--i:0">The model is</span></span>
+          <span class="line"><span class="line-inner" style="--i:1"><em>not</em> the product.</span></span>
+        </h1>
+        <div class="hero-grid">
+          <div>
+            <p class="lead">Choosing an LLM is not a shopping exercise. You are selecting a behavior, an artifact, and a serving configuration that must survive real traffic, real constraints, and real failures. The best model is the smallest operable system that clears your release bar.</p>
+            <div class="hero-links">
+              <a href="#workload">Define the workload</a>
+              <a href="#families">Read model labels</a>
+              <a href="#selection">Run the decision</a>
+            </div>
+            <div class="byline">
+              <span class="avatar" aria-hidden="true">AR</span>
+              <div><strong>Ali Reza Rashidi</strong><div class="byline-meta"><span>12 min read</span><span>Updated Sep 4, 2026</span></div></div>
+            </div>
+          </div>
+          <div>
+            <p class="hero-note">A leaderboard can introduce candidates. It cannot tell you which configuration will obey your policy, fit your hardware, meet your tail-latency target, or survive your traffic mix.</p>
+            <aside class="toc" aria-label="In this piece">
+              <p class="toc-label">In this piece</p>
+              <ol>
+                <li><a href="#workload">Start with the workload</a></li>
+                <li><a href="#families">Choose the right intelligence</a></li>
+                <li><a href="#deployment">Read the deployable artifact</a></li>
+                <li><a href="#selection">Let evidence choose</a></li>
+                <li><a href="#sources">Primary sources</a></li>
+              </ol>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="section reveal" id="workload" aria-labelledby="workload-title" style="--spy:var(--orange)">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">01</span><span>— Workload</span></div>
+            <h2 id="workload-title">Begin with a contract, not a model name.<a class="anchor" href="#workload" aria-label="Link to Workload section">#</a></h2>
+          </div>
+          <p class="body-copy">“Which LLM is best?” is incomplete. Best for which inputs, which decisions, which latency target, which failure cost, and which deployment boundary? Fix those variables before you compare candidates.</p>
+        </div>
+
+        <article class="framework" style="--ac:var(--orange)">
+          <aside class="framework-aside" aria-labelledby="workload-contract">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="workload-contract">Write the workload contract<a class="anchor" href="#workload-contract" aria-label="Link to workload contract">#</a></h3></div>
+            <div class="framework-role">Gate 01 · Product behavior</div>
+            <p class="framework-summary">Make success, traffic, safety, and operating limits observable before testing a model.</p>
+          </aside>
+          <div class="framework-content">
+            <p>Use one concrete system. Ticket <strong>SUP-4821</strong> arrives in Persian: a customer says a refund never appeared. Your support copilot must identify the issue, retrieve the applicable refund policy, return a strict JSON object, and draft a short reply in the customer’s language. It may explain the next step. It may not claim that a refund was issued unless a tool confirms it.</p>
+            <p>The product serves 40 requests per second at peak. At least 95% of tickets must reach the correct queue. The P95 time to first token must remain below 800 milliseconds. The service has a fixed monthly inference budget and cannot send account data outside approved regions. Those statements do more selection work than “use a powerful reasoning model.” They create gates a candidate can pass or fail.</p>
+            <p>The Modular handbook provides a useful taxonomy—base, instruct, chat, dense, Mixture of Experts, specialist models, hubs, and weight formats.<a class="xref" href="#src-1">[1]</a> Taxonomy helps you read the shelf. It does not replace a workload contract. Production selection is a constrained optimization problem: eliminate models that cannot satisfy hard constraints, establish a quality threshold, then optimize the survivors for cost and speed.</p>
+
+            <div class="flow">
+              <div class="flow-item" style="--ac:var(--orange)"><span class="fnum">01 / BEHAVIOR</span><strong>Name the decision</strong><p>Route the issue, ground the answer, produce valid JSON, and abstain when evidence is missing.</p></div>
+              <div class="flow-item" style="--ac:var(--blue)"><span class="fnum">02 / SERVICE</span><strong>Name the traffic</strong><p>Languages, context lengths, peak concurrency, output lengths, and retry distribution.</p></div>
+              <div class="flow-item" style="--ac:var(--green)"><span class="fnum">03 / BOUNDARY</span><strong>Name the limits</strong><p>Latency, cost, privacy, region, licensing, safety, and hardware capacity.</p></div>
+            </div>
+            <div class="formula">Candidate value = quality above threshold − operational cost − failure cost</div>
+            <p>Do not collapse performance into average latency. An interactive assistant cares about time to first token and inter-token latency. A multi-call agent cares about end-to-end completion because one slow step blocks the next. An offline batch may care mostly about throughput. Tail latency matters because your users experience the slow requests, not the mean. Goodput—the number of requests that meet an explicit service objective—is often more honest than raw tokens per second.<a class="xref" href="#src-2">[2]</a><a class="xref" href="#src-3">[3]</a></p>
+            <p class="callout-line" style="--ac:var(--orange)">A benchmark score is evidence about a model under one protocol.<small>Your release decision is evidence about a complete system under your workload.</small></p>
+          </div>
+        </article>
+
+        <article class="framework" style="--ac:var(--cyan)">
+          <aside class="framework-aside" aria-labelledby="selection-unit">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="selection-unit">Define the unit you are choosing<a class="anchor" href="#selection-unit" aria-label="Link to selection unit">#</a></h3></div>
+            <div class="framework-role">Gate 02 · Reproducibility</div>
+            <p class="framework-summary">A model family name is not enough to reproduce behavior or serving performance.</p>
+          </aside>
+          <div class="framework-content">
+            <p>Your deployable unit is a configuration: provider or repository, immutable revision, base or post-trained variant, chat template, tokenizer, weight format, quantization method, inference engine, engine version, hardware topology, context limit, batching policy, and generation settings. Change any one of these and you may change quality, memory, latency, or all three.</p>
+            <p>For a hosted API, the equivalent unit includes the stable model identifier, reasoning setting, tools, response schema, region, rate limits, retry policy, and provider version guarantees. “We tested Model X” is not a reproducible statement. “We tested snapshot X with prompt v12, schema v4, retrieval index r18, and the recorded traffic distribution” is.</p>
+            <div class="code">
+              <div class="code-label">Selection record for SUP-4821</div>
+              <pre><code>candidate:
+  model_revision: immutable-id
+  interface: chat-template-v3
+  artifact: safetensors | bf16
+  runtime: engine-version + hardware
+  workload: support-eval-v5
+  limits: 8k input | 300 output | 40 rps
+  result: quality + p95_ttft + goodput + cost/success</code></pre>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section reveal" id="families" aria-labelledby="families-title" style="--spy:var(--blue)">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">02</span><span>— Families</span></div>
+            <h2 id="families-title">Choose the kind of intelligence before its size.<a class="anchor" href="#families" aria-label="Link to Families section">#</a></h2>
+          </div>
+          <p class="body-copy">Model labels describe training history, architecture, or modality. They are clues—not guarantees. Read the model card and interface, then test the behavior you need.</p>
+        </div>
+
+        <article class="framework" style="--ac:var(--blue)">
+          <aside class="framework-aside" aria-labelledby="base-models">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="base-models">Base models<a class="anchor" href="#base-models" aria-label="Link to Base models">#</a></h3></div>
+            <div class="framework-role">Class 01 · Pretraining</div>
+            <p class="framework-summary">A foundation for research and post-training, not automatically the best assistant interface.</p>
+          </aside>
+          <div class="framework-content">
+            <p>A base language model is commonly trained through self-supervised next-token prediction over a large corpus. It learns patterns that support completion, in-context learning, and many latent capabilities. Saying it “cannot follow instructions” is too absolute. The useful operational statement is narrower: it was not post-trained for the assistant interaction contract you expect.</p>
+            <p>Choose a base model when you intend to continue pretraining, study raw model behavior, or build your own post-training pipeline. For SUP-4821, that is usually unnecessary work. The product needs instruction following, safe abstention, tool use, and a response schema. A post-trained candidate offers a more relevant starting point. The InstructGPT results famously showed that a much smaller post-trained model could be preferred over a far larger pretrained model on the evaluated prompt distribution—parameter count alone did not determine usefulness.<a class="xref" href="#src-4">[4]</a></p>
+          </div>
+        </article>
+
+        <article class="framework" style="--ac:var(--purple)">
+          <aside class="framework-aside" aria-labelledby="instruction-chat">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="instruction-chat">Instruction-tuned and chat models<a class="anchor" href="#instruction-chat" aria-label="Link to instruction and chat models">#</a></h3></div>
+            <div class="framework-role">Class 02 · Post-training</div>
+            <p class="framework-summary">Judge the interface and training contract, not inconsistent naming conventions.</p>
+          </aside>
+          <div class="framework-content">
+            <p>Instruction tuning exposes a model to tasks and desired responses. Preference optimization may further shape helpfulness, safety, and style. “Instruct” and “Chat” are not standardized stages shared by every vendor. Many conversational models are called instruct models. The name is less important than the model card, intended use, supported features, and required chat template.</p>
+            <p>A chat template converts role-and-content messages into the exact token sequence a model was trained to interpret. Control tokens differ between families. Using the wrong template can quietly damage performance even when the weights load correctly.<a class="xref" href="#src-5">[5]</a> A chat model is also not inherently stateful: your application or provider usually resends conversation history. The model interprets that serialized history; its weights do not remember the previous API call.</p>
+            <div class="split">
+              <div class="text-block" style="--ac:var(--red)"><h4>Name-driven selection</h4><p>Assumes every “Chat” model owns memory and every “Instruct” model behaves like a single-turn command processor.</p></div>
+              <div class="text-block" style="--ac:var(--green)"><h4>Interface-driven selection</h4><p>Checks the template, message roles, tool protocol, schema support, context handling, and evaluation results.</p></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="framework" style="--ac:var(--green)">
+          <aside class="framework-aside" aria-labelledby="specialist-models">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="specialist-models">Specialist models<a class="anchor" href="#specialist-models" aria-label="Link to Specialist models">#</a></h3></div>
+            <div class="framework-role">Class 03 · Composition</div>
+            <p class="framework-summary">Use a dedicated primitive when generation is not the job.</p>
+          </aside>
+          <div class="framework-content">
+            <p>SUP-4821 does not need one giant model to impersonate an entire system. An embedding model can retrieve semantically related policy passages. A reranker can reorder those candidates. A deterministic service can fetch account status. A generator can synthesize the grounded reply. Vision-language and speech models belong only when the input actually contains images or audio.</p>
+            <p>This is not an argument for maximum composition. Every component adds a versioned interface, latency, monitoring, and another failure mode. Add a specialist only when the system-level evaluation shows that it improves the outcome enough to justify that burden. A fixed classifier may beat a generator for a closed label set. A keyword rule may beat both for a stable compliance phrase.</p>
+
+            <figure class="diagram-block observe-diagram">
+              <figcaption class="diagram-title">A multi-model system for ticket SUP-4821</figcaption>
+              <div class="chart-scroll">
+                <svg viewBox="0 0 960 480" role="img" aria-labelledby="model-system-title model-system-desc" aria-label="A multi-model support system routes one ticket through retrieval, account tools, generation, and validation.">
+                  <title id="model-system-title">The SUP-4821 multi-model system</title>
+                  <desc id="model-system-desc">The customer ticket enters a retrieval and account-data layer, then a generative model produces a structured answer that a validation gate either releases or escalates.</desc>
+                  <defs>
+                    <marker id="sys-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#5b6b7a"></polygon></marker>
+                    <marker id="sys-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#eb8237"></polygon></marker>
+                  </defs>
+                  <rect width="960" height="480" fill="#fffdfa"></rect>
+                  <rect x="236" y="48" width="328" height="300" rx="8" fill="rgba(52,104,245,.025)" stroke="rgba(52,104,245,.2)" stroke-dasharray="4 4"></rect>
+                  <rect x="248" y="52" width="96" height="20" fill="#fffdfa"></rect>
+                  <text x="296" y="66" text-anchor="middle" class="svg-mono" font-size="8" fill="#3468f5">EVIDENCE LAYER</text>
+                  <rect x="584" y="48" width="316" height="300" rx="8" fill="rgba(35,149,111,.025)" stroke="rgba(35,149,111,.2)" stroke-dasharray="4 4"></rect>
+                  <rect x="596" y="52" width="92" height="20" fill="#fffdfa"></rect>
+                  <text x="642" y="66" text-anchor="middle" class="svg-mono" font-size="8" fill="#23956f">DECISION LAYER</text>
+                  <path d="M 200 176 H 232 Q 240 176 240 168 V 148 Q 240 140 248 140 H 280" fill="none" stroke="#5b6b7a" stroke-width="1.2" marker-end="url(#sys-arrow)" class="diagram-path" style="--d:.08s"></path>
+                  <path d="M 200 200 H 232 Q 240 200 240 208 V 252 Q 240 260 248 260 H 280" fill="none" stroke="#5b6b7a" stroke-width="1.2" marker-end="url(#sys-arrow)" class="diagram-path" style="--d:.12s"></path>
+                  <path d="M 400 140 H 468 Q 476 140 476 148 V 160" fill="none" stroke="#5b6b7a" stroke-width="1.2" marker-end="url(#sys-arrow)" class="diagram-path" style="--d:.16s"></path>
+                  <path d="M 400 260 H 468 Q 476 260 476 252 V 240" fill="none" stroke="#5b6b7a" stroke-width="1.2" marker-end="url(#sys-arrow)" class="diagram-path" style="--d:.24s"></path>
+                  <path d="M 552 200 H 624" fill="none" stroke="#eb8237" stroke-width="1.5" marker-end="url(#sys-arrow-accent)" class="diagram-path" style="--d:.32s"></path>
+                  <path d="M 760 200 H 804" fill="none" stroke="#5b6b7a" stroke-width="1.2" marker-end="url(#sys-arrow)" class="diagram-path" style="--d:.40s"></path>
+                  <path d="M 828 232 V 300 H 760" fill="none" stroke="#5b6b7a" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#sys-arrow)" class="diagram-path diagram-path-dashed" style="--d:.48s"></path>
+                  <g class="diagram-node" style="--d:.04s"><rect x="64" y="144" width="136" height="80" rx="8" fill="#fffdfa" stroke="rgba(23,23,23,.24)"></rect><text x="132" y="176" text-anchor="middle" class="svg-title" font-size="16" font-weight="700" fill="#171717">SUP-4821</text><text x="132" y="198" text-anchor="middle" class="svg-mono" font-size="8" fill="#656565">PERSIAN TICKET</text></g>
+                  <g class="diagram-node" style="--d:.12s"><rect x="280" y="100" width="120" height="80" rx="8" fill="rgba(52,104,245,.06)" stroke="#3468f5"></rect><text x="340" y="132" text-anchor="middle" class="svg-title" font-size="14" font-weight="700" fill="#171717">Embedding</text><text x="340" y="154" text-anchor="middle" class="svg-mono" font-size="8" fill="#656565">POLICY SEARCH</text></g>
+                  <g class="diagram-node" style="--d:.20s"><rect x="280" y="220" width="120" height="80" rx="8" fill="#fffdfa" stroke="rgba(23,23,23,.24)"></rect><text x="340" y="252" text-anchor="middle" class="svg-title" font-size="14" font-weight="700" fill="#171717">Account tool</text><text x="340" y="274" text-anchor="middle" class="svg-mono" font-size="8" fill="#656565">REFUND STATUS</text></g>
+                  <g class="diagram-node" style="--d:.28s"><rect x="476" y="160" width="76" height="80" rx="8" fill="#171717" stroke="#171717"></rect><text x="514" y="192" text-anchor="middle" class="svg-title" font-size="13" font-weight="700" fill="#f5f3ec">Evidence</text><text x="514" y="214" text-anchor="middle" class="svg-mono" font-size="8" fill="#c9c7bf">BUNDLE</text></g>
+                  <g class="diagram-node" style="--d:.36s"><rect x="624" y="152" width="136" height="96" rx="8" fill="rgba(235,130,55,.08)" stroke="#eb8237" stroke-width="1.5"></rect><text x="692" y="190" text-anchor="middle" class="svg-title" font-size="16" font-weight="700" fill="#171717">Generator</text><text x="692" y="212" text-anchor="middle" class="svg-mono" font-size="8" fill="#656565">JSON + DRAFT</text></g>
+                  <g class="diagram-node" style="--d:.44s"><rect x="804" y="152" width="96" height="80" rx="8" fill="rgba(35,149,111,.06)" stroke="#23956f"></rect><text x="852" y="184" text-anchor="middle" class="svg-title" font-size="14" font-weight="700" fill="#171717">Validate</text><text x="852" y="206" text-anchor="middle" class="svg-mono" font-size="8" fill="#656565">RELEASE</text></g>
+                  <g class="diagram-node" style="--d:.52s"><rect x="624" y="284" width="136" height="64" rx="8" fill="#fffdfa" stroke="rgba(219,100,120,.6)"></rect><text x="692" y="312" text-anchor="middle" class="svg-title" font-size="14" font-weight="700" fill="#171717">Human queue</text><text x="692" y="332" text-anchor="middle" class="svg-mono" font-size="8" fill="#db6478">FAIL CLOSED</text></g>
+                  <line x1="64" y1="404" x2="896" y2="404" stroke="rgba(23,23,23,.12)"></line>
+                  <text x="64" y="432" class="svg-mono" font-size="8" fill="#989898" letter-spacing="1.1">SOLID = REQUEST FLOW · DASHED = ESCALATION · ORANGE = GENERATIVE DECISION</text>
+                </svg>
+              </div>
+              <p class="diagram-caption"><strong>How to read this:</strong> the LLM owns synthesis, not every operation. Retrieval and account status become explicit evidence; validation decides whether the answer is released or escalated. Remove a component if the end-to-end evaluation shows it adds no value.</p>
+            </figure>
+          </div>
+        </article>
+      </section>
+    </div>
+
+    <section class="section section-dark reveal" id="deployment" aria-labelledby="deployment-title">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">03</span><span>— Deployment</span></div>
+            <h2 id="deployment-title">Read the architecture and artifact correctly.<a class="anchor" href="#deployment" aria-label="Link to Deployment section">#</a></h2>
+          </div>
+          <p class="body-copy">Parameter counts, weight formats, and quantization labels are compressed descriptions. They become useful only when you understand what they include—and what they leave out.</p>
+        </div>
+
+        <article class="framework" style="--ac:var(--orange)">
+          <aside class="framework-aside" aria-labelledby="dense-moe">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="dense-moe">Dense and Mixture of Experts<a class="anchor" href="#dense-moe" aria-label="Link to dense and MoE models">#</a></h3></div>
+            <div class="framework-role">Architecture · Compute path</div>
+            <p class="framework-summary">Separate resident model capacity from the parameters activated for each token.</p>
+          </aside>
+          <div class="framework-content">
+            <p>In a dense transformer block, the same feed-forward parameters participate for each token. A sparse Mixture-of-Experts block contains several learned subnetworks and a router that activates a subset. Mixtral 8x7B, for example, routes each token to two of eight feed-forward experts and reports 47 billion total parameters with about 13 billion active per token.<a class="xref" href="#src-6">[6]</a></p>
+            <p>Do not imagine an expert as a labeled human specialist for mathematics, code, or Persian. It is a learned subnetwork. Specialization can be overlapping, shallow, or difficult to interpret. Sparse activation can lower arithmetic per token relative to activating all parameters, but the full weights still need storage or distribution. Routing, all-to-all communication, load imbalance, batch shape, kernels, and hardware topology decide whether theoretical savings become real throughput.</p>
+            <div class="split">
+              <div class="text-block" style="--ac:var(--blue)"><h4>Dense budget</h4><p>Total parameters are broadly aligned with parameters used per token. Serving is conceptually simpler, though large dense models remain expensive.</p></div>
+              <div class="text-block" style="--ac:var(--orange)"><h4>MoE budget</h4><p>Total parameters describe resident capacity; active parameters describe part of per-token compute. Neither number alone predicts latency or VRAM.</p></div>
+            </div>
+            <p>A suffix such as <code>30B-A3B</code> describes roughly total and active parameter counts—not the total and active number of experts. The official Qwen3-30B-A3B model card separately lists 30.5B total parameters, 3.3B activated parameters, 128 experts, and eight activated experts.<a class="xref" href="#src-7">[7]</a> Naming is metadata; the model card is the contract to inspect.</p>
+          </div>
+        </article>
+
+        <article class="framework" style="--ac:var(--purple)">
+          <aside class="framework-aside" aria-labelledby="weights-formats">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="weights-formats">Weights, formats, and quantization<a class="anchor" href="#weights-formats" aria-label="Link to weights formats and quantization">#</a></h3></div>
+            <div class="framework-role">Artifact · Runtime boundary</div>
+            <p class="framework-summary">Choose a format for the runtime, then verify the exact artifact and its loading boundary.</p>
+          </aside>
+          <div class="framework-content">
+            <p>PyTorch checkpoints, Safetensors, and GGUF solve different packaging and runtime problems. PyTorch warns that <code>torch.load</code> uses an unpickler and that untrusted data must never be loaded casually. Current <code>weights_only=True</code> restricts what may be reconstructed, but executable repository code remains a separate concern.<a class="xref" href="#src-8">[8]</a></p>
+            <p>Safetensors stores tensor metadata and raw tensor data without the pickle mechanism. It supports lazy and memory-mapped access and narrows the weight-deserialization attack surface.<a class="xref" href="#src-9">[9]</a> It does not certify the tokenizer, custom Python code, license, training data, or model behavior. A safe container is not a safe product.</p>
+            <p>GGUF is a versioned binary container used by the GGML and llama.cpp ecosystem. It can carry architecture, tokenizer, metadata, tensor types, and weights. GGUF is commonly associated with local quantized models, but quantization is optional in the specification.<a class="xref" href="#src-10">[10]</a> Choose it when your runtime supports the architecture and artifact you need—not because the extension itself promises speed.</p>
+            <p>Quantization represents weights, and sometimes activations or caches, with lower precision. It can reduce memory and enable a model that otherwise would not fit. It does not guarantee proportional latency improvement or zero quality loss. Hardware support, kernels, dequantization overhead, calibration data, model family, task, and bit width all matter.<a class="xref" href="#src-11">[11]</a></p>
+            <div class="formula">weight bytes ≈ total parameters × bits per parameter ÷ 8</div>
+            <p>That formula is a floor for weight storage, not a serving-capacity estimate. KV cache grows with context length and concurrent requests. Activations, workspace buffers, communication, runtime allocations, and CUDA graphs need room too.<a class="xref" href="#src-18">[18]</a> For MoE, use total parameters when reasoning about resident weights and active parameters as one signal about arithmetic per token.</p>
+            <p class="callout-line" style="--ac:var(--purple)">The file that fits is not automatically the system that serves.<small>Benchmark memory and latency at the context lengths, concurrency, and output distribution you expect.</small></p>
+          </div>
+        </article>
+
+        <article class="framework" style="--ac:var(--gold)">
+          <aside class="framework-aside" aria-labelledby="model-hubs">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="model-hubs">Model cards, hubs, and licenses<a class="anchor" href="#model-hubs" aria-label="Link to model cards and licenses">#</a></h3></div>
+            <div class="framework-role">Supply chain · Operability</div>
+            <p class="framework-summary">A discoverable repository is not a legal approval, security review, or production guarantee.</p>
+          </aside>
+          <div class="framework-content">
+            <p>Hugging Face and other hubs distribute weights, tokenizers, configuration, adapters, code, evaluations, and documentation.<a class="xref" href="#src-17">[17]</a> A model card should explain intended use, limitations, training information, and evaluation results, but cards are publisher-authored and vary in completeness.<a class="xref" href="#src-12">[12]</a> Verify publisher identity, lineage, immutable revision, license file, training disclosures, template, required executable code, and the exact artifact you plan to run.</p>
+            <p>“Available weights” does not automatically mean “open source” or “commercially usable.” A metadata field is not independent legal certification. Gating has a specific meaning on Hugging Face: users request access and share information with the model author; approval may be automatic or manual and can later be revoked.<a class="xref" href="#src-13">[13]</a> Gating alone does not prove stricter license terms, weak engineering quality, or poor availability. Inspect each condition directly.</p>
+            <p>For hosted APIs, the supply-chain review changes shape: examine data controls, region availability, retention, rate limits, tool support, stable identifiers, deprecation policy, and provider terms. Self-hosting gives you more control over data and runtime, but also makes capacity, patching, monitoring, model loading, abuse controls, and incident response your responsibility.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="section reveal" id="selection" aria-labelledby="selection-title" style="--spy:var(--green)">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span>— Selection</span></div>
+            <h2 id="selection-title">Let the workload eliminate candidates.<a class="anchor" href="#selection" aria-label="Link to Selection section">#</a></h2>
+          </div>
+          <p class="body-copy">Public benchmarks create a shortlist. Your fixed evaluation set, deployment stack, and release thresholds choose the winner.</p>
+        </div>
+
+        <article class="framework" style="--ac:var(--green)">
+          <aside class="framework-aside" aria-labelledby="evaluate-system">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="evaluate-system">Evaluate the system<a class="anchor" href="#evaluate-system" aria-label="Link to evaluate the system">#</a></h3></div>
+            <div class="framework-role">Decision · Evidence</div>
+            <p class="framework-summary">Test typical, edge, and adversarial cases with the same prompt, tools, data, and serving conditions.</p>
+          </aside>
+          <div class="framework-content">
+            <p>Start with a capable candidate to establish a quality ceiling. Build the full behavior: prompt, retrieval, tools, response schema, safety checks, and retry policy. Once it clears the quality bar, test smaller models, shorter contexts, lower reasoning settings, quantized artifacts, caching, or routing. OpenAI describes the same general sequence: optimize for accuracy first, then preserve it with the cheapest and fastest option.<a class="xref" href="#src-14">[14]</a></p>
+            <p>For SUP-4821, the evaluation set should contain English and Persian tickets, obvious and ambiguous refund cases, missing account evidence, conflicting policy passages, malformed customer input, tool failures, long histories, and prompt-injection attempts. Measure routing accuracy by language and issue type, JSON validity, required-field completion, groundedness, unsupported refund claims, correct abstention, tool-call correctness, output length, retry rate, and human escalation.</p>
+            <p>Use deterministic checks for schema, labels, tool arguments, forbidden claims, and policy identifiers. Use calibrated human review—or a model grader validated against human judgments—for tone and nuanced groundedness. Measure P50 and P95 time to first token, inter-token latency, end-to-end latency, goodput, peak memory, and cost per successful request. Cost per token hides retries, escalations, and downstream corrections.</p>
+
+            <figure class="diagram-block observe-diagram">
+              <figcaption class="diagram-title">The selection funnel for SUP-4821</figcaption>
+              <div class="chart-scroll">
+                <svg viewBox="0 0 960 380" role="img" aria-labelledby="selection-funnel-title selection-funnel-desc" aria-label="A six-stage funnel eliminates model configurations that fail workload, capability, legal, quality, or serving gates.">
+                  <title id="selection-funnel-title">The SUP-4821 model-selection funnel</title>
+                  <desc id="selection-funnel-desc">Candidates move from a workload contract through capability, legal and operational, quality, and serving gates until one versioned deployable configuration remains.</desc>
+                  <defs><marker id="funnel-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#5b6b7a"></polygon></marker><marker id="funnel-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#23956f"></polygon></marker></defs>
+                  <rect width="960" height="380" fill="#fffdfa"></rect>
+                  <line x1="184" y1="164" x2="216" y2="164" stroke="#5b6b7a" stroke-width="1.2" marker-end="url(#funnel-arrow)" class="diagram-path" style="--d:.08s"></line>
+                  <line x1="344" y1="164" x2="376" y2="164" stroke="#5b6b7a" stroke-width="1.2" marker-end="url(#funnel-arrow)" class="diagram-path" style="--d:.16s"></line>
+                  <line x1="504" y1="164" x2="536" y2="164" stroke="#5b6b7a" stroke-width="1.2" marker-end="url(#funnel-arrow)" class="diagram-path" style="--d:.24s"></line>
+                  <line x1="664" y1="164" x2="696" y2="164" stroke="#5b6b7a" stroke-width="1.2" marker-end="url(#funnel-arrow)" class="diagram-path" style="--d:.32s"></line>
+                  <line x1="824" y1="164" x2="856" y2="164" stroke="#23956f" stroke-width="1.5" marker-end="url(#funnel-arrow-accent)" class="diagram-path" style="--d:.40s"></line>
+                  <g class="diagram-node" style="--d:.04s"><rect x="56" y="108" width="128" height="112" rx="8" fill="#fffdfa" stroke="rgba(23,23,23,.24)"></rect><text x="120" y="140" text-anchor="middle" class="svg-mono" font-size="8" fill="#eb8237">01 · CONTRACT</text><text x="120" y="170" text-anchor="middle" class="svg-title" font-size="14" font-weight="700" fill="#171717">Workload</text><text x="120" y="194" text-anchor="middle" class="svg-mono" font-size="8" fill="#656565">SUCCESS + SLO</text></g>
+                  <g class="diagram-node" style="--d:.12s"><rect x="216" y="108" width="128" height="112" rx="8" fill="#fffdfa" stroke="rgba(23,23,23,.24)"></rect><text x="280" y="140" text-anchor="middle" class="svg-mono" font-size="8" fill="#3468f5">02 · CLASS</text><text x="280" y="170" text-anchor="middle" class="svg-title" font-size="14" font-weight="700" fill="#171717">Capability</text><text x="280" y="194" text-anchor="middle" class="svg-mono" font-size="8" fill="#656565">TEXT + TOOLS</text></g>
+                  <g class="diagram-node" style="--d:.20s"><rect x="376" y="108" width="128" height="112" rx="8" fill="#fffdfa" stroke="rgba(23,23,23,.24)"></rect><text x="440" y="140" text-anchor="middle" class="svg-mono" font-size="8" fill="#7650e6">03 · BOUNDARY</text><text x="440" y="170" text-anchor="middle" class="svg-title" font-size="14" font-weight="700" fill="#171717">Legal + ops</text><text x="440" y="194" text-anchor="middle" class="svg-mono" font-size="8" fill="#656565">LICENSE + REGION</text></g>
+                  <g class="diagram-node" style="--d:.28s"><rect x="536" y="108" width="128" height="112" rx="8" fill="rgba(235,130,55,.07)" stroke="#eb8237"></rect><text x="600" y="140" text-anchor="middle" class="svg-mono" font-size="8" fill="#b85c20">04 · EVAL</text><text x="600" y="170" text-anchor="middle" class="svg-title" font-size="14" font-weight="700" fill="#171717">Quality gate</text><text x="600" y="194" text-anchor="middle" class="svg-mono" font-size="8" fill="#656565">95% + NO CLAIMS</text></g>
+                  <g class="diagram-node" style="--d:.36s"><rect x="696" y="108" width="128" height="112" rx="8" fill="#fffdfa" stroke="rgba(23,23,23,.24)"></rect><text x="760" y="140" text-anchor="middle" class="svg-mono" font-size="8" fill="#14a9c5">05 · SERVE</text><text x="760" y="170" text-anchor="middle" class="svg-title" font-size="14" font-weight="700" fill="#171717">Benchmark</text><text x="760" y="194" text-anchor="middle" class="svg-mono" font-size="8" fill="#656565">P95 + GOODPUT</text></g>
+                  <g class="diagram-node" style="--d:.44s"><rect x="856" y="108" width="80" height="112" rx="8" fill="rgba(35,149,111,.08)" stroke="#23956f" stroke-width="1.5"></rect><text x="896" y="140" text-anchor="middle" class="svg-mono" font-size="8" fill="#176f54">06</text><text x="896" y="170" text-anchor="middle" class="svg-title" font-size="14" font-weight="700" fill="#171717">Ship</text><text x="896" y="194" text-anchor="middle" class="svg-mono" font-size="8" fill="#656565">PINNED</text></g>
+                  <line x1="56" y1="276" x2="936" y2="276" stroke="rgba(23,23,23,.12)"></line>
+                  <text x="56" y="304" class="svg-mono" font-size="8" fill="#989898" letter-spacing="1.1">EACH GATE REMOVES CANDIDATES · THE OUTPUT IS A VERSIONED CONFIGURATION</text>
+                  <text x="56" y="332" class="svg-mono" font-size="8" fill="#656565">Rejected candidates remain useful evidence: record why each one failed.</text>
+                </svg>
+              </div>
+              <p class="diagram-caption"><strong>How to read this:</strong> move left to right and stop a candidate as soon as it fails a hard gate. Only candidates that clear quality are worth fine-grained serving optimization. The final object is pinned and reproducible—not merely a model family name.</p>
+            </figure>
+          </div>
+        </article>
+
+        <article class="framework" style="--ac:var(--cyan)">
+          <aside class="framework-aside" aria-labelledby="benchmark-artifact">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="benchmark-artifact">Benchmark the exact artifact<a class="anchor" href="#benchmark-artifact" aria-label="Link to benchmark artifact">#</a></h3></div>
+            <div class="framework-role">Decision · Serving</div>
+            <p class="framework-summary">Hold the workload constant and record the complete stack for every candidate.</p>
+          </aside>
+          <div class="framework-content">
+            <p>Public evaluations are useful for screening. They rarely match your languages, policy constraints, context distribution, tool protocol, quantization, or hardware. Compare candidates on the same held-out cases, prompt, retrieval corpus, sampling policy, concurrency schedule, and maximum lengths. Warm-up behavior, prefix caching, batching, and rate limiting must match the intended service.</p>
+            <p>Pin API snapshots and repository revisions. Re-run the suite when the model, prompt, tokenizer, template, retrieval index, tools, runtime, drivers, quantization, or hardware changes. Production failures should become regression cases. OpenAI and Anthropic both frame evaluation as an iterative discipline built around task-specific success criteria—not a final demonstration after the system has already been chosen.<a class="xref" href="#src-15">[15]</a><a class="xref" href="#src-16">[16]</a></p>
+
+            <div class="stat-strip">
+              <div class="stat"><strong>95%</strong><span>minimum correct routing target</span></div>
+              <div class="stat"><strong>800ms</strong><span>P95 TTFT ceiling</span></div>
+              <div class="stat"><strong>40 rps</strong><span>peak arrival rate</span></div>
+              <div class="stat"><strong>0</strong><span>unsupported refund claims allowed</span></div>
+            </div>
+            <p>These are workload requirements for the fictional SUP-4821 system, not claims about a particular model. They are valuable because they force a decision. Candidate A may be cheapest per token but fail the Persian routing threshold. Candidate B may pass quality but miss tail latency under concurrency. Candidate C may fit the GPU only at a quantization level that creates unacceptable grounding errors. The first configuration that passes every hard gate becomes a credible release candidate.</p>
+            <p>Then optimize on the Pareto frontier. A model is dominated when another candidate is at least as good on every decision metric and better on one. Keep tradeoffs visible: quality, latency, cost per successful request, operational complexity, and risk. A single weighted score can hide a safety failure behind a speed improvement, so hard constraints should remain gates rather than negotiable points.</p>
+            <p class="callout-line" style="--ac:var(--green)">The winning model is provisional.<small>Monitor drift, pin versions, canary changes, and keep a rollback configuration that already passed the same evaluation.</small></p>
+          </div>
+        </article>
+
+        <article class="framework" style="--ac:var(--gold)">
+          <aside class="framework-aside" aria-labelledby="decision-rule">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="decision-rule">Use a durable decision rule<a class="anchor" href="#decision-rule" aria-label="Link to decision rule">#</a></h3></div>
+            <div class="framework-role">Release · Reversible choice</div>
+            <p class="framework-summary">Choose the simplest configuration that passes, then preserve the evidence needed to change it safely.</p>
+          </aside>
+          <div class="framework-content">
+            <p>For SUP-4821, begin with the strongest operable candidate to learn what good looks like. If a smaller model matches its task-level quality, use the smaller one. If a quantized artifact preserves the release metrics, keep the memory saving. If routing easy tickets to a small model cuts cost without increasing false claims or escalations, add routing. If the router’s own errors and operational burden erase the benefit, return to one model.</p>
+            <p>This is the deeper point hidden beneath every model catalog: the model is a replaceable component inside a measured product. Your durable asset is the workload contract, evaluation set, deployment record, observability, and rollback path. Those artifacts let you adopt a better model without restarting the decision from folklore.</p>
+            <div class="formula">Choose = simplest configuration that clears every hard gate and lies on the measured frontier</div>
+            <p>The Modular handbook is a useful map of the vocabulary you will encounter.<a class="xref" href="#src-1">[1]</a> Use it to understand candidate classes and formats. Then go further: verify the model card, interpret architecture labels carefully, benchmark the exact runtime artifact, and let your own workload make the final choice.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="section reveal" id="sources" aria-labelledby="sources-title" style="--spy:var(--gold)">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span>— Sources</span></div>
+            <h2 id="sources-title">Read the contracts behind the labels.<a class="anchor" href="#sources" aria-label="Link to Sources section">#</a></h2>
+          </div>
+          <p class="body-copy">Model catalogs change quickly. These primary sources support the mechanisms and decision rules in this article; always verify the current model card, runtime documentation, and provider terms before deployment.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><span><strong>Choosing the right model.</strong> Modular LLM Inference Handbook. <a class="xlink" href="https://handbook.modular.com/getting-started/choosing-the-right-model/">Read the handbook</a></span></li>
+          <li id="src-2"><span><strong>Key metrics for LLM inference.</strong> Modular LLM Inference Handbook. <a class="xlink" href="https://handbook.modular.com/llm-inference-basics/llm-inference-metrics/">Read the guide</a></span></li>
+          <li id="src-3"><span><strong>Benchmark CLI.</strong> vLLM documentation. <a class="xlink" href="https://docs.vllm.ai/en/stable/cli/bench/">Read the documentation</a></span></li>
+          <li id="src-4"><span><strong>Training language models to follow instructions with human feedback.</strong> Ouyang et al., 2022. <a class="xlink" href="https://arxiv.org/abs/2203.02155">Read the paper</a></span></li>
+          <li id="src-5"><span><strong>Chat templates.</strong> Hugging Face Transformers documentation. <a class="xlink" href="https://huggingface.co/docs/transformers/chat_templating">Read the documentation</a></span></li>
+          <li id="src-6"><span><strong>Mixtral of Experts.</strong> Jiang et al., 2024. <a class="xlink" href="https://arxiv.org/abs/2401.04088">Read the paper</a></span></li>
+          <li id="src-7"><span><strong>Qwen3-30B-A3B model card.</strong> Qwen. <a class="xlink" href="https://huggingface.co/Qwen/Qwen3-30B-A3B">Read the model card</a></span></li>
+          <li id="src-8"><span><strong>torch.load.</strong> PyTorch documentation. <a class="xlink" href="https://docs.pytorch.org/docs/stable/generated/torch.load.html">Read the API reference</a></span></li>
+          <li id="src-9"><span><strong>Safetensors.</strong> Official repository and format rationale. <a class="xlink" href="https://github.com/huggingface/safetensors">Read the repository</a></span></li>
+          <li id="src-10"><span><strong>GGUF specification.</strong> GGML project. <a class="xlink" href="https://github.com/ggml-org/ggml/blob/master/docs/gguf.md">Read the specification</a></span></li>
+          <li id="src-11"><span><strong>Quantization.</strong> Hugging Face Transformers documentation. <a class="xlink" href="https://huggingface.co/docs/transformers/main_classes/quantization">Read the documentation</a></span></li>
+          <li id="src-12"><span><strong>Model cards.</strong> Hugging Face Hub documentation. <a class="xlink" href="https://huggingface.co/docs/hub/model-cards">Read the documentation</a></span></li>
+          <li id="src-13"><span><strong>Gated models.</strong> Hugging Face Hub documentation. <a class="xlink" href="https://huggingface.co/docs/hub/models-gated">Read the documentation</a></span></li>
+          <li id="src-14"><span><strong>Model selection.</strong> OpenAI API documentation. <a class="xlink" href="https://developers.openai.com/api/docs/guides/model-selection">Read the guide</a></span></li>
+          <li id="src-15"><span><strong>Evaluation best practices.</strong> OpenAI API documentation. <a class="xlink" href="https://developers.openai.com/api/docs/guides/evaluation-best-practices">Read the guide</a></span></li>
+          <li id="src-16"><span><strong>Define success criteria and build evaluations.</strong> Anthropic documentation. <a class="xlink" href="https://platform.claude.com/docs/en/test-and-evaluate/develop-tests">Read the guide</a></span></li>
+          <li id="src-17"><span><strong>Models and repositories.</strong> Hugging Face Hub documentation. <a class="xlink" href="https://huggingface.co/docs/hub/models">Read the documentation</a></span></li>
+          <li id="src-18"><span><strong>Calculating GPU memory for serving LLMs.</strong> Modular LLM Inference Handbook. <a class="xlink" href="https://handbook.modular.com/getting-started/calculating-gpu-memory-for-llms/">Read the guide</a></span></li>
+        </ol>
+      </section>
+    </div>
+  </main>
+
+  <button class="to-top" type="button" aria-label="Back to top">↑</button>
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const header = document.querySelector('.site-header');
+      const progress = document.querySelector('.progress span');
+      const toTop = document.querySelector('.to-top');
+      const navLinks = [...document.querySelectorAll('.nav a')];
+      const sections = [...document.querySelectorAll('main section[id]')].filter(section => section.id !== 'top');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const updateScroll = () => {
+        const y = window.scrollY;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        progress.style.width = `${max > 0 ? (y / max) * 100 : 0}%`;
+        header.classList.toggle('scrolled', y > 8);
+        toTop.classList.toggle('visible', y > 700);
+      };
+
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
+      }, { threshold: .08 });
+      root.classList.add('reveal-ready');
+      document.querySelectorAll('.reveal').forEach(element => revealObserver.observe(element));
+
+      const diagramObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
+      }, { threshold: .18 });
+      root.classList.add('diagram-motion-ready');
+      document.querySelectorAll('.observe-diagram').forEach(element => diagramObserver.observe(element));
+
+      const spyObserver = new IntersectionObserver(entries => {
+        const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${visible.target.id}`));
+      }, { rootMargin: '-25% 0px -60% 0px', threshold: [0, .2, .6] });
+      sections.forEach(section => spyObserver.observe(section));
+
+      if (reduceMotion) document.querySelectorAll('.reveal, .observe-diagram').forEach(element => element.classList.add('is-visible'));
+      window.addEventListener('scroll', updateScroll, { passive: true });
+      toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' }));
+      updateScroll();
+    })();
+  </script>
+</body>
+</html>

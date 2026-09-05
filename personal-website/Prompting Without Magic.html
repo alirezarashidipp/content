@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A practical guide to writing prompts as clear, testable specifications that remain useful as language models change.">
+  <title>Prompting Without Magic — Six Principles That Survive Model Changes</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='6' fill='%233468f5'/%3E%3Ccircle cx='23' cy='9' r='6' fill='%23eb8237'/%3E%3Ccircle cx='9' cy='23' r='6' fill='%2323956f'/%3E%3Ccircle cx='23' cy='23' r='6' fill='%23c9a227'/%3E%3C/svg%3E">
+  <meta property="og:title" content="Prompting Without Magic — Six Principles That Survive Model Changes">
+  <meta property="og:description" content="How to turn a vague request into a clear, testable prompt without relying on brittle tricks.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary">
+  <script>document.documentElement.classList.add('js');</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Prompting Without Magic: Six Principles That Survive Model Changes",
+    "description": "A practical guide to writing prompts as clear, testable specifications that remain useful as language models change.",
+    "datePublished": "2026-08-30",
+    "dateModified": "2026-08-30",
+    "author": {
+      "@type": "Person",
+      "name": "Ali Reza Rashidi"
+    }
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Roboto+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap">
+  <style>
+    :root {
+      --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898;
+      --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+      --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+      --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+      --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+      --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { color-scheme: light; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(23,23,23,.25) transparent; overflow-x: clip; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border: 2px solid var(--bg); border-radius: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    body { margin: 0; color: var(--ink); font-family: "DM Sans", sans-serif; line-height: 1.7; background: linear-gradient(180deg, #fffdfa, #fcfbf8); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+    ::selection { background: var(--ink); color: var(--paper); }
+    a { color: inherit; text-decoration: none; }
+    svg { display: block; width: 100%; height: auto; }
+    p { text-wrap: pretty; }
+    h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
+    [id] { scroll-margin-top: 96px; }
+    :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 2px; }
+
+    .wrap { position: relative; z-index: 1; width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    .skip-link { position: fixed; top: 10px; left: 16px; z-index: 400; padding: 9px 14px; color: var(--paper); background: var(--ink); font-weight: 700; transform: translateY(-160%); }
+    .skip-link:focus { transform: none; }
+    .progress { position: fixed; inset: 0 0 auto; z-index: 300; height: 2px; pointer-events: none; }
+    .progress span { display: block; width: 100%; height: 100%; background: var(--ink); transform: scaleX(0); transform-origin: left center; }
+    .grain { position: fixed; inset: 0; z-index: 0; opacity: .08; pointer-events: none; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E"); }
+    .site-head { position: sticky; top: 0; z-index: 200; transition: background .2s ease, box-shadow .2s ease; }
+    .site-head.scrolled { background: rgba(252,251,248,.82); box-shadow: 0 1px 0 var(--line); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 17px 0 13px; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: -.02em; white-space: nowrap; }
+    .brand-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(23,23,23,.06); }
+    .nav { display: flex; gap: 20px; color: var(--muted); font-size: .94rem; }
+    .nav a { position: relative; padding-bottom: 2px; white-space: nowrap; }
+    .nav a::before { content: ""; position: absolute; top: 50%; left: -12px; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--spy, var(--ink)); opacity: 0; }
+    .nav a::after { content: ""; position: absolute; bottom: -2px; left: 0; width: 100%; height: 1px; background: var(--ink); transform: scaleX(0); transform-origin: left center; transition: transform .2s ease; }
+    .nav a:hover, .nav a.active { color: var(--ink); }
+    .nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
+    .nav a.active::before { opacity: 1; }
+
+    .hero { padding: 48px 0 66px; border-bottom: 1px solid var(--line); }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; color: var(--muted); font-family: "Roboto Mono", monospace; font-size: .76rem; letter-spacing: .13em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--line-strong); }
+    .hero h1 { max-width: 1080px; margin-top: 17px; font-family: "Space Grotesk", sans-serif; font-size: clamp(3rem, 8.4vw, 6.8rem); line-height: .94; letter-spacing: -.055em; }
+    .hero h1 em { color: #535353; font-family: "Instrument Serif", serif; font-weight: 400; }
+    .line { display: block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
+    .line-inner { display: inline-block; }
+    .js .line-inner { transform: translateY(115%); animation: lineUp .55s ease-out forwards; }
+    .js .line:nth-child(2) .line-inner { animation-delay: .09s; }
+    .js .line:nth-child(3) .line-inner { animation-delay: .18s; }
+    @keyframes lineUp { to { transform: translateY(0); } }
+
+    .hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 48px; align-items: start; margin-top: 32px; }
+    .lead { max-width: 700px; margin: 0; color: #3f3f3f; font-size: clamp(1.08rem, 1.8vw, 1.28rem); }
+    .lead::first-letter { float: left; margin: .12em .1em 0 0; color: var(--ink); font-family: "Instrument Serif", serif; font-size: 3.35em; line-height: .75; }
+    .hero-links { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 22px; font-weight: 700; }
+    .hero-links span { color: var(--muted); font-weight: 500; }
+    .byline { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 28px; color: var(--muted); font-family: "Roboto Mono", monospace; font-size: .78rem; }
+    .avatar { display: grid; width: 34px; height: 34px; place-items: center; border-radius: 50%; color: var(--paper); background: var(--ink); font-weight: 500; }
+    .byline strong { color: var(--ink); }
+    .meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--soft); }
+    .hero-note { margin: 0 0 18px; color: var(--muted); font-family: "Instrument Serif", serif; font-size: 1.23rem; font-style: italic; line-height: 1.45; }
+    .toc { padding: 22px 24px; border-radius: 12px; background: #f3f1e9; }
+    .toc-label { margin: 0 0 12px; color: var(--soft); font-family: "Roboto Mono", monospace; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; }
+    .toc ol { margin: 0; padding-left: 25px; }
+    .toc li { padding: 4px 0; color: #4d4d4d; }
+    .toc a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    .section { padding: 88px 0; border-bottom: 1px solid var(--line); }
+    .section-head {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 34px;
+      align-items: start;
+      margin-bottom: 38px;
+    }
+    .kicker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: var(--soft);
+      font-family: "Roboto Mono", monospace;
+      font-size: .78rem;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .kicker-mark { width: 8px; height: 8px; background: var(--ink); }
+    .section h2 {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(2rem, 4.4vw, 4rem);
+      line-height: .98;
+      letter-spacing: -.045em;
+    }
+    .body-copy { max-width: 43rem; margin: 0; color: #4d4d4d; font-size: 1.06rem; }
+    .anchor {
+      margin-left: 11px;
+      color: var(--soft);
+      font-family: "DM Sans", sans-serif;
+      font-size: .48em;
+      font-weight: 500;
+      letter-spacing: 0;
+      opacity: 0;
+      transition: opacity .2s ease;
+      vertical-align: middle;
+    }
+    h2:hover .anchor, h3:hover .anchor, .anchor:focus-visible { opacity: 1; }
+
+    .framework {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 38px;
+      padding: 46px 0;
+      border-top: 1px solid var(--line);
+    }
+    .framework-aside { position: sticky; top: 110px; align-self: start; }
+    .framework-name { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .mark { width: 14px; height: 14px; flex: 0 0 14px; border-radius: 50%; background: var(--ac); }
+    .framework h3 {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+    .framework-role { margin-bottom: 17px; color: var(--muted); font-family: "Roboto Mono", monospace; font-size: .79rem; }
+    .framework-summary { max-width: 225px; color: #454545; font-size: .98rem; }
+    .framework-content > p { max-width: 45rem; margin: 0 0 18px; color: #454545; font-size: 1.05rem; }
+
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin: 26px 0; }
+    .text-block { padding-top: 13px; border-top: 2px solid var(--ac, var(--ink)); }
+    .text-block h4 { margin-bottom: 10px; font-family: "Space Grotesk", sans-serif; font-size: 1.05rem; }
+    .text-block p, .text-block li { color: #4d4d4d; }
+    .text-block ul { margin: 0; padding-left: 19px; }
+    .text-block li { margin-bottom: 9px; }
+    .callout-line {
+      max-width: 46rem;
+      margin: 26px 0;
+      padding-left: 17px;
+      border-left: 2px solid var(--ac, var(--ink));
+      font-weight: 700;
+      letter-spacing: -.02em;
+    }
+    .callout-line small { display: block; margin-top: 5px; color: var(--muted); font-weight: 500; letter-spacing: 0; }
+    .formula {
+      max-width: 48rem;
+      margin: 22px 0;
+      padding: 18px 21px;
+      overflow-x: auto;
+      border-radius: 12px;
+      color: #33312b;
+      background: #f3f1e9;
+      font-family: "Roboto Mono", monospace;
+      font-size: .94rem;
+    }
+    .code { max-width: 50rem; margin: 24px 0; }
+    .code-label { margin-bottom: 8px; color: var(--soft); font-family: "Roboto Mono", monospace; font-size: .75rem; text-transform: uppercase; }
+    .code pre {
+      margin: 0;
+      padding: 20px 22px;
+      overflow-x: auto;
+      border: 1px solid rgba(245,243,236,.12);
+      border-radius: 12px;
+      color: #f2efe5;
+      background: var(--dark);
+      font-family: "Roboto Mono", monospace;
+      font-size: .86rem;
+      line-height: 1.65;
+      white-space: pre-wrap;
+    }
+
+    .mini-compare { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin: 30px 0 0; }
+    .mini-item { padding-top: 12px; border-top: 1px solid var(--line-strong); }
+    .mini-dot { display: block; width: 10px; height: 10px; margin-bottom: 10px; border-radius: 50%; background: var(--ac); }
+    .mini-item strong { display: block; margin-bottom: 5px; font-family: "Space Grotesk", sans-serif; }
+    .mini-item span { color: var(--muted); font-size: .92rem; }
+
+    .diagram-block { margin: 42px 0 18px; padding-top: 24px; border-top: 1px solid var(--line); }
+    .diagram-title { margin-bottom: 15px; font-family: "Space Grotesk", sans-serif; font-size: 1.18rem; letter-spacing: -.025em; }
+    .chart-scroll { overflow-x: auto; overscroll-behavior-inline: contain; }
+    .diagram-caption { max-width: 48rem; margin-top: 16px; color: var(--muted); font-size: .98rem; }
+    .diagram-caption strong { color: var(--ink); }
+    .svg-name { font-family: "Space Grotesk", sans-serif; }
+    .svg-tag, .svg-small, .arrow-label { font-family: "Roboto Mono", monospace; }
+    .motion-node, .motion-path { opacity: 1; transform: none; stroke-dashoffset: 0; }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .motion-node { opacity: 0; transform: translateY(8px); }
+    .js.diagram-motion-ready .observe-diagram.is-visible .motion-node {
+      opacity: 1;
+      transform: none;
+      transition: opacity .4s ease, transform .4s ease;
+      transition-delay: var(--d, 0s);
+    }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .motion-path { stroke-dasharray: 700; stroke-dashoffset: 700; }
+    .js.diagram-motion-ready .observe-diagram.is-visible .motion-path {
+      stroke-dasharray: 700;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset .9s ease;
+      transition-delay: var(--d, 0s);
+    }
+
+    .section-dark { position: relative; color: var(--dark-paper); background: var(--dark); border-bottom: 0; }
+    .section-dark .section-head h2 { color: var(--dark-paper); background: var(--dark); }
+    .section-dark .framework h3,
+    .section-dark .text-block h4 { color: var(--dark-paper); }
+    .section-dark .kicker,
+    .section-dark .body-copy,
+    .section-dark .framework-role,
+    .section-dark .framework-summary,
+    .section-dark .framework-content > p,
+    .section-dark .text-block p,
+    .section-dark .text-block li { color: rgba(245,243,236,.76); }
+    .section-dark .kicker-mark { background: var(--dark-paper); }
+    .section-dark .framework, .section-dark .text-block { border-color: var(--dark-line); }
+    .section-dark .callout-line small { color: rgba(245,243,236,.66); }
+    .section-dark .anchor { color: rgba(245,243,236,.58); }
+    .section-dark .xref { color: #8fb0ff; }
+
+    .sources-list { max-width: 55rem; margin: 0; padding: 0; list-style: none; counter-reset: source; }
+    .sources-list li {
+      position: relative;
+      counter-increment: source;
+      padding: 17px 0 17px 54px;
+      border-bottom: 1px solid var(--line);
+      color: #4d4d4d;
+    }
+    .sources-list li::before {
+      content: counter(source, decimal-leading-zero);
+      position: absolute;
+      top: 19px;
+      left: 0;
+      color: var(--soft);
+      font-family: "Roboto Mono", monospace;
+      font-size: .8rem;
+    }
+    .sources-list strong { color: var(--ink); }
+    .xref { margin-left: 2px; color: var(--blue); font-family: "Roboto Mono", monospace; font-size: .7em; vertical-align: super; }
+    .xlink { border-bottom: 1px dashed currentColor; }
+    .xlink::after { content: " ↗"; font-size: .8em; }
+
+    .to-top {
+      position: fixed;
+      right: max(20px, env(safe-area-inset-right));
+      bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+      z-index: 150;
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      color: var(--ink);
+      background: rgba(252,251,248,.94);
+      font-family: "Roboto Mono", monospace;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .to-top.show { opacity: 1; pointer-events: auto; transform: none; }
+
+    .hero-grid > *, .section-head > *, .framework > *, .split > *, .mini-compare > * { min-width: 0; }
+    .js.reveal-ready .reveal:not(.is-visible) { opacity: 0; transform: translateY(18px); }
+    .js.reveal-ready .reveal.is-visible { opacity: 1; transform: none; transition: opacity .55s ease, transform .55s ease; }
+
+    @media (max-width: 720px) {
+      .topbar { align-items: flex-start; }
+      .nav { max-width: 62vw; gap: 13px; overflow-x: auto; }
+      .hero { padding-top: 34px; }
+      .hero-grid, .section-head, .framework, .split { grid-template-columns: 1fr; }
+      .hero-grid, .section-head { gap: 28px; }
+      .framework-aside { position: static; }
+      .framework-summary { max-width: 34rem; }
+      .mini-compare { grid-template-columns: repeat(2, 1fr); }
+      .section { padding: 70px 0; }
+    }
+
+    @media (max-width: 430px) {
+      .wrap { width: min(100% - 28px, var(--max)); }
+      .brand { font-size: .88rem; }
+      .nav { max-width: 54vw; font-size: .82rem; }
+      .hero h1 { font-size: clamp(2.15rem, 12.5vw, 3rem); }
+      .hero-grid { margin-top: 25px; }
+      .mini-compare { grid-template-columns: 1fr 1fr; gap: 14px; }
+      .chart-scroll svg { min-width: 560px; }
+      .sources-list li { padding-left: 44px; }
+    }
+
+    @media (hover: none) {
+      .anchor { opacity: .5; }
+      .nav a { padding: 5px 1px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+      .js .line-inner,
+      .js.reveal-ready .reveal,
+      .js.diagram-motion-ready .observe-diagram .motion-node {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .js.diagram-motion-ready .observe-diagram .motion-path { stroke-dashoffset: 0 !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span id="progressFill"></span></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-head" id="siteHead">
+    <div class="wrap topbar">
+      <a class="brand" href="#top" aria-label="Back to article beginning">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span>Prompting Without Magic</span>
+      </a>
+      <nav class="nav" aria-label="Article sections">
+        <a href="#specification" style="--spy:var(--orange)">Specify</a>
+        <a href="#context" style="--spy:var(--blue)">Context</a>
+        <a href="#patterns" style="--spy:var(--purple)">Patterns</a>
+        <a href="#evaluation" style="--spy:var(--green)">Evaluate</a>
+        <a href="#sources" style="--spy:var(--slate)">Sources</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content">
+    <div class="wrap" id="top">
+      <section class="hero" aria-label="Introduction">
+        <div class="eyebrow">Applied AI Practice</div>
+        <h1>
+          <span class="line"><span class="line-inner">Prompting without</span></span>
+          <span class="line"><span class="line-inner"><em>magic.</em></span></span>
+          <span class="line"><span class="line-inner">Specifications that travel.</span></span>
+        </h1>
+
+        <div class="hero-grid">
+          <div>
+            <p class="lead">A durable prompt does not depend on a secret phrase. It names the outcome, supplies the missing context, defines the boundaries, and makes success observable. Those habits still matter when the model, interface, or provider changes.</p>
+            <div class="hero-links">
+              <a href="#specification">↓ <span>Build the specification</span></a>
+              <a href="#evaluation">↘ <span>Test the result</span></a>
+            </div>
+            <div class="byline">
+              <span class="avatar" aria-hidden="true">AR</span>
+              <strong>Ali Reza Rashidi</strong>
+              <span class="meta-dot" aria-hidden="true"></span>
+              <span>8 min read</span>
+              <span class="meta-dot" aria-hidden="true"></span>
+              <span>Updated Aug 30, 2026</span>
+            </div>
+          </div>
+
+          <div>
+            <p class="hero-note">Treat the model like a capable collaborator entering a task with none of your private assumptions.</p>
+            <div class="toc">
+              <p class="toc-label">In this piece</p>
+              <ol>
+                <li><a href="#specification">Prompting as specification</a></li>
+                <li><a href="#context">Context and output contracts</a></li>
+                <li><a href="#patterns">Examples and boundaries</a></li>
+                <li><a href="#evaluation">Reason, test, refine</a></li>
+                <li><a href="#sources">Sources</a></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="specification" aria-labelledby="specification-title">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">01</span><span>— Specification</span></div>
+            <h2 id="specification-title">Replace wishes with decisions.<a class="anchor" href="#specification" aria-label="Link to Specification section">#</a></h2>
+          </div>
+          <p class="body-copy">When a prompt fails, the model is often blamed for a decision the prompt never made. “Handle this ticket” leaves the audience, action, tone, evidence, and stopping point undefined. A useful prompt closes the choices that matter and leaves the rest open.</p>
+        </div>
+
+        <article class="framework" style="--ac:var(--orange)">
+          <aside class="framework-aside" aria-labelledby="define-success">
+            <div class="framework-name">
+              <span class="mark" aria-hidden="true"></span>
+              <h3 id="define-success">Define success<a class="anchor" href="#define-success" aria-label="Link to Define success">#</a></h3>
+            </div>
+            <div class="framework-role">Principle 01 · Outcome</div>
+            <p class="framework-summary">Describe the decision a good response enables—not merely the topic it discusses.</p>
+          </aside>
+          <div class="framework-content">
+            <p>Imagine a support ticket: a customer says invoice <strong>INV-2047</strong> contains the same €89 charge twice. “Answer the customer” sounds clear because you know the business. The model does not know whether it should apologize, authorize a refund, request evidence, or escalate the case.</p>
+            <p>Start with the observable result: draft a reply that acknowledges the customer’s duplicate-charge concern, explains the next verification step, does not confirm duplication, fraud, or refund status before review, and ends with one action for the customer. Official provider guides consistently put clear instructions and relevant details ahead of elaborate tricks.<a class="xref" href="#src-1">[1]</a><a class="xref" href="#src-2">[2]</a><a class="xref" href="#src-3">[3]</a></p>
+
+            <div class="split">
+              <div class="text-block" style="--ac:var(--red)">
+                <h4>Topic-shaped request</h4>
+                <p>“Reply to this billing complaint.” The model must invent the purpose, policy boundary, level of detail, and next step.</p>
+              </div>
+              <div class="text-block" style="--ac:var(--green)">
+                <h4>Decision-shaped request</h4>
+                <p>“Draft a 120-word reply that acknowledges the customer’s concern, requests the receipt, and does not confirm duplication, fraud, or a refund before review.”</p>
+              </div>
+            </div>
+
+            <div class="formula">Useful objective = action + audience + acceptance criteria</div>
+            <p class="callout-line" style="--ac:var(--orange)">Specific does not mean long.<small>It means the important choices are visible.</small></p>
+          </div>
+        </article>
+      </section>
+
+      <section class="section reveal" id="context" aria-labelledby="context-title">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">02</span><span>— Context</span></div>
+            <h2 id="context-title">Give the model what the task assumes.<a class="anchor" href="#context" aria-label="Link to Context section">#</a></h2>
+          </div>
+          <p class="body-copy">Instructions say what to do. Context explains the world in which the instruction must work. An output contract then turns the desired response into a shape that a person—or another system—can inspect.</p>
+        </div>
+
+        <article class="framework" style="--ac:var(--blue)">
+          <aside class="framework-aside" aria-labelledby="supply-context">
+            <div class="framework-name">
+              <span class="mark" aria-hidden="true"></span>
+              <h3 id="supply-context">Supply context<a class="anchor" href="#supply-context" aria-label="Link to Supply context">#</a></h3>
+            </div>
+            <div class="framework-role">Principle 02 · Background</div>
+            <p class="framework-summary">Include facts, policies, definitions, and limits that the model cannot safely infer.</p>
+          </aside>
+          <div class="framework-content">
+            <p>For INV-2047, useful context is concrete: the payment processor shows two settled charges; the company verifies receipts before refunding; support may apologize but may not confirm fraud; the customer is in the EU and prefers English. Each fact changes the correct reply.</p>
+            <p>Explain the reason behind an unusual constraint when that reason helps generalization. “Do not promise a refund because the payment record is still under review” gives the model a principle it can apply when wording the whole response. Still, provide only task-relevant context. Extra documents create more places for conflicts, stale facts, and malicious instructions to hide.</p>
+            <p class="callout-line" style="--ac:var(--blue)">Context is not autobiography.<small>Every included fact should change a decision in the output.</small></p>
+          </div>
+        </article>
+
+        <article class="framework" style="--ac:var(--cyan)">
+          <aside class="framework-aside" aria-labelledby="output-contract">
+            <div class="framework-name">
+              <span class="mark" aria-hidden="true"></span>
+              <h3 id="output-contract">Specify the output contract<a class="anchor" href="#output-contract" aria-label="Link to Specify the output contract">#</a></h3>
+            </div>
+            <div class="framework-role">Principle 03 · Shape</div>
+            <p class="framework-summary">Name the format, required fields, length, tone, and acceptable uncertainty.</p>
+          </aside>
+          <div class="framework-content">
+            <p>An output contract prevents a response from being “correct” yet unusable. For a human reply, you might require a subject line and two short paragraphs. For software, you might require a schema with <code>summary</code>, <code>risk</code>, and <code>next_action</code>. Structured Outputs can enforce a JSON schema when the API and model support it; plain prompting alone cannot guarantee machine-valid data.<a class="xref" href="#src-4">[4]</a></p>
+
+            <figure class="diagram-block observe-diagram">
+              <figcaption class="diagram-title">The five decisions inside a useful prompt</figcaption>
+              <div class="chart-scroll">
+                <svg viewBox="0 0 960 400" role="img" aria-labelledby="prompt-anatomy-title prompt-anatomy-desc" aria-label="A five-stage prompt specification for the INV-2047 support reply.">
+                  <title id="prompt-anatomy-title">Anatomy of the INV-2047 prompt</title>
+                  <desc id="prompt-anatomy-desc">A process diagram showing objective, context, constraints, evidence, and output format turning a vague billing request into a testable support-reply specification.</desc>
+                  <defs>
+                    <marker id="anatomy-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                      <polygon points="0 0, 8 3, 0 6" fill="#656565"></polygon>
+                    </marker>
+                    <marker id="anatomy-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                      <polygon points="0 0, 8 3, 0 6" fill="#14a9c5"></polygon>
+                    </marker>
+                  </defs>
+
+                  <rect width="960" height="400" fill="#fffdfa"></rect>
+                  <line x1="208" y1="168" x2="240" y2="168" stroke="#656565" stroke-width="1.2" marker-end="url(#anatomy-arrow)" class="motion-path" style="--d:.08s"></line>
+                  <line x1="384" y1="168" x2="416" y2="168" stroke="#656565" stroke-width="1.2" marker-end="url(#anatomy-arrow)" class="motion-path" style="--d:.16s"></line>
+                  <line x1="560" y1="168" x2="592" y2="168" stroke="#656565" stroke-width="1.2" marker-end="url(#anatomy-arrow)" class="motion-path" style="--d:.24s"></line>
+                  <line x1="736" y1="168" x2="768" y2="168" stroke="#14a9c5" stroke-width="1.2" marker-end="url(#anatomy-arrow-accent)" class="motion-path" style="--d:.32s"></line>
+
+                  <g class="motion-node" style="--d:.04s">
+                    <rect x="64" y="64" width="144" height="256" rx="8" fill="#fffdfa" stroke="rgba(23,23,23,.22)"></rect>
+                    <rect x="80" y="80" width="24" height="24" rx="4" fill="rgba(235,130,55,.16)"></rect>
+                    <text x="92" y="96" text-anchor="middle" class="svg-tag" font-size="8" fill="#b85c20">01</text>
+                    <text x="80" y="128" class="svg-name" font-size="16" font-weight="700" fill="#171717">Objective</text>
+                    <line x1="80" y1="144" x2="192" y2="144" stroke="rgba(23,23,23,.12)"></line>
+                    <text x="80" y="168" class="svg-tag" font-size="8" fill="#989898">QUESTION</text>
+                    <text x="80" y="184" class="svg-small" font-size="8" fill="#454545">What should happen?</text>
+                    <text x="80" y="208" class="svg-tag" font-size="8" fill="#989898">INPUT</text>
+                    <text x="80" y="224" class="svg-small" font-size="8" fill="#454545">Billing ticket</text>
+                    <text x="80" y="248" class="svg-tag" font-size="8" fill="#989898">CONTROL</text>
+                    <text x="80" y="264" class="svg-small" font-size="8" fill="#454545">None</text>
+                    <text x="80" y="288" class="svg-tag" font-size="8" fill="#989898">OUTPUT</text>
+                    <text x="80" y="304" class="svg-small" font-size="8" fill="#454545">Draft reply</text>
+                  </g>
+
+                  <g class="motion-node" style="--d:.12s">
+                    <rect x="240" y="64" width="144" height="256" rx="8" fill="#fffdfa" stroke="rgba(23,23,23,.22)"></rect>
+                    <rect x="256" y="80" width="24" height="24" rx="4" fill="rgba(52,104,245,.14)"></rect>
+                    <text x="268" y="96" text-anchor="middle" class="svg-tag" font-size="8" fill="#3468f5">02</text>
+                    <text x="256" y="128" class="svg-name" font-size="16" font-weight="700" fill="#171717">Context</text>
+                    <line x1="256" y1="144" x2="368" y2="144" stroke="rgba(23,23,23,.12)"></line>
+                    <text x="256" y="168" class="svg-tag" font-size="8" fill="#989898">QUESTION</text>
+                    <text x="256" y="184" class="svg-small" font-size="8" fill="#454545">What changes the answer?</text>
+                    <text x="256" y="208" class="svg-tag" font-size="8" fill="#989898">INPUT</text>
+                    <text x="256" y="224" class="svg-small" font-size="8" fill="#454545">2 settled charges</text>
+                    <text x="256" y="248" class="svg-tag" font-size="8" fill="#989898">CONTROL</text>
+                    <text x="256" y="264" class="svg-small" font-size="8" fill="#454545">None</text>
+                    <text x="256" y="288" class="svg-tag" font-size="8" fill="#989898">OUTPUT</text>
+                    <text x="256" y="304" class="svg-small" font-size="8" fill="#454545">Grounded facts</text>
+                  </g>
+
+                  <g class="motion-node" style="--d:.20s">
+                    <rect x="416" y="64" width="144" height="256" rx="8" fill="#fffdfa" stroke="rgba(23,23,23,.22)"></rect>
+                    <rect x="432" y="80" width="24" height="24" rx="4" fill="rgba(118,80,230,.14)"></rect>
+                    <text x="444" y="96" text-anchor="middle" class="svg-tag" font-size="8" fill="#7650e6">03</text>
+                    <text x="432" y="128" class="svg-name" font-size="16" font-weight="700" fill="#171717">Constraints</text>
+                    <line x1="432" y1="144" x2="544" y2="144" stroke="rgba(23,23,23,.12)"></line>
+                    <text x="432" y="168" class="svg-tag" font-size="8" fill="#989898">QUESTION</text>
+                    <text x="432" y="184" class="svg-small" font-size="8" fill="#454545">What is out of bounds?</text>
+                    <text x="432" y="208" class="svg-tag" font-size="8" fill="#989898">INPUT</text>
+                    <text x="432" y="224" class="svg-small" font-size="8" fill="#454545">None</text>
+                    <text x="432" y="248" class="svg-tag" font-size="8" fill="#989898">CONTROL</text>
+                    <text x="432" y="264" class="svg-small" font-size="8" fill="#454545">No refund promise</text>
+                    <text x="432" y="288" class="svg-tag" font-size="8" fill="#989898">OUTPUT</text>
+                    <text x="432" y="304" class="svg-small" font-size="8" fill="#454545">Safe boundary</text>
+                  </g>
+
+                  <g class="motion-node" style="--d:.28s">
+                    <rect x="592" y="64" width="144" height="256" rx="8" fill="#fffdfa" stroke="rgba(23,23,23,.22)"></rect>
+                    <rect x="608" y="80" width="24" height="24" rx="4" fill="rgba(201,162,39,.16)"></rect>
+                    <text x="620" y="96" text-anchor="middle" class="svg-tag" font-size="8" fill="#8b721d">04</text>
+                    <text x="608" y="128" class="svg-name" font-size="16" font-weight="700" fill="#171717">Evidence</text>
+                    <line x1="608" y1="144" x2="720" y2="144" stroke="rgba(23,23,23,.12)"></line>
+                    <text x="608" y="168" class="svg-tag" font-size="8" fill="#989898">QUESTION</text>
+                    <text x="608" y="184" class="svg-small" font-size="8" fill="#454545">What supports the reply?</text>
+                    <text x="608" y="208" class="svg-tag" font-size="8" fill="#989898">INPUT</text>
+                    <text x="608" y="224" class="svg-small" font-size="8" fill="#454545">Receipt + policy</text>
+                    <text x="608" y="248" class="svg-tag" font-size="8" fill="#989898">CONTROL</text>
+                    <text x="608" y="264" class="svg-small" font-size="8" fill="#454545">None</text>
+                    <text x="608" y="288" class="svg-tag" font-size="8" fill="#989898">OUTPUT</text>
+                    <text x="608" y="304" class="svg-small" font-size="8" fill="#454545">Traceable basis</text>
+                  </g>
+
+                  <g class="motion-node" style="--d:.36s">
+                    <rect x="768" y="64" width="144" height="256" rx="8" fill="rgba(20,169,197,.07)" stroke="#14a9c5" stroke-width="1.2"></rect>
+                    <rect x="784" y="80" width="24" height="24" rx="4" fill="rgba(20,169,197,.18)"></rect>
+                    <text x="796" y="96" text-anchor="middle" class="svg-tag" font-size="8" fill="#087b91">05</text>
+                    <text x="784" y="128" class="svg-name" font-size="16" font-weight="700" fill="#171717">Format</text>
+                    <line x1="784" y1="144" x2="896" y2="144" stroke="rgba(23,23,23,.12)"></line>
+                    <text x="784" y="168" class="svg-tag" font-size="8" fill="#087b91">QUESTION</text>
+                    <text x="784" y="184" class="svg-small" font-size="8" fill="#454545">How will it be used?</text>
+                    <text x="784" y="208" class="svg-tag" font-size="8" fill="#087b91">INPUT</text>
+                    <text x="784" y="224" class="svg-small" font-size="8" fill="#454545">None</text>
+                    <text x="784" y="248" class="svg-tag" font-size="8" fill="#087b91">CONTROL</text>
+                    <text x="784" y="264" class="svg-small" font-size="8" fill="#454545">120 words · 2 parts</text>
+                    <text x="784" y="288" class="svg-tag" font-size="8" fill="#087b91">OUTPUT</text>
+                    <text x="784" y="304" class="svg-small" font-size="8" fill="#454545">Testable response</text>
+                  </g>
+
+                  <line x1="64" y1="360" x2="912" y2="360" stroke="rgba(23,23,23,.12)"></line>
+                  <text x="64" y="384" class="svg-tag" font-size="8" letter-spacing="1.2" fill="#989898">READ LEFT TO RIGHT · EACH DECISION REMOVES A COSTLY AMBIGUITY</text>
+                </svg>
+              </div>
+              <p class="diagram-caption"><strong>How to read this:</strong> the prompt becomes more reliable as it moves from a broad intention to a response contract. The format card is highlighted because that is where an otherwise good answer becomes inspectable.</p>
+            </figure>
+          </div>
+        </article>
+      </section>
+    </div>
+
+    <section class="section section-dark reveal" id="patterns" aria-labelledby="patterns-title">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">03</span><span>— Patterns</span></div>
+            <h2 id="patterns-title">Show the pattern. Mark the boundary.<a class="anchor" href="#patterns" aria-label="Link to Patterns section">#</a></h2>
+          </div>
+          <p class="body-copy">Examples teach the mapping you want. Delimiters tell the model which text plays which role. Both reduce ambiguity, but neither should be treated as a security control.</p>
+        </div>
+
+        <article class="framework" style="--ac:var(--gold)">
+          <aside class="framework-aside" aria-labelledby="demonstrate-pattern">
+            <div class="framework-name">
+              <span class="mark" aria-hidden="true"></span>
+              <h3 id="demonstrate-pattern">Demonstrate the pattern<a class="anchor" href="#demonstrate-pattern" aria-label="Link to Demonstrate the pattern">#</a></h3>
+            </div>
+            <div class="framework-role">Principle 04 · Examples</div>
+            <p class="framework-summary">Use examples when the desired mapping is easier to demonstrate than to describe.</p>
+          </aside>
+          <div class="framework-content">
+            <p>Few-shot examples can steer classification labels, response shape, and style by showing completed input-output pairs.<a class="xref" href="#src-5">[5]</a> One representative example may be enough for a simple pattern; a difficult boundary may need several diverse examples. There is no universal best count. Add examples because a measured failure calls for them, not because a checklist demands a fixed number.</p>
+            <p>For INV-2047, a useful example would show a different duplicate-charge case in which the reply acknowledges the problem, names the verification step, and avoids an unsupported promise. Keep the example close to the real task but not so narrow that the model merely copies names or amounts.</p>
+
+            <div class="split">
+              <div class="text-block" style="--ac:var(--red)">
+                <h4>Memorization-shaped example</h4>
+                <p>Same customer, amount, phrasing, and resolution. The model may imitate surface details instead of learning the decision pattern.</p>
+              </div>
+              <div class="text-block" style="--ac:var(--gold)">
+                <h4>Pattern-shaped example</h4>
+                <p>Different case details, same policy boundary and response structure. The reusable relationship becomes visible.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="framework" style="--ac:var(--purple)">
+          <aside class="framework-aside" aria-labelledby="separate-data">
+            <div class="framework-name">
+              <span class="mark" aria-hidden="true"></span>
+              <h3 id="separate-data">Separate instructions from data<a class="anchor" href="#separate-data" aria-label="Link to Separate instructions from data">#</a></h3>
+            </div>
+            <div class="framework-role">Principle 05 · Boundaries</div>
+            <p class="framework-summary">Use stable headings or tags so the model can distinguish rules, examples, and untrusted content.</p>
+          </aside>
+          <div class="framework-content">
+            <p>Markdown headings, XML tags, or other consistent separators make a multi-part prompt easier to parse. Anthropic explicitly recommends XML tags for separating prompt components, while Google and OpenAI show structured sections and clear boundaries in their guidance.<a class="xref" href="#src-2">[2]</a><a class="xref" href="#src-1">[1]</a><a class="xref" href="#src-3">[3]</a></p>
+
+            <div class="code">
+              <div class="code-label">A bounded prompt for INV-2047</div>
+              <pre><code>&lt;objective&gt;
+Draft a calm customer-support reply.
+&lt;/objective&gt;
+
+&lt;policy&gt;
+Do not promise a refund before payment review.
+&lt;/policy&gt;
+
+&lt;ticket&gt;
+Invoice: INV-2047
+Customer report: two €89 charges
+Processor status: both charges settled
+&lt;/ticket&gt;
+
+&lt;output&gt;
+Subject line, then two paragraphs, maximum 120 words.
+&lt;/output&gt;</code></pre>
+            </div>
+
+            <p>Delimiters improve communication; they do not make untrusted content safe. A document inside <code>&lt;ticket&gt;</code> can still contain an instruction designed to redirect the model. Keep trusted instructions outside untrusted data, restrict available tools, validate outputs, and enforce authorization in code. Prompt formatting is one layer—not the boundary itself.<a class="xref" href="#src-7">[7]</a></p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="section reveal" id="evaluation" aria-labelledby="evaluation-title">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span>— Evaluation</span></div>
+            <h2 id="evaluation-title">Reason through the task. Test the system.<a class="anchor" href="#evaluation" aria-label="Link to Evaluation section">#</a></h2>
+          </div>
+          <p class="body-copy">A prompt is a hypothesis about behavior. You do not validate it with one attractive answer. You validate it against representative cases, failure modes, and an acceptance rule that existed before you saw the output.</p>
+        </div>
+
+        <article class="framework" style="--ac:var(--green)">
+          <aside class="framework-aside" aria-labelledby="evaluate-revise">
+            <div class="framework-name">
+              <span class="mark" aria-hidden="true"></span>
+              <h3 id="evaluate-revise">Evaluate and revise<a class="anchor" href="#evaluate-revise" aria-label="Link to Evaluate and revise">#</a></h3>
+            </div>
+            <div class="framework-role">Principle 06 · Evidence</div>
+            <p class="framework-summary">Change a prompt in response to a named failure, then compare it against the same test set.</p>
+          </aside>
+          <div class="framework-content">
+            <p>Build a small evaluation set before polishing wording: an obvious duplicate charge, a pending charge that should not be called a duplicate, a missing receipt, an angry customer, and a ticket containing irrelevant or hostile instructions. Score the behaviors you actually need: policy compliance, factual grounding, action clarity, and format validity.</p>
+            <p>Provider guidance treats prompt development as iterative, and OpenAI recommends pinning model snapshots and building evaluations as applications move toward production.<a class="xref" href="#src-9">[9]</a> Model behavior is nondeterministic and can change across versions, so preserve the cases, rubric, prompt version, model snapshot, and results together.<a class="xref" href="#src-1">[1]</a></p>
+
+            <figure class="diagram-block observe-diagram">
+              <figcaption class="diagram-title">The evidence loop for INV-2047</figcaption>
+              <div class="chart-scroll">
+                <svg viewBox="0 0 960 620" role="img" aria-labelledby="evaluation-loop-title evaluation-loop-desc" aria-label="A five-stage evaluation loop that improves the INV-2047 prompt using shared evidence.">
+                  <title id="evaluation-loop-title">Prompt evaluation loop</title>
+                  <desc id="evaluation-loop-desc">A clockwise loop moves from baseline to test cases, failure inspection, targeted revision, and comparison, with every stage writing evidence to a shared central record.</desc>
+                  <defs>
+                    <marker id="loop-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                      <polygon points="0 0, 8 3, 0 6" fill="#656565"></polygon>
+                    </marker>
+                    <marker id="loop-arrow-soft" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                      <polygon points="0 0, 8 3, 0 6" fill="#989898"></polygon>
+                    </marker>
+                  </defs>
+
+                  <rect width="960" height="620" fill="#fffdfa"></rect>
+
+                  <path d="M 544 114 A 200 200 0 0 1 656 216" fill="none" stroke="#656565" stroke-width="1.2" marker-end="url(#loop-arrow)" class="motion-path" style="--d:.08s"></path>
+                  <path d="M 680 280 A 200 200 0 0 1 628 440" fill="none" stroke="#656565" stroke-width="1.2" marker-end="url(#loop-arrow)" class="motion-path" style="--d:.16s"></path>
+                  <path d="M 536 492 A 200 200 0 0 1 424 492" fill="none" stroke="#656565" stroke-width="1.2" marker-end="url(#loop-arrow)" class="motion-path" style="--d:.24s"></path>
+                  <path d="M 296 472 A 200 200 0 0 1 296 280" fill="none" stroke="#656565" stroke-width="1.2" marker-end="url(#loop-arrow)" class="motion-path" style="--d:.32s"></path>
+                  <path d="M 352 248 A 200 200 0 0 1 416 114" fill="none" stroke="#656565" stroke-width="1.2" marker-end="url(#loop-arrow)" class="motion-path" style="--d:.40s"></path>
+
+                  <line x1="480" y1="144" x2="480" y2="256" stroke="#989898" stroke-width="1" stroke-dasharray="5 4" marker-end="url(#loop-arrow-soft)"></line>
+                  <line x1="608" y1="268" x2="568" y2="284" stroke="#989898" stroke-width="1" stroke-dasharray="5 4" marker-end="url(#loop-arrow-soft)"></line>
+                  <line x1="576" y1="440" x2="520" y2="364" stroke="#989898" stroke-width="1" stroke-dasharray="5 4" marker-end="url(#loop-arrow-soft)"></line>
+                  <line x1="384" y1="440" x2="440" y2="364" stroke="#989898" stroke-width="1" stroke-dasharray="5 4" marker-end="url(#loop-arrow-soft)"></line>
+                  <line x1="352" y1="268" x2="392" y2="284" stroke="#989898" stroke-width="1" stroke-dasharray="5 4" marker-end="url(#loop-arrow-soft)"></line>
+
+                  <g class="motion-node" style="--d:.04s">
+                    <rect x="416" y="80" width="128" height="64" rx="8" fill="#fffdfa" stroke="rgba(23,23,23,.28)"></rect>
+                    <text x="480" y="108" text-anchor="middle" class="svg-name" font-size="16" font-weight="700" fill="#171717">Baseline</text>
+                    <text x="480" y="128" text-anchor="middle" class="svg-small" font-size="8" fill="#656565">PROMPT V1</text>
+                  </g>
+
+                  <g class="motion-node" style="--d:.12s">
+                    <rect x="608" y="216" width="128" height="64" rx="8" fill="#fffdfa" stroke="rgba(23,23,23,.28)"></rect>
+                    <text x="672" y="244" text-anchor="middle" class="svg-name" font-size="16" font-weight="700" fill="#171717">Test cases</text>
+                    <text x="672" y="264" text-anchor="middle" class="svg-small" font-size="8" fill="#656565">NORMAL + EDGE</text>
+                  </g>
+
+                  <g class="motion-node" style="--d:.20s">
+                    <rect x="536" y="440" width="128" height="64" rx="8" fill="#fffdfa" stroke="rgba(23,23,23,.28)"></rect>
+                    <text x="600" y="468" text-anchor="middle" class="svg-name" font-size="16" font-weight="700" fill="#171717">Inspect</text>
+                    <text x="600" y="488" text-anchor="middle" class="svg-small" font-size="8" fill="#656565">NAME FAILURES</text>
+                  </g>
+
+                  <g class="motion-node" style="--d:.28s">
+                    <rect x="296" y="440" width="128" height="64" rx="8" fill="rgba(35,149,111,.08)" stroke="#23956f" stroke-width="1.2"></rect>
+                    <text x="360" y="468" text-anchor="middle" class="svg-name" font-size="16" font-weight="700" fill="#176f54">Revise</text>
+                    <text x="360" y="488" text-anchor="middle" class="svg-small" font-size="8" fill="#176f54">ONE TARGETED CHANGE</text>
+                  </g>
+
+                  <g class="motion-node" style="--d:.36s">
+                    <rect x="224" y="216" width="128" height="64" rx="8" fill="#fffdfa" stroke="rgba(23,23,23,.28)"></rect>
+                    <text x="288" y="244" text-anchor="middle" class="svg-name" font-size="16" font-weight="700" fill="#171717">Compare</text>
+                    <text x="288" y="264" text-anchor="middle" class="svg-small" font-size="8" fill="#656565">SAME EVAL SET</text>
+                  </g>
+
+                  <g class="motion-node" style="--d:.44s">
+                    <rect x="400" y="264" width="160" height="96" rx="8" fill="#171717" stroke="#171717"></rect>
+                    <text x="480" y="304" text-anchor="middle" class="svg-name" font-size="16" font-weight="700" fill="#f5f3ec">Shared evidence</text>
+                    <text x="480" y="328" text-anchor="middle" class="svg-small" font-size="8" fill="#c9c7bf">CASES · RUBRIC · RESULTS</text>
+                  </g>
+
+                  <line x1="64" y1="552" x2="896" y2="552" stroke="rgba(23,23,23,.12)"></line>
+                  <text x="64" y="580" class="svg-tag" font-size="8" letter-spacing="1.2" fill="#989898">SOLID = OPERATING LOOP · DASHED = WRITE-BACK TO EVIDENCE</text>
+                </svg>
+              </div>
+              <p class="diagram-caption"><strong>How to read this:</strong> work moves clockwise, but every stage writes back to the shared evidence record. A revision earns its place only when the same evaluation set shows an improvement without creating a new failure.</p>
+            </figure>
+
+            <p>For complex work, asking for intermediate artifacts can improve reliability: extract the relevant policy, list missing facts, propose a decision, then draft the reply. That is task decomposition. It is different from demanding a hidden reasoning transcript. Reasoning models are designed to reason internally, and OpenAI’s guidance recommends simple, direct prompts rather than “think step by step” instructions for those models.<a class="xref" href="#src-8">[8]</a></p>
+          </div>
+        </article>
+
+        <div class="mini-compare" role="group" aria-label="Prompting tactics and their real value">
+          <div class="mini-item" style="--ac:var(--blue)">
+            <span class="mini-dot" aria-hidden="true"></span>
+            <strong>Role labels</strong>
+            <span>Useful for voice or perspective; not a substitute for facts, criteria, or tools.<a class="xref" href="#src-10">[10]</a></span>
+          </div>
+          <div class="mini-item" style="--ac:var(--orange)">
+            <span class="mini-dot" aria-hidden="true"></span>
+            <strong>Long prompts</strong>
+            <span>Sometimes necessary, never automatically better. Remove text that changes no decision.</span>
+          </div>
+          <div class="mini-item" style="--ac:var(--purple)">
+            <span class="mini-dot" aria-hidden="true"></span>
+            <strong>Negative rules</strong>
+            <span>Can express boundaries, but pair them with the behavior you want instead.</span>
+          </div>
+          <div class="mini-item" style="--ac:var(--green)">
+            <span class="mini-dot" aria-hidden="true"></span>
+            <strong>Magic phrases</strong>
+            <span>A benchmark result on one model is not a universal law. Test the actual task.</span>
+          </div>
+        </div>
+
+        <p class="callout-line" style="--ac:var(--green)">The production unit is not the prompt alone.<small>It is the prompt, model snapshot, tools, context, evaluation set, and acceptance rule.</small></p>
+      </section>
+
+      <section class="section reveal" id="sources" aria-labelledby="sources-title">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span>— Sources</span></div>
+            <h2 id="sources-title">Read the primary guidance.<a class="anchor" href="#sources" aria-label="Link to Sources section">#</a></h2>
+          </div>
+          <p class="body-copy">Prompt advice ages quickly when it is detached from a model, task, and evaluation. These sources provide the provider guidance and research foundations used in this article.</p>
+        </div>
+
+        <ol class="sources-list">
+          <li id="src-1"><strong>Prompt engineering.</strong> OpenAI API documentation. <a class="xlink" href="https://developers.openai.com/api/docs/guides/prompt-engineering">Read the guide</a></li>
+          <li id="src-2"><strong>Prompting best practices.</strong> Anthropic documentation. <a class="xlink" href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices">Read the guide</a></li>
+          <li id="src-3"><strong>Prompt design strategies.</strong> Google AI for Developers. <a class="xlink" href="https://ai.google.dev/gemini-api/docs/prompting-strategies">Read the guide</a></li>
+          <li id="src-4"><strong>Structured Outputs.</strong> OpenAI API documentation. <a class="xlink" href="https://developers.openai.com/api/docs/guides/structured-outputs">Read the guide</a></li>
+          <li id="src-5"><strong>Language Models are Few-Shot Learners.</strong> Brown et al., NeurIPS 2020. <a class="xlink" href="https://arxiv.org/abs/2005.14165">Read the paper</a></li>
+          <li id="src-7"><strong>Understanding prompt injections.</strong> OpenAI. <a class="xlink" href="https://openai.com/index/prompt-injections/">Read the security guidance</a></li>
+          <li id="src-8"><strong>Reasoning best practices.</strong> OpenAI API documentation. <a class="xlink" href="https://developers.openai.com/api/docs/guides/reasoning-best-practices">Read the guide</a></li>
+          <li id="src-9"><strong>Evaluation best practices.</strong> OpenAI API documentation. <a class="xlink" href="https://developers.openai.com/api/docs/guides/evaluation-best-practices">Read the guide</a></li>
+          <li id="src-10"><strong>When “A Helpful Assistant” Is Not Really Helpful: Personas in System Prompts Do Not Improve Performances of Large Language Models.</strong> Zheng et al., 2023. <a class="xlink" href="https://arxiv.org/abs/2311.10054">Read the paper</a></li>
+        </ol>
+      </section>
+    </div>
+  </main>
+
+  <button class="to-top" id="toTop" type="button" aria-label="Back to top">↑</button>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const siteHead = document.getElementById('siteHead');
+      const progressFill = document.getElementById('progressFill');
+      const toTop = document.getElementById('toTop');
+      const navLinks = [...document.querySelectorAll('.nav a')];
+      const sections = [...document.querySelectorAll('main section[id]')];
+
+      const updateScrollUi = () => {
+        const scrollTop = window.scrollY;
+        const scrollRange = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollRange > 0 ? Math.min(scrollTop / scrollRange, 1) : 0;
+        progressFill.style.transform = `scaleX(${progress})`;
+        siteHead.classList.toggle('scrolled', scrollTop > 12);
+        toTop.classList.toggle('show', scrollTop > 560);
+      };
+
+      updateScrollUi();
+      window.addEventListener('scroll', updateScrollUi, { passive: true });
+      window.addEventListener('resize', updateScrollUi);
+      toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+      if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+          });
+        }, { threshold: .08 });
+
+        document.querySelectorAll('.reveal').forEach((element) => revealObserver.observe(element));
+        root.classList.add('reveal-ready');
+
+        const diagramObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            diagramObserver.unobserve(entry.target);
+          });
+        }, { threshold: .18 });
+
+        document.querySelectorAll('.observe-diagram').forEach((element) => diagramObserver.observe(element));
+        root.classList.add('diagram-motion-ready');
+
+        const spyObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            navLinks.forEach((link) => link.classList.toggle('active', link.hash === `#${entry.target.id}`));
+          });
+        }, { rootMargin: '-22% 0px -64% 0px', threshold: 0 });
+
+        sections.forEach((section) => spyObserver.observe(section));
+      }
+    })();
+  </script>
+</body>
+</html>
