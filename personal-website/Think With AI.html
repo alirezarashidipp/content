@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>document.documentElement.classList.add('js');</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A practical approach to using LLMs for research, writing, and editing while retaining ownership of your reasoning and decisions.">
+  <title>Think With AI — Keep the Thinking</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='3' fill='%233468f5'/%3E%3Ccircle cx='23' cy='9' r='3' fill='%23eb8237'/%3E%3Ccircle cx='9' cy='23' r='3' fill='%2323956f'/%3E%3Ccircle cx='23' cy='23' r='3' fill='%235b6b7a'/%3E%3C/svg%3E">
+  <meta property="og:title" content="Think With AI — Keep the Thinking">
+  <meta property="og:description" content="Use a pricing memo to explore a deliberate division of labor: expand with AI, build your argument, then edit within clear boundaries.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Think With AI — Keep the Thinking",
+    "description": "A practical approach to using LLMs for research, writing, and editing while retaining ownership of your reasoning and decisions.",
+    "datePublished": "2026-09-12",
+    "dateModified": "2026-09-12",
+    "inLanguage": "en",
+    "author": { "@type": "Person", "name": "Ali Reza Rashidi" }
+  }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Instrument+Serif:ital@0;1&amp;family=Roboto+Mono:wght@400;500&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898;
+      --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+      --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+      --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+      --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+      --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+    }
+    * { box-sizing: border-box; }
+    html { color-scheme: light; scroll-behavior: smooth; overflow-x: clip; }
+    body { margin: 0; color: var(--ink); background: linear-gradient(180deg, #fffdfa, #fcfbf8); font: 400 17px/1.7 "DM Sans", sans-serif; -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
+    ::selection { background: var(--ink); color: var(--paper); }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; border: 2px solid var(--bg); }
+    a { color: inherit; }
+    p { text-wrap: pretty; }
+    h1, h2, h3, h4 { margin: 0; font-family: "Space Grotesk", sans-serif; text-wrap: balance; }
+    h1, h2 { letter-spacing: -.045em; }
+    h1 { font-size: clamp(3rem, 8.4vw, 6.8rem); line-height: .94; font-weight: 700; }
+    h1 em { font-family: "Instrument Serif", serif; font-weight: 400; color: #535353; }
+    h2 { font-size: clamp(2rem, 4.4vw, 4rem); line-height: .98; }
+    h3 { font-size: 1.45rem; line-height: 1.12; letter-spacing: -.025em; }
+    h4 { font-size: 1.05rem; line-height: 1.3; }
+    pre, code, .mono { font-family: "Roboto Mono", monospace; }
+    :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+    [hidden] { display: none !important; }
+    .wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    .grain { position: fixed; inset: 0; z-index: 40; pointer-events: none; opacity: .08; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E"); }
+    .skip-link { position: fixed; top: -80px; left: 16px; z-index: 100; padding: 10px 14px; color: var(--paper); background: var(--ink); }
+    .skip-link:focus { top: 16px; }
+    .progress { position: fixed; inset: 0 auto auto 0; z-index: 90; width: 100%; height: 2px; }
+    .progress span { display: block; width: 0; height: 100%; background: var(--ink); }
+    .site-header { position: sticky; top: 0; z-index: 35; border-bottom: 1px solid transparent; transition: background .25s, border-color .25s; }
+    .site-header.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); border-color: var(--line); }
+    .header-inner { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font: 500 13px/1 "Space Grotesk", sans-serif; text-decoration: none; white-space: nowrap; }
+    .brand-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--ink); }
+    .nav { display: flex; align-items: center; gap: 24px; overflow-x: auto; scrollbar-width: none; padding-left: 10px; }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav a { position: relative; padding: 22px 0; color: var(--muted); font: 500 12px/1 "Roboto Mono", monospace; text-decoration: none; white-space: nowrap; }
+    .nav a::before { content: ""; position: absolute; left: -10px; top: 25px; width: 6px; height: 6px; border-radius: 50%; background: var(--spy); opacity: 0; }
+    .nav a::after { content: ""; position: absolute; inset: auto 0 16px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .2s; }
+    .nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
+    .nav a.active::before { opacity: 1; }
+    .hero { padding: 98px 0 92px; border-bottom: 1px solid var(--line); }
+    .eyebrow, .kicker, .framework-role, .toc-label, .byline-meta, .diagram-caption, .code-label { font-family: "Roboto Mono", monospace; }
+    .eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--ink); }
+    .line { display: block; overflow: hidden; padding-bottom: .09em; margin-bottom: -.09em; }
+    .line-inner { display: block; }
+    .js .hero .line-inner { animation: lineUp .8s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 90ms); }
+    @keyframes lineUp { from { transform: translateY(115%); } to { transform: translateY(0); } }
+    .hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 72px; margin-top: 56px; align-items: start; }
+    .lead { max-width: 690px; margin: 0; color: #343434; font-size: clamp(1.15rem, 2vw, 1.42rem); line-height: 1.58; }
+    .lead::first-letter { float: left; margin: 6px 8px 0 0; color: var(--ink); font: italic 3.3rem/.72 "Instrument Serif", serif; }
+    .hero-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+    .hero-links a { padding: 10px 12px; border: 1px solid var(--line-strong); border-radius: 999px; font: 500 11px/1 "Roboto Mono", monospace; text-decoration: none; }
+    .hero-links a:hover { color: var(--paper); background: var(--ink); }
+    .byline { display: flex; align-items: center; gap: 12px; margin-top: 34px; }
+    .avatar { display: grid; place-items: center; flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; color: var(--paper); background: var(--ink); font: 500 11px/1 "Roboto Mono", monospace; }
+    .byline strong { display: block; font-size: 13px; }
+    .byline-meta { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 10px; }
+    .byline-meta span + span::before { content: ""; display: inline-block; width: 3px; height: 3px; margin-right: 8px; border-radius: 50%; background: currentColor; vertical-align: middle; }
+    .hero-note { margin: 0 0 18px; padding-left: 18px; border-left: 2px solid var(--orange); color: #505050; font: italic 1.25rem/1.5 "Instrument Serif", serif; }
+    .toc { padding: 24px; border-radius: 12px; }
+    .toc, .toc .toc-label, .toc a { color: var(--ink); background: #f3f1e9; }
+    .toc-label { margin: 0 0 14px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+    .toc ol { margin: 0; padding: 0; list-style: none; counter-reset: toc; }
+    .toc li { counter-increment: toc; border-top: 1px solid var(--line); }
+    .toc a { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 11px 0; font-size: 13px; text-decoration: none; }
+    .toc a::before { content: counter(toc, decimal-leading-zero); color: var(--muted); font: 10px/1.7 "Roboto Mono", monospace; }
+    .section { padding: 88px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
+    #workflow, #research-prompt, #judgment-check { scroll-margin-top: 88px; }
+    .section-head { display: grid; grid-template-columns: .9fr 1.1fr; gap: 64px; margin-bottom: 56px; align-items: start; }
+    .section-head h2 { position: relative; color: var(--ink); background: var(--bg); }
+    .kicker { display: flex; align-items: center; gap: 9px; margin-bottom: 18px; color: var(--muted); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+    .kicker-mark { width: 8px; height: 8px; background: var(--ink); }
+    .kicker-num { color: var(--ink); }
+    .body-copy { max-width: 650px; margin: 7px 0 0; color: var(--muted); font-size: 1.04rem; }
+    .anchor { position: absolute; margin-left: 10px; color: var(--muted); font: 400 .45em/1 "Roboto Mono", monospace; text-decoration: none; opacity: 0; transition: opacity .2s; }
+    h2:hover .anchor, .anchor:focus { opacity: 1; }
+    .framework { display: grid; grid-template-columns: 260px 1fr; gap: 58px; padding: 48px 0; border-top: 1px solid var(--line); }
+    .framework-aside { align-self: start; position: sticky; top: 94px; }
+    .framework-content { min-width: 0; }
+    .framework-name { display: flex; align-items: flex-start; gap: 12px; }
+    .mark { flex: 0 0 auto; width: 11px; height: 11px; margin-top: 6px; border-radius: 50%; background: var(--ac); }
+    .framework-role { margin: 11px 0 0 23px; color: var(--muted); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .framework-summary { margin: 16px 0 0 23px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .framework-content > p:first-child { margin-top: 0; }
+    .framework-content p { max-width: 760px; }
+    .framework-content h4 { margin-top: 28px; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin: 28px 0; }
+    .text-block { padding: 18px 0 4px; border-top: 3px solid var(--ac); }
+    .text-block p { margin-bottom: 0; color: var(--muted); font-size: 14px; }
+    .mini-compare { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; margin: 30px 0; }
+    .mini-compare > div { padding-top: 16px; border-top: 1px solid var(--line-strong); }
+    .mini-compare strong::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-radius: 50%; background: var(--ac); }
+    .mini-compare p { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+    .stat-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin: 28px 0; padding: 25px 0; border-block: 1px solid var(--line); }
+    .stat strong { display: block; font: 500 clamp(1.7rem,3vw,2.4rem)/1 "Roboto Mono", monospace; }
+    .stat span { display: block; margin-top: 10px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .callout-line { margin: 28px 0; padding: 15px 0 15px 18px; border-left: 3px solid var(--ac); color: var(--ink); font-weight: 700; }
+    .callout-line small { display: block; margin-top: 4px; color: var(--muted); font-weight: 400; }
+    .formula { margin: 24px 0; padding: 18px 20px; border: 1px solid var(--line); color: var(--ink); background: #f6f4ee; font: 500 13px/1.7 "Roboto Mono", monospace; }
+    .code { margin: 24px 0; padding: 22px 24px; border-radius: 8px; color: var(--dark-paper); background: var(--dark); }
+    .code .code-label { margin: 0 0 14px; color: #c9c7bf; background: var(--dark); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+    .code pre, .code pre code { margin: 0; color: var(--dark-paper); background: var(--dark); font: 400 13px/1.8 "Roboto Mono", monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .code:focus-within { outline: 2px solid var(--orange); outline-offset: 4px; }
+    .diagram-block { margin: 32px 0; padding: 24px; border: 1px solid var(--line); border-radius: 12px; }
+    .diagram-block, .diagram-block .diagram-title { color: var(--ink); background: var(--paper); }
+    .diagram-title { margin-bottom: 22px; font: 500 1.15rem/1.35 "Space Grotesk", sans-serif; letter-spacing: -.025em; }
+    .chart-scroll { overflow-x: auto; scrollbar-gutter: stable; }
+    .chart-scroll svg { display: block; width: 100%; height: auto; }
+    .diagram-caption { margin: 18px 0 0; color: var(--muted); background: var(--paper); font-size: 11px; line-height: 1.8; }
+    .diagram-caption strong { color: var(--ink); }
+    .svg-title { font: 500 20px "Space Grotesk", sans-serif; fill: var(--ink); letter-spacing: -.02em; }
+    .svg-mono { font: 400 16px "Roboto Mono", monospace; fill: var(--muted); }
+    .svg-small { font: 400 12px "Roboto Mono", monospace; fill: var(--muted); }
+    .diagram-path { fill: none; stroke: var(--muted); stroke-width: 1.5; }
+    .section-dark { color: var(--dark-paper); background: var(--dark); border-color: var(--dark-line); }
+    .section-dark .section-head h2, .section-dark h3, .section-dark h4 { color: var(--dark-paper); background: var(--dark); }
+    .section-dark .body-copy, .section-dark .framework-role, .section-dark .framework-summary, .section-dark .framework-content p, .section-dark .text-block p { color: #c9c7bf; background: var(--dark); }
+    .section-dark .kicker, .section-dark .anchor { color: #b8b6af; background: var(--dark); }
+    .section-dark .kicker-mark { background: var(--dark-paper); }
+    .section-dark .kicker-num, .section-dark .framework-content strong { color: var(--dark-paper); }
+    .section-dark .framework { border-color: var(--dark-line); }
+    .section-dark .callout-line { color: var(--dark-paper); background: var(--dark); }
+    .section-dark .callout-line small { color: #c9c7bf; background: var(--dark); }
+    .section-dark .xref { color: #aac1ff; }
+    .section-dark :focus-visible { outline-color: var(--dark-paper); }
+    .quiz { margin-top: 32px; padding: 28px; border-radius: 12px; color: var(--ink); background: #f3f1e9; }
+    .quiz h3, .quiz h4, .quiz p, .quiz details, .quiz summary { color: var(--ink); background: #f3f1e9; }
+    .quiz .kicker { color: var(--muted); background: #f3f1e9; }
+    .quiz-item { padding: 22px 0; border-top: 1px solid var(--line-strong); }
+    .quiz-item h4 { margin: 0; font-size: 1rem; }
+    .quiz-options { display: grid; gap: 9px; margin: 18px 0; }
+    .quiz-options button, .quiz-retake { padding: 12px 16px; min-height: 44px; text-align: left; font: inherit; font-size: 14px; color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); border-left: 3px solid var(--slate); cursor: pointer; }
+    .quiz-options button:disabled { opacity: 1; cursor: default; }
+    .quiz-options button[aria-pressed="true"] { font-weight: 700; border-left-color: var(--orange); }
+    .quiz-options button[data-result="correct"] { border-left-color: var(--green); }
+    .quiz-options button:focus-visible { outline-offset: 2px; }
+    .quiz summary { cursor: pointer; font-size: 14px; }
+    .quiz details p { font-size: 14px; }
+    .quiz-track { height: 3px; margin-top: 20px; background: var(--line); }
+    .quiz-fill { display: block; width: 0; height: 100%; background: var(--green); transition: width .2s; }
+    .quiz-status { min-height: 1.7em; font: 12px/1.7 "Roboto Mono", monospace; }
+    .sources-list { margin: 0; padding: 0; list-style: none; counter-reset: sources; }
+    .sources-list li { counter-increment: sources; display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 18px 0; border-top: 1px solid var(--line); font-size: 14px; scroll-margin-top: 90px; }
+    .sources-list li::before { content: counter(sources, decimal-leading-zero); color: var(--muted); font: 10px/1.8 "Roboto Mono", monospace; }
+    .sources-list li > span { min-width: 0; overflow-wrap: anywhere; }
+    .source-note { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .xref { margin-left: 2px; color: var(--blue); font: 500 .68em/1 "Roboto Mono", monospace; vertical-align: super; text-decoration: none; }
+    .xlink { margin-left: 6px; color: var(--muted); border-bottom: 1px dashed currentColor; text-decoration: none; }
+    .xlink::after { content: " ↗"; }
+    .to-top { position: fixed; right: max(18px,env(safe-area-inset-right)); bottom: max(18px,env(safe-area-inset-bottom)); z-index: 30; display: grid; place-items: center; width: 44px; height: 44px; padding-bottom: env(safe-area-inset-bottom,0px); border: 1px solid var(--line-strong); border-radius: 50%; color: var(--ink); background: rgba(255,253,250,.94); text-decoration: none; transition: opacity .2s; }
+    .js.scroll-ready .to-top:not(.visible) { opacity: 0; pointer-events: none; }
+    .js.scroll-ready .to-top:focus-visible { opacity: 1; pointer-events: auto; }
+    .js.reveal-ready .reveal:not(.is-visible) { opacity: 0; transform: translateY(18px); }
+    .js.reveal-ready .reveal.is-visible { opacity: 1; transform: none; transition: opacity .65s, transform .65s; }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .diagram-node { opacity: 0; transform: translateY(8px); }
+    .js.diagram-motion-ready .observe-diagram.is-visible .diagram-node { opacity: 1; transform: none; transition: opacity .48s var(--d), transform .48s var(--d); }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .line-path { stroke-dasharray: 1000; stroke-dashoffset: 1000; }
+    .js.diagram-motion-ready .observe-diagram.is-visible .line-path { stroke-dasharray: 1000; stroke-dashoffset: 0; transition: stroke-dashoffset 1s var(--d); }
+    @media (max-width: 720px) {
+      body { font-size: 16px; }
+      .header-inner { align-items: stretch; gap: 12px; }
+      .brand { padding: 18px 0; }
+      .nav { max-width: 56%; gap: 20px; }
+      .hero { padding: 72px 0 66px; }
+      .hero-grid, .section-head, .framework { grid-template-columns: 1fr; gap: 28px; }
+      .section-head { margin-bottom: 40px; }
+      .framework { padding: 40px 0; }
+      .framework-aside { position: static; }
+      .mini-compare { grid-template-columns: 1fr; }
+      .section { scroll-margin-top: 76px; }
+    }
+    @media (max-width: 430px) {
+      .wrap { width: min(1180px,calc(100% - 28px)); }
+      h1 { font-size: clamp(2.15rem,12.5vw,3rem); }
+      .brand { font-size: 11px; }
+      .nav { max-width: 49%; gap: 18px; }
+      .hero { padding-top: 54px; }
+      .section { padding: 66px 0; }
+      .split { grid-template-columns: 1fr; }
+      .stat-strip { gap: 12px; }
+      .stat span { font-size: 11px; }
+      .diagram-block { padding: 16px; }
+      .chart-scroll svg { min-width: 560px; }
+      .quiz { padding: 20px; }
+      .code { padding: 18px; }
+      .sources-list li { grid-template-columns: 30px 1fr; gap: 8px; }
+    }
+    @media (hover: none) { .anchor { opacity: .55; } .nav a { padding-inline: 4px; } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+      .js.reveal-ready .reveal, .js.diagram-motion-ready .observe-diagram .diagram-node { opacity: 1 !important; transform: none !important; }
+      .js.diagram-motion-ready .observe-diagram .line-path { stroke-dashoffset: 0 !important; }
+    }
+    @media print {
+      .site-header, .progress, .grain, .to-top, .quiz-track, .quiz-status, .quiz-retake { display: none !important; }
+      .js.reveal-ready .reveal, .js.diagram-motion-ready .observe-diagram .diagram-node { opacity: 1 !important; transform: none !important; }
+      .js.diagram-motion-ready .observe-diagram .line-path { stroke-dashoffset: 0 !important; }
+      .framework-aside { position: static; }
+      .chart-scroll { overflow: visible; }
+      .hero .line-inner { animation: none !important; transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span></span></div>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top"><span class="brand-dot" aria-hidden="true"></span>Think With AI</a>
+      <nav class="nav" aria-label="Article sections">
+        <a href="#stakes" style="--spy:var(--slate)">The stakes</a>
+        <a href="#expand" style="--spy:var(--blue)">Expand</a>
+        <a href="#write" style="--spy:var(--orange)">Write</a>
+        <a href="#edit" style="--spy:var(--green)">Edit</a>
+        <a href="#sources" style="--spy:var(--purple)">Sources</a>
+      </nav>
+    </div>
+  </header>
+  <main id="content" tabindex="-1">
+    <div class="hero" id="top">
+      <div class="wrap">
+        <div class="eyebrow">Human Judgment Series · A practical essay</div>
+        <h1>
+          <span class="line"><span class="line-inner" style="--i:0">Think with AI.</span></span>
+          <span class="line"><span class="line-inner" style="--i:1">Keep the <em>thinking.</em></span></span>
+        </h1>
+        <div class="hero-grid">
+          <div>
+            <p class="lead">Your memo is finished. The sentences are clean. The recommendation sounds decisive. Then someone asks why you rejected the alternative, and you reach for the chat history. A useful way to work with a large language model starts with that moment: what should you still be able to explain when the model is gone?</p>
+            <div class="hero-links"><a href="#workflow">See the workflow</a><a href="#research-prompt">Try the research prompt</a><a href="#judgment-check">Test your judgment</a></div>
+            <div class="byline">
+              <div class="avatar" aria-hidden="true">AR</div>
+              <div><strong>Ali Reza Rashidi</strong><div class="byline-meta"><span>10 min read</span><span>Updated September 12, 2026</span></div></div>
+            </div>
+          </div>
+          <aside aria-label="Reading guide">
+            <p class="hero-note">Let the model widen the search. Give yourself enough space to decide what deserves to survive it.</p>
+            <div class="toc">
+              <p class="toc-label">In this piece</p>
+              <ol>
+                <li><a href="#stakes">What better output does—and does not—prove</a></li>
+                <li><a href="#expand">Research that opens up your options</a></li>
+                <li><a href="#write">The draft where you make the decision</a></li>
+                <li><a href="#edit">Editing that preserves your meaning</a></li>
+                <li><a href="#sources">Sources and research boundaries</a></li>
+              </ol>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <section class="section reveal" id="stakes" aria-labelledby="stakes-title" style="--spy:var(--slate)">
+      <div class="wrap">
+        <div class="section-head">
+          <div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">01</span>— The stakes</div><h2 id="stakes-title">A finished page.<br>An unfinished thought.<a class="anchor" href="#stakes" aria-label="Link to The stakes">#</a></h2></div>
+          <p class="body-copy">A document has an immediate result: someone can read it. Writing can also leave you with something less visible: a clearer model of the problem. Decide which of those outcomes your use of AI needs to protect.</p>
+        </div>
+        <div class="framework" style="--ac:var(--slate)">
+          <aside class="framework-aside" aria-label="Two outcomes"><div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Two outcomes</h3></div><p class="framework-role">Foundation · Output and understanding</p><p class="framework-summary">A polished argument is useful. Being able to defend it is a separate capability.</p></aside>
+          <div class="framework-content">
+            <p>In his <em>Code to Care</em> video, Don Woodlock describes a deliberate boundary: use LLMs to explore a subject, write and edit the first draft yourself, then bring the model back for grammar and spelling. This essay develops that approach into a practical workflow. It is a choice about how to work, not a scientifically established rule for every writer.<a class="xref" href="#src-1" aria-label="Source 1">[1]</a></p>
+            <p>Follow one example. You are preparing a pricing memo for <strong>Fieldnote</strong>, a fictional research assistant for small teams. You are considering a €19 plan per person, a €49 team plan, or metered usage. Those prices are illustrative proposals, not market data. Your task is to recommend a first experiment and explain what would make you change course.</p>
+            <p>An AI draft might recommend “a competitive, scalable pricing structure.” You still need to decide whose budget matters, how usage affects costs, and what evidence supports willingness to pay. Writing forces those unresolved choices onto the page—provided you actually make them.</p>
+            <p>AI can improve the page itself. In a randomized experiment involving 453 college-educated professionals, Noy and Zhang found that ChatGPT reduced time spent on selected professional writing tasks by 40% and increased rated output quality by 18%. That study measured task performance; it did not establish long-term learning effects.<a class="xref" href="#src-2" aria-label="Source 2">[2]</a></p>
+          </div>
+        </div>
+        <div class="framework" style="--ac:var(--red)">
+          <aside class="framework-aside" aria-label="Read the evidence carefully"><div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Read the evidence carefully</h3></div><p class="framework-role">Evidence · Different tasks, different claims</p><p class="framework-summary">“Intuition rust” is a metaphor. Each study measures something more specific.</p></aside>
+          <div class="framework-content">
+            <p>A high-school mathematics experiment by Bastani and colleagues found a gap between assisted practice and unaided performance. Compared with a control group, access to a general GPT-4 interface improved practice grades by 48%, but subsequent grades without AI were 17% lower. A tutor with learning safeguards raised practice grades by 127% and largely removed the later penalty, without demonstrating a positive unaided exam effect.<a class="xref" href="#src-3" aria-label="Source 3">[3]</a></p>
+            <div class="stat-strip" role="group" aria-label="Relative grade differences versus the control group in the mathematics study">
+              <div class="stat"><strong data-count="48" data-prefix="+" data-suffix="%">+48%</strong><span>General GPT interface<br>Assisted practice grades</span></div>
+              <div class="stat"><strong data-count="17" data-prefix="−" data-suffix="%">−17%</strong><span>General GPT interface<br>Later unaided grades</span></div>
+              <div class="stat"><strong data-count="127" data-prefix="+" data-suffix="%">+127%</strong><span>Safeguarded tutor<br>Assisted practice grades</span></div>
+            </div>
+            <p>These are relative differences in grades, not percentage-point changes or measurements of intelligence. The practical lesson is that the kind of help matters. Finishing practice successfully and acquiring a skill can come apart.</p>
+            <div class="split">
+              <div class="text-block" style="--ac:var(--purple)"><h4>Essay writing: a limited signal</h4><p>Kosmyna and colleagues’ preprint studied 54 participants in its first three sessions. LLM users reported less ownership and had more difficulty quoting their essays. The work does not establish permanent cognitive damage. A subsequent methodological critique raised concerns about sample size, EEG analysis, and reproducibility.<a class="xref" href="#src-4" aria-label="Source 4">[4]</a><a class="xref" href="#src-5" aria-label="Source 5">[5]</a></p></div>
+              <div class="text-block" style="--ac:var(--red)"><h4>Clinical AI: an association</h4><p>An observational study at four Polish centres compared colonoscopies performed without AI before and after its introduction. Adenoma detection fell from 28.4% to 22.4%: six percentage points. This involved computer-aided polyp detection, not LLM writing. Its design cannot by itself establish that AI caused the decline.<a class="xref" href="#src-6" aria-label="Source 6">[6]</a></p></div>
+            </div>
+            <p>Bring that distinction back to Fieldnote. Your memo can look stronger while your understanding remains untested. You do not need to predict brain damage to make room for independent reasoning.</p>
+          </div>
+        </div>
+        <figure class="diagram-block observe-diagram" id="workflow">
+          <div class="diagram-title">One memo, three different jobs for AI</div>
+          <section class="chart-scroll" aria-label="Scrollable diagram of the Fieldnote writing workflow" tabindex="0">
+            <svg viewBox="0 0 800 396" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Fieldnote pricing memo moves from AI-assisted exploration to human drafting and then bounded AI editing, with the decision owned by the writer throughout." aria-labelledby="workflow-title workflow-desc">
+              <title id="workflow-title">The Fieldnote memo workflow</title>
+              <desc id="workflow-desc">Three stages repeat the same roles: AI proposes options and later edits, while you verify sources, write the recommendation, and approve the final wording.</desc>
+              <defs><marker id="workflow-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#656565"/></marker></defs>
+              <path class="diagram-path line-path" style="--d:.12s" d="M316 60H356" marker-end="url(#workflow-arrow)"/>
+              <path class="diagram-path line-path" style="--d:.24s" d="M548 60H588" marker-end="url(#workflow-arrow)"/>
+              <path d="M0 104H800M0 180H800M0 256H800M0 332H800" fill="none" stroke="rgba(23,23,23,.12)"/>
+              <text x="0" y="144" class="svg-mono">AI does</text><text x="0" y="220" class="svg-mono">You do</text><text x="0" y="296" class="svg-mono">Output</text>
+              <g class="diagram-node" style="--d:.12s">
+                <rect x="128" y="24" width="184" height="72" rx="8" fill="#eef2ff" stroke="#3468f5"/>
+                <text x="144" y="48" class="svg-small">01 · EXPAND</text><text x="144" y="76" class="svg-title">Open the options</text>
+                <text x="128" y="140" class="svg-title">Map alternatives</text><text x="128" y="164" class="svg-mono">and objections</text>
+                <text x="128" y="216" class="svg-title">Verify evidence</text><text x="128" y="240" class="svg-mono">and assumptions</text>
+                <text x="128" y="292" class="svg-title">Pricing options</text><text x="128" y="316" class="svg-mono">with source notes</text>
+              </g>
+              <g class="diagram-node" style="--d:.24s">
+                <rect x="360" y="24" width="184" height="72" rx="8" fill="#fcf0e6" stroke="#eb8237"/>
+                <text x="376" y="48" class="svg-small">02 · WRITE</text><text x="376" y="76" class="svg-title">Build a position</text>
+                <text x="360" y="140" class="svg-title">No drafting</text><text x="360" y="164" class="svg-mono">in this workflow</text>
+                <text x="360" y="216" class="svg-title">Choose and justify</text><text x="360" y="240" class="svg-mono">then edit once</text>
+                <text x="360" y="292" class="svg-title">Your first memo</text><text x="360" y="316" class="svg-mono">with a trade-off</text>
+              </g>
+              <g class="diagram-node" style="--d:.36s">
+                <rect x="592" y="24" width="184" height="72" rx="8" fill="#edf6f0" stroke="#23956f"/>
+                <text x="608" y="48" class="svg-small">03 · EDIT</text><text x="608" y="76" class="svg-title">Preserve meaning</text>
+                <text x="592" y="140" class="svg-title">Suggest corrections</text><text x="592" y="164" class="svg-mono">to the language</text>
+                <text x="592" y="216" class="svg-title">Accept or reject</text><text x="592" y="240" class="svg-mono">every change</text>
+                <text x="592" y="292" class="svg-title">A finished memo</text><text x="592" y="316" class="svg-mono">you can defend</text>
+              </g>
+              <circle cx="12" cy="368" r="4" fill="#171717"/><text x="28" y="372" class="svg-mono">Arrows = handoff of the same Fieldnote memo</text>
+            </svg>
+          </section>
+          <figcaption class="diagram-caption"><strong>How to read this:</strong> Read across for the sequence and down for responsibility. Each stage produces an artifact you can inspect. The middle stage deliberately reserves drafting for you. This is a proposed working method, not a measured model of cognition.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section reveal" id="expand" aria-labelledby="expand-title" style="--spy:var(--blue)">
+      <div class="wrap">
+        <div class="section-head">
+          <div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">02</span>— Before the draft</div><h2 id="expand-title">Make the question<br>bigger first.<a class="anchor" href="#expand" aria-label="Link to Expand">#</a></h2></div>
+          <p class="body-copy">Give the model a research assignment with visible boundaries. Ask it to surface options, assumptions, and missing evidence. Keep the recommendation open until you have something worth comparing.</p>
+        </div>
+        <div class="framework" style="--ac:var(--blue)">
+          <aside class="framework-aside" aria-label="Expand deliberately"><div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Expand deliberately</h3></div><p class="framework-role">Step 01 · Explore and verify</p><p class="framework-summary">Collect different mechanisms, not five rephrasings of the same suggestion.</p></aside>
+          <div class="framework-content">
+            <p>Start with your own rough position. For Fieldnote, write: “I lean toward a team plan because collaboration is the product’s main benefit. I do not yet know whether small teams share a budget.” This gives you an assumption to investigate before a fluent response supplies the framing.</p>
+            <p>Then ask for alternatives that change the economics: charge per person, per team, or per unit of usage. Ask who benefits and who objects under each. A longer list is useful only when it reveals a different mechanism or a neglected constraint.</p>
+            <div class="code" id="research-prompt">
+              <p class="code-label">Prompt · Open the decision</p>
+              <pre><code>I am comparing pricing options for Fieldnote, a fictional
+research assistant for small teams: €19 per person,
+€49 per team, or usage-based pricing.
+
+Do not recommend a winner yet.
+For each option, identify the buyer, likely objection,
+cost exposure, and assumption I would need to test.
+Add one materially different alternative.
+Separate supplied facts from your hypotheses.
+If current sources are available, include the exact URL,
+date, billing unit, and passage supporting each claim.
+If you cannot verify something, mark it unverified.</code></pre>
+            </div>
+            <p>Treat the response as a research map. Open the original sources yourself. A price without its billing period, usage allowance, region, or tax treatment is an incomplete comparison. A model without current browsing or supplied documents cannot verify today’s competitor prices.</p>
+            <div class="mini-compare">
+              <div style="--ac:var(--blue)"><strong>Observation</strong><p>A source states a plan’s price and billing unit. Save the page, date, and relevant passage.</p></div>
+              <div style="--ac:var(--orange)"><strong>Inference</strong><p>You think a shared budget makes a team plan attractive. Record the reasoning separately.</p></div>
+              <div style="--ac:var(--slate)"><strong>Unknown</strong><p>You have no willingness-to-pay evidence for Fieldnote. Keep that gap visible.</p></div>
+            </div>
+            <figure class="diagram-block observe-diagram">
+              <div class="diagram-title">A claim earns its place in the pricing memo</div>
+              <section class="chart-scroll" aria-label="Scrollable flowchart for verifying a Fieldnote pricing claim" tabindex="0">
+                <svg viewBox="0 0 720 448" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A proposed competitor price must match its source and billing terms before entering the Fieldnote memo; otherwise it remains an unknown to investigate." aria-labelledby="claim-title claim-desc">
+                  <title id="claim-title">Verify a claim before using it</title>
+                  <desc id="claim-desc">An illustrative claim that a competitor charges 49 euros per team is checked against an original source, then either retained with its scope or marked unknown.</desc>
+                  <defs><marker id="claim-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#656565"/></marker></defs>
+                  <path class="diagram-path line-path" style="--d:.12s" d="M244 92V136" marker-end="url(#claim-arrow)"/>
+                  <path class="diagram-path line-path" style="--d:.24s" d="M388 208H448Q456 208 456 200V112Q456 104 464 104H512" marker-end="url(#claim-arrow)"/>
+                  <path class="diagram-path" d="M244 280V344" marker-end="url(#claim-arrow)"/>
+                  <rect x="416" y="168" width="40" height="24" fill="#fffdfa"/><text x="420" y="184" class="svg-mono">Yes</text>
+                  <rect x="256" y="300" width="40" height="24" fill="#fffdfa"/><text x="260" y="316" class="svg-mono">No</text>
+                  <g class="diagram-node" style="--d:.12s">
+                    <rect x="72" y="16" width="344" height="76" rx="20" fill="#f3f1e9" stroke="#656565"/>
+                    <text x="96" y="44" class="svg-small">ILLUSTRATIVE MODEL CLAIM</text><text x="96" y="72" class="svg-title">“Competitor: €49 per team”</text>
+                  </g>
+                  <g class="diagram-node" style="--d:.24s">
+                    <path d="M244 136L388 208L244 280L100 208Z" fill="#eef2ff" stroke="#3468f5"/>
+                    <text x="244" y="196" text-anchor="middle" class="svg-title">Original source</text><text x="244" y="224" text-anchor="middle" class="svg-title">and terms match?</text>
+                  </g>
+                  <g class="diagram-node" style="--d:.36s">
+                    <rect x="512" y="56" width="200" height="96" rx="8" fill="#edf6f0" stroke="#23956f"/>
+                    <text x="528" y="84" class="svg-title">Keep with scope</text><text x="528" y="112" class="svg-mono">Link + date</text><text x="528" y="136" class="svg-mono">Unit + limits</text>
+                    <rect x="72" y="344" width="344" height="56" rx="8" fill="#fffdfa" stroke="#656565"/>
+                    <text x="92" y="380" class="svg-title">Mark unknown. Investigate first.</text>
+                  </g>
+                  <path d="M0 416H720" stroke="rgba(23,23,23,.12)"/><text x="8" y="440" class="svg-small">Diamond = evidence check · Rectangle = next action · No live competitor data shown</text>
+                </svg>
+              </section>
+              <figcaption class="diagram-caption"><strong>How to read this:</strong> Follow the labelled branches. A plausible price enters the memo only after the original source supports the same claim. “Unknown” is a valid research result; it is not a space for the model to fill creatively.</figcaption>
+            </figure>
+            <p>Finish the exploration by asking for a serious objection: “Assume the team plan fails. What plausible mechanism explains the failure, and what observation would distinguish it from a weak product?” The answer might point toward high usage costs, purchasing friction, or low demand. Those are hypotheses to test, not facts produced by the prompt.</p>
+            <p>Set a stopping condition: you can explain the main options, their decisive trade-offs, and the next missing piece of evidence. Otherwise, asking for “more ideas” can become a way to postpone choosing.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark reveal" id="write" aria-labelledby="write-title" style="--spy:var(--orange)">
+      <div class="wrap">
+        <div class="section-head">
+          <div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">03</span>— The first draft</div><h2 id="write-title">Close the chat.<br>Make the case.<a class="anchor" href="#write" aria-label="Link to Write">#</a></h2></div>
+          <p class="body-copy">The transition from options to a position deserves its own space. Keep your verified notes available. Put the generated prose aside. Write the recommendation in words that expose your reasoning.</p>
+        </div>
+        <div class="framework" style="--ac:var(--orange)">
+          <aside class="framework-aside" aria-label="Keep the hard choices"><div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Keep the hard choices</h3></div><p class="framework-role">Step 02 · Draft and self-edit</p><p class="framework-summary">Your draft should reveal what you believe, what supports it, and what remains uncertain.</p></aside>
+          <div class="framework-content">
+            <p>Begin with three sentences: what you recommend, why, and what could make it wrong. For Fieldnote, a provisional position could be: “Test a capped €49 team plan. It matches our collaboration hypothesis and gives buyers a predictable bill. We have not established willingness to pay, so this is a pilot proposal.”</p>
+            <p>Now explain the rejected alternative. Per-person billing may collect more from large teams, but it could discourage inviting occasional collaborators. That trade-off is part of your argument. If you cannot explain it, you have found a question to resolve before polishing the wording.</p>
+            <div class="split">
+              <div class="text-block" style="--ac:var(--orange)"><h4>The sentence you can defend</h4><p>“We propose testing a capped team plan because shared use is central to the product.” You can identify the proposal, its rationale, and the assumption behind it.</p></div>
+              <div class="text-block" style="--ac:var(--slate)"><h4>The sentence that hides the work</h4><p>“Our optimized pricing strategy will unlock sustainable growth.” Which price? Optimized against what? What evidence makes “will” appropriate?</p></div>
+            </div>
+            <p>A useful memo makes the chain explicit: observation, interpretation, recommendation, next test. It also preserves uncertainty. “We do not know the cost of heavy usage” is a reason to measure costs or cap a pilot. It is not a reason to ask for more confident prose.</p>
+            <h4>Edit once for the argument</h4>
+            <p>Read your draft without the chat beside it. Underline each factual claim and locate its source. Circle each recommendation and check its reasoning. Remove any sentence you cannot explain. Then read it aloud: where you need a long spoken qualification, the written claim may be too broad.</p>
+            <p>Self-review matters because trusting a tool and evaluating its output are different activities. A CHI study of 319 knowledge workers found that greater confidence in GenAI was associated with less reported critical-thinking effort. It was a survey, not a causal test of skill loss; the authors also describe work shifting toward verification and integration.<a class="xref" href="#src-7" aria-label="Source 7">[7]</a></p>
+            <div class="callout-line">Can you explain the recommendation without reopening the chat?<small>Keep sources available. The point is to own the reasoning, not memorize every price or citation.</small></div>
+            <p>This boundary should serve your purpose. If you need language or accessibility support, dictate your reasoning or work from your own outline. For routine production, a reviewed AI draft may be appropriate. When learning, original argument, or strategic judgment is the goal, reserve a meaningful part of the reasoning for yourself.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal" id="edit" aria-labelledby="edit-title" style="--spy:var(--green)">
+      <div class="wrap">
+        <div class="section-head">
+          <div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span>— The final pass</div><h2 id="edit-title">Clean the language.<br>Protect the claim.<a class="anchor" href="#edit" aria-label="Link to Edit">#</a></h2></div>
+          <p class="body-copy">Bring the model back with a narrow brief and a visible record of changes. The useful output is a set of proposed edits you can judge, not a replacement document you must trust.</p>
+        </div>
+        <div class="framework" style="--ac:var(--green)">
+          <aside class="framework-aside" aria-label="Edit within a boundary"><div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Edit within a boundary</h3></div><p class="framework-role">Step 03 · Language, then approval</p><p class="framework-summary">Small grammatical repairs are different from stronger claims, new evidence, or a new voice.</p></aside>
+          <div class="framework-content">
+            <p>Suppose your draft says, “The team plan reduce purchasing friction, but the evidence is preliminary.” Changing “reduce” to “reduces” repairs subject–verb agreement. Removing the final clause changes how certain the claim appears. Turning it into “The team plan will accelerate adoption” introduces a different prediction.</p>
+            <div class="code">
+              <p class="code-label">Prompt · Make every change reviewable</p>
+              <pre><code>Review this memo for grammar and spelling only.
+Preserve its meaning, voice, numbers, citations,
+qualifiers, and level of certainty.
+
+Return a table: original phrase | proposed edit | reason.
+Do not rewrite the whole document.
+If a sentence is ambiguous, ask what I mean.
+Flag any suspected factual problem separately;
+do not silently correct or invent evidence.</code></pre>
+            </div>
+            <p>The prompt sets a boundary; your review enforces it. Compare each change with the original. Pay special attention to <em>may</em>, <em>will</em>, <em>some</em>, <em>all</em>, and <em>because</em>. These small words carry scope, certainty, and causality.</p>
+            <div class="formula">“May improve adoption” → “Will improve adoption”<br>That is a change of claim, not a spelling correction.</div>
+            <p>If you also want criticism of the argument, make it a separate pass: ask for unsupported claims and unanswered objections without requesting a rewrite. Decide which criticisms deserve a revision, then make that revision yourself. An editing brief should not silently become a decision brief.</p>
+            <h4>Leave with more than the file</h4>
+            <p>After finishing the Fieldnote memo, close it and write a short explanation of your recommendation, the strongest alternative, and the evidence that would change your mind. Check that explanation against the memo. Treat any gap as a prompt to revisit the reasoning, not as a diagnosis of your memory.</p>
+            <p>For your next important document, compare two outcomes: how efficiently you completed it and how well you can explain its choices. You can gain speed and retain ownership. The boundary is a deliberate allocation of work, not a contest to minimize AI use.</p>
+            <section class="quiz" id="judgment-check" aria-labelledby="quiz-title">
+              <div class="kicker">Three decisions · Check the boundary</div>
+              <h3 id="quiz-title">Who is doing the thinking?</h3>
+              <p>Apply the method to the Fieldnote memo. Choose an answer, then inspect the reasoning.</p>
+              <div class="quiz-item" data-answer="1">
+                <h4>1. The model gives you a competitor price with a link. What earns that claim a place in the memo?</h4>
+                <div class="quiz-options" role="group" aria-label="Answers to question 1">
+                  <button type="button" disabled aria-pressed="false">A. The same model confirms it a second time.</button>
+                  <button type="button" disabled aria-pressed="false">B. You inspect the original source and match the date, unit, and terms.</button>
+                  <button type="button" disabled aria-pressed="false">C. The number fits the recommendation you already prefer.</button>
+                </div>
+                <details><summary>Why this matters</summary><p><strong>B is the supported choice.</strong> Repetition does not supply independent evidence. Checking the source can reveal that a price is per person, billed annually, or unavailable under the conditions your memo assumes.</p></details>
+              </div>
+              <div class="quiz-item" data-answer="0">
+                <h4>2. An edit changes “may reduce friction” to “will accelerate adoption.” How should you classify it?</h4>
+                <div class="quiz-options" role="group" aria-label="Answers to question 2">
+                  <button type="button" disabled aria-pressed="false">A. A substantive change that needs evidence and your judgment.</button>
+                  <button type="button" disabled aria-pressed="false">B. A grammatical correction you can accept automatically.</button>
+                  <button type="button" disabled aria-pressed="false">C. Proof that the model understands your customers better.</button>
+                </div>
+                <details><summary>Why this matters</summary><p><strong>A is the supported choice.</strong> The edit changes both certainty and the predicted outcome. Smoother language does not justify either change.</p></details>
+              </div>
+              <div class="quiz-item" data-answer="2">
+                <h4>3. Your memo is convincing, but you cannot explain why you rejected per-person billing. What next?</h4>
+                <div class="quiz-options" role="group" aria-label="Answers to question 3">
+                  <button type="button" disabled aria-pressed="false">A. Ask for a more confident executive summary.</button>
+                  <button type="button" disabled aria-pressed="false">B. Memorize the model’s conclusion.</button>
+                  <button type="button" disabled aria-pressed="false">C. Revisit the trade-off and write your own justification.</button>
+                </div>
+                <details><summary>Why this matters</summary><p><strong>C is the supported choice.</strong> The missing piece is an explanation. Use the verified notes to rebuild it; revise the recommendation if it no longer holds.</p></details>
+              </div>
+              <div class="quiz-track" aria-hidden="true" hidden><span class="quiz-fill"></span></div>
+              <p class="quiz-status" role="status" aria-live="polite" aria-atomic="true" hidden></p>
+              <button class="quiz-retake" type="button" hidden>Try again</button>
+            </section>
+            <div class="callout-line">Finish with an argument you can explain, revise, and take responsibility for.<small>The model can help you get there. Make that the standard you use to judge the help.</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal" id="sources" aria-labelledby="sources-title" style="--spy:var(--purple)">
+      <div class="wrap">
+        <div class="section-head">
+          <div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span>— Sources</div><h2 id="sources-title">Follow the evidence.<a class="anchor" href="#sources" aria-label="Link to Sources">#</a></h2></div>
+          <p class="body-copy">The studies below address different tasks and outcomes. They do not validate this exact three-stage workflow. Fieldnote, its proposed prices, prompts, and memo excerpts are teaching examples; no customer or competitor research is implied.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><span><strong>How to Personally Use LLMs.</strong> Don Woodlock · Code to Care.<a class="xlink" href="https://www.linkedin.com/posts/donwoodlock_how-should-i-use-large-language-models-at-activity-7501254413957701633-NL4-">Original video and transcript</a><span class="source-note">The starting point for the research–draft–edit division of labor. This article adds worked examples and independently checks the research claims.</span></span></li>
+          <li id="src-2"><span><strong>Experimental evidence on the productivity effects of generative artificial intelligence.</strong> Shakked Noy and Whitney Zhang · Science, 2023.<a class="xlink" href="https://doi.org/10.1126/science.adh2586">Research article</a><span class="source-note">Randomized professional writing experiment; time and rated output quality, not long-term learning.</span></span></li>
+          <li id="src-3"><span><strong>Generative AI without guardrails can harm learning: Evidence from high school mathematics.</strong> Hamsa Bastani and colleagues · PNAS, 2025.<a class="xlink" href="https://doi.org/10.1073/pnas.2422633122">Research article</a><span class="source-note">Assisted practice and unaided exams are distinct outcomes. The published correction concerns an author affiliation, not these findings.</span></span></li>
+          <li id="src-4"><span><strong>Your Brain on ChatGPT: Accumulation of Cognitive Debt when Using an AI Assistant for Essay Writing Task.</strong> Nataliya Kosmyna and colleagues · arXiv preprint, version 2, December 2025.<a class="xlink" href="https://arxiv.org/abs/2506.08872v2">Preprint</a><span class="source-note">Small essay-writing study with behavioral and EEG measures. Used here with explicit limits on interpretation.</span></span></li>
+          <li id="src-5"><span><strong>Comment on: Your Brain on ChatGPT.</strong> Milos Stankovic and colleagues · arXiv preprint.<a class="xlink" href="https://arxiv.org/abs/2601.00856">Methodological critique</a><span class="source-note">Raises concerns about study design, reproducibility, and EEG methodology; it is not a replication study.</span></span></li>
+          <li id="src-6"><span><strong>Endoscopist deskilling risk after exposure to artificial intelligence in colonoscopy: a multicentre, observational study.</strong> Krzysztof Budzyń and colleagues · The Lancet Gastroenterology &amp; Hepatology, 2025.<a class="xlink" href="https://pubmed.ncbi.nlm.nih.gov/40816301/">Study abstract</a><span class="source-note">Before–after comparison of procedures without AI. Computer-aided detection is a different technology and task from LLM-assisted writing.</span></span></li>
+          <li id="src-7"><span><strong>The Impact of Generative AI on Critical Thinking: Self-Reported Reductions in Cognitive Effort and Confidence Effects From a Survey of Knowledge Workers.</strong> Hao-Ping Lee and colleagues · CHI, 2025.<a class="xlink" href="https://www.microsoft.com/en-us/research/publication/the-impact-of-generative-ai-on-critical-thinking-self-reported-reductions-in-cognitive-effort-and-confidence-effects-from-a-survey-of-knowledge-workers/">Research publication</a><span class="source-note">Self-reports from 319 knowledge workers; associations and descriptions of work, not a causal estimate of cognitive decline.</span></span></li>
+        </ol>
+      </div>
+    </section>
+  </main>
+  <a class="to-top" href="#top" aria-label="Back to top">↑</a>
+  <script>
+    (() => {
+      'use strict';
+      const root = document.documentElement;
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const staticMotion = new URLSearchParams(window.location.search).get('motion') === 'static';
+      const sections = [...document.querySelectorAll('main > section')];
+      const navLinks = [...document.querySelectorAll('.nav a')];
+      const progress = document.querySelector('.progress span');
+      const header = document.querySelector('.site-header');
+      const toTop = document.querySelector('.to-top');
+      let scrollPending = false;
+
+      function updateScroll() {
+        const maxScroll = root.scrollHeight - window.innerHeight;
+        progress.style.width = `${maxScroll > 0 ? Math.min(100, window.scrollY / maxScroll * 100) : 0}%`;
+        header.classList.toggle('scrolled', window.scrollY > 12);
+        toTop.classList.toggle('visible', window.scrollY > 600);
+        let activeId = '';
+        for (const section of sections) {
+          if (section.getBoundingClientRect().top <= 160) activeId = section.id;
+        }
+        if (maxScroll > 0 && window.scrollY >= maxScroll - 4) activeId = 'sources';
+        for (const link of navLinks) {
+          const active = link.hash === `#${activeId}`;
+          link.classList.toggle('active', active);
+          if (active) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        }
+        scrollPending = false;
+      }
+      function requestScrollUpdate() {
+        if (scrollPending) return;
+        scrollPending = true;
+        window.requestAnimationFrame(updateScroll);
+      }
+      window.addEventListener('scroll', requestScrollUpdate, { passive: true });
+      window.addEventListener('resize', requestScrollUpdate);
+      updateScroll();
+      root.classList.add('scroll-ready');
+
+      if ('IntersectionObserver' in window && !reducedMotion.matches && !staticMotion) {
+        const revealObserver = new IntersectionObserver(entries => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+          }
+        }, { threshold: 0, rootMargin: '0px 0px -36px 0px' });
+        for (const section of sections) revealObserver.observe(section);
+        root.classList.add('reveal-ready');
+
+        const diagramObserver = new IntersectionObserver(entries => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            entry.target.classList.add('is-visible');
+            diagramObserver.unobserve(entry.target);
+          }
+        }, { threshold: .15 });
+        document.querySelectorAll('.observe-diagram').forEach(figure => diagramObserver.observe(figure));
+        root.classList.add('diagram-motion-ready');
+
+        const countObserver = new IntersectionObserver(entries => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            const element = entry.target;
+            const start = performance.now();
+            const value = Number(element.dataset.count);
+            const finalText = element.textContent;
+            element.setAttribute('aria-label', finalText);
+            function count(now) {
+              const fraction = reducedMotion.matches ? 1 : Math.min((now - start) / 850, 1);
+              const current = Math.round(value * (1 - Math.pow(1 - fraction, 3)));
+              element.textContent = `${element.dataset.prefix || ''}${current}${element.dataset.suffix || ''}`;
+              if (fraction < 1) window.requestAnimationFrame(count);
+              else element.textContent = finalText;
+            }
+            window.requestAnimationFrame(count);
+            countObserver.unobserve(element);
+          }
+        }, { threshold: .6 });
+        document.querySelectorAll('[data-count]').forEach(element => countObserver.observe(element));
+      }
+
+      const quiz = document.querySelector('.quiz');
+      const questions = [...quiz.querySelectorAll('.quiz-item')];
+      const status = quiz.querySelector('.quiz-status');
+      const retake = quiz.querySelector('.quiz-retake');
+      let answered = 0;
+      let correct = 0;
+      for (const question of questions) {
+        const buttons = [...question.querySelectorAll('button')];
+        buttons.forEach((button, index) => {
+          button.addEventListener('click', () => {
+            if (question.dataset.answered) return;
+            question.dataset.answered = 'true';
+            const isCorrect = index === Number(question.dataset.answer);
+            answered += 1;
+            if (isCorrect) correct += 1;
+            button.setAttribute('aria-pressed', 'true');
+            for (const option of buttons) option.disabled = true;
+            buttons[Number(question.dataset.answer)].dataset.result = 'correct';
+            question.querySelector('details').open = true;
+            quiz.querySelector('.quiz-fill').style.width = `${answered / questions.length * 100}%`;
+            status.textContent = `${isCorrect ? 'Correct.' : 'Review the explanation.'} ${answered} of ${questions.length} answered; ${correct} correct.`;
+            retake.hidden = answered !== questions.length;
+          });
+          button.disabled = false;
+        });
+      }
+      retake.addEventListener('click', () => {
+        answered = 0;
+        correct = 0;
+        for (const question of questions) {
+          delete question.dataset.answered;
+          question.querySelector('details').open = false;
+          for (const button of question.querySelectorAll('button')) {
+            button.disabled = false;
+            button.setAttribute('aria-pressed', 'false');
+            delete button.dataset.result;
+          }
+        }
+        quiz.querySelector('.quiz-fill').style.width = '0%';
+        status.textContent = `0 of ${questions.length} answered.`;
+        retake.hidden = true;
+        questions[0].querySelector('button').focus();
+      });
+      quiz.querySelector('.quiz-track').hidden = false;
+      status.hidden = false;
+      status.textContent = `0 of ${questions.length} answered.`;
+    })();
+  </script>
+</body>
+</html>

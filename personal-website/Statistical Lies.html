@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>document.documentElement.classList.add('js');</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Understand statistical lies through ten misleading practices, an interactive chart, and checks for percentages, sampling, uncertainty, and causal claims.">
+  <title>Statistical Lies — How Numbers Mislead</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='6' fill='%233468f5'/%3E%3Ccircle cx='23' cy='9' r='6' fill='%23db6478'/%3E%3Ccircle cx='9' cy='23' r='6' fill='%23c9a227'/%3E%3Ccircle cx='23' cy='23' r='6' fill='%2323956f'/%3E%3C/svg%3E">
+  <meta property="og:title" content="Statistical Lies — How Numbers Mislead">
+  <meta property="og:description" content="Understand statistical lies through ten misleading practices, an interactive chart, and checks for percentages, sampling, uncertainty, and causal claims.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Instrument+Serif:ital@0;1&amp;family=Roboto+Mono:wght@400;500&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Statistical Lies — How Numbers Mislead","description":"Understand statistical lies through ten misleading practices, an interactive chart, and checks for percentages, sampling, uncertainty, and causal claims.","datePublished":"2026-09-12","dateModified":"2026-09-12","author":{"@type":"Person","name":"Ali Reza Rashidi"},"inLanguage":"en"}</script>
+  <style>
+    :root {
+      --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898;
+      --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+      --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+      --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+      --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+      --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+    }
+    * { box-sizing: border-box; }
+    html { color-scheme: light; scroll-behavior: smooth; overflow-x: clip; }
+    body {
+      margin: 0; color: var(--ink); background: linear-gradient(180deg, #fffdfa, #fcfbf8);
+      font-family: "DM Sans", sans-serif; font-size: 17px; line-height: 1.7;
+      -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+    }
+    ::selection { background: var(--ink); color: var(--paper); }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; border: 2px solid var(--bg); }
+    a { color: inherit; }
+    p { text-wrap: pretty; }
+    h1, h2, h3, h4 { margin: 0; font-family: "Space Grotesk", sans-serif; text-wrap: balance; }
+    h1, h2 { letter-spacing: -.045em; }
+    h1 { font-size: clamp(3rem, 8.4vw, 6.8rem); line-height: .94; font-weight: 700; }
+    h1 em { color: #535353; font-family: "Instrument Serif", serif; font-weight: 400; }
+    h2 { font-size: clamp(2rem, 4.4vw, 4rem); line-height: .98; }
+    h3 { font-size: 1.45rem; line-height: 1.08; letter-spacing: -.025em; }
+    h4 { font-size: 1.02rem; line-height: 1.25; }
+    code, pre, .mono { font-family: "Roboto Mono", monospace; }
+    :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+    .wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    .grain {
+      position: fixed; inset: 0; z-index: 40; pointer-events: none; opacity: .08; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+    }
+    .skip-link { position: fixed; left: 16px; top: -80px; z-index: 100; padding: 10px 14px; background: var(--ink); color: var(--paper); border-radius: 4px; }
+    .skip-link:focus { top: 16px; }
+    .progress { position: fixed; inset: 0 auto auto 0; z-index: 90; width: 100%; height: 2px; background: transparent; }
+    .progress span { display: block; width: 0; height: 100%; background: var(--ink); }
+    .site-header { position: sticky; top: 0; z-index: 35; transition: background .25s, border-color .25s; border-bottom: 1px solid transparent; }
+    .site-header.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); border-color: var(--line); }
+    .header-inner { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font: 500 13px/1 "Space Grotesk", sans-serif; text-decoration: none; white-space: nowrap; }
+    .brand-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--ink); }
+    .nav { display: flex; align-items: center; gap: 20px; overflow-x: auto; scrollbar-width: none; }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav a { position: relative; padding: 22px 0; color: var(--muted); font: 500 12px/1 "Roboto Mono", monospace; text-decoration: none; white-space: nowrap; }
+    .nav a::before { content: ""; position: absolute; left: -10px; top: 29px; width: 6px; height: 6px; border-radius: 50%; background: var(--spy, var(--ink)); opacity: 0; }
+    .nav a::after { content: ""; position: absolute; inset: auto 0 16px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .2s; }
+    .nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
+    .nav a.active::before { opacity: 1; }
+    .hero { padding: 98px 0 92px; border-bottom: 1px solid var(--line); }
+    .eyebrow, .kicker, .framework-role, .toc-label, .byline-meta, .diagram-caption, .code-label { font-family: "Roboto Mono", monospace; }
+    .eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--ink); }
+    .line { display: block; overflow: hidden; }
+    .line-inner { display: block; }
+    .js .hero .line-inner { animation: lineUp .8s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 90ms); }
+    @keyframes lineUp { from { transform: translateY(115%); } to { transform: translateY(0); } }
+    .hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 72px; margin-top: 56px; align-items: start; }
+    .lead { max-width: 690px; margin: 0; color: #343434; font-size: clamp(1.15rem, 2vw, 1.42rem); line-height: 1.58; }
+    .lead::first-letter { float: left; margin: 6px 8px 0 0; color: var(--ink); font: italic 3.3rem/.72 "Instrument Serif", serif; }
+    .hero-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+    .hero-links a { padding: 8px 11px; border: 1px solid var(--line-strong); border-radius: 999px; font: 500 11px/1 "Roboto Mono", monospace; text-decoration: none; }
+    .hero-links a:hover { background: var(--ink); color: var(--paper); }
+    .byline { display: flex; align-items: center; gap: 12px; margin-top: 34px; }
+    .avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--ink); color: var(--paper); font: 500 11px/1 "Roboto Mono", monospace; }
+    .byline strong { display: block; font-size: 13px; }
+    .byline-meta { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 10px; }
+    .byline-meta span + span::before { content: "·"; margin-right: 8px; }
+    .hero-note { margin: 0 0 18px; padding-left: 18px; border-left: 2px solid var(--orange); color: #505050; font: italic 1.12rem/1.55 "Instrument Serif", serif; }
+    .toc { padding: 24px; background: #f3f1e9; border-radius: 12px; }
+    .toc-label { margin: 0 0 14px; color: var(--muted); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+    .toc ol { margin: 0; padding: 0; list-style: none; counter-reset: toc; }
+    .toc li { counter-increment: toc; border-top: 1px solid var(--line); }
+    .toc a { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 11px 0; font-size: 13px; text-decoration: none; }
+    .toc a::before { content: "0" counter(toc); color: var(--soft); font: 10px/1.7 "Roboto Mono", monospace; }
+    .section { padding: 88px 0; border-bottom: 1px solid var(--line); --spy: var(--blue); }
+    .section-head { display: grid; grid-template-columns: .9fr 1.1fr; gap: 64px; margin-bottom: 64px; align-items: start; }
+    .section-head h2 { position: relative; color: var(--ink); background: transparent; }
+    .kicker { display: flex; align-items: center; gap: 9px; margin-bottom: 18px; color: var(--muted); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+    .kicker-mark { width: 8px; height: 8px; background: var(--spy); }
+    .kicker-num { color: var(--ink); }
+    .body-copy { max-width: 650px; margin: 7px 0 0; color: var(--muted); font-size: 1.04rem; }
+    .anchor { position: absolute; margin-left: 10px; color: var(--soft); font: 400 .45em/1 "Roboto Mono", monospace; text-decoration: none; opacity: 0; transition: opacity .2s; }
+    h2:hover .anchor, h3:hover .anchor, .anchor:focus { opacity: 1; }
+    .framework { display: grid; grid-template-columns: 260px 1fr; gap: 58px; padding: 54px 0; border-top: 1px solid var(--line); }
+    .framework-aside { align-self: start; position: sticky; top: 94px; }
+    .framework-content { min-width: 0; }
+    .framework-name { display: flex; align-items: flex-start; gap: 12px; }
+    .mark { flex: 0 0 auto; width: 11px; height: 11px; margin-top: 6px; border-radius: 50%; background: var(--ac); }
+    .framework-name h3 { position: relative; }
+    .framework-role { margin: 11px 0 0 23px; color: var(--muted); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .framework-summary { margin: 16px 0 0 23px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .framework-content > p:first-child { margin-top: 0; }
+    .framework-content p { max-width: 760px; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin: 30px 0; }
+    .text-block { padding: 20px 0 4px; border-top: 3px solid var(--ac); }
+    .text-block p { margin-bottom: 0; color: var(--muted); font-size: 14px; }
+    .flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 30px 0; }
+    .flow-item { padding: 19px 0; border-top: 2px solid var(--ac); }
+    .fnum { display: block; margin-bottom: 10px; color: var(--ac); font: 500 10px/1 "Roboto Mono", monospace; }
+    .flow-item strong { font-family: "Space Grotesk", sans-serif; }
+    .flow-item p { margin: 7px 0 0; color: var(--muted); font-size: 13px; }
+    .formula { margin: 28px 0; padding: 18px 20px; border: 1px solid var(--line); background: #f6f4ee; font: 500 13px/1.7 "Roboto Mono", monospace; overflow-x: auto; }
+    .callout-line { margin: 28px 0; padding: 15px 0 15px 18px; border-left: 3px solid var(--ac); font-weight: 700; }
+    .callout-line small { display: block; margin-top: 3px; color: var(--muted); font-weight: 400; }
+    .stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 34px 0; padding: 25px 0; border-block: 1px solid var(--line); }
+    .stat strong { display: block; font: 500 clamp(1.7rem, 3vw, 2.4rem)/1 "Roboto Mono", monospace; }
+    .stat span { display: block; margin-top: 8px; color: var(--muted); font-size: 12px; }
+    .code { margin: 28px 0; overflow: hidden; border-radius: 10px; background: var(--dark); }
+    .code-label { padding: 10px 16px; color: #c9c7bf; background: var(--dark); border-bottom: 1px solid var(--dark-line); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .code pre { margin: 0; padding: 20px; color: #f2efe5; background: var(--dark); font-size: 12px; line-height: 1.75; overflow-x: auto; }
+    .diagram-block { margin: 38px 0; padding: 24px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+    .diagram-title { margin-bottom: 18px; font: 700 1.15rem/1.2 "Space Grotesk", sans-serif; }
+    .chart-scroll { width: 100%; max-width: 100%; overflow-x: auto; }
+    .chart-scroll svg { display: block; width: 100%; height: auto; }
+    .diagram-caption { margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; line-height: 1.6; }
+    .diagram-caption strong { color: var(--ink); }
+    .diagram-node, .diagram-path { opacity: 1; transform: none; stroke-dashoffset: 0; }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .diagram-node { opacity: 0; transform: translateY(8px); }
+    .js.diagram-motion-ready .observe-diagram.is-visible .diagram-node { opacity: 1; transform: none; transition: opacity .48s ease var(--d), transform .48s ease var(--d); }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .diagram-path:not(.diagram-path-dashed) { stroke-dasharray: 900; stroke-dashoffset: 900; }
+    .js.diagram-motion-ready .observe-diagram.is-visible .diagram-path:not(.diagram-path-dashed) { stroke-dasharray: 900; stroke-dashoffset: 0; transition: stroke-dashoffset 1s ease var(--d); }
+    .svg-title { font-family: "Space Grotesk", sans-serif; letter-spacing: -.02em; }
+    .svg-mono { font-family: "Roboto Mono", monospace; }
+    .section-dark { --spy: var(--orange); color: var(--dark-paper); background: var(--dark); border-color: var(--dark-line); }
+    .section-dark .section-head h2 { color: var(--dark-paper); background: var(--dark); }
+    .section-dark .body-copy, .section-dark .framework-role, .section-dark .framework-summary, .section-dark .framework-content p, .section-dark .text-block p { color: #c9c7bf; }
+    .section-dark .kicker { color: #b8b6af; }
+    .section-dark .kicker-num, .section-dark h3, .section-dark h4 { color: var(--dark-paper); }
+    .section-dark .framework, .section-dark .text-block { border-color: var(--dark-line); }
+    .section-dark .anchor { color: #aaa79f; }
+    .section-dark .xref { color: #9db8ff; }
+    .section-dark .callout-line small { color: #c9c7bf; }
+    .section-dark .formula { color: var(--dark-paper); background: #232320; border-color: var(--dark-line); }
+    .sources-list { margin: 0; padding: 0; list-style: none; counter-reset: sources; }
+    .sources-list li { counter-increment: sources; display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 18px 0; border-top: 1px solid var(--line); font-size: 14px; }
+    .sources-list li::before { content: counter(sources, decimal-leading-zero); color: var(--soft); font: 10px/1.8 "Roboto Mono", monospace; }
+    .xref { margin-left: 2px; color: var(--blue); font: 500 .68em/1 "Roboto Mono", monospace; text-decoration: none; vertical-align: super; }
+    .xlink { margin-left: 6px; border-bottom: 1px dashed currentColor; color: var(--muted); text-decoration: none; }
+    .xlink::after { content: " ↗"; }
+    .to-top { position: fixed; right: max(18px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); z-index: 30; width: 44px; height: 44px; border: 1px solid var(--line-strong); border-radius: 50%; background: rgba(255,253,250,.9); color: var(--ink); cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .to-top.visible { opacity: 1; pointer-events: auto; }
+    .js.reveal-ready .reveal { opacity: 0; transform: translateY(18px); }
+    .js.reveal-ready .reveal.is-visible { opacity: 1; transform: none; transition: opacity .65s ease, transform .65s ease; }
+    @media (max-width: 720px) {
+      body { font-size: 16px; }
+      .header-inner { align-items: stretch; }
+      .brand { padding: 18px 0; }
+      .nav { max-width: 56%; }
+      .hero { padding: 72px 0 66px; }
+      .hero-grid, .section-head, .framework { grid-template-columns: 1fr; }
+      .hero-grid { gap: 34px; }
+      .section-head { gap: 24px; margin-bottom: 44px; }
+      .framework { gap: 26px; padding: 42px 0; }
+      .framework-aside { position: static; }
+      .flow { grid-template-columns: 1fr; }
+      .stat-strip { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 430px) {
+      .wrap { width: min(100% - 28px, var(--max)); }
+      h1 { font-size: clamp(2.15rem, 12.5vw, 3rem); }
+      .brand { font-size: 11px; }
+      .nav { max-width: 44%; gap: 16px; }
+      .hero { padding-top: 54px; }
+      .section { padding: 66px 0; }
+      .split { grid-template-columns: 1fr; }
+      .diagram-block { margin-inline: -4px; padding: 16px; }
+      .chart-scroll svg { min-width: 560px; }
+      .stat-strip { gap: 12px; }
+      .sources-list li { grid-template-columns: 30px 1fr; gap: 8px; }
+    }
+    @media (hover: none) {
+      .anchor { opacity: .55; }
+      .nav a { padding-inline: 4px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+      .js.reveal-ready .reveal, .js.diagram-motion-ready .observe-diagram .diagram-node { opacity: 1 !important; transform: none !important; }
+      .js.diagram-motion-ready .observe-diagram .diagram-path { stroke-dashoffset: 0 !important; }
+    }
+  
+    .section { scroll-margin-top: 80px; }
+    .section-head h2 { background: var(--bg); }
+    .kicker-mark { background: var(--ink); }
+    .toc, .toc .toc-label, .toc a { color: var(--ink); background: #f3f1e9; }
+    .toc a::before, .sources-list li::before { color: var(--muted); }
+    .diagram-block, .diagram-block .diagram-title { color: var(--ink); background: var(--paper); }
+    .formula { color: var(--ink); background: #f6f4ee; }
+    .svg-title { fill: var(--ink); font-size: 18px; }
+    .svg-mono { fill: var(--muted); font-size: 13px; }
+    .quiz { margin-top: 36px; padding: 26px; color: var(--ink); background: #f3f1e9; border-radius: 12px; }
+    .quiz h3, .quiz p, .quiz details, .quiz summary { color: var(--ink); background: #f3f1e9; }
+    .quiz-question { font-weight: 700; }
+    .quiz-options { display: grid; gap: 10px; margin: 20px 0; }
+    .quiz-options button, .quiz-retake { text-align: left; font: inherit; padding: 13px 16px; color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); border-left: 3px solid var(--slate); cursor: pointer; }
+    .quiz-options button:disabled { cursor: default; opacity: 1; }
+    .quiz-options button[aria-pressed="true"] { border-left-color: var(--purple); font-weight: 700; }
+    .quiz-options button[data-result="correct"] { border-left-color: var(--green); }
+    .quiz-track { height: 3px; background: var(--line); margin: 16px 0; }
+    .quiz-fill { display: block; height: 100%; width: 0; background: var(--purple); transition: width .2s; }
+    .quiz-progress { font: 12px/1.7 "Roboto Mono", monospace; }
+    .quiz details { margin: 14px 0; }
+    .quiz summary { cursor: pointer; }
+    [hidden] { display: none !important; }
+    .callout-line { color: var(--ink); }
+    .to-top { padding-bottom: env(safe-area-inset-bottom, 0px); }
+    @media (max-width: 720px) { .section-head, .framework { gap: 26px; } }
+    @media (prefers-reduced-motion: reduce) { .quiz-fill { transition: none; } }
+  
+    .hero .line { padding-bottom: .08em; margin-bottom: -.08em; }
+    .hero-subtitle { margin: 26px 0 0; font: 500 clamp(1.2rem,2.4vw,1.8rem)/1.3 "Space Grotesk", sans-serif; }
+    .framework-content h4 { margin-top: 28px; }
+    .mini-compare { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; margin: 30px 0; }
+    .mini-compare > div { padding-top: 16px; border-top: 1px solid var(--line-strong); }
+    .mini-compare strong::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-radius: 50%; background: var(--ac); }
+    .mini-compare p { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+    .bias-check { border-left: 3px solid var(--ac); padding-left: 16px; }
+    .chart-scroll { scrollbar-gutter: stable; }
+    .diagram-block { box-shadow: none; }
+    .svg-title { font-size: 20px; }
+    .svg-mono { font-size: 16px; }
+    .svg-small { font: 12px "Roboto Mono", monospace; fill: var(--muted); }
+    .diagram-path { fill: none; stroke: var(--muted); stroke-width: 1.5; }
+    .faq { margin: 38px 0 0; }
+    .faq details { padding: 16px 0; border-top: 1px solid var(--line-strong); }
+    .faq summary { cursor: pointer; font-weight: 700; }
+    .faq p { margin-bottom: 0; }
+    .code { color: var(--dark-paper); background: var(--dark); }
+    .code pre, .code pre code { color: var(--dark-paper); background: var(--dark); }
+    .quiz .kicker { color: var(--muted); background: #f3f1e9; }
+    .quiz-options button:focus-visible { outline-offset: 2px; }
+    .fnum { color: var(--ink); }
+    .quiz-progress { min-height: 1.7em; }
+    .sources-list strong { font-weight: 700; }
+    .sources-list li { scroll-margin-top: 90px; }
+    .to-top { display: grid; place-items: center; text-decoration: none; opacity: 1; pointer-events: auto; }
+    .js.scroll-ready .to-top:not(.visible) { opacity: 0; pointer-events: none; }
+    .js.scroll-ready .to-top:focus-visible { opacity: 1; pointer-events: auto; }
+    .byline-meta span + span::before { content: ""; display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: currentColor; vertical-align: middle; }
+    @media (max-width: 720px) { .mini-compare { grid-template-columns: 1fr; } }
+    @media (max-width: 430px) { .hero-subtitle { font-size: 1.2rem; } .quiz { padding: 20px; } }
+    @media print {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .site-header, .grain, .progress, .to-top, .quiz-options, .quiz-track, .quiz-progress, .quiz-retake { display: none !important; }
+      .js.reveal-ready .reveal, .js.diagram-motion-ready .observe-diagram .diagram-node { opacity: 1 !important; transform: none !important; }
+      .js.diagram-motion-ready .observe-diagram .diagram-path { stroke-dashoffset: 0 !important; }
+      .framework-aside { position: static; } .chart-scroll { overflow: visible; }
+      .quiz details[hidden] { display: block !important; }
+    }
+  
+    .stat-strip { grid-template-columns: repeat(3, 1fr); }
+    .stat strong { min-height: 1em; }
+    .line-dot { transform-box: fill-box; transform-origin: center; transform: scale(1); }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .line-dot { transform: scale(0); }
+    .js.diagram-motion-ready .observe-diagram.is-visible .line-dot { transform: scale(1); transition: transform .5s cubic-bezier(.34,1.56,.64,1) var(--d); }
+    .svg-title { font-size: 20px; }
+    .timeline-year { font: 500 20px "Roboto Mono", monospace; fill: var(--ink); }
+    .sequence-note { font: 12px "Roboto Mono", monospace; fill: var(--muted); }
+    .code pre { font-size: 13px; }
+    .code code { white-space: pre; }
+    .framework-content .framework-date { font: 500 12px "Roboto Mono", monospace; color: var(--muted); }
+    .framework[id] { scroll-margin-top: 90px; }
+    .sources-list li > span { min-width: 0; overflow-wrap: anywhere; }
+    .source-note { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .diagram-caption a { color: var(--ink); }
+    @media (max-width: 430px) { .stat-strip { gap: 12px; } .stat span { font-size: 11px; } }
+    @media (prefers-reduced-motion: reduce) { .line-dot { transform: none !important; } }
+    @media print { .line-dot { transform: none !important; } }
+  
+    .framework[id] { scroll-margin-top: 90px; }
+    .axis-control { margin: 20px 0 0; padding: 18px 0; border-top: 1px solid var(--line); color: var(--ink); background: var(--paper); }
+    .axis-control label, .axis-control output, .axis-control p { color: var(--ink); background: var(--paper); }
+    .axis-control label { display: block; font-size: 14px; font-weight: 700; }
+    .axis-control input { display: block; width: 100%; max-width: 440px; margin: 16px 0; accent-color: var(--blue); cursor: pointer; }
+    .axis-control p { margin: 8px 0 0; font: 12px/1.7 "Roboto Mono", monospace; }
+    .axis-control output { font-family: "Roboto Mono", monospace; }
+    .vbar-rect, .bar-rect { transform: scale(1); transform-box: fill-box; transform-origin: center bottom; }
+    .bar-rect { transform-origin: left center; }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .vbar-rect { transform: scaleY(0); }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .bar-rect { transform: scaleX(0); }
+    .js.diagram-motion-ready .observe-diagram.is-visible .vbar-rect,
+    .js.diagram-motion-ready .observe-diagram.is-visible .bar-rect { transform: scale(1); transition: transform .8s cubic-bezier(.2,.8,.2,1) var(--d,0s); }
+    .axis-label { font: 16px "Roboto Mono", monospace; fill: #656565; }
+    .chart-value { font: 500 18px "Roboto Mono", monospace; fill: var(--ink); }
+    .chart-category { font: 500 18px "Space Grotesk", sans-serif; fill: var(--ink); }
+    .chart-note { font: 14px "Roboto Mono", monospace; fill: var(--muted); }
+    .source-note, .sources-list li > span { overflow-wrap: anywhere; }
+    .audit-list { padding-left: 24px; }
+    .audit-list li { padding: 8px 0 8px 6px; }
+    .article-definition { font-size: 1.15rem; }
+    .stat strong span { display: inline; margin: 0; color: inherit; font: inherit; }
+    @media (prefers-reduced-motion: reduce) { .vbar-rect, .bar-rect { transform: none !important; transition: none !important; } }
+    @media print { .vbar-rect, .bar-rect { transform: none !important; } .axis-control { display: none; } }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span></span></div>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top"><span class="brand-dot" aria-hidden="true"></span>Statistical Lies</a>
+      <nav class="nav" aria-label="Article sections">
+        <a href="#definition" style="--spy:var(--red)">Meaning</a>
+        <a href="#visuals" style="--spy:var(--blue)">Charts</a>
+        <a href="#selection" style="--spy:var(--orange)">Data</a>
+        <a href="#claims" style="--spy:var(--purple)">Claims</a>
+        <a href="#sources" style="--spy:var(--slate)">Sources</a>
+      </nav>
+    </div>
+  </header>
+  <main id="content" tabindex="-1">
+    <div class="wrap">
+      <div class="hero" id="top">
+        <div class="eyebrow">Statistical Thinking Series</div>
+        <h1><span class="line"><span class="line-inner" style="--i:0">Statistical lies.</span></span><span class="line"><span class="line-inner" style="--i:1">Real numbers.</span></span><span class="line"><span class="line-inner" style="--i:2"><em>False impressions.</em></span></span></h1>
+        <p class="hero-subtitle">Ten ways statistics mislead—and how to read past the headline.</p>
+        <div class="hero-grid">
+          <div>
+            <p class="lead">You see two bars. One towers over the other. The labels say 53.1% and 42.4%, but the picture seems to say “five times better.” The arithmetic can be correct while the message is wrong. To spot a statistical lie, follow the choices between the evidence and the conclusion.</p>
+            <div class="hero-links"><a href="#axis-example">Change the axis</a><a href="#reader-check">Check a claim</a><a href="#quiz-title">Test your judgment</a></div>
+            <div class="byline"><span class="avatar" aria-hidden="true">AR</span><div><strong>Ali Reza Rashidi</strong><div class="byline-meta"><span>12 min read</span><span>Updated <time datetime="2026-09-12">September 12, 2026</time></span></div></div></div>
+          </div>
+          <div>
+            <p class="hero-note">A number becomes persuasive when you stop asking what was counted, what was left out, and what the comparison actually means.</p>
+            <div class="toc"><p class="toc-label">In this piece</p><ol><li><a href="#definition">What makes a statistic deceptive?</a></li><li><a href="#visuals">Same numbers, different pictures</a></li><li><a href="#selection">The evidence you never see</a></li><li><a href="#claims">When the claim outruns the data</a></li><li><a href="#sources">Sources and calculation notes</a></li></ol></div>
+          </div>
+        </div>
+      </div>
+      <section class="section reveal" id="definition" aria-labelledby="definition-title" style="--spy:var(--red)">
+        <div class="section-head">
+          <div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">01</span><span>— Meaning</span></div><h2 id="definition-title">What is a statistical lie?<a class="anchor" href="#definition" aria-label="Link to meaning">#</a></h2></div>
+          <p class="body-copy">A statistical lie deliberately creates a false impression through numbers: fabricated observations, altered records, selective comparisons, or a presentation that conceals essential context. “Misleading statistics” is the broader category. It also includes careless work and honest mistakes.</p>
+        </div>
+        <p class="article-definition">The familiar joke divides falsehoods into “lies, damned lies, and statistics.” Mark Twain repeated it and attributed it to Disraeli; that attribution is disputed. Treat it as a warning about persuasion, not a verified pronouncement by a famous statistician.<a class="xref" href="#src-1">[1]</a></p>
+        <p>Statistics is a method for examining evidence. A statistician, manager, advertiser, or journalist can misuse it. A misleading chart alone does not tell you whether its maker intended to deceive. You can establish what the chart gets wrong before making a claim about the person.</p>
+        <div class="mini-compare">
+          <div style="--ac:var(--red)"><strong>Deliberate deception</strong><p>You know the records contradict the claim and alter or conceal them to preserve it.</p></div>
+          <div style="--ac:var(--orange)"><strong>Analytical error</strong><p>You use the wrong formula, overlook a bias, or misunderstand what a result supports.</p></div>
+          <div style="--ac:var(--slate)"><strong>Honest uncertainty</strong><p>You report the estimate and its limitations. An uncertain answer is not a dishonest one.</p></div>
+        </div>
+        <article class="framework" style="--ac:var(--red)">
+          <div class="framework-aside"><div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Fabrication &amp; alteration</h3></div><p class="framework-role">Type 01 · Change the evidence</p><p class="framework-summary">The reported observation never happened—or no longer matches the record.</p></div>
+          <div class="framework-content">
+            <p>Imagine a report about the Yankees and Red Sox. Inventing match results is fabrication. Changing recorded losses into wins is alteration. Quietly deleting valid losses while presenting the remainder as the full record misrepresents the evidence even if every retained row is genuine.</p>
+            <p>Data cleaning can legitimately remove duplicates or repair errors. The difference is a defensible rule, a traceable record, and disclosure—not whether the cleaned result looks favorable. The American Statistical Association calls for transparent methods and resistance to pressure to predetermine or selectively interpret results.<a class="xref" href="#src-2">[2]</a></p>
+            <p class="callout-line">Ask for the chain from original records to reported totals.<small>A polished dashboard cannot replace the underlying evidence.</small></p>
+          </div>
+        </article>
+        <p><strong>Our running example:</strong> the supplied illustration labels the Yankees at 0.531 and the Red Sox at 0.424. We will read these as 53.1% and 42.4%. The image does not identify a season, game counts, or an original data source. These are transcribed illustration values, not independently verified historical records.<a class="xref" href="#src-3">[3]</a></p>
+      </section>
+      <section class="section reveal" id="visuals" aria-labelledby="visuals-title" style="--spy:var(--blue)">
+        <div class="section-head">
+          <div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">02</span><span>— Presentation</span></div><h2 id="visuals-title">The picture can change the claim.<a class="anchor" href="#visuals" aria-label="Link to chart examples">#</a></h2></div>
+          <p class="body-copy">Keep both rates fixed. Change only where a bar begins. Your eye compares the visible lengths, but those lengths now represent the amount above an arbitrary threshold.</p>
+        </div>
+        <article class="framework" id="axis-example" style="--ac:var(--blue)">
+          <div class="framework-aside"><div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Truncated axes</h3></div><p class="framework-role">Type 02 · Change the picture</p><p class="framework-summary">A bar should encode its value from zero.</p></div>
+          <div class="framework-content">
+            <p>At a 40% baseline, the visible lengths represent 13.1 and 2.4 percentage points. The first is about 5.46 times the second. At zero, the lengths represent 53.1 and 42.4, a ratio of about 1.25. Both panels retain correct labels; only one preserves the ratio of the reported rates.</p>
+            <p>That is why the UK Government Analysis Function recommends a zero baseline for bars. If the purpose is to inspect a small difference, use an appropriate alternative and make its scale clear.<a class="xref" href="#src-4">[4]</a></p>
+          </div>
+        </article>
+        <div class="diagram-block observe-diagram">
+          <h3 class="diagram-title">Two rates. One movable baseline.</h3>
+          <div class="chart-scroll" role="group" tabindex="0" aria-label="Scrollable comparison of truncated and zero-based bars">
+            <svg id="baseline-chart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" role="img" aria-labelledby="baseline-chart-title" aria-describedby="baseline-chart-desc" aria-label="Both panels show Yankees 53.1 percent and Red Sox 42.4 percent; a 40 percent baseline makes their visible heights differ by 5.46 times, compared with the actual rate ratio of 1.25.">
+              <title id="baseline-chart-title">The effect of truncating a bar chart at 40 percent</title>
+              <desc id="baseline-chart-desc">Both panels show Yankees 53.1 percent and Red Sox 42.4 percent. The left bars start at 40 percent; the right bars start at zero. Both scales end at 60 percent.</desc>
+              <defs>
+                <linearGradient id="yankees-fill" x1="0" x2="1"><stop offset="0%" stop-color="#3468f5" stop-opacity=".72"></stop><stop offset="100%" stop-color="#3468f5"></stop></linearGradient>
+                <linearGradient id="redsox-fill" x1="0" x2="1"><stop offset="0%" stop-color="#db6478" stop-opacity=".72"></stop><stop offset="100%" stop-color="#db6478"></stop></linearGradient>
+              </defs>
+              <text id="left-title" class="svg-title" x="202" y="32" text-anchor="middle">Baseline: 40%</text>
+              <text class="chart-note" x="202" y="58" text-anchor="middle">Truncation demonstration</text>
+              <text class="svg-title" x="602" y="32" text-anchor="middle">Baseline: 0%</text>
+              <text class="chart-note" x="602" y="58" text-anchor="middle">Rate comparison</text>
+              <g stroke="rgba(23,23,23,.12)" stroke-width="1">
+                <path d="M56 104H354 M56 174H354 M56 244H354 M56 314H354 M56 384H354"></path>
+                <path d="M456 104H754 M456 174H754 M456 244H754 M456 314H754 M456 384H754"></path>
+              </g>
+              <g class="axis-label" text-anchor="end">
+                <text data-left-tick="0" x="46" y="390">40%</text>
+                <text data-left-tick="1" x="46" y="320">45%</text>
+                <text data-left-tick="2" x="46" y="250">50%</text>
+                <text data-left-tick="3" x="46" y="180">55%</text>
+                <text data-left-tick="4" x="46" y="110">60%</text>
+                <text x="446" y="390">0%</text>
+                <text x="446" y="320">15%</text>
+                <text x="446" y="250">30%</text>
+                <text x="446" y="180">45%</text>
+                <text x="446" y="110">60%</text>
+              </g>
+              <rect id="left-yankees" class="vbar-rect" style="--d:0.12s" x="96" y="200.6" width="84" height="183.4" fill="url(#yankees-fill)" stroke="#171717" stroke-width="1"></rect>
+              <rect id="left-redsox" class="vbar-rect" style="--d:0.24s" x="226" y="350.4" width="84" height="33.6" fill="url(#redsox-fill)" stroke="#171717" stroke-width="1"></rect>
+              <rect class="vbar-rect" style="--d:0.36s" x="496" y="136.2" width="84" height="247.8" fill="url(#yankees-fill)" stroke="#171717" stroke-width="1"></rect>
+              <rect class="vbar-rect" style="--d:0.48s" x="626" y="186.133" width="84" height="197.867" fill="url(#redsox-fill)" stroke="#171717" stroke-width="1"></rect>
+              <g class="chart-value" text-anchor="middle">
+                <text id="label-yankees" x="138" y="188.6"><tspan data-count="53.1" data-decimals="1">53.1</tspan>%</text>
+                <text id="label-redsox" x="268" y="338.4"><tspan data-count="42.4" data-decimals="1">42.4</tspan>%</text>
+                <text x="538" y="124.2"><tspan data-count="53.1" data-decimals="1">53.1</tspan>%</text>
+                <text x="668" y="174.133"><tspan data-count="42.4" data-decimals="1">42.4</tspan>%</text>
+              </g>
+              <g class="chart-category" text-anchor="middle"><text x="138" y="416">Yankees</text><text x="268" y="416">Red Sox</text><text x="538" y="416">Yankees</text><text x="668" y="416">Red Sox</text></g>
+              <path d="M56 384H354 M456 384H754" stroke="#656565" stroke-width="1.5"></path>
+              <text id="left-ratio" class="chart-note" x="202" y="458" text-anchor="middle">Visible height ratio: 5.46×</text>
+              <text class="chart-note" x="602" y="458" text-anchor="middle">Actual rate ratio: 1.25×</text>
+            </svg>
+          </div>
+          <div class="axis-control" hidden>
+            <label for="baseline">Left chart baseline</label><output id="baseline-value" for="baseline" aria-label="Left chart baseline value">40%</output>
+            <input id="baseline" type="range" min="0" max="40" step="4" value="40" aria-describedby="baseline-report">
+            <p id="baseline-report" aria-live="polite">Visible height ratio: 5.46×. Actual rate ratio: 1.25×. Gap: 10.7 percentage points.</p>
+          </div>
+          <p class="diagram-caption"><strong>How to read this:</strong> compare each bar with its own baseline. The team labels and rates stay fixed. This redraw uses a common 60% upper bound to isolate the baseline effect; the supplied image used different upper bounds. The static view shows 40% on the left and zero on the right. Values come from the supplied illustration.<a class="xref" href="#src-3">[3]</a></p>
+        </div>
+        <p>A nonzero axis is not automatically deceptive in every chart. A line chart can use a restricted, clearly identified range to show variation over time. Its positions and slopes serve a different purpose from the lengths of bars. Still check the range and aspect ratio before judging how dramatic a trend is.<a class="xref" href="#src-5">[5]</a></p>
+        <p>Other visual distortions include unequal time spacing, a reversed scale without warning, and pictures whose width and height both grow with a quantity. Doubling both dimensions makes an icon four times the area. These design choices change the visual message without changing a printed value.</p>
+        <article class="framework" style="--ac:var(--green)">
+          <div class="framework-aside"><div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Percentage framing</h3></div><p class="framework-role">Type 03 · Change the reference</p><p class="framework-summary">Percent and percentage points answer different questions.</p></div>
+          <div class="framework-content">
+            <p>The Yankees’ displayed rate is <strong>10.7 percentage points higher</strong>. Relative to the Red Sox rate, it is <strong>about 25.2% higher</strong>. These are compatible descriptions. Calling the difference “25.2 percentage points” is incorrect; calling it “25.2% more wins” would require comparable game counts that the image never supplies.</p>
+            <div class="formula">Absolute gap: 53.1% − 42.4% = 10.7 percentage points<br>Relative gap: (53.1 − 42.4) ÷ 42.4 × 100 ≈ 25.2%</div>
+            <p>Reverse the comparison and the reference changes: the Red Sox rate is about <strong>20.2% lower</strong> than the Yankees rate, because you now divide the gap by 53.1. “Higher” and “lower” percentages need not be symmetric. Always name the reference.</p>
+          </div>
+        </article>
+        <div class="stat-strip">
+          <div class="stat"><strong><span data-count="10.7" data-decimals="1">10.7</span> pp</strong><span>Absolute difference between the rates</span></div>
+          <div class="stat"><strong><span data-count="25.2" data-decimals="1">25.2</span>%</strong><span>Higher, using 42.4% as the reference</span></div>
+          <div class="stat"><strong><span data-count="20.2" data-decimals="1">20.2</span>%</strong><span>Lower, using 53.1% as the reference</span></div>
+        </div>
+      </section>
+      <section class="section reveal" id="selection" aria-labelledby="selection-title" style="--spy:var(--orange)">
+        <div class="section-head">
+          <div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">03</span><span>— Selection</span></div><h2 id="selection-title">What disappeared before the chart?<a class="anchor" href="#selection" aria-label="Link to data selection">#</a></h2></div>
+          <p class="body-copy">A zero baseline fixes one problem. It does not establish that the right games were counted, the comparison periods match, or the summary represents the question you care about.</p>
+        </div>
+        <article class="framework" style="--ac:var(--orange)">
+          <div class="framework-aside"><div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Selective inclusion</h3></div><p class="framework-role">Types 04–06 · Change who counts</p><p class="framework-summary">The missing observations can determine the story.</p></div>
+          <div class="framework-content">
+            <h4>04 · Cherry-picking the period</h4>
+            <p>Suppose you publish only a team’s strongest stretch and describe it as typical performance. Those wins may be real; the selection hides the stretches that would change the impression. Ask for the full relevant period and whether the start and end dates were chosen before the results were examined.</p>
+            <h4>05 · Sampling and survivorship bias</h4>
+            <p>A fan poll about which team is better does not measure a win rate. If you recruit only from one team’s fan page, it may not even represent baseball fans generally. A large response count does not by itself establish representative recruitment. Survey transparency requires information about the population, sampling, recruitment, questions, and weighting.<a class="xref" href="#src-6">[6]</a></p>
+            <p>Survivorship bias is a related selection problem: reviewing only clubs that reached the playoffs omits those that did not. You cannot explain why a strategy succeeds across all clubs by studying only its survivors. This is a possible failure mode, not a finding about the supplied image.</p>
+            <h4>06 · Moving the denominator or definition</h4>
+            <p>A win rate needs both wins and eligible games. Excluding unfavorable games, mixing home-only results with all-game results, or quietly redefining an “eligible game” changes the measure. In administrative reporting, the same problem appears when a success rate improves because difficult cases disappear from eligibility. Ask for numerator, denominator, exclusions, and definition changes together.</p>
+            <p class="callout-line">“53.1% of what, over which dates, with which exclusions?”<small>If the report cannot answer, its precision is ahead of its documentation.</small></p>
+          </div>
+        </article>
+        <article class="framework" style="--ac:var(--gold)">
+          <div class="framework-aside"><div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Convenient summaries</h3></div><p class="framework-role">Type 07 · Hide the distribution</p><p class="framework-summary">An average is a compression choice.</p></div>
+          <div class="framework-content">
+            <p>If you extend the team report to runs scored per game, a few very high-scoring games can pull up the mean. A median answers a different question about the middle of the distribution. Neither is universally the honest choice; disclose the measure and show enough spread to support the interpretation.<a class="xref" href="#src-7">[7]</a></p>
+            <p>Pooling win rates creates another trap. The combined rate is total wins divided by total eligible games. Taking a simple average of subgroup percentages works only when their denominators are equal. Home and away rates must be weighted by the corresponding game counts.</p>
+            <div class="formula">Combined win rate = (home wins + away wins)<br>÷ (home games + away games)</div>
+            <p>With different subgroup weights, an overall comparison can even reverse the comparisons within every subgroup: Simpson’s paradox. You need the subgroup counts to check for it; the two image values cannot establish that it happened here. And disaggregating is not automatically the correct causal analysis—the relevant grouping depends on the question and how the data arose.<a class="xref" href="#src-8">[8]</a></p>
+          </div>
+        </article>
+      </section>
+      <section class="section reveal" id="claims" aria-labelledby="claims-title" style="--spy:var(--purple)">
+        <div class="section-head">
+          <div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span>— Interpretation</span></div><h2 id="claims-title">A precise number can support a weak claim.<a class="anchor" href="#claims" aria-label="Link to interpreting claims">#</a></h2></div>
+          <p class="body-copy">A displayed difference describes the supplied values. It does not by itself establish a stable performance advantage, identify its cause, or predict the next match.</p>
+        </div>
+        <article class="framework" style="--ac:var(--slate)">
+          <div class="framework-aside"><div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>False certainty</h3></div><p class="framework-role">Type 08 · Hide uncertainty</p><p class="framework-summary">Decimal places do not supply missing evidence.</p></div>
+          <div class="framework-content">
+            <p>You cannot calculate a justified confidence interval or significance test from these two percentages alone. You would need the game counts, the underlying records, and a defensible model. Independence cannot simply be assumed: teams may play each other and face different schedules.</p>
+            <p>If the records cover every game in a defined season, the rate describes that season without sampling uncertainty about the recorded total. Predicting future performance introduces a different source of uncertainty. Measurement mistakes, missing records, and model assumptions can matter in either case.</p>
+            <p>Even a valid small p-value would not tell you the probability that the favored team is “truly better,” or whether its advantage matters in practice. Statistical significance does not measure effect size or importance.<a class="xref" href="#src-9">[9]</a></p>
+          </div>
+        </article>
+        <article class="framework" style="--ac:var(--cyan)">
+          <div class="framework-aside"><div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Causal overreach</h3></div><p class="framework-role">Type 09 · Invent an explanation</p><p class="framework-summary">A difference between teams does not identify what caused it.</p></div>
+          <div class="framework-content">
+            <p>“The new coach caused the higher win rate” adds a claim the bars do not test. Rosters, injuries, opponents, and scheduling could also differ. A before-and-after comparison would still need to address other changes occurring at the same time.</p>
+            <p>A causal question asks what would have happened under an alternative decision. Random assignment can help create a credible comparison when feasible; observational analysis needs explicit assumptions and a suitable design. Merely adding more variables does not guarantee that those assumptions hold.<a class="xref" href="#src-10">[10]</a></p>
+            <p class="callout-line">Separate “the reported rates differ” from “this decision caused the difference.”<small>The second statement requires additional evidence.</small></p>
+          </div>
+        </article>
+        <article class="framework" style="--ac:var(--purple)">
+          <div class="framework-aside"><div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Selective analysis</h3></div><p class="framework-role">Type 10 · Hide the search</p><p class="framework-summary">The winning test is only part of the evidence.</p></div>
+          <div class="framework-content">
+            <p>Suppose you try many date windows, opponent groups, and performance measures, then report only the comparison with a small p-value. The reader sees one apparently decisive result and never sees how many opportunities you gave chance to produce it. This is the mechanism behind p-hacking and selective reporting.<a class="xref" href="#src-9">[9]</a></p>
+            <p>Exploration is useful. The misleading step is presenting a discovery from that search as if it were a single prediction specified beforehand. Report what you tried, distinguish exploratory from confirmatory claims, and use an appropriate correction or fresh evidence to evaluate selected findings.</p>
+          </div>
+        </article>
+        <div class="diagram-block observe-diagram">
+          <h3 class="diagram-title">What the supplied values actually support</h3>
+          <div class="chart-scroll" role="group" tabindex="0" aria-label="Scrollable zero-based horizontal comparison of the two team rates">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" role="img" aria-labelledby="gap-chart-title" aria-describedby="gap-chart-desc" aria-label="Yankees 53.1 percent and Red Sox 42.4 percent are shown on a shared zero to 60 percent scale; the absolute gap is 10.7 percentage points, with sample sizes and causal evidence unknown.">
+              <title id="gap-chart-title">A 10.7 percentage-point gap on a shared scale</title>
+              <desc id="gap-chart-desc">Horizontal bars begin at zero. The Yankees rate is 53.1 percent and the Red Sox rate is 42.4 percent. A bracket marks their 10.7 percentage-point difference. The illustration does not supply sample sizes or causal evidence.</desc>
+              <defs><linearGradient id="gap-blue" x1="0" x2="1"><stop offset="0%" stop-color="#3468f5" stop-opacity=".72"></stop><stop offset="100%" stop-color="#3468f5"></stop></linearGradient><linearGradient id="gap-red" x1="0" x2="1"><stop offset="0%" stop-color="#db6478" stop-opacity=".72"></stop><stop offset="100%" stop-color="#db6478"></stop></linearGradient></defs>
+              <g stroke="rgba(23,23,23,.12)" stroke-width="1"><path d="M160 68V224 M310 68V224 M460 68V224 M610 68V224 M760 68V224"></path></g>
+              <text class="chart-category" x="140" y="112" text-anchor="end">Yankees</text><text class="chart-category" x="140" y="198" text-anchor="end">Red Sox</text>
+              <rect class="bar-rect" style="--d:0.12s" x="160" y="82" width="531" height="48" fill="url(#gap-blue)" stroke="#171717"></rect>
+              <rect class="bar-rect" style="--d:0.24s" x="160" y="168" width="424" height="48" fill="url(#gap-red)" stroke="#171717"></rect>
+              <text class="chart-value" x="702" y="112">53.1%</text><text class="chart-value" x="596" y="198">42.4%</text>
+              <g class="axis-label" text-anchor="middle"><text x="160" y="250">0%</text><text x="310" y="250">15%</text><text x="460" y="250">30%</text><text x="610" y="250">45%</text><text x="760" y="250">60%</text></g>
+              <path d="M584 60V46H691V60" fill="none" stroke="#23956f" stroke-width="2"></path>
+              <text class="chart-value" x="637.5" y="30" text-anchor="middle">10.7 pp</text>
+              <text class="chart-note" x="400" y="300" text-anchor="middle">Sample sizes: unknown · Cause of difference: not established</text>
+            </svg>
+          </div>
+          <p class="diagram-caption"><strong>How to read this:</strong> both horizontal bars use the same zero-based scale. The bracket marks the arithmetic gap, not a confidence interval. A relative comparison divides that gap by a stated reference rate. Nothing here supplies the missing game counts or demonstrates why the teams differ.<a class="xref" href="#src-3">[3]</a></p>
+        </div>
+        <div id="reader-check" class="framework" style="--ac:var(--ink)">
+          <div class="framework-aside"><div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Read like an auditor</h3></div><p class="framework-role">A practical check</p><p class="framework-summary">Reconstruct the claim before sharing it.</p></div>
+          <div class="framework-content">
+            <p>Start with the sentence the report wants you to believe. Then check the steps needed to support it. For our team comparison, these five questions expose both the visible distortion and the missing context.</p>
+            <ol class="audit-list"><li><strong>What is the source?</strong> Find the original match records and the exact reporting period.</li><li><strong>What was counted?</strong> Request wins, eligible games, exclusions, and consistent definitions.</li><li><strong>What comparison is being made?</strong> Check the baseline, reference rate, units, subgroup weights, and time window.</li><li><strong>How uncertain is the conclusion?</strong> Separate recorded results from an estimate of future ability.</li><li><strong>What would weaken the claim?</strong> Look for omitted periods, alternative analyses, and explanations other than the preferred one.</li></ol>
+            <p>If you produce the report, make those answers easy to find. Preserve the original data, document transformations, disclose limitations, and correct errors visibly. A manager’s demand for a favorable headline does not make selective reporting sound statistical practice.<a class="xref" href="#src-2">[2]</a></p>
+          </div>
+        </div>
+        <div class="quiz" role="group" aria-labelledby="quiz-title">
+          <div class="kicker">One-minute evidence check</div><h3 id="quiz-title">Which headline survives scrutiny?</h3>
+          <p class="quiz-question">You have only the supplied chart labels: Yankees 53.1%, Red Sox 42.4%. Which statement is justified?</p>
+          <div class="quiz-options" hidden><button type="button" data-answer="0" aria-pressed="false">The Yankees won more than five times as often.</button><button type="button" data-answer="1" aria-pressed="false">The displayed rates differ by 10.7 percentage points; the image gives no game counts.</button><button type="button" data-answer="2" aria-pressed="false">The Yankees’ coaching caused a 25.2% improvement.</button></div>
+          <div class="quiz-track" aria-hidden="true" hidden><span class="quiz-fill"></span></div><p class="quiz-progress" role="status" hidden>0 of 1 answered.</p>
+          <details><summary>Why this answer holds</summary><p>The displayed difference is 53.1 − 42.4 = 10.7 percentage points. Relative to 42.4%, the Yankees rate is about 25.2% higher. The 5.46 ratio comes from truncated bar heights, and the image supplies neither game counts nor evidence about coaching. Only the statement about the displayed gap and missing counts is justified.</p></details>
+          <button class="quiz-retake" type="button" hidden>Retake the question</button>
+        </div>
+        <div class="faq" role="group" aria-label="Questions about statistical lies">
+          <details><summary>Are all misleading statistics intentional lies?</summary><p>No. Misleading results can come from mistakes, poor design, or misunderstood uncertainty. Establish the analytical problem first. Calling it deliberate deception requires evidence about intent.</p></details>
+          <details><summary>Does a large dataset make a claim trustworthy?</summary><p>No. More observations can improve precision under suitable assumptions, but they do not automatically repair an unrepresentative sample, inconsistent definitions, or a biased analysis.</p></details>
+          <details><summary>Can correct numbers still mislead?</summary><p>Yes. The labels 53.1% and 42.4% stay unchanged when a 40% baseline inflates the visible height ratio to about 5.46. Missing context can distort interpretation just as effectively as changing a number.</p></details>
+        </div>
+      </section>
+      <section class="section reveal" id="sources" aria-labelledby="sources-title" style="--spy:var(--slate)">
+        <div class="section-head">
+          <div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span>— Sources</span></div><h2 id="sources-title">Trace the evidence.<a class="anchor" href="#sources" aria-label="Link to sources">#</a></h2></div>
+          <p class="body-copy">Professional guidance and original methodological work support the explanations. The team scenarios are thought experiments built around the supplied illustration. They make no allegation about either club or the creator of the image.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><span><strong>Mark Twain quotations: Statistics.</strong> Barbara Schmidt’s Twain quotation collection.<a class="xlink" href="https://www.twainquotes.com/Statistics.html">Quotation and attribution notes</a><small class="source-note">Documents Twain’s wording and flags the disputed attribution to Disraeli.</small></span></li>
+          <li id="src-2"><span><strong>Ethical Guidelines for Statistical Practice.</strong> American Statistical Association, 2022.<a class="xlink" href="https://www.amstat.org/your-career/ethical-guidelines-for-statistical-practice">Professional guidelines</a><small class="source-note">Professional integrity, data and methods, transparency, and responsibilities of leaders.</small></span></li>
+          <li id="src-3"><span><strong>Supplied “Percentage of victories” illustration.</strong> Reader-provided image; original author, season, and underlying records unidentified.<small class="source-note">Transcribed values: 0.531 and 0.424. Calculations: gap = 0.107; rate ratio = 0.531/0.424 ≈ 1.2524; visible height ratio at a 0.400 baseline = 0.131/0.024 ≈ 5.4583. Rounded display values are used throughout. No historical provenance is implied.</small></span></li>
+          <li id="src-4"><span><strong>Bar charts.</strong> UK Government Analysis Function.<a class="xlink" href="https://analysisfunction.civilservice.gov.uk/support/communicating-analysis/introduction-to-data-visualisation-e-learning/module-5-bar-charts/">Chart guidance</a><small class="source-note">Zero baselines and alternatives when a bar chart obscures a small difference.</small></span></li>
+          <li id="src-5"><span><strong>Accessible charts: a checklist of the basics.</strong> UK Government Analysis Function.<a class="xlink" href="https://analysisfunction.civilservice.gov.uk/policy-store/charts-a-checklist/">Chart checklist</a><small class="source-note">Scale labeling, bar and line chart distinctions, sources, and accessible presentation.</small></span></li>
+          <li id="src-6"><span><strong>Best Practices for Survey Research.</strong> American Association for Public Opinion Research.<a class="xlink" href="https://aapor.org/standards-and-ethics/best-practices/">Survey guidance</a><small class="source-note">Sampling, recruitment, question design, and disclosure of methodology.</small></span></li>
+          <li id="src-7"><span><strong>Measures of Location.</strong> NIST/SEMATECH e-Handbook of Statistical Methods.<a class="xlink" href="https://www.itl.nist.gov/div898/handbook/eda/section3/eda351.htm">Mean, median, and distribution shape</a></span></li>
+          <li id="src-8"><span><strong>Comment: Understanding Simpson’s Paradox.</strong> Judea Pearl, The American Statistician, 2014.<a class="xlink" href="https://ftp.cs.ucla.edu/pub/stat_ser/r414-reprint.pdf">Author-hosted paper, PDF</a><small class="source-note">Aggregation reversals and the role of causal reasoning in interpretation.</small></span></li>
+          <li id="src-9"><span><strong>Statement on Statistical Significance and P-Values.</strong> American Statistical Association, March 7, 2016.<a class="xlink" href="https://www.amstat.org/asa/files/pdfs/p-valuestatement.pdf">Statement summary, PDF</a><small class="source-note">Six principles, effect size, transparency, and selective reporting.</small></span></li>
+          <li id="src-10"><span><strong>Causal Inference in Statistics: An Overview.</strong> Judea Pearl, Statistics Surveys, 2009.<a class="xlink" href="https://ftp.cs.ucla.edu/pub/stat_ser/r350.pdf">Author-hosted paper, PDF</a><small class="source-note">The assumptions and methods required to connect statistical associations to causal claims.</small></span></li>
+        </ol>
+      </section>
+    </div>
+  </main>
+  <button class="to-top" type="button" aria-label="Back to top" hidden>↑</button>
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const staticMotion = new URLSearchParams(window.location.search).get('motion') === 'static';
+      const header = document.querySelector('.site-header');
+      const progress = document.querySelector('.progress span');
+      const toTop = document.querySelector('.to-top');
+      const navLinks = [...document.querySelectorAll('.nav a')];
+      const sections = [...document.querySelectorAll('main .section[id]')];
+      const updateScroll = () => {
+        const y = window.scrollY;
+        const max = root.scrollHeight - window.innerHeight;
+        progress.style.width = (max > 0 ? Math.min(100, y / max * 100) : 0) + '%';
+        header.classList.toggle('scrolled', y > 8);
+        toTop.classList.toggle('visible', y > 700);
+        const active = sections.filter(section => section.getBoundingClientRect().top <= 160).at(-1);
+        navLinks.forEach(link => {
+          const current = Boolean(active && link.hash === '#' + active.id);
+          link.classList.toggle('active', current);
+          if (current) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
+      };
+      if ('IntersectionObserver' in window && !reduced && !staticMotion) {
+        const animateCounts = container => {
+          container.querySelectorAll('[data-count]').forEach(element => {
+            const target = Number(element.dataset.count);
+            const started = performance.now();
+            const step = now => {
+              const fraction = Math.min(1, (now - started) / 650);
+              element.textContent = (target * (1 - Math.pow(1 - fraction, 3))).toFixed(Number(element.dataset.decimals || 0));
+              if (fraction < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+          });
+        };
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              if (entry.target.matches('.observe-diagram, .stat-strip')) animateCounts(entry.target);
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0, rootMargin: '0px 0px -30px 0px' });
+        document.querySelectorAll('.reveal, .observe-diagram, .stat-strip').forEach(element => observer.observe(element));
+        root.classList.add('reveal-ready', 'diagram-motion-ready', 'count-motion-ready');
+      }
+      window.addEventListener('scroll', updateScroll, { passive: true });
+      window.addEventListener('resize', updateScroll);
+      toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }));
+      toTop.hidden = false;
+      updateScroll();
+      root.classList.add('scroll-ready');
+      const slider = document.querySelector('#baseline');
+      const control = document.querySelector('.axis-control');
+      const chart = document.querySelector('#baseline-chart');
+      const output = document.querySelector('#baseline-value');
+      const report = document.querySelector('#baseline-report');
+      const updateBaseline = () => {
+        const baseline = Number(slider.value);
+        const scale = 280 / (60 - baseline);
+        const ratio = (53.1 - baseline) / (42.4 - baseline);
+        for (const [id, rate] of [['yankees',53.1], ['redsox',42.4]]) {
+          const height = (rate - baseline) * scale;
+          const bar = chart.querySelector('#left-' + id);
+          bar.setAttribute('height', height.toFixed(3));
+          bar.setAttribute('y', (384 - height).toFixed(3));
+          chart.querySelector('#label-' + id).setAttribute('y', (372 - height).toFixed(3));
+        }
+        chart.querySelectorAll('[data-left-tick]').forEach((tick, index) => {
+          tick.textContent = (baseline + (60 - baseline) * index / 4).toFixed(0) + '%';
+        });
+        chart.querySelector('#left-title').textContent = 'Baseline: ' + baseline + '%';
+        chart.querySelector('title').textContent = 'Bar comparison with a ' + baseline + ' percent left baseline and a zero right baseline';
+        chart.querySelector('#left-ratio').textContent = 'Visible height ratio: ' + ratio.toFixed(2) + '×';
+        const description = 'Both panels show Yankees 53.1 percent and Red Sox 42.4 percent. The left baseline is ' + baseline + ' percent, giving a visible bar-height ratio of ' + ratio.toFixed(2) + '. The right baseline is zero, giving the actual rate ratio of 1.25.';
+        chart.setAttribute('aria-label', description);
+        chart.querySelector('desc').textContent = description;
+        output.value = baseline + '%';
+        slider.setAttribute('aria-valuetext', baseline + ' percent');
+        report.textContent = 'Visible height ratio: ' + ratio.toFixed(2) + '×. Actual rate ratio: 1.25×. Gap: 10.7 percentage points.';
+      };
+      slider.addEventListener('input', updateBaseline);
+      updateBaseline();
+      control.hidden = false;
+      const quiz = document.querySelector('.quiz');
+      const options = quiz.querySelector('.quiz-options');
+      const buttons = [...options.querySelectorAll('button')];
+      const details = quiz.querySelector('details');
+      const status = quiz.querySelector('.quiz-progress');
+      const track = quiz.querySelector('.quiz-track');
+      const retake = quiz.querySelector('.quiz-retake');
+      const fill = quiz.querySelector('.quiz-fill');
+      buttons.forEach(button => button.addEventListener('click', () => {
+        const correct = button.dataset.answer === '1';
+        buttons.forEach(option => {
+          option.disabled = true;
+          option.setAttribute('aria-pressed', String(option === button));
+          if (option.dataset.answer === '1') option.dataset.result = 'correct';
+        });
+        status.textContent = correct ? 'Correct · 1 of 1 answered.' : 'Not quite · 1 of 1 answered. Read why below.';
+        fill.style.width = '100%';
+        details.hidden = false;
+        details.open = true;
+        retake.hidden = false;
+      }));
+      retake.addEventListener('click', () => {
+        buttons.forEach(button => {
+          button.disabled = false;
+          button.setAttribute('aria-pressed', 'false');
+          delete button.dataset.result;
+        });
+        details.open = false;
+        details.hidden = true;
+        retake.hidden = true;
+        fill.style.width = '0%';
+        status.textContent = '0 of 1 answered.';
+        buttons[0].focus();
+      });
+      options.hidden = false;
+      track.hidden = false;
+      status.hidden = false;
+      status.textContent = '0 of 1 answered.';
+      details.hidden = true;
+    })();
+      </script>
+</body>
+</html>

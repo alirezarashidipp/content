@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>document.documentElement.classList.add('js');</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Trace the history of design patterns from Christopher Alexander to the Gang of Four, and see what changed in modern software design.">
+  <title>The History of Design Patterns — From Buildings to Software</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='3' fill='%233468f5'/%3E%3Ccircle cx='23' cy='9' r='3' fill='%2323956f'/%3E%3Ccircle cx='9' cy='23' r='3' fill='%23eb8237'/%3E%3Ccircle cx='23' cy='23' r='3' fill='%237650e6'/%3E%3C/svg%3E">
+  <meta property="og:title" content="The History of Design Patterns — From Buildings to Software">
+  <meta property="og:description" content="Follow one dashboard through the ideas behind pattern languages, the Gang of Four, and modern software design.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The History of Design Patterns — From Buildings to Software",
+    "description": "Trace the history of design patterns from Christopher Alexander to the Gang of Four, and see what changed in modern software design.",
+    "datePublished": "2026-09-11",
+    "dateModified": "2026-09-11",
+    "inLanguage": "en",
+    "author": { "@type": "Person", "name": "Ali Reza Rashidi" }
+  }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Instrument+Serif:ital@0;1&amp;family=Roboto+Mono:wght@400;500&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898;
+      --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+      --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+      --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+      --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+      --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+    }
+    * { box-sizing: border-box; }
+    html { color-scheme: light; scroll-behavior: smooth; overflow-x: clip; }
+    body {
+      margin: 0; color: var(--ink); background: linear-gradient(180deg, #fffdfa, #fcfbf8);
+      font-family: "DM Sans", sans-serif; font-size: 17px; line-height: 1.7;
+      -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+    }
+    ::selection { background: var(--ink); color: var(--paper); }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; border: 2px solid var(--bg); }
+    a { color: inherit; }
+    p { text-wrap: pretty; }
+    h1, h2, h3, h4 { margin: 0; font-family: "Space Grotesk", sans-serif; text-wrap: balance; }
+    h1, h2 { letter-spacing: -.045em; }
+    h1 { font-size: clamp(3rem, 8.4vw, 6.8rem); line-height: .94; font-weight: 700; }
+    h1 em { color: #535353; font-family: "Instrument Serif", serif; font-weight: 400; }
+    h2 { font-size: clamp(2rem, 4.4vw, 4rem); line-height: .98; }
+    h3 { font-size: 1.45rem; line-height: 1.08; letter-spacing: -.025em; }
+    h4 { font-size: 1.02rem; line-height: 1.25; }
+    code, pre, .mono { font-family: "Roboto Mono", monospace; }
+    :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+    .wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    .grain {
+      position: fixed; inset: 0; z-index: 40; pointer-events: none; opacity: .08; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+    }
+    .skip-link { position: fixed; left: 16px; top: -80px; z-index: 100; padding: 10px 14px; background: var(--ink); color: var(--paper); border-radius: 4px; }
+    .skip-link:focus { top: 16px; }
+    .progress { position: fixed; inset: 0 auto auto 0; z-index: 90; width: 100%; height: 2px; background: transparent; }
+    .progress span { display: block; width: 0; height: 100%; background: var(--ink); }
+    .site-header { position: sticky; top: 0; z-index: 35; transition: background .25s, border-color .25s; border-bottom: 1px solid transparent; }
+    .site-header.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); border-color: var(--line); }
+    .header-inner { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font: 500 13px/1 "Space Grotesk", sans-serif; text-decoration: none; white-space: nowrap; }
+    .brand-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--ink); }
+    .nav { display: flex; align-items: center; gap: 20px; overflow-x: auto; scrollbar-width: none; }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav a { position: relative; padding: 22px 0; color: var(--muted); font: 500 12px/1 "Roboto Mono", monospace; text-decoration: none; white-space: nowrap; }
+    .nav a::before { content: ""; position: absolute; left: -10px; top: 29px; width: 6px; height: 6px; border-radius: 50%; background: var(--spy, var(--ink)); opacity: 0; }
+    .nav a::after { content: ""; position: absolute; inset: auto 0 16px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .2s; }
+    .nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
+    .nav a.active::before { opacity: 1; }
+    .hero { padding: 98px 0 92px; border-bottom: 1px solid var(--line); }
+    .eyebrow, .kicker, .framework-role, .toc-label, .byline-meta, .diagram-caption, .code-label { font-family: "Roboto Mono", monospace; }
+    .eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--ink); }
+    .line { display: block; overflow: hidden; }
+    .line-inner { display: block; }
+    .js .hero .line-inner { animation: lineUp .8s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 90ms); }
+    @keyframes lineUp { from { transform: translateY(115%); } to { transform: translateY(0); } }
+    .hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 72px; margin-top: 56px; align-items: start; }
+    .lead { max-width: 690px; margin: 0; color: #343434; font-size: clamp(1.15rem, 2vw, 1.42rem); line-height: 1.58; }
+    .lead::first-letter { float: left; margin: 6px 8px 0 0; color: var(--ink); font: italic 3.3rem/.72 "Instrument Serif", serif; }
+    .hero-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+    .hero-links a { padding: 8px 11px; border: 1px solid var(--line-strong); border-radius: 999px; font: 500 11px/1 "Roboto Mono", monospace; text-decoration: none; }
+    .hero-links a:hover { background: var(--ink); color: var(--paper); }
+    .byline { display: flex; align-items: center; gap: 12px; margin-top: 34px; }
+    .avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--ink); color: var(--paper); font: 500 11px/1 "Roboto Mono", monospace; }
+    .byline strong { display: block; font-size: 13px; }
+    .byline-meta { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 10px; }
+    .byline-meta span + span::before { content: "·"; margin-right: 8px; }
+    .hero-note { margin: 0 0 18px; padding-left: 18px; border-left: 2px solid var(--orange); color: #505050; font: italic 1.12rem/1.55 "Instrument Serif", serif; }
+    .toc { padding: 24px; background: #f3f1e9; border-radius: 12px; }
+    .toc-label { margin: 0 0 14px; color: var(--muted); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+    .toc ol { margin: 0; padding: 0; list-style: none; counter-reset: toc; }
+    .toc li { counter-increment: toc; border-top: 1px solid var(--line); }
+    .toc a { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 11px 0; font-size: 13px; text-decoration: none; }
+    .toc a::before { content: "0" counter(toc); color: var(--soft); font: 10px/1.7 "Roboto Mono", monospace; }
+    .section { padding: 88px 0; border-bottom: 1px solid var(--line); --spy: var(--blue); }
+    .section-head { display: grid; grid-template-columns: .9fr 1.1fr; gap: 64px; margin-bottom: 64px; align-items: start; }
+    .section-head h2 { position: relative; color: var(--ink); background: transparent; }
+    .kicker { display: flex; align-items: center; gap: 9px; margin-bottom: 18px; color: var(--muted); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+    .kicker-mark { width: 8px; height: 8px; background: var(--spy); }
+    .kicker-num { color: var(--ink); }
+    .body-copy { max-width: 650px; margin: 7px 0 0; color: var(--muted); font-size: 1.04rem; }
+    .anchor { position: absolute; margin-left: 10px; color: var(--soft); font: 400 .45em/1 "Roboto Mono", monospace; text-decoration: none; opacity: 0; transition: opacity .2s; }
+    h2:hover .anchor, h3:hover .anchor, .anchor:focus { opacity: 1; }
+    .framework { display: grid; grid-template-columns: 260px 1fr; gap: 58px; padding: 54px 0; border-top: 1px solid var(--line); }
+    .framework-aside { align-self: start; position: sticky; top: 94px; }
+    .framework-content { min-width: 0; }
+    .framework-name { display: flex; align-items: flex-start; gap: 12px; }
+    .mark { flex: 0 0 auto; width: 11px; height: 11px; margin-top: 6px; border-radius: 50%; background: var(--ac); }
+    .framework-name h3 { position: relative; }
+    .framework-role { margin: 11px 0 0 23px; color: var(--muted); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .framework-summary { margin: 16px 0 0 23px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .framework-content > p:first-child { margin-top: 0; }
+    .framework-content p { max-width: 760px; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin: 30px 0; }
+    .text-block { padding: 20px 0 4px; border-top: 3px solid var(--ac); }
+    .text-block p { margin-bottom: 0; color: var(--muted); font-size: 14px; }
+    .flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 30px 0; }
+    .flow-item { padding: 19px 0; border-top: 2px solid var(--ac); }
+    .fnum { display: block; margin-bottom: 10px; color: var(--ac); font: 500 10px/1 "Roboto Mono", monospace; }
+    .flow-item strong { font-family: "Space Grotesk", sans-serif; }
+    .flow-item p { margin: 7px 0 0; color: var(--muted); font-size: 13px; }
+    .formula { margin: 28px 0; padding: 18px 20px; border: 1px solid var(--line); background: #f6f4ee; font: 500 13px/1.7 "Roboto Mono", monospace; overflow-x: auto; }
+    .callout-line { margin: 28px 0; padding: 15px 0 15px 18px; border-left: 3px solid var(--ac); font-weight: 700; }
+    .callout-line small { display: block; margin-top: 3px; color: var(--muted); font-weight: 400; }
+    .stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 34px 0; padding: 25px 0; border-block: 1px solid var(--line); }
+    .stat strong { display: block; font: 500 clamp(1.7rem, 3vw, 2.4rem)/1 "Roboto Mono", monospace; }
+    .stat span { display: block; margin-top: 8px; color: var(--muted); font-size: 12px; }
+    .code { margin: 28px 0; overflow: hidden; border-radius: 10px; background: var(--dark); }
+    .code-label { padding: 10px 16px; color: #c9c7bf; background: var(--dark); border-bottom: 1px solid var(--dark-line); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .code pre { margin: 0; padding: 20px; color: #f2efe5; background: var(--dark); font-size: 12px; line-height: 1.75; overflow-x: auto; }
+    .diagram-block { margin: 38px 0; padding: 24px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+    .diagram-title { margin-bottom: 18px; font: 700 1.15rem/1.2 "Space Grotesk", sans-serif; }
+    .chart-scroll { width: 100%; max-width: 100%; overflow-x: auto; }
+    .chart-scroll svg { display: block; width: 100%; height: auto; }
+    .diagram-caption { margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; line-height: 1.6; }
+    .diagram-caption strong { color: var(--ink); }
+    .diagram-node, .diagram-path { opacity: 1; transform: none; stroke-dashoffset: 0; }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .diagram-node { opacity: 0; transform: translateY(8px); }
+    .js.diagram-motion-ready .observe-diagram.is-visible .diagram-node { opacity: 1; transform: none; transition: opacity .48s ease var(--d), transform .48s ease var(--d); }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .diagram-path:not(.diagram-path-dashed) { stroke-dasharray: 900; stroke-dashoffset: 900; }
+    .js.diagram-motion-ready .observe-diagram.is-visible .diagram-path:not(.diagram-path-dashed) { stroke-dasharray: 900; stroke-dashoffset: 0; transition: stroke-dashoffset 1s ease var(--d); }
+    .svg-title { font-family: "Space Grotesk", sans-serif; letter-spacing: -.02em; }
+    .svg-mono { font-family: "Roboto Mono", monospace; }
+    .section-dark { --spy: var(--orange); color: var(--dark-paper); background: var(--dark); border-color: var(--dark-line); }
+    .section-dark .section-head h2 { color: var(--dark-paper); background: var(--dark); }
+    .section-dark .body-copy, .section-dark .framework-role, .section-dark .framework-summary, .section-dark .framework-content p, .section-dark .text-block p { color: #c9c7bf; }
+    .section-dark .kicker { color: #b8b6af; }
+    .section-dark .kicker-num, .section-dark h3, .section-dark h4 { color: var(--dark-paper); }
+    .section-dark .framework, .section-dark .text-block { border-color: var(--dark-line); }
+    .section-dark .anchor { color: #aaa79f; }
+    .section-dark .xref { color: #9db8ff; }
+    .section-dark .callout-line small { color: #c9c7bf; }
+    .section-dark .formula { color: var(--dark-paper); background: #232320; border-color: var(--dark-line); }
+    .sources-list { margin: 0; padding: 0; list-style: none; counter-reset: sources; }
+    .sources-list li { counter-increment: sources; display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 18px 0; border-top: 1px solid var(--line); font-size: 14px; }
+    .sources-list li::before { content: counter(sources, decimal-leading-zero); color: var(--soft); font: 10px/1.8 "Roboto Mono", monospace; }
+    .xref { margin-left: 2px; color: var(--blue); font: 500 .68em/1 "Roboto Mono", monospace; text-decoration: none; vertical-align: super; }
+    .xlink { margin-left: 6px; border-bottom: 1px dashed currentColor; color: var(--muted); text-decoration: none; }
+    .xlink::after { content: " ↗"; }
+    .to-top { position: fixed; right: max(18px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); z-index: 30; width: 44px; height: 44px; border: 1px solid var(--line-strong); border-radius: 50%; background: rgba(255,253,250,.9); color: var(--ink); cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .to-top.visible { opacity: 1; pointer-events: auto; }
+    .js.reveal-ready .reveal { opacity: 0; transform: translateY(18px); }
+    .js.reveal-ready .reveal.is-visible { opacity: 1; transform: none; transition: opacity .65s ease, transform .65s ease; }
+    @media (max-width: 720px) {
+      body { font-size: 16px; }
+      .header-inner { align-items: stretch; }
+      .brand { padding: 18px 0; }
+      .nav { max-width: 56%; }
+      .hero { padding: 72px 0 66px; }
+      .hero-grid, .section-head, .framework { grid-template-columns: 1fr; }
+      .hero-grid { gap: 34px; }
+      .section-head { gap: 24px; margin-bottom: 44px; }
+      .framework { gap: 26px; padding: 42px 0; }
+      .framework-aside { position: static; }
+      .flow { grid-template-columns: 1fr; }
+      .stat-strip { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 430px) {
+      .wrap { width: min(100% - 28px, var(--max)); }
+      h1 { font-size: clamp(2.15rem, 12.5vw, 3rem); }
+      .brand { font-size: 11px; }
+      .nav { max-width: 44%; gap: 16px; }
+      .hero { padding-top: 54px; }
+      .section { padding: 66px 0; }
+      .split { grid-template-columns: 1fr; }
+      .diagram-block { margin-inline: -4px; padding: 16px; }
+      .chart-scroll svg { min-width: 560px; }
+      .stat-strip { gap: 12px; }
+      .sources-list li { grid-template-columns: 30px 1fr; gap: 8px; }
+    }
+    @media (hover: none) {
+      .anchor { opacity: .55; }
+      .nav a { padding-inline: 4px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+      .js.reveal-ready .reveal, .js.diagram-motion-ready .observe-diagram .diagram-node { opacity: 1 !important; transform: none !important; }
+      .js.diagram-motion-ready .observe-diagram .diagram-path { stroke-dashoffset: 0 !important; }
+    }
+  
+    .section { scroll-margin-top: 80px; }
+    .section-head h2 { background: var(--bg); }
+    .kicker-mark { background: var(--ink); }
+    .toc, .toc .toc-label, .toc a { color: var(--ink); background: #f3f1e9; }
+    .toc a::before, .sources-list li::before { color: var(--muted); }
+    .diagram-block, .diagram-block .diagram-title { color: var(--ink); background: var(--paper); }
+    .formula { color: var(--ink); background: #f6f4ee; }
+    .svg-title { fill: var(--ink); font-size: 18px; }
+    .svg-mono { fill: var(--muted); font-size: 13px; }
+    .quiz { margin-top: 36px; padding: 26px; color: var(--ink); background: #f3f1e9; border-radius: 12px; }
+    .quiz h3, .quiz p, .quiz details, .quiz summary { color: var(--ink); background: #f3f1e9; }
+    .quiz-question { font-weight: 700; }
+    .quiz-options { display: grid; gap: 10px; margin: 20px 0; }
+    .quiz-options button, .quiz-retake { text-align: left; font: inherit; padding: 13px 16px; color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); border-left: 3px solid var(--slate); cursor: pointer; }
+    .quiz-options button:disabled { cursor: default; opacity: 1; }
+    .quiz-options button[aria-pressed="true"] { border-left-color: var(--purple); font-weight: 700; }
+    .quiz-options button[data-result="correct"] { border-left-color: var(--green); }
+    .quiz-track { height: 3px; background: var(--line); margin: 16px 0; }
+    .quiz-fill { display: block; height: 100%; width: 0; background: var(--purple); transition: width .2s; }
+    .quiz-progress { font: 12px/1.7 "Roboto Mono", monospace; }
+    .quiz details { margin: 14px 0; }
+    .quiz summary { cursor: pointer; }
+    [hidden] { display: none !important; }
+    .callout-line { color: var(--ink); }
+    .to-top { padding-bottom: env(safe-area-inset-bottom, 0px); }
+    @media (max-width: 720px) { .section-head, .framework { gap: 26px; } }
+    @media (prefers-reduced-motion: reduce) { .quiz-fill { transition: none; } }
+  
+    .hero .line { padding-bottom: .08em; margin-bottom: -.08em; }
+    .hero-subtitle { margin: 26px 0 0; font: 500 clamp(1.2rem,2.4vw,1.8rem)/1.3 "Space Grotesk", sans-serif; }
+    .framework-content h4 { margin-top: 28px; }
+    .mini-compare { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; margin: 30px 0; }
+    .mini-compare > div { padding-top: 16px; border-top: 1px solid var(--line-strong); }
+    .mini-compare strong::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-radius: 50%; background: var(--ac); }
+    .mini-compare p { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+    .bias-check { border-left: 3px solid var(--ac); padding-left: 16px; }
+    .chart-scroll { scrollbar-gutter: stable; }
+    .diagram-block { box-shadow: none; }
+    .svg-title { font-size: 20px; }
+    .svg-mono { font-size: 16px; }
+    .svg-small { font: 12px "Roboto Mono", monospace; fill: var(--muted); }
+    .diagram-path { fill: none; stroke: var(--muted); stroke-width: 1.5; }
+    .faq { margin: 38px 0 0; }
+    .faq details { padding: 16px 0; border-top: 1px solid var(--line-strong); }
+    .faq summary { cursor: pointer; font-weight: 700; }
+    .faq p { margin-bottom: 0; }
+    .code { color: var(--dark-paper); background: var(--dark); }
+    .code pre, .code pre code { color: var(--dark-paper); background: var(--dark); }
+    .quiz .kicker { color: var(--muted); background: #f3f1e9; }
+    .quiz-options button:focus-visible { outline-offset: 2px; }
+    .fnum { color: var(--ink); }
+    .quiz-progress { min-height: 1.7em; }
+    .sources-list strong { font-weight: 700; }
+    .sources-list li { scroll-margin-top: 90px; }
+    .to-top { display: grid; place-items: center; text-decoration: none; opacity: 1; pointer-events: auto; }
+    .js.scroll-ready .to-top:not(.visible) { opacity: 0; pointer-events: none; }
+    .js.scroll-ready .to-top:focus-visible { opacity: 1; pointer-events: auto; }
+    .byline-meta span + span::before { content: ""; display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: currentColor; vertical-align: middle; }
+    @media (max-width: 720px) { .mini-compare { grid-template-columns: 1fr; } }
+    @media (max-width: 430px) { .hero-subtitle { font-size: 1.2rem; } .quiz { padding: 20px; } }
+    @media print {
+      .site-header, .grain, .progress, .to-top, .quiz-options, .quiz-track, .quiz-progress, .quiz-retake { display: none !important; }
+      .js.reveal-ready .reveal, .js.diagram-motion-ready .observe-diagram .diagram-node { opacity: 1 !important; transform: none !important; }
+      .js.diagram-motion-ready .observe-diagram .diagram-path { stroke-dashoffset: 0 !important; }
+      .framework-aside { position: static; } .chart-scroll { overflow: visible; }
+      .quiz details[hidden] { display: block !important; }
+    }
+  
+    .stat-strip { grid-template-columns: repeat(3, 1fr); }
+    .stat strong { min-height: 1em; }
+    .line-dot { transform-box: fill-box; transform-origin: center; transform: scale(1); }
+    .js.diagram-motion-ready .observe-diagram:not(.is-visible) .line-dot { transform: scale(0); }
+    .js.diagram-motion-ready .observe-diagram.is-visible .line-dot { transform: scale(1); transition: transform .5s cubic-bezier(.34,1.56,.64,1) var(--d); }
+    .svg-title { font-size: 20px; }
+    .timeline-year { font: 500 20px "Roboto Mono", monospace; fill: var(--ink); }
+    .sequence-note { font: 12px "Roboto Mono", monospace; fill: var(--muted); }
+    .code pre { font-size: 13px; }
+    .code code { white-space: pre; }
+    .framework-content .framework-date { font: 500 12px "Roboto Mono", monospace; color: var(--muted); }
+    .framework[id] { scroll-margin-top: 90px; }
+    .sources-list li > span { min-width: 0; overflow-wrap: anywhere; }
+    .source-note { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .diagram-caption a { color: var(--ink); }
+    @media (max-width: 430px) { .stat-strip { gap: 12px; } .stat span { font-size: 11px; } }
+    @media (prefers-reduced-motion: reduce) { .line-dot { transform: none !important; } }
+    @media print { .line-dot { transform: none !important; } }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span></span></div>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top"><span class="brand-dot" aria-hidden="true"></span>Design Patterns</a>
+      <nav class="nav" aria-label="Article sections">
+        <a href="#origins" style="--spy:var(--blue)">Origins</a>
+        <a href="#catalog" style="--spy:var(--orange)">GoF</a>
+        <a href="#community" style="--spy:var(--purple)">Beyond GoF</a>
+        <a href="#today" style="--spy:var(--green)">Today</a>
+        <a href="#sources" style="--spy:var(--slate)">Sources</a>
+      </nav>
+    </div>
+  </header>
+  <main id="content">
+    <section class="hero" id="top" aria-labelledby="article-title">
+      <div class="wrap">
+        <div class="eyebrow">Software Design Series</div>
+        <h1 id="article-title">
+          <span class="line"><span class="line-inner" style="--i:0">Design patterns.</span></span>
+          <span class="line"><span class="line-inner" style="--i:1">A history of <em>ideas.</em></span></span>
+        </h1>
+        <p class="hero-subtitle">From buildings to software—and the decisions you still have to make.</p>
+        <div class="hero-grid">
+          <div>
+            <p class="lead">You add a chart beside a table in a sales dashboard. When the data changes, both views must update. You could hard-code two calls. But what happens when you add another view, close one, or move it into a separate service? The history of design patterns helps you recognize what changes at each step.</p>
+            <div class="hero-links"><a href="#origins">Follow the history</a><a href="#observer">See Observer in action</a><a href="#quiz">Test the decision</a></div>
+            <div class="byline"><span class="avatar" aria-hidden="true">AR</span><div><strong>Ali Reza Rashidi</strong><div class="byline-meta"><span>8 min read</span><span>Updated <time datetime="2026-09-11">Sep 11, 2026</time></span></div></div></div>
+          </div>
+          <div>
+            <p class="hero-note">A useful pattern gives you a name for a recurring problem, the reasoning behind a solution, and the costs you accept.</p>
+            <aside class="toc" aria-label="In this piece">
+              <p class="toc-label">In this piece</p>
+              <ol>
+                <li><a href="#origins">Architecture and the first software experiments</a></li>
+                <li><a href="#catalog">What the Gang of Four catalogued</a></li>
+                <li><a href="#community">A community and a wider vocabulary</a></li>
+                <li><a href="#today">What language features change</a></li>
+                <li><a href="#sources">Primary sources and further reading</a></li>
+              </ol>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="wrap">
+      <section class="section reveal" id="origins" aria-labelledby="origins-title" style="--spy:var(--blue)">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">01</span><span>— Origins</span></div>
+            <h2 id="origins-title">Before classes, there were buildings.<a class="anchor" href="#origins" aria-label="Link to the origins section">#</a></h2>
+          </div>
+          <p class="body-copy">The software patterns movement borrowed an architectural idea: document recurring design problems in their context, then describe adaptable solutions. It did not begin as a checklist of class diagrams.</p>
+        </div>
+        <article class="framework" style="--ac:var(--blue)">
+          <aside class="framework-aside" aria-labelledby="alexander-title">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="alexander-title">Christopher Alexander</h3></div>
+            <div class="framework-role">1977–1979 · A language for design</div>
+            <p class="framework-summary">Describe a situation people encounter, not a form they must copy.</p>
+          </aside>
+          <div class="framework-content">
+            <p><em>A Pattern Language</em> appeared in 1977. Alexander and his collaborators collected 253 patterns spanning towns, buildings, and construction, with the aim of helping people shape their own environments.<a class="xref" href="#src-1">[1]</a> <em>The Timeless Way of Building</em> followed in 1979 and developed the underlying theory.<a class="xref" href="#src-2">[2]</a></p>
+            <p>A pattern connects a recurring problem with a solution that makes sense under particular constraints. A pattern language adds relationships: one design decision creates the context for others.<a class="xref" href="#src-3">[3]</a></p>
+            <p>For our dashboard, start with the user’s task: compare the same sales data in a table and a chart. The important tension is shared information with independently changing views. That is a problem description you can carry between implementations.</p>
+          </div>
+        </article>
+        <article class="framework" style="--ac:var(--green)">
+          <aside class="framework-aside" aria-labelledby="smalltalk-title">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="smalltalk-title">The Smalltalk bridge</h3></div>
+            <div class="framework-role">1987 · From occupants to users</div>
+            <p class="framework-summary">Early software patterns helped people decide what an interface should do.</p>
+          </aside>
+          <div class="framework-content">
+            <p>Kent Beck and Ward Cunningham’s 1987 paper, <em>Using Pattern Languages for Object-Oriented Programs</em>, documented an early adaptation. Its five window-interface patterns included <em>Window Per Task</em> and <em>Few Panes Per Window</em>. Their order guided decisions from the overall task down to panes and actions.<a class="xref" href="#src-3">[3]</a></p>
+            <p>Viewed through that lens, your dashboard’s table and chart belong together because they support one task. You decide how the person uses the window before deciding how its objects communicate.</p>
+            <figure class="diagram-block observe-diagram" data-motion-mode="reveal">
+              <figcaption class="diagram-title">Four milestones behind the dashboard’s design</figcaption>
+              <div class="chart-scroll" tabindex="0" role="group" aria-label="Scrollable timeline of design-pattern publications">
+                <svg viewBox="0 0 760 404" role="img" aria-labelledby="history-map-title history-map-desc" aria-label="The timeline places A Pattern Language in 1977, Beck and Cunningham in 1987, the Gang of Four book in 1994, and Enterprise Integration Patterns in 2003, using proportional year spacing.">
+                  <title id="history-map-title">From pattern languages to messaging patterns</title>
+                  <desc id="history-map-desc">Four dated milestones provide lenses for the dashboard example: describing context, designing its interface, coordinating objects, and connecting systems.</desc>
+                  <path class="diagram-path" style="--d:0s" d="M64 200 H688"/>
+                  <path class="diagram-path" style="--d:.12s" d="M64 192 V136 M304 208 V260 M472 192 V136 M688 208 V260"/>
+                  <g class="diagram-node" style="--d:0s">
+                    <text x="32" y="48" class="timeline-year">1977</text>
+                    <text x="32" y="80" class="svg-title">A Pattern Language</text>
+                    <text x="32" y="112" class="svg-mono">Describe the context</text>
+                  </g>
+                  <g class="diagram-node" style="--d:.12s">
+                    <text x="304" y="292" text-anchor="middle" class="timeline-year">1987</text>
+                    <text x="304" y="324" text-anchor="middle" class="svg-title">Beck &amp; Cunningham</text>
+                    <text x="304" y="356" text-anchor="middle" class="svg-mono">Design the interface</text>
+                  </g>
+                  <g class="diagram-node" style="--d:.24s">
+                    <text x="472" y="48" text-anchor="middle" class="timeline-year">1994</text>
+                    <text x="472" y="80" text-anchor="middle" class="svg-title">Gang of Four</text>
+                    <text x="472" y="112" text-anchor="middle" class="svg-mono">Coordinate objects</text>
+                  </g>
+                  <g class="diagram-node" style="--d:.36s">
+                    <text x="728" y="292" text-anchor="end" class="timeline-year">2003</text>
+                    <text x="728" y="324" text-anchor="end" class="svg-title">Integration patterns</text>
+                    <text x="728" y="356" text-anchor="end" class="svg-mono">Connect systems</text>
+                  </g>
+                  <circle class="line-dot" style="--d:0s" cx="64" cy="200" r="4" fill="#3468f5"/>
+                  <circle class="line-dot" style="--d:.12s" cx="304" cy="200" r="4" fill="#23956f"/>
+                  <circle class="line-dot" style="--d:.24s" cx="472" cy="200" r="8" fill="#eb8237"/>
+                  <circle class="line-dot" style="--d:.36s" cx="688" cy="200" r="4" fill="#14a9c5"/>
+                  <text x="32" y="392" class="svg-small">Calendar years · distances are proportional · selected milestones</text>
+                </svg>
+              </div>
+              <p class="diagram-caption"><strong>How to read this:</strong> The gaps represent elapsed years. Each subtitle applies that period’s ideas to our hypothetical dashboard; it does not claim the dashboard existed then. These are selected milestones, not the invention dates of every underlying technique.<a class="xref" href="#src-1">[1]</a><a class="xref" href="#src-3">[3]</a><a class="xref" href="#src-4">[4]</a><a class="xref" href="#src-8">[8]</a></p>
+            </figure>
+          </div>
+        </article>
+      </section>
+      <section class="section reveal" id="catalog" aria-labelledby="catalog-title" style="--spy:var(--orange)">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">02</span><span>— The Gang of Four</span></div>
+            <h2 id="catalog-title">Give the collaboration a name.<a class="anchor" href="#catalog" aria-label="Link to the Gang of Four section">#</a></h2>
+          </div>
+          <p class="body-copy">Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides catalogued 23 recurring object-oriented designs in <em>Design Patterns</em>. Published in 1994 with a 1995 copyright, the book explains applicability and consequences alongside examples in C++ and Smalltalk.<a class="xref" href="#src-4">[4]</a></p>
+        </div>
+        <div class="stat-strip" role="group" aria-label="Counts from the original architectural and software pattern catalogs">
+          <div class="stat"><strong data-count="253">253</strong><span>patterns in <em>A Pattern Language</em><a class="xref" href="#src-1">[1]</a></span></div>
+          <div class="stat"><strong data-count="23">23</strong><span>patterns in the GoF catalog<a class="xref" href="#src-4">[4]</a></span></div>
+          <div class="stat"><strong data-count="3">3</strong><span>GoF categories<a class="xref" href="#src-4">[4]</a></span></div>
+        </div>
+        <article class="framework" id="observer" style="--ac:var(--orange)">
+          <aside class="framework-aside" aria-labelledby="observer-title">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="observer-title">Observer</h3></div>
+            <div class="framework-role">One example · Several dependent views</div>
+            <p class="framework-summary">The data model notifies registered views when its state changes.</p>
+          </aside>
+          <div class="framework-content">
+            <p>Your table and chart can register with the data model, receive updates, and unregister when no longer needed. The model can work through a common update contract instead of knowing each view’s rendering details. Norvig later used a closely related spreadsheet-and-bar-chart example to explain Observer.<a class="xref" href="#src-9">[9]</a></p>
+            <div class="mini-compare">
+              <div style="--ac:var(--orange)"><strong>Creational</strong><p>How objects are created. A dashboard might need interchangeable view construction.</p></div>
+              <div style="--ac:var(--orange)"><strong>Structural</strong><p>How objects fit together. An adapter might reconcile a legacy data interface.</p></div>
+              <div style="--ac:var(--orange)"><strong>Behavioral</strong><p>How objects collaborate. Observer coordinates the dashboard’s updates.</p></div>
+            </div>
+            <figure class="diagram-block observe-diagram" data-motion-mode="reveal">
+              <figcaption class="diagram-title">One data change, two subscribed views</figcaption>
+              <div class="chart-scroll" tabindex="0" role="group" aria-label="Scrollable Observer sequence diagram">
+                <svg viewBox="0 0 760 488" role="img" aria-labelledby="observer-map-title observer-map-desc" aria-label="The table and chart subscribe to the data model, which later sends a new snapshot to each through synchronous update calls.">
+                  <title id="observer-map-title">Observer inside the sales dashboard</title>
+                  <desc id="observer-map-desc">The table and chart register with a data model, then each receives an update after the model changes; this is a local synchronous example.</desc>
+                  <defs>
+                    <marker id="ob-arrow" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#656565"/></marker>
+                    <marker id="ob-accent" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#eb8237"/></marker>
+                    <marker id="ob-link" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#3468f5"/></marker>
+                  </defs>
+                  <path class="diagram-path diagram-path-dashed" d="M128 80 V440 M384 80 V440 M640 80 V440" stroke-dasharray="4 4"/>
+                  <path class="diagram-path" style="--d:0s" d="M384 144 H132" marker-end="url(#ob-arrow)"/>
+                  <path class="diagram-path" style="--d:.12s" d="M640 216 H132" marker-end="url(#ob-arrow)"/>
+                  <path class="diagram-path" style="--d:.24s;stroke:var(--orange)" d="M132 328 H380" marker-end="url(#ob-accent)"/>
+                  <path class="diagram-path" style="--d:.36s;stroke:var(--orange)" d="M132 400 H636" marker-end="url(#ob-accent)"/>
+                  <g class="diagram-node" style="--d:0s">
+                    <rect x="24" y="24" width="208" height="56" rx="8" fill="#fffdfa" stroke="#656565"/>
+                    <text x="128" y="60" text-anchor="middle" class="svg-title">Data model</text>
+                    <rect x="292" y="24" width="184" height="56" rx="8" fill="#fffdfa" stroke="#656565"/>
+                    <text x="384" y="60" text-anchor="middle" class="svg-title">Table view</text>
+                    <rect x="548" y="24" width="184" height="56" rx="8" fill="#fffdfa" stroke="#656565"/>
+                    <text x="640" y="60" text-anchor="middle" class="svg-title">Chart view</text>
+                  </g>
+                  <g class="diagram-node" style="--d:.12s">
+                    <rect x="192" y="112" width="128" height="24" fill="#fffdfa"/>
+                    <text x="256" y="128" text-anchor="middle" class="svg-mono">subscribe()</text>
+                    <rect x="448" y="184" width="128" height="24" fill="#fffdfa"/>
+                    <text x="512" y="200" text-anchor="middle" class="svg-mono">subscribe()</text>
+                    <rect x="124" y="136" width="8" height="24" fill="#fffdfa" stroke="#656565"/>
+                    <rect x="124" y="208" width="8" height="24" fill="#fffdfa" stroke="#656565"/>
+                  </g>
+                  <g class="diagram-node" style="--d:.24s">
+                    <rect x="32" y="252" width="192" height="24" fill="#fffdfa"/>
+                    <text x="128" y="268" text-anchor="middle" class="sequence-note">New sales snapshot</text>
+                    <rect x="124" y="304" width="8" height="112" fill="#fffdfa" stroke="#656565"/>
+                    <rect x="380" y="320" width="8" height="24" fill="#fffdfa" stroke="#656565"/>
+                    <rect x="184" y="296" width="144" height="24" fill="#fffdfa"/>
+                    <text x="256" y="312" text-anchor="middle" class="svg-mono">update(data)</text>
+                  </g>
+                  <g class="diagram-node" style="--d:.36s">
+                    <rect x="636" y="392" width="8" height="24" fill="#fffdfa" stroke="#656565"/>
+                    <rect x="440" y="368" width="144" height="24" fill="#fffdfa"/>
+                    <text x="512" y="384" text-anchor="middle" class="svg-mono">update(data)</text>
+                  </g>
+                  <text x="32" y="472" class="svg-small">Time flows down · solid arrows are calls · dashed lines are lifelines</text>
+                </svg>
+              </div>
+              <p class="diagram-caption"><strong>How to read this:</strong> Read downward: views subscribe, data changes, then the model calls each view. Thin rectangles show activity. Return arrows are omitted; spacing shows order, not duration. This local example provides no network-delivery guarantees.</p>
+            </figure>
+            <p>For a fixed two-view screen, direct calls may be enough. Registration becomes useful when views come and go. Either way, decide what happens when a view closes or its update fails. Naming Observer helps you discuss that responsibility; it does not implement the policy.</p>
+          </div>
+        </article>
+      </section>
+      <section class="section reveal" id="community" aria-labelledby="community-title" style="--spy:var(--purple)">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">03</span><span>— Beyond the catalog</span></div>
+            <h2 id="community-title">A community made the vocabulary grow.<a class="anchor" href="#community" aria-label="Link to the pattern community">#</a></h2>
+          </div>
+          <p class="body-copy">A catalog records a set of solutions. A community can challenge their explanations, document new contexts, and connect patterns into larger designs.</p>
+        </div>
+        <article class="framework" style="--ac:var(--purple)">
+          <aside class="framework-aside" aria-labelledby="plop-title">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="plop-title">PLoP and the wiki</h3></div>
+            <div class="framework-role">1993–1995 · Patterns as shared work</div>
+            <p class="framework-summary">The account of a design matters as much as its diagram.</p>
+          </aside>
+          <div class="framework-content">
+            <p>The Hillside Group grew from a 1993 gathering. The first Pattern Languages of Programs conference took place in 1994 near Monticello, Illinois.<a class="xref" href="#src-5">[5]</a> In March 1995, Cunningham opened the collaborative People, Projects &amp; Patterns area of the Portland Pattern Repository, part of the early WikiWikiWeb story.<a class="xref" href="#src-6">[6]</a></p>
+            <p>For your dashboard, a useful pattern account would explain why views subscribe, how they detach, and what failures cost. Another developer can then challenge the assumptions instead of copying an unexplained diagram.</p>
+          </div>
+        </article>
+        <article class="framework" style="--ac:var(--cyan)">
+          <aside class="framework-aside" aria-labelledby="enterprise-title">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="enterprise-title">Beyond individual objects</h3></div>
+            <div class="framework-role">1996–2003 · Architecture and integration</div>
+            <p class="framework-summary">Larger boundaries bring different recurring problems.</p>
+          </aside>
+          <div class="framework-content">
+            <p><em>Pattern-Oriented Software Architecture</em> began in 1996, spanning architecture, design patterns, and implementation idioms.<a class="xref" href="#src-12">[12]</a> Martin Fowler’s <em>Patterns of Enterprise Application Architecture</em> followed in 2002, addressing concerns such as domain logic and persistence.<a class="xref" href="#src-7">[7]</a> Gregor Hohpe and Bobby Woolf’s <em>Enterprise Integration Patterns</em> documented 65 messaging patterns in 2003.<a class="xref" href="#src-8">[8]</a></p>
+            <p>Now move the dashboard’s chart into another service. A publish-subscribe channel offers a related one-to-many communication structure, but you must also choose delivery, retry, and failure behavior.<a class="xref" href="#src-8">[8]</a> Replacing local calls with messages changes the engineering problem.</p>
+            <p>Do not mistake later popularity for invention. Garcia-Molina and Salem’s 1987 <em>Sagas</em> work already described splitting long transactions and using compensating transactions after partial execution.<a class="xref" href="#src-10">[10]</a> The histories overlap; they are not a single ladder from GoF to microservices.</p>
+          </div>
+        </article>
+      </section>
+      <section class="section reveal" id="today" aria-labelledby="today-title" style="--spy:var(--green)">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">04</span><span>— What survives</span></div>
+            <h2 id="today-title">Keep the reasoning. Revisit the machinery.<a class="anchor" href="#today" aria-label="Link to modern design decisions">#</a></h2>
+          </div>
+          <p class="body-copy">Language features can make a pattern’s implementation smaller. They do not automatically decide which dependencies, lifetimes, or failure modes your application should have.</p>
+        </div>
+        <article class="framework" style="--ac:var(--green)">
+          <aside class="framework-aside" aria-labelledby="norvig-title">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="norvig-title">Norvig’s challenge</h3></div>
+            <div class="framework-role">1996 · Language changes the expression</div>
+            <p class="framework-summary">Less implementation code can preserve the same design intent.</p>
+          </aside>
+          <div class="framework-content">
+            <p>In his 1996 talk, Peter Norvig argued that 16 of the 23 GoF patterns had substantially simpler implementations in Lisp or Dylan than in C++, for at least some uses. His slides described them as “invisible or simpler.” This was a qualified language comparison, not a universal obsolescence score.<a class="xref" href="#src-9">[9]</a></p>
+            <p>Here is an illustrative JavaScript notification core for our dashboard. A view supplies a function rather than an instance of an observer class. The returned function lets that view unsubscribe.</p>
+            <div class="code">
+              <div class="code-label">Dashboard example · Synchronous callbacks</div>
+              <pre><code>const subscribers = new Set();
+
+function subscribe(updateView) {
+  subscribers.add(updateView);
+  return () =&gt; subscribers.delete(updateView);
+}
+
+function publish(snapshot) {
+  for (const updateView of [...subscribers]) {
+    updateView(snapshot);
+  }
+}</code></pre>
+            </div>
+            <p>This example chooses synchronous dispatch over a snapshot of the subscriber list. If a callback throws, later callbacks are not called. Removing a callback during dispatch does not remove it from that already-copied list. Those are concrete semantics you must accept or change.</p>
+            <p>The example is our adaptation, not Norvig’s implementation. His Observer example uses method combination. The general lesson is to examine what your language can express before reproducing an older class structure.<a class="xref" href="#src-9">[9]</a></p>
+          </div>
+        </article>
+        <article class="framework" style="--ac:var(--slate)">
+          <aside class="framework-aside" aria-labelledby="decision-title">
+            <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3 id="decision-title">Choose by the problem</h3></div>
+            <div class="framework-role">Today · State the cost</div>
+            <p class="framework-summary">Start with the change you need to support.</p>
+          </aside>
+          <div class="framework-content">
+            <p>Updating the dashboard after a notification does not imply Event Sourcing. Making an event history authoritative is a separate decision. CQRS separates read and write models and can be used without events.<a class="xref" href="#src-11">[11]</a> These names should narrow the discussion, not merge distinct choices.</p>
+            <div class="flow">
+              <div class="flow-item" style="--ac:var(--blue)"><span class="fnum">01 · CONTEXT</span><strong>Name the pressure</strong><p>Views change independently, while displaying the same sales state.</p></div>
+              <div class="flow-item" style="--ac:var(--orange)"><span class="fnum">02 · MECHANISM</span><strong>Choose the smallest fit</strong><p>Direct calls, registered callbacks, or a message channel—depending on the boundary.</p></div>
+              <div class="flow-item" style="--ac:var(--green)"><span class="fnum">03 · CONSEQUENCES</span><strong>Explain the trade-off</strong><p>Specify cleanup, ordering, and what a failed update does to the other views.</p></div>
+            </div>
+            <div class="quiz" id="quiz" role="group" aria-labelledby="quiz-title">
+              <div class="kicker">Try the decision · 1 question</div>
+              <h3 id="quiz-title">Does a simpler implementation erase the pattern?</h3>
+              <p class="quiz-question">Your dashboard already supports callbacks and unsubscription. Someone suggests adding a class hierarchy because the GoF diagram contains classes. What should you do?</p>
+              <div class="quiz-options" hidden>
+                <button type="button" data-answer="0" aria-pressed="false">Reproduce the class hierarchy so the implementation qualifies as Observer.</button>
+                <button type="button" data-answer="1" aria-pressed="false">Check the notification and lifetime contract; add structure only for a concrete need.</button>
+                <button type="button" data-answer="2" aria-pressed="false">Remove unsubscription because callbacks make lifecycle management unnecessary.</button>
+              </div>
+              <div class="quiz-track" aria-hidden="true" hidden><span class="quiz-fill"></span></div>
+              <p class="quiz-progress" aria-live="polite" hidden></p>
+              <details>
+                <summary>Read the answer and why</summary>
+                <p>Check the notification and lifetime contract. A callback can represent an observer’s behavior without a class hierarchy, while registration, cleanup, and failure handling still need deliberate choices. The useful question is what the extra structure would solve.</p>
+              </details>
+              <button class="quiz-retake" type="button" hidden>Try again</button>
+            </div>
+            <div class="faq" role="group" aria-label="Common questions about design-pattern history">
+              <details><summary>Did the Gang of Four invent design patterns?</summary><p>No. Alexander’s architectural work and Beck and Cunningham’s software adaptation came earlier. The GoF book catalogued 23 object-oriented patterns and gave developers a shared reference.<a class="xref" href="#src-1">[1]</a><a class="xref" href="#src-3">[3]</a><a class="xref" href="#src-4">[4]</a></p></details>
+              <details><summary>Was the GoF book published in 1994 or 1995?</summary><p>The publisher lists a 1994 publication date and a 1995 copyright. They refer to different bibliographic fields.<a class="xref" href="#src-4">[4]</a></p></details>
+              <details><summary>Are design patterns still useful?</summary><p>They remain useful when they clarify a recurring problem and its trade-offs. Your dashboard may need Observer’s collaboration contract while using functions or an existing framework to implement it.</p></details>
+            </div>
+          </div>
+        </article>
+      </section>
+      <section class="section reveal" id="sources" aria-labelledby="sources-title" style="--spy:var(--slate)">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="kicker-mark" aria-hidden="true"></span><span class="kicker-num">05</span><span>— Sources</span></div>
+            <h2 id="sources-title">Read the original accounts.<a class="anchor" href="#sources" aria-label="Link to sources">#</a></h2>
+          </div>
+          <p class="body-copy">Author-maintained pages, original papers, community records, and publisher catalogs support the chronology. The sales dashboard and its JavaScript are teaching examples; the diagrams do not depict a historical product.</p>
+        </div>
+        <ol class="sources-list">
+          <li id="src-1"><span><strong>A Pattern Language: Towns, Buildings, Construction.</strong> Christopher Alexander and collaborators, 1977.<a class="xlink" href="https://www.patternlanguage.com/apl/aplintro.htm">Author’s site</a><small class="source-note">Publication year and the 253-pattern architectural language.</small></span></li>
+          <li id="src-2"><span><strong>The Timeless Way of Building.</strong> Christopher Alexander, 1979.<a class="xlink" href="https://www.patternlanguage.com/bookstore/timeless-way-of-building.html">Author’s site</a></span></li>
+          <li id="src-3"><span><strong>Using Pattern Languages for Object-Oriented Programs.</strong> Kent Beck and Ward Cunningham, 1987.<a class="xlink" href="https://c2.com/doc/oopsla87.html">Original paper</a></span></li>
+          <li id="src-4"><span><strong>Design Patterns: Elements of Reusable Object-Oriented Software.</strong> Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides.<a class="xlink" href="https://www.informit.com/store/design-patterns-elements-of-reusable-object-oriented-software-9780201633610">Publisher record</a><small class="source-note">Published 1994; copyright 1995. Catalog, categories, and original preface.</small></span></li>
+          <li id="src-5"><span><strong>Hillside Group history and the first PLoP conference.</strong> Hillside Group.<a class="xlink" href="https://hillside.net/home/history">Group history</a><a class="xlink" href="https://www.hillside.net/pattern-languages-of-program-design-book">Conference record</a></span></li>
+          <li id="src-6"><span><strong>Portland Pattern Repository: Recent Changes.</strong> Cunningham &amp; Cunningham.<a class="xlink" href="https://c2.com/ppr/about/changes.html">Original changelog</a><small class="source-note">The March 25, 1995 entry records the People, Projects &amp; Patterns opening.</small></span></li>
+          <li id="src-7"><span><strong>Patterns of Enterprise Application Architecture.</strong> Martin Fowler, 2002.<a class="xlink" href="https://martinfowler.com/books/eaa.html">Author’s account</a></span></li>
+          <li id="src-8"><span><strong>Enterprise Integration Patterns.</strong> Gregor Hohpe and Bobby Woolf, 2003.<a class="xlink" href="https://www.enterpriseintegrationpatterns.com/books1.html">Book details</a><a class="xlink" href="https://www.enterpriseintegrationpatterns.com/patterns/messaging/PublishSubscribeChannel.html">Publish-Subscribe Channel</a></span></li>
+          <li id="src-9"><span><strong>Design Patterns in Dynamic Languages.</strong> Peter Norvig, presented 1996; posted online 1998.<a class="xlink" href="https://www.norvig.com/design-patterns/index.htm">Talk and slides</a><small class="source-note">The qualified 16-of-23 comparison and the Observer example.</small></span></li>
+          <li id="src-10"><span><strong>Sagas.</strong> Hector Garcia-Molina and Kenneth Salem, 1987.<a class="xlink" href="https://www.cs.princeton.edu/research/techreps/598">Princeton technical report</a></span></li>
+          <li id="src-11"><span><strong>What do you mean by “Event-Driven”?</strong> Martin Fowler, 2017.<a class="xlink" href="https://www.martinfowler.com/articles/201701-event-driven.html">Author’s article</a></span></li>
+          <li id="src-12"><span><strong>Books on Pattern-Oriented Software Architecture.</strong> POSA series overview, Vanderbilt University.<a class="xlink" href="https://www.dre.vanderbilt.edu/POSA/">Series account</a><small class="source-note">Volume 1 appeared in 1996 and spans architectural patterns, design patterns, and idioms.</small></span></li>
+        </ol>
+      </section>
+    </div>
+  </main>
+  <button class="to-top" type="button" aria-label="Back to top" hidden>↑</button>
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const staticMotion = new URLSearchParams(window.location.search).get('motion') === 'static';
+      const header = document.querySelector('.site-header');
+      const progress = document.querySelector('.progress span');
+      const toTop = document.querySelector('.to-top');
+      const navLinks = [...document.querySelectorAll('.nav a')];
+      const sections = [...document.querySelectorAll('main .section[id]')];
+      const updateScroll = () => {
+        const y = window.scrollY;
+        const max = root.scrollHeight - window.innerHeight;
+        progress.style.width = (max > 0 ? Math.min(100, y / max * 100) : 0) + '%';
+        header.classList.toggle('scrolled', y > 8);
+        toTop.classList.toggle('visible', y > 700);
+        const active = sections.filter(section => section.getBoundingClientRect().top <= 160).at(-1);
+        navLinks.forEach(link => {
+          const current = Boolean(active && link.hash === '#' + active.id);
+          link.classList.toggle('active', current);
+          if (current) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
+      };
+      if ('IntersectionObserver' in window && !reduced && !staticMotion) {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0, rootMargin: '0px 0px -30px 0px' });
+        document.querySelectorAll('.reveal, .observe-diagram').forEach(element => observer.observe(element));
+        root.classList.add('reveal-ready', 'diagram-motion-ready');
+        const countObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const element = entry.target;
+            const target = Number(element.dataset.count);
+            const started = performance.now();
+            const step = now => {
+              const fraction = Math.min(1, (now - started) / 650);
+              element.textContent = String(Math.round(target * (1 - Math.pow(1 - fraction, 3))));
+              if (fraction < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+            countObserver.unobserve(element);
+          });
+        }, { threshold: .4 });
+        document.querySelectorAll('[data-count]').forEach(element => countObserver.observe(element));
+        root.classList.add('count-motion-ready');
+      }
+      window.addEventListener('scroll', updateScroll, { passive: true });
+      window.addEventListener('resize', updateScroll);
+      toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }));
+      toTop.hidden = false;
+      updateScroll();
+      root.classList.add('scroll-ready');
+      const quiz = document.querySelector('.quiz');
+      const options = quiz.querySelector('.quiz-options');
+      const buttons = [...options.querySelectorAll('button')];
+      const details = quiz.querySelector('details');
+      const status = quiz.querySelector('.quiz-progress');
+      const track = quiz.querySelector('.quiz-track');
+      const retake = quiz.querySelector('.quiz-retake');
+      const fill = quiz.querySelector('.quiz-fill');
+      buttons.forEach(button => button.addEventListener('click', () => {
+        const correct = button.dataset.answer === '1';
+        buttons.forEach(option => {
+          option.disabled = true;
+          option.setAttribute('aria-pressed', String(option === button));
+          if (option.dataset.answer === '1') option.dataset.result = 'correct';
+        });
+        status.textContent = correct ? 'Correct · 1 of 1 answered.' : 'Not quite · 1 of 1 answered. Read why below.';
+        fill.style.width = '100%';
+        details.hidden = false;
+        details.open = true;
+        retake.hidden = false;
+      }));
+      retake.addEventListener('click', () => {
+        buttons.forEach(button => {
+          button.disabled = false;
+          button.setAttribute('aria-pressed', 'false');
+          delete button.dataset.result;
+        });
+        details.open = false;
+        details.hidden = true;
+        retake.hidden = true;
+        fill.style.width = '0%';
+        status.textContent = '0 of 1 answered.';
+        buttons[0].focus();
+      });
+      options.hidden = false;
+      track.hidden = false;
+      status.hidden = false;
+      status.textContent = '0 of 1 answered.';
+      details.hidden = true;
+    })();
+    </script>
+</body>
+</html>

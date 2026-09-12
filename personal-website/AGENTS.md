@@ -82,6 +82,16 @@ When asked to create a new article on a topic, produce **one complete `.html` fi
 - **Quiz** (optional but loved): light quiz block — mono kicker, question, answer rows with left border, progress track/fill, "why" explanation, retake button. Pure JS, no dependencies.
 - **Sources section** (last): `.sources-list` — auto-numbered (`decimal-leading-zero`) entries with `<strong>` title + outlet/author; in-text citations as superscript mono links `<a class="xref" href="#src-1">[1]</a>`. External links: `.xlink` with dashed underline and `↗`.
 
+### Python code highlighting (required for Python blocks)
+
+- Mark Python examples with `.code pre code.language-python` and scope all syntax colors to that selector; keep prose, formulas, and other languages unchanged.
+- Use escaped code with static `<span>` token markup and CSS in the page's existing `<style>` block. Highlighting must work without JavaScript or external highlighter dependencies.
+- Set the Python code and its containing `pre` explicitly to `var(--dark-paper)` on `var(--dark)`; use Roboto Mono.
+- Color keywords such as `for`, `def`, and `return` pink (`--red`); comments green (`--green`); strings gold (`--gold`); numbers orange (`--orange`); built-ins and function names cyan (`--cyan`). Leave other tokens in the plain text color.
+- Preserve the original code text, indentation, and line breaks exactly so copying the rendered block yields runnable Python; syntax spans must contain only existing code characters.
+- Keep Python text free of decorative lines or boxes: scope `border: 0`, `text-decoration: none`, and `box-shadow: none` to its `pre`, `code`, and token spans so generic host styling cannot frame individual wrapped lines. Preserve syntax colors, whitespace, and keyboard focus indicators on interactive controls.
+- At desktop and 390px, with and without JavaScript, verify 4.5:1 token contrast and no decorative lines or boxes after injecting generic host `pre`, `code`, and `span` rules for borders, underlines, and shadows.
+
 ## 5. Charts (hand-built SVG)
 
 ### Diagram Design plugin
