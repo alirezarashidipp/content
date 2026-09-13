@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.classList.add('js');</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Use a renewal-reminder experiment to connect data quality, causal evidence, uncertainty, economics, and a decision someone can act on.">
+<title>Evidence Needs a Decision — Data-Driven Decision Making in Practice</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='3' fill='%233468f5'/%3E%3Ccircle cx='23' cy='9' r='3' fill='%23eb8237'/%3E%3Ccircle cx='9' cy='23' r='3' fill='%235b6b7a'/%3E%3Ccircle cx='23' cy='23' r='3' fill='%237650e6'/%3E%3C/svg%3E">
+<meta property="og:title" content="Evidence Needs a Decision — Data-Driven Decision Making in Practice">
+<meta property="og:description" content="Use a renewal-reminder experiment to connect data quality, causal evidence, uncertainty, economics, and a decision someone can act on.">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Evidence Needs a Decision — Data-Driven Decision Making in Practice",
+  "description": "Use a renewal-reminder experiment to connect data quality, causal evidence, uncertainty, economics, and a decision someone can act on.",
+  "datePublished": "2026-09-12",
+  "dateModified": "2026-09-12",
+  "inLanguage": "en",
+  "wordCount": 2612,
+  "timeRequired": "PT12M",
+  "author": {
+    "@type": "Person",
+    "name": "Ali Reza Rashidi"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Instrument+Serif:ital@0;1&amp;family=Roboto+Mono:wght@400;500&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898;
+  --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+  --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+  --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+  --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+  --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+}
+* { box-sizing: border-box; }
+html { color-scheme: light; overflow-x: clip; scroll-behavior: smooth; }
+body { margin: 0; color: var(--ink); background: linear-gradient(180deg, #fffdfa, #fcfbf8); font: 400 17px/1.7 "DM Sans", sans-serif; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; }
+::selection { color: var(--paper); background: var(--ink); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+h1, h2, h3, h4 { font-family: "Space Grotesk", sans-serif; margin: 0; text-wrap: balance; }
+h1, h2 { letter-spacing: -.045em; }
+p { text-wrap: pretty; margin: 0 0 22px; }
+svg { display: block; width: 100%; height: auto; }
+.wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+.grain { position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: .08; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.skip-link { position: fixed; left: 16px; top: -80px; z-index: 100; padding: 12px 18px; color: var(--paper); background: var(--ink); }
+.skip-link:focus { top: 12px; }
+.progress { position: fixed; inset: 0 0 auto; height: 2px; z-index: 90; }
+.progress span { display: block; height: 100%; width: 0; background: var(--ink); }
+.site-header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid transparent; }
+.site-header.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); border-bottom-color: var(--line); }
+.topbar { min-height: 68px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 500 13px "Space Grotesk", sans-serif; white-space: nowrap; }
+.brand-dot { width: 12px; height: 12px; background: var(--ink); border-radius: 50%; flex-shrink: 0; }
+.nav { display: flex; align-items: center; gap: 26px; overflow-x: auto; padding-left: 10px; scrollbar-width: none; }
+.nav a { position: relative; padding: 24px 0; white-space: nowrap; text-decoration: none; color: var(--muted); font: 500 11px "Roboto Mono", monospace; }
+.nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 18px; height: 1px; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform .2s; }
+.nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
+.nav a.active::before { content: ""; position: absolute; left: -10px; top: 27px; width: 6px; height: 6px; border-radius: 50%; background: var(--spy); }
+.hero { padding: 92px 0 88px; border-bottom: 1px solid var(--line); }
+.eyebrow, .kicker, .framework-role, .toc-label, .byline-meta, .source-note, .diagram-caption { font-family: "Roboto Mono", monospace; }
+.eyebrow { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 28px; }
+.eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--ink); }
+h1 { font-size: clamp(3rem,8.4vw,6.8rem); line-height: .96; font-weight: 700; }
+h1 em { font: italic 400 1em/.96 "Instrument Serif", serif; color: #535353; }
+.line { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.04em; }
+.line-inner { display: inline-block; }
+.js .line-inner { animation: lineUp .7s both; }
+.js .line:nth-child(2) .line-inner { animation-delay: 90ms; }
+.js .line:nth-child(3) .line-inner { animation-delay: 180ms; }
+@keyframes lineUp { from { transform: translateY(115%); } to { transform: translateY(0); } }
+.hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 60px; margin-top: 54px; }
+.lead { font-size: clamp(1.15rem,1.8vw,1.5rem); line-height: 1.6; color: #414141; }
+.lead::first-letter { float: left; padding: 0 5px 0 0; font: italic 400 2.2em/1 "Instrument Serif", serif; color: var(--ink); }
+.hero-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 30px 0; }
+.hero-links a { padding: 9px 12px; border: 1px solid var(--line-strong); border-radius: 30px; text-decoration: none; font: 11px "Roboto Mono", monospace; }
+.byline { display: flex; gap: 12px; align-items: center; font-size: 13px; }
+.avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; font: 11px "Roboto Mono", monospace; color: var(--paper); background: var(--ink); flex-shrink: 0; }
+.byline-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; font-size: 10px; color: var(--muted); margin-top: 3px; }
+.byline-meta span + span::before { content: ""; display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: var(--muted); vertical-align: middle; margin-right: 9px; }
+.hero-note { border-left: 2px solid var(--accent); padding-left: 20px; font: italic 400 1.25rem/1.5 "Instrument Serif", serif; color: #535353; }
+.toc { padding: 24px; border-radius: 12px; color: var(--ink); background: #f3f1e9; }
+.toc-label { color: var(--muted); background: #f3f1e9; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 16px; }
+.toc ol { list-style: none; counter-reset: toc; padding: 0; margin: 0; }
+.toc li { counter-increment: toc; border-top: 1px solid var(--line); }
+.toc a { display: grid; grid-template-columns: 28px 1fr; gap: 10px; text-decoration: none; font-size: 13px; padding: 14px 0; color: var(--ink); background: #f3f1e9; }
+.toc a::before { content: counter(toc,decimal-leading-zero); font: 10px/2 "Roboto Mono", monospace; color: var(--muted); }
+.section { padding: 88px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
+.section-head { display: grid; grid-template-columns: .9fr 1.1fr; gap: 50px; margin-bottom: 42px; }
+.kicker { display: flex; align-items: center; gap: 10px; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 18px; color: var(--muted); }
+.kicker-mark { width: 8px; height: 8px; background: var(--ink); }
+h2 { font-size: clamp(2rem,4.4vw,4rem); line-height: .98; position: relative; }
+.body-copy { color: var(--muted); font-size: 18px; margin: 6px 0 0; }
+.anchor { margin-left: 10px; font: 400 .45em "DM Sans", sans-serif; text-decoration: none; opacity: 0; }
+h2:hover .anchor, .anchor:focus-visible { opacity: 1; }
+.framework { display: grid; grid-template-columns: 260px minmax(0,1fr); gap: 58px; padding: 42px 0 10px; border-top: 1px solid var(--line); }
+.framework + .framework { margin-top: 40px; }
+.framework-aside { position: sticky; top: 100px; align-self: start; }
+.framework-name { display: flex; align-items: start; gap: 12px; }
+.mark { width: 11px; height: 11px; margin-top: 8px; background: var(--ac); border-radius: 50%; flex-shrink: 0; }
+h3 { font-size: 24px; line-height: 1.18; letter-spacing: -.03em; }
+.framework-role { margin: 15px 0; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .05em; }
+.framework-summary { font-size: 13px; color: var(--muted); }
+.framework-content { min-width: 0; }
+.framework-content h4 { font-size: 19px; margin: 34px 0 14px; letter-spacing: -.02em; }
+.xref { vertical-align: super; font: 10px "Roboto Mono", monospace; text-decoration: none; color: #2854cd; margin-left: 3px; }
+.callout-line { border-left: 3px solid var(--ac,var(--accent)); padding: 12px 0 12px 20px; font-weight: 700; margin: 30px 0; }
+.callout-line small { display: block; font-weight: 400; color: var(--muted); font-size: 14px; margin-top: 6px; }
+.formula { color: var(--ink); background: #f3f1e9; border: 1px solid var(--line); padding: 20px; margin: 26px 0; font: 13px/1.9 "Roboto Mono", monospace; overflow-x: auto; }
+.formula span { display: block; }
+.stat-strip { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; margin: 30px 0; padding: 24px 0; border-block: 1px solid var(--line); }
+.stat strong { display: block; font: 400 clamp(1.7rem,3vw,2.4rem)/1.2 "Roboto Mono", monospace; letter-spacing: -.04em; }
+.stat span { display: block; font-size: 12px; margin-top: 10px; color: var(--muted); }
+.diagram-block { margin: 36px 0; padding: 24px; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: var(--paper); }
+.diagram-title { font: 500 19px/1.4 "Space Grotesk", sans-serif; margin-bottom: 22px; color: var(--ink); background: var(--paper); }
+.chart-scroll { overflow-x: auto; }
+.diagram-caption { font-size: 11px; line-height: 1.85; margin: 20px 0 0; color: var(--muted); background: var(--paper); }
+.svg-label { font: 500 18px "Space Grotesk", sans-serif; fill: var(--ink); }
+.svg-mono { font: 400 14px "Roboto Mono", monospace; fill: var(--muted); }
+.svg-value { font: 500 16px "Roboto Mono", monospace; fill: var(--ink); }
+.bar-rect { transform-box: fill-box; transform-origin: left; }
+.js.diagram-motion-ready .diagram-block:not(.entered) .bar-rect { transform: scaleX(0); }
+.js.diagram-motion-ready .diagram-block.entered .bar-rect { transition: transform .8s var(--d,0s); }
+.js.reveal-ready .reveal:not(.entered) { opacity: 0; transform: translateY(16px); }
+.js.reveal-ready .reveal { transition: opacity .6s, transform .6s; }
+.lab { margin: 30px 0; padding: 26px; border-radius: 12px; background: #f3f1e9; color: var(--ink); }
+.lab h4, .lab p, .lab label, .lab output, .lab .stat strong { color: var(--ink); background: #f3f1e9; }
+.lab h4 { margin-top: 0; }
+.lab .stat span { color: var(--muted); background: #f3f1e9; }
+.lab-controls label { display: block; font-size: 14px; font-weight: 700; }
+.lab input { width: 100%; min-height: 44px; accent-color: var(--green); }
+.lab select { margin: 10px 0; min-height: 44px; padding: 8px; font: 14px "Roboto Mono", monospace; color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); max-width: 100%; }
+.lab .lab-status { font-size: 14px; border-left: 3px solid var(--green); padding-left: 16px; margin-bottom: 0; }
+.question { margin: 30px 0; padding: 22px 0; border-block: 1px solid var(--line-strong); }
+.question summary { cursor: pointer; font-weight: 700; }
+.question p { margin: 18px 0 0; color: var(--muted); }
+.section-dark { color: var(--dark-paper); background: var(--dark); }
+.section-dark .section-head h2, .section-dark h3, .section-dark h4 { color: var(--dark-paper); background: var(--dark); }
+.section-dark .body-copy, .section-dark p, .section-dark .framework-role, .section-dark .framework-summary, .section-dark small { color: #c9c7bf; background: var(--dark); }
+.section-dark .kicker { color: #c9c7bf; background: var(--dark); }
+.section-dark .kicker-mark { background: var(--dark-paper); }
+.section-dark .framework { border-color: var(--dark-line); }
+.section-dark .xref { color: #aac1ff; }
+.section-dark :focus-visible { outline-color: var(--dark-paper); }
+.section-dark .callout-line { color: var(--dark-paper); background: var(--dark); }
+.sources-list { list-style: none; padding: 0; margin: 0; counter-reset: sources; }
+.sources-list li { counter-increment: sources; display: grid; grid-template-columns: 40px 1fr; gap: 14px; padding: 22px 0; border-top: 1px solid var(--line); scroll-margin-top: 90px; }
+.sources-list li::before { content: counter(sources,decimal-leading-zero); font: 12px/2 "Roboto Mono", monospace; color: var(--muted); }
+.sources-list strong { font-weight: 700; }
+.source-note { display: block; font-size: 11px; margin-top: 8px; color: var(--muted); }
+.xlink { color: #4c4c4c; border-bottom: 1px dashed currentColor; text-decoration: none; margin-left: 6px; }
+.xlink::after { content: " ↗"; }
+.to-top { position: fixed; z-index: 60; bottom: max(18px,env(safe-area-inset-bottom)); right: max(18px,env(safe-area-inset-right)); display: grid; place-items: center; width: 44px; height: 44px; padding-bottom: env(safe-area-inset-bottom,0px); color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); border-radius: 50%; text-decoration: none; }
+@media (max-width: 720px) {
+  .hero { padding: 64px 0; }
+  .hero-grid, .section-head, .framework { grid-template-columns: 1fr; gap: 28px; }
+  .hero-grid { margin-top: 38px; }
+  .framework-aside { position: static; }
+  .nav { max-width: 50%; gap: 20px; }
+  .framework { padding-top: 30px; }
+  .section-head { margin-bottom: 32px; }
+  .body-copy { font-size: 17px; }
+}
+@media (max-width: 430px) {
+  .wrap { width: calc(100% - 28px); }
+  h1 { font-size: clamp(2.15rem,12.5vw,3rem); }
+  .brand { font-size: 11px; }
+  .nav { max-width: 46%; }
+  .section { padding: 64px 0; }
+  .diagram-block, .lab { padding: 18px; }
+  .chart-scroll svg { min-width: 560px; }
+  .stat-strip { gap: 12px; }
+  .stat strong { font-size: 1.55rem; }
+  .stat span { font-size: 11px; }
+  .lab .stat-strip { grid-template-columns: 1fr; }
+  .sources-list li { grid-template-columns: 28px 1fr; gap: 8px; }
+}
+@media (hover: none) { .anchor { opacity: .55; } .nav a { padding-inline: 4px; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .js.reveal-ready .reveal, .js.diagram-motion-ready .bar-rect { opacity: 1 !important; transform: none !important; }
+}
+@media print {
+  *, *::before, *::after { transition: none !important; }
+  .grain, .site-header, .progress, .to-top, .lab-controls { display: none !important; }
+  .js.reveal-ready .reveal, .js.diagram-motion-ready .bar-rect, .js .line-inner { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .framework-aside { position: static; }
+  .chart-scroll { overflow: visible; }
+}
+.diagram-block, .lab { scroll-margin-top: 88px; }
+</style>
+</head>
+<body style="--accent:var(--blue)" id="top">
+<a class="skip-link" href="#content">Skip to content</a>
+<div class="progress" aria-hidden="true">
+<span>
+</span>
+</div>
+<div class="grain" aria-hidden="true">
+</div>
+<header class="site-header">
+<div class="wrap topbar">
+<a class="brand" href="#top">
+<span class="brand-dot" aria-hidden="true">
+</span>Data-Driven Decisions</a>
+<nav class="nav" aria-label="Article sections">
+<a href="#frame" style="--spy:var(--blue)">The decision</a>
+<a href="#evidence" style="--spy:var(--orange)">The comparison</a>
+<a href="#economics" style="--spy:var(--green)">The trade-off</a>
+<a href="#learning" style="--spy:var(--purple)">The review</a>
+<a href="#sources" style="--spy:var(--slate)">Sources</a>
+</nav>
+</div>
+</header>
+<main id="content" tabindex="-1">
+<div class="hero">
+<div class="wrap">
+<div class="eyebrow">Decision Practice · A field guide</div>
+<h1>
+<span class="line">
+<span class="line-inner">Evidence needs</span>
+</span>
+<span class="line">
+<span class="line-inner">
+<em>a decision.</em>
+</span>
+</span>
+</h1>
+<div class="hero-grid">
+<div>
+<p class="lead">Your renewal campaign increased sales. It also drove more customers to unsubscribe. The dashboard can show
+both results; it cannot decide which trade-off you should accept. Follow one campaign from the first question
+to the rollout decision, and see what it takes to turn a promising number into a recommendation you can
+defend.</p>
+<div class="hero-links">
+<a href="#frame">Read the argument</a>
+<a href="#scenario">Try the worked example</a>
+</div>
+<div class="byline">
+<span class="avatar" aria-hidden="true">AR</span>
+<div>
+<strong>Ali Reza Rashidi</strong>
+<div class="byline-meta">
+<span>12 min read</span>
+<span>Updated September 12, 2026</span>
+</div>
+</div>
+</div>
+</div>
+<aside aria-label="Reading guide">
+<p class="hero-note">The difficult part starts when the evidence is credible and the decision is still uncomfortable.</p>
+<div class="toc">
+<p class="toc-label">In this piece</p>
+<ol>
+<li>
+<a href="#frame">Give the evidence somewhere to go.</a>
+</li>
+<li>
+<a href="#evidence">A fair test needs a trustworthy record.</a>
+</li>
+<li>
+<a href="#economics">A lift is only part of the answer.</a>
+</li>
+<li>
+<a href="#learning">Leave a decision someone can revisit.</a>
+</li>
+<li>
+<a href="#sources">Sources and example assumptions</a>
+</li>
+</ol>
+</div>
+</aside>
+</div>
+</div>
+</div>
+<section class="section reveal" id="frame" aria-labelledby="frame-title" style="--spy:var(--blue)">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">
+<span class="kicker-mark" aria-hidden="true">
+</span>01 — The decision</div>
+<h2 id="frame-title">Give the evidence somewhere to go.<a class="anchor" href="#frame" aria-label="Link to The decision">#</a>
+</h2>
+</div>
+<p class="body-copy">Before you request a dataset, define the action, the eligible population, and the result that would change
+your mind.</p>
+</div>
+<div class="framework" style="--ac:var(--blue)">
+<aside class="framework-aside" aria-label="Frame the action">
+<div class="framework-name">
+<span class="mark" aria-hidden="true">
+</span>
+<h3>Frame the action</h3>
+</div>
+<p class="framework-role">01 · Decision design</p>
+<p class="framework-summary">Define what can change before asking what the data says.</p>
+</aside>
+<div class="framework-content">
+<p>The meeting starts with a chart. Renewals are down, the line is red, and someone has already written “send a
+reminder” on the whiteboard. Marketing wants a campaign. Finance wants a forecast. The analyst is asked to
+confirm whether the idea will work. By the time the data arrives, the organization has almost made the
+decision. The remaining risk is that analysis becomes a way to give that decision a respectable-looking
+explanation.</p>
+<p>You can change the meeting by changing its first question. Instead of asking whether renewals fell, ask what
+action you are choosing between, for whom, and by when. In this article, you run a subscription service and
+must decide whether to send an extra renewal reminder to customers approaching expiry. The alternative is the
+existing reminder schedule. The campaign is a worked example: its counts, costs, and operating limits are
+hypothetical, specified here so you can inspect the reasoning.</p>
+<p>The distinction matters because a metric has no opinion about what you should do. A renewal rate can fall
+because a product became less useful, because last month's promotion attracted a different audience, or
+because the reporting job changed its definition of an eligible customer. An extra message addresses only some
+of those mechanisms. A dashboard can establish that something changed. It cannot, on its own, establish which
+intervention will repair it.</p>
+<h4>Put the action inside the question</h4>
+<p>Write a decision brief before requesting another chart. For this campaign, the brief says: “Should we add one
+reminder for eligible customers, provided it produces enough incremental contribution and does not breach our
+unsubscribe limit?” Name the owner who can approve rollout, the analyst who can challenge the evidence, and
+the date when the team will decide. These are not administrative decorations. They make it possible for the
+analysis to end in an action, including the action of stopping.</p>
+<p>Define the population just as carefully. An eligible customer is an account approaching renewal, with a valid
+contact permission, that has not already opted out. Keep this definition fixed through assignment and
+reporting. If someone becomes unreachable after assignment, quietly deleting that account from the denominator
+could change the apparent effect. You need to distinguish the people assigned to receive a treatment from the
+people who actually opened it. Those are different populations answering different questions.</p>
+<p>The outcome is renewal within the agreed observation window, measured once per eligible account. The business
+quantity is contribution from additional renewals after variable service costs, not gross subscription
+revenue. The guardrail is the increase in unsubscribes. Opens and clicks can help diagnose the mechanism, but
+they are not substitutes for the outcome. Otherwise you may build a campaign that is excellent at attracting
+attention and poor at retaining customers.</p>
+<h4>Evidence earns influence; it does not inherit authority</h4>
+<p>There is empirical support for taking this discipline seriously. Brynjolfsson, Hitt, and Kim studied 179 large
+publicly traded firms and reported an association between data-driven decision making and output and
+productivity roughly 5–6% above what their other investments and IT use would predict. This is evidence from a
+particular study, not a guaranteed return from installing analytics software. Its setting, measurement
+choices, and identification assumptions matter when interpreting the result.<a class="xref" href="#src-1"
+aria-label="Source 1">[1]</a></p>
+<p>That limitation is useful. It stops you replacing one kind of authority with another. “The boss believes it”
+is a weak argument, but “a paper says data-driven firms perform better” does not establish that this reminder
+is worthwhile either. Your decision needs evidence at the right level: what this action changes for this
+population under these conditions. Broad research can motivate a practice. It cannot do the local reasoning on
+your behalf.</p>
+<p>Domain knowledge still has a place at the table. A customer-support lead may know that the current reminder
+arrives before an invoice is understandable. A finance colleague may notice that annual-plan renewals and
+monthly renewals have different economics. Treat these observations as explanations to investigate. The goal
+is not to remove judgment from the decision. It is to make the judgment visible enough that someone else can
+test its assumptions.</p>
+<div class="callout-line">Start with the decision you might change.<small>If every possible result leads to the same action, you are probably commissioning a justification rather than an investigation.</small>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="section reveal" id="evidence" aria-labelledby="evidence-title" style="--spy:var(--orange)">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">
+<span class="kicker-mark" aria-hidden="true">
+</span>02 — The comparison</div>
+<h2 id="evidence-title">A fair test needs a trustworthy record.<a class="anchor" href="#evidence" aria-label="Link to The comparison">#</a>
+</h2>
+</div>
+<p class="body-copy">Random assignment helps answer a causal question. Correct denominators and consistent measurement make that
+question answerable in practice.</p>
+</div>
+<div class="framework" style="--ac:var(--orange)">
+<aside class="framework-aside" aria-label="Build a fair comparison">
+<div class="framework-name">
+<span class="mark" aria-hidden="true">
+</span>
+<h3>Build a fair comparison</h3>
+</div>
+<p class="framework-role">02 · Measurement and inference</p>
+<p class="framework-summary">Follow the same population from assignment to outcome.</p>
+</aside>
+<div class="framework-content">
+<p>You now have a decision worth studying. The next task is to make a comparison that can answer it. Looking at
+customers who opened the reminder and customers who ignored it is tempting: the two groups are already in the
+reporting tool. But opening a reminder is a choice. People who intend to renew may be more likely to open it.
+The comparison mixes the effect of the message with differences that existed before anyone received it.</p>
+<p>For the worked example, assign 8,000 eligible accounts at random: 4,000 keep the existing schedule and 4,000
+receive the extra reminder. An account stays in its assigned group. Both groups are observed over the same
+complete renewal window. Random assignment makes the treatment contrast informative about causation under the
+design's assumptions, including correct implementation and no material interference between accounts. It does
+not excuse broken instrumentation or a changed outcome definition.</p>
+<p>The result is 600 renewals in the control group and 680 in the treatment group. That is 15% versus 17%. The
+absolute difference is two percentage points; the relative increase is about 13.3%. Both describe the same
+counts. The absolute difference is usually the more direct input to an operating decision because it tells you
+how many additional outcomes to expect per customer contacted. A large-looking relative percentage does not
+pay the campaign bill by itself.</p>
+<figure class="diagram-block" id="renewal-results">
+<div class="diagram-title">Same denominator. Two different renewal counts.</div>
+<section class="chart-scroll" tabindex="0" aria-label="Scrollable diagram: Same denominator. Two different renewal counts.">
+<svg viewBox="0 0 960 272" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Existing schedule: 15%; Extra reminder: 17%." aria-labelledby="renewal-results-title renewal-results-desc">
+<title id="renewal-results-title">Same denominator. Two different renewal counts.</title>
+<desc id="renewal-results-desc">Existing schedule: 15%; Extra reminder: 17%.</desc>
+<defs>
+<linearGradient id="renewal-results-fill" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0" stop-color="#eb8237"/>
+<stop offset="1" stop-color="#c9a227"/>
+</linearGradient>
+</defs>
+<path d="M240 32V192" stroke="rgba(23,23,23,.12)"/>
+<text x="240" y="222" text-anchor="middle" class="svg-mono">0%</text> <path d="M380 32V192"
+stroke="rgba(23,23,23,.12)"/>
+<text x="380" y="222" text-anchor="middle" class="svg-mono">5%</text> <path
+d="M520 32V192" stroke="rgba(23,23,23,.12)"/>
+<text x="520" y="222" text-anchor="middle"
+class="svg-mono">10%</text> <path d="M660 32V192" stroke="rgba(23,23,23,.12)"/>
+<text x="660" y="222"
+text-anchor="middle" class="svg-mono">15%</text> <path d="M800 32V192" stroke="rgba(23,23,23,.12)"/>
+<text
+x="800" y="222" text-anchor="middle" class="svg-mono">20%</text> <text x="24" y="82"
+class="svg-label">Existing schedule</text>
+<rect class="bar-rect" x="240" y="56" width="420.000" height="40"
+rx="3" fill="#5b6b7a" style="--d:0.0s"/>
+<text x="676.000" y="82" class="svg-value" data-count="15"
+data-decimals="0" data-suffix="%">15%</text> <text x="24" y="162" class="svg-label">Extra reminder</text>
+<rect
+class="bar-rect" x="240" y="136" width="476.000" height="40" rx="3" fill="url(#renewal-results-fill)"
+style="--d:0.12s"/>
+<text x="732.000" y="162" class="svg-value" data-count="17" data-decimals="0"
+data-suffix="%">17%</text> <text x="24" y="264" class="svg-mono">Constructed example · axis begins at zero ·
+%</text> </svg>
+</section> <figcaption class="diagram-caption">
+<strong>How to read this:</strong> The control
+has 600 renewals out of 4,000 accounts; treatment has 680 out of 4,000. The absolute difference is 2
+percentage points. Bars show point estimates, not uncertainty; the approximate interval for the difference is
+calculated below.</figcaption> </figure>
+<h4>Audit the denominator before admiring the lift</h4> <p>Check
+assignment counts against the intended allocation and investigate statistically meaningful mismatches.
+Microsoft researchers describe sample ratio mismatch as a symptom of possible experiment-quality problems,
+with causes ranging from assignment to logging and analysis. It is a warning that the groups reaching your
+report may not be the groups you meant to compare. A balanced total is reassuring, but it is not proof that
+every outcome was recorded correctly.<a class="xref" href="#src-2" aria-label="Source 2">[2]</a></p>
+<p>For our reminder, trace several accounts from assignment through delivery to the final renewal record. Include
+failures, unsubscribes, and accounts that never clicked. Reconcile the aggregate against the billing system.
+If treatment users pass through a different checkout path, confirm that its renewal events use the same
+identifiers and timestamps. You are not merely testing a campaign. You are also testing whether two software
+paths produce evidence that means the same thing.</p>
+<p>This is where a clear data definition saves time. Keep an assignment table with one row per account and an
+outcome table that can be reduced to one renewal indicator per account. Joining directly to raw click events
+can multiply rows and make active accounts count several times. A plausible-looking rate is not enough. You
+should be able to explain the row grain, the join keys, and why every eligible account contributes the
+intended amount to the result.</p>
+<h4>Separate a promising estimate from a precise one</h4>
+<p>The observed difference is an estimate, not an exact property of the campaign. A simple
+independent-proportions normal approximation gives a standard error of about 0.82 percentage points and an
+approximate 95% confidence interval from 0.39 to 3.61 percentage points. These calculations use the stated
+counts and independent account-level observations. They are appropriate as an illustration here; clustered
+assignment, repeated observations, or sequential stopping would require a different analysis.</p>
+<div class="formula">
+<span>Difference = 680 / 4,000 − 600 / 4,000 = 0.02</span>
+<span>SE = √[0.17 × 0.83 / 4,000 + 0.15 × 0.85 / 4,000]</span>
+<span>Approximate 95% interval = 0.02 ± 1.96 × SE</span>
+</div>
+<p>A confidence interval is not a statement that this fixed treatment effect has a 95% probability of sitting
+inside the displayed endpoints. It comes from a procedure with a repeated-sampling coverage interpretation
+under its assumptions. More practically, it reminds you that a range of effect sizes is compatible with a
+noisy experiment. The American Statistical Association likewise cautions that statistical significance does
+not measure effect size or practical importance.<a class="xref" href="#src-3" aria-label="Source 3">[3]</a></p>
+<p>Do not keep checking a conventional fixed-horizon test and stop on the first attractive result. Decide the
+observation window and analysis approach before reading the treatment effect, or use a method designed for
+sequential decisions. Likewise, if you inspect many customer segments, label unplanned findings as
+exploratory. The most flattering slice is a hypothesis for another test, not automatically the customer group
+to which you should roll out tomorrow.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="section reveal" id="economics" aria-labelledby="economics-title" style="--spy:var(--green)">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">
+<span class="kicker-mark" aria-hidden="true">
+</span>03 — The trade-off</div>
+<h2 id="economics-title">A lift is only part of the answer.<a class="anchor" href="#economics" aria-label="Link to The trade-off">#</a>
+</h2>
+</div>
+<p class="body-copy">The same experiment can be statistically promising, economically uncertain, and unacceptable under a customer
+guardrail.</p>
+</div>
+<div class="framework" style="--ac:var(--green)">
+<aside class="framework-aside" aria-label="Price the consequences">
+<div class="framework-name">
+<span class="mark" aria-hidden="true">
+</span>
+<h3>Price the consequences</h3>
+</div>
+<p class="framework-role">03 · Economics and guardrails</p>
+<p class="framework-summary">Separate the size of the effect from whether it is worth acting on.</p>
+</aside>
+<div class="framework-content">
+<p>Suppose each additional renewal contributes $80 over the horizon you have chosen, and the extra reminder costs
+$0.40 per assigned treatment account. These are planning assumptions, not measured lifetime values. Applying
+the observed two-point lift to 4,000 treated accounts implies 80 additional renewals. Their contribution is
+$6,400. Subtract $1,600 in contact costs and the point estimate of incremental contribution is $4,800. The
+arithmetic is straightforward; the assumptions doing the work deserve equal attention.</p>
+<p>The break-even effect is contact cost divided by contribution per additional renewal: $0.40 / $80, or 0.5
+percentage points. Notice what happened. The statistical question was whether the treatment effect differs
+from zero. The business question is whether it clears a positive hurdle. Our approximate effect interval
+begins at 0.39 points, below the 0.5-point hurdle. Evidence for some renewal lift is not the same as strong
+evidence that the campaign meets your economic requirement.</p>
+<div class="formula">
+<span>Incremental contribution = N × (lift × contribution per renewal − contact cost)</span>
+<span>At the point estimate: 4,000 × (0.02 × $80 − $0.40) = $4,800</span>
+<span>Break-even lift = $0.40 / $80 = 0.005 = 0.5 percentage points</span>
+</div>
+<div class="lab" id="scenario" data-kind="decisions" role="group" aria-labelledby="scenario-title">
+<h4 id="scenario-title">When does the extra reminder stop paying?</h4>
+<p>Hold the observed 2-point lift, 4,000 treated accounts, and $80 contribution per extra renewal fixed. Change
+only the contact cost.</p>
+<div class="lab-controls" hidden>
+<label for="scenario-input">Cost per contacted account, dollars</label>
+<input id="scenario-input" type="range" min="0" max="2" step="0.1" value="0.4" aria-valuetext="$0.40">
+</div>
+<div class="stat-strip">
+<div class="stat">
+<strong id="scenario-0">$0.40</strong>
+<span>Cost per account</span>
+</div>
+<div class="stat">
+<strong id="scenario-1">$4,800</strong>
+<span>Point-estimate contribution</span>
+</div>
+<div class="stat">
+<strong id="scenario-2">0.50%</strong>
+<span>Break-even absolute lift</span>
+</div>
+</div>
+<p class="lab-status" id="scenario-status" role="status" aria-live="polite">At $0.40 per account, the point estimate is positive. The unsubscribe guardrail still requires a pause.</p>
+</div>
+<p>The calculator deliberately changes one assumption, the contact cost. It holds the observed lift and
+contribution per renewal fixed. It is a sensitivity exercise, not another experiment and not a forecast model.
+Real contribution may vary by customer segment, refunds, service load, and the time horizon used to count
+value. If those quantities are uncertain, the analysis should carry that uncertainty instead of presenting a
+single dollar number with more precision than the inputs support.</p>
+<h4>Give the downside a seat in the decision</h4>
+<p>Now inspect the guardrail. In the hypothetical trial, 12 control accounts unsubscribe and 28 treatment
+accounts unsubscribe: 0.3% versus 0.7%. The observed increase is 0.4 percentage points. Before launch, the
+team agreed that an observed increase above 0.2 points would pause expansion pending review. The campaign
+crosses that operating threshold. A favorable renewal result does not erase the promise the team made about
+how much customer friction it would tolerate.</p>
+<p>The guardrail rule is an explicit policy for this example. It is not a universal statistical threshold, and
+the unsubscribe estimate also has sampling uncertainty. You might choose a more formal uncertainty-aware rule
+in a real experiment, especially where the downside is material. What you should not do is invent a permissive
+rule after discovering that the result you wanted has an inconvenient side effect. That changes the meaning of
+the decision process midway through it.</p>
+<p>Metric interpretation is a genuine engineering problem. Microsoft's work on experiment pitfalls describes
+cases where changes in measurement and population composition produce misleading movements in metrics. For the
+reminder, a rise in renewals could coincide with an altered logging path, a different mix of exposed
+customers, or a changed denominator. Looking at multiple measures helps only when you understand how each one
+is generated. More colored tiles do not automatically create a better explanation.<a class="xref"
+href="#src-4" aria-label="Source 4">[4]</a></p>
+<h4>Write a recommendation that admits the trade-off</h4>
+<p>A defensible recommendation here is to pause broad rollout, investigate the unsubscribe mechanism, and test a
+revised message if the intervention still looks worthwhile. Perhaps the timing is intrusive. Perhaps the
+message is unclear. Those are possibilities to investigate, not conclusions from the counts. Your
+recommendation should distinguish what the experiment measured, what the economics assumes, and what you
+believe might explain the downside. That separation gives the next team something concrete to challenge.</p>
+<p>The decision could differ if the action were easily reversible, the cost of delay were high, or the downside
+were contained to a small pilot. Those considerations belong in the brief before the result, with named owners
+and limits. A data-informed organization can make a cautious decision with incomplete information. Its
+advantage is that it knows which uncertainty it is accepting, what could make the decision wrong, and when it
+will look again.</p>
+<details class="question">
+<summary>Would a statistically significant renewal lift be enough to approve this campaign?</summary>
+<p>No. You still need to compare the effect with the economic hurdle, inspect the guardrail, verify measurement,
+and consider the costs of delay and reversal. Statistical evidence answers a narrower question than the
+rollout decision.</p>
+</details>
+</div>
+</div>
+</div>
+</section>
+<section class="section reveal section-dark" id="learning" aria-labelledby="learning-title" style="--spy:var(--purple)">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">
+<span class="kicker-mark" aria-hidden="true">
+</span>04 — The review</div>
+<h2 id="learning-title">Leave a decision someone can revisit.<a class="anchor" href="#learning" aria-label="Link to The review">#</a>
+</h2>
+</div>
+<p class="body-copy">A decision record turns the result into something your colleagues can inspect after the presentation and
+improve after the rollout.</p>
+</div>
+<div class="framework" style="--ac:var(--purple)">
+<aside class="framework-aside" aria-label="Keep the reasoning">
+<div class="framework-name">
+<span class="mark" aria-hidden="true">
+</span>
+<h3>Keep the reasoning</h3>
+</div>
+<p class="framework-role">04 · Organizational learning</p>
+<p class="framework-summary">Preserve the assumptions, the dissent, and the next review.</p>
+</aside>
+<div class="framework-content">
+<p>The quality of your decision process becomes visible after the meeting. Did anyone change the campaign? Was
+the revised message tested? Did the support team learn why customers were unsubscribing? A report that
+disappears into a folder has not completed the loop. The analysis only becomes organizational knowledge when
+someone can connect the recommendation to an action and later compare the expected result with what actually
+happened.</p>
+<p>Keep a short decision record. For this reminder, record the eligible population, assignment rule, observation
+window, renewal definition, effect estimate, cost assumptions, unsubscribe rule, chosen action, and review
+date. Link the query or dataset version used to produce the counts. The record should be readable without
+reconstructing a month of chat messages. Its purpose is not to prove that the original team was right. It is
+to preserve enough context for the next team to reason accurately.</p>
+<h4>Make disagreement specific</h4>
+<p>When colleagues disagree, ask where their reasoning diverges. One person may doubt that $80 is the right
+contribution. Another may consider the guardrail too permissive. A third may suspect that the experiment
+excluded accounts with failed deliveries. These are three different objections requiring different evidence.
+Treating them as a general disagreement about “trusting the data” obscures the work that would actually
+resolve them.</p>
+<p>Give dissent an explicit place in the recommendation. State the strongest alternative interpretation and the
+observation that would support it. For our campaign, that might be evidence that unsubscribe events were
+counted differently between groups. If verified, it would change the conclusion. If not, it should not remain
+an indefinitely reusable excuse to ignore the guardrail. Good analysis leaves room for correction while still
+requiring objections to make testable claims.</p>
+<p>Also preserve the unsuccessful experiments. A message that raises clicks but damages customer trust is useful
+evidence about the product relationship. If only successful campaigns are remembered, the organization
+develops a distorted picture of what usually works. People repeat the same failed idea under a new name
+because the previous attempt left no accessible account of its population, mechanism, and trade-offs. A modest
+experiment archive can prevent expensive institutional forgetfulness.</p>
+<h4>Review the decision, not only the metric</h4>
+<p>When the revised reminder eventually ships, compare its operating results with the assumptions in the brief.
+Did contact costs change? Did the eligible population expand into accounts unlike those in the test? Did
+support demand increase? A rollout is a change in conditions, not a permanent extension of the experimental
+sample. Keep watching the outcome and the guardrail, and state when the original evidence has become too
+remote from current practice to carry the decision alone.</p>
+<p>Avoid turning every review into a trial of the person who made the call. A sound process can produce a
+disappointing outcome, and a weak process can get lucky. Ask whether the team used the information available
+at the time, exposed important assumptions, and chose a response proportionate to the consequences. This makes
+it safer to report uncertainty honestly. Otherwise analysts learn to express confidence that the evidence
+cannot support, because confidence is what gets rewarded.</p>
+<p>Your practical starting point is small: choose one upcoming decision and write its brief before opening the
+dashboard. Ask the operator who will act what they can actually change. Ask the analyst what would make the
+comparison untrustworthy. Ask the owner what result would cause them to stop. Then make the measurement and
+review fit that decision. This is a habit a team can practice immediately, even while its data platform
+remains imperfect.</p>
+<p>Return to the meeting where this article began. The renewal chart is still red. The team still has to act. But
+now the extra reminder is a proposal with a defined population, an economic hurdle, a customer guardrail, and
+a way to learn. The numbers have not removed responsibility from the room. They have made it harder to hide
+the assumptions on which responsibility rests.</p>
+<div class="callout-line">A useful analysis changes what you are prepared to do.<small>The lasting asset is a decision the next person can understand, challenge, and improve.</small>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="section reveal" id="sources" aria-labelledby="sources-title">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">
+<span class="kicker-mark" aria-hidden="true">
+</span>05 — Sources</div>
+<h2 id="sources-title">Follow the evidence.<a class="anchor" href="#sources" aria-label="Link to Sources">#</a>
+</h2>
+</div>
+<p class="body-copy">The renewal campaign, its guardrail, and its economics are a constructed teaching example. Counts and
+assumptions are stated in the text; the interval is an approximate independent-proportions calculation. The
+research below supports the methods and cautions, not the fictional campaign outcomes.</p>
+</div>
+<ol class="sources-list">
+<li id="src-1">
+<span>
+<strong>Strength in Numbers: How Does Data-Driven Decisionmaking Affect Firm Performance?.</strong> Brynjolfsson, Hitt &amp; Kim · 2011.<a class="xlink" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1819486">Read source</a>
+<span class="source-note">Firm-level study of 179 public companies; its association is not a guaranteed return for an individual intervention.</span>
+</span>
+</li>
+<li id="src-2">
+<span>
+<strong>Diagnosing Sample Ratio Mismatch in Online Controlled Experiments.</strong> Fabijan and colleagues · Microsoft Research / KDD 2019.<a class="xlink" href="https://www.microsoft.com/en-us/research/publication/diagnosing-sample-ratio-mismatch-in-online-controlled-experiments-a-taxonomy-and-rules-of-thumb-for-practitioners/">Read source</a>
+<span class="source-note">Quality checks for experiment assignment, observation, and analysis.</span>
+</span>
+</li>
+<li id="src-3">
+<span>
+<strong>Statement on Statistical Significance and P-Values.</strong> American Statistical Association · 2016.<a class="xlink" href="https://www.amstat.org/asa/files/pdfs/p-valuestatement.pdf">Read source</a>
+<span class="source-note">Why statistical significance alone does not establish effect size or practical importance.</span>
+</span>
+</li>
+<li id="src-4">
+<span>
+<strong>A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls in Online Controlled Experiments.</strong> Microsoft Research · KDD 2017.<a class="xlink" href="https://www.microsoft.com/en-us/research/wp-content/uploads/2020/08/2017-08-KDDMetricInterpretationPitfalls.pdf">Read source</a>
+<span class="source-note">Practical examples of misleading metric movements and measurement problems.</span>
+</span>
+</li>
+</ol>
+</div>
+</section>
+</main>
+<a class="to-top" href="#top" aria-label="Back to top">↑</a>
+<script>
+(() => {
+  'use strict';
+  const root = document.documentElement;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const staticView = new URLSearchParams(location.search).get('motion') === 'static';
+  const sections = [...document.querySelectorAll('main > section')];
+  const navLinks = [...document.querySelectorAll('.nav a')];
+  let pending = false;
+  function updateScroll() {
+    const max = root.scrollHeight - innerHeight;
+    document.querySelector('.progress span').style.width = `${max > 0 ? Math.min(100, scrollY / max * 100) : 0}%`;
+    document.querySelector('.site-header').classList.toggle('scrolled', scrollY > 12);
+    let active = '';
+    for (const section of sections) if (section.getBoundingClientRect().top <= 170) active = section.id;
+    if (max > 0 && scrollY >= max - 5) active = 'sources';
+    for (const link of navLinks) {
+      const current = link.hash === `#${active}`;
+      link.classList.toggle('active', current);
+      if (current) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    }
+    pending = false;
+  }
+  addEventListener('scroll', () => { if (!pending) { pending = true; requestAnimationFrame(updateScroll); } }, {passive:true});
+  addEventListener('resize', updateScroll);
+  updateScroll();
+  if ('IntersectionObserver' in window && !reduced && !staticView) {
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) if (entry.isIntersecting) {
+        entry.target.classList.add('entered');
+        if (entry.target.classList.contains('diagram-block')) {
+          for (const label of entry.target.querySelectorAll('[data-count]')) {
+            const started = performance.now();
+            const target = Number(label.dataset.count);
+            const decimals = Number(label.dataset.decimals);
+            function count(now) {
+              const fraction = Math.min(1, (now - started) / 700);
+              label.textContent = (target * fraction).toFixed(decimals) + label.dataset.suffix;
+              if (fraction < 1) requestAnimationFrame(count);
+            }
+            requestAnimationFrame(count);
+          }
+        }
+        observer.unobserve(entry.target);
+      }
+    }, {threshold:0, rootMargin:'0px 0px -24px 0px'});
+    document.querySelectorAll('.reveal, .diagram-block').forEach(node => observer.observe(node));
+    root.classList.add('reveal-ready', 'diagram-motion-ready');
+  }
+  const lab = document.querySelector('.lab');
+  const input = document.getElementById('scenario-input');
+  function updateScenario(announce = false) {
+    const value = Number(input.value);
+    let results, message;
+    if (lab.dataset.kind === 'decisions') {
+      const net = 4000 * (0.02 * 80 - value);
+      results = [`$${value.toFixed(2)}`, new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(net), `${(value / 80 * 100).toFixed(2)}%`];
+      input.setAttribute('aria-valuetext', `$${value.toFixed(2)}`);
+      message = `At $${value.toFixed(2)} per account, point-estimate contribution is ${results[1]}. The unsubscribe guardrail still requires a pause.`;
+    } else if (lab.dataset.kind === 'big-data') {
+      const events = value * 10 * 600;
+      const daily = events * 600 / 1e9;
+      results = [value.toLocaleString('en-US'), `${daily.toFixed(2)} GB`, `${(daily * 30).toFixed(1)} GB`];
+      message = `${value.toLocaleString('en-US')} vans produce ${events.toLocaleString('en-US')} events per operating day. Raw payload excludes compression, copies, and overhead.`;
+    } else {
+      const truePositives = {50:40,100:60,200:80}[value];
+      results = [`${truePositives / value * 100}%`, `${truePositives}%`, `${value}%`];
+      message = `The top ${value} contain ${truePositives} late orders and ${value-truePositives} on-time orders. ${value > 100 ? 'This exceeds daily capacity by 100 reviews.' : 'This fits daily capacity.'}`;
+    }
+    results.forEach((result,index) => { document.getElementById(`scenario-${index}`).textContent = result; });
+    if (announce) document.getElementById('scenario-status').textContent = message;
+  }
+  input.addEventListener('input', () => updateScenario(false));
+  input.addEventListener('change', () => updateScenario(true));
+  updateScenario(false);
+  lab.querySelector('.lab-controls').hidden = false;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.classList.add('js');</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Explore Toyota’s production discipline and connected services through a worked example of how a vehicle signal becomes a verified improvement.">
+<title>Factory Floor to Cloud — Toyota’s Data Feedback Loop</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='3' fill='%23eb8237'/%3E%3Ccircle cx='23' cy='9' r='3' fill='%233468f5'/%3E%3Ccircle cx='9' cy='23' r='3' fill='%2323956f'/%3E%3Ccircle cx='23' cy='23' r='3' fill='%237650e6'/%3E%3C/svg%3E">
+<meta property="og:title" content="Factory Floor to Cloud — Toyota’s Data Feedback Loop">
+<meta property="og:description" content="Explore Toyota’s production discipline and connected services through a worked example of how a vehicle signal becomes a verified improvement.">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Factory Floor to Cloud — Toyota’s Data Feedback Loop",
+  "description": "Explore Toyota’s production discipline and connected services through a worked example of how a vehicle signal becomes a verified improvement.",
+  "datePublished": "2026-09-13",
+  "dateModified": "2026-09-13",
+  "inLanguage": "en",
+  "wordCount": 2330,
+  "timeRequired": "PT11M",
+  "author": {
+    "@type": "Person",
+    "name": "Ali Reza Rashidi"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Instrument+Serif:ital@0;1&amp;family=Roboto+Mono:wght@400;500&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898;
+  --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+  --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+  --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+  --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+  --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+}
+* { box-sizing: border-box; }
+html { color-scheme: light; overflow-x: clip; scroll-behavior: smooth; }
+body { margin: 0; color: var(--ink); background: linear-gradient(180deg, #fffdfa, #fcfbf8); font: 400 17px/1.7 "DM Sans", sans-serif; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; }
+::selection { color: var(--paper); background: var(--ink); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+h1, h2, h3, h4 { font-family: "Space Grotesk", sans-serif; margin: 0; text-wrap: balance; }
+h1, h2 { letter-spacing: -.045em; }
+p { text-wrap: pretty; margin: 0 0 22px; }
+svg { display: block; width: 100%; height: auto; }
+.wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+.grain { position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: .08; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.skip-link { position: fixed; left: 16px; top: -80px; z-index: 100; padding: 12px 18px; color: var(--paper); background: var(--ink); }
+.skip-link:focus { top: 12px; }
+.progress { position: fixed; inset: 0 0 auto; height: 2px; z-index: 90; }
+.progress span { display: block; height: 100%; width: 0; background: var(--ink); }
+.site-header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid transparent; }
+.site-header.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); border-bottom-color: var(--line); }
+.topbar { min-height: 68px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 500 13px "Space Grotesk", sans-serif; white-space: nowrap; }
+.brand-dot { width: 12px; height: 12px; background: var(--ink); border-radius: 50%; flex-shrink: 0; }
+.nav { display: flex; align-items: center; gap: 26px; overflow-x: auto; padding-left: 10px; scrollbar-width: none; }
+.nav a { position: relative; padding: 24px 0; white-space: nowrap; text-decoration: none; color: var(--muted); font: 500 11px "Roboto Mono", monospace; }
+.nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 18px; height: 1px; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform .2s; }
+.nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
+.nav a.active::before { content: ""; position: absolute; left: -10px; top: 27px; width: 6px; height: 6px; border-radius: 50%; background: var(--spy); }
+.hero { padding: 92px 0 88px; border-bottom: 1px solid var(--line); }
+.eyebrow, .kicker, .framework-role, .toc-label, .byline-meta, .source-note, .diagram-caption { font-family: "Roboto Mono", monospace; }
+.eyebrow { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 28px; }
+.eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--ink); }
+h1 { font-size: clamp(3rem,8.4vw,6.8rem); line-height: .96; font-weight: 700; }
+h1 em { font: italic 400 1em/.96 "Instrument Serif", serif; color: #535353; }
+.line { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.04em; }
+.line-inner { display: inline-block; }
+.js .line-inner { animation: lineUp .7s both; }
+.js .line:nth-child(2) .line-inner { animation-delay: 90ms; }
+.js .line:nth-child(3) .line-inner { animation-delay: 180ms; }
+@keyframes lineUp { from { transform: translateY(115%); } to { transform: translateY(0); } }
+.hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 60px; margin-top: 54px; }
+.lead { font-size: clamp(1.15rem,1.8vw,1.5rem); line-height: 1.6; color: #414141; }
+.lead::first-letter { float: left; padding: 0 5px 0 0; font: italic 400 2.2em/1 "Instrument Serif", serif; color: var(--ink); }
+.hero-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 30px 0; }
+.hero-links a { padding: 9px 12px; border: 1px solid var(--line-strong); border-radius: 30px; text-decoration: none; font: 11px "Roboto Mono", monospace; }
+.byline { display: flex; gap: 12px; align-items: center; font-size: 13px; }
+.avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; font: 11px "Roboto Mono", monospace; color: var(--paper); background: var(--ink); flex-shrink: 0; }
+.byline-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; font-size: 10px; color: var(--muted); margin-top: 3px; }
+.byline-meta span + span::before { content: ""; display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: var(--muted); vertical-align: middle; margin-right: 9px; }
+.hero-note { border-left: 2px solid var(--accent); padding-left: 20px; font: italic 400 1.25rem/1.5 "Instrument Serif", serif; color: #535353; }
+.toc { padding: 24px; border-radius: 12px; color: var(--ink); background: #f3f1e9; }
+.toc-label { color: var(--muted); background: #f3f1e9; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 16px; }
+.toc ol { list-style: none; counter-reset: toc; padding: 0; margin: 0; }
+.toc li { counter-increment: toc; border-top: 1px solid var(--line); }
+.toc a { display: grid; grid-template-columns: 28px 1fr; gap: 10px; text-decoration: none; font-size: 13px; padding: 14px 0; color: var(--ink); background: #f3f1e9; }
+.toc a::before { content: counter(toc,decimal-leading-zero); font: 10px/2 "Roboto Mono", monospace; color: var(--muted); }
+.section { padding: 88px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
+.section-head { display: grid; grid-template-columns: .9fr 1.1fr; gap: 50px; margin-bottom: 42px; }
+.kicker { display: flex; align-items: center; gap: 10px; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 18px; color: var(--muted); }
+.kicker-mark { width: 8px; height: 8px; background: var(--ink); }
+h2 { font-size: clamp(2rem,4.4vw,4rem); line-height: .98; position: relative; }
+.body-copy { color: var(--muted); font-size: 18px; margin: 6px 0 0; }
+.anchor { margin-left: 10px; font: 400 .45em "DM Sans", sans-serif; text-decoration: none; opacity: 0; }
+h2:hover .anchor, .anchor:focus-visible { opacity: 1; }
+.framework { display: grid; grid-template-columns: 260px minmax(0,1fr); gap: 58px; padding: 42px 0 10px; border-top: 1px solid var(--line); }
+.framework + .framework { margin-top: 40px; }
+.framework-aside { position: sticky; top: 100px; align-self: start; }
+.framework-name { display: flex; align-items: start; gap: 12px; }
+.mark { width: 11px; height: 11px; margin-top: 8px; background: var(--ac); border-radius: 50%; flex-shrink: 0; }
+h3 { font-size: 24px; line-height: 1.18; letter-spacing: -.03em; }
+.framework-role { margin: 15px 0; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .05em; }
+.framework-summary { font-size: 13px; color: var(--muted); }
+.framework-content { min-width: 0; }
+.framework-content h4 { font-size: 19px; margin: 34px 0 14px; letter-spacing: -.02em; }
+.xref { vertical-align: super; font: 10px "Roboto Mono", monospace; text-decoration: none; color: #2854cd; margin-left: 3px; }
+.callout-line { border-left: 3px solid var(--ac,var(--accent)); padding: 12px 0 12px 20px; font-weight: 700; margin: 30px 0; }
+.callout-line small { display: block; font-weight: 400; color: var(--muted); font-size: 14px; margin-top: 6px; }
+.formula { color: var(--ink); background: #f3f1e9; border: 1px solid var(--line); padding: 20px; margin: 26px 0; font: 13px/1.9 "Roboto Mono", monospace; overflow-x: auto; }
+.formula span { display: block; }
+.stat-strip { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; margin: 30px 0; padding: 24px 0; border-block: 1px solid var(--line); }
+.stat strong { display: block; font: 400 clamp(1.7rem,3vw,2.4rem)/1.2 "Roboto Mono", monospace; letter-spacing: -.04em; }
+.stat span { display: block; font-size: 12px; margin-top: 10px; color: var(--muted); }
+.diagram-block { margin: 36px 0; padding: 24px; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: var(--paper); }
+.diagram-title { font: 500 19px/1.4 "Space Grotesk", sans-serif; margin-bottom: 22px; color: var(--ink); background: var(--paper); }
+.chart-scroll { overflow-x: auto; }
+.diagram-caption { font-size: 11px; line-height: 1.85; margin: 20px 0 0; color: var(--muted); background: var(--paper); }
+.svg-label { font: 500 18px "Space Grotesk", sans-serif; fill: var(--ink); }
+.svg-mono { font: 400 14px "Roboto Mono", monospace; fill: var(--muted); }
+.svg-value { font: 500 16px "Roboto Mono", monospace; fill: var(--ink); }
+.bar-rect { transform-box: fill-box; transform-origin: left; }
+.js.diagram-motion-ready .diagram-block:not(.entered) .bar-rect { transform: scaleX(0); }
+.js.diagram-motion-ready .diagram-block.entered .bar-rect { transition: transform .8s var(--d,0s); }
+.js.reveal-ready .reveal:not(.entered) { opacity: 0; transform: translateY(16px); }
+.js.reveal-ready .reveal { transition: opacity .6s, transform .6s; }
+.question { margin: 30px 0; padding: 22px 0; border-block: 1px solid var(--line-strong); }
+.question summary { cursor: pointer; font-weight: 700; }
+.question p { margin: 18px 0 0; color: var(--muted); }
+.section-dark { color: var(--dark-paper); background: var(--dark); }
+.section-dark .section-head h2, .section-dark h3, .section-dark h4 { color: var(--dark-paper); background: var(--dark); }
+.section-dark .body-copy, .section-dark p, .section-dark .framework-role, .section-dark .framework-summary, .section-dark small { color: #c9c7bf; background: var(--dark); }
+.section-dark .kicker { color: #c9c7bf; background: var(--dark); }
+.section-dark .kicker-mark { background: var(--dark-paper); }
+.section-dark .framework { border-color: var(--dark-line); }
+.section-dark .xref { color: #aac1ff; }
+.section-dark :focus-visible { outline-color: var(--dark-paper); }
+.section-dark .callout-line { color: var(--dark-paper); background: var(--dark); }
+.sources-list { list-style: none; padding: 0; margin: 0; counter-reset: sources; }
+.sources-list li { counter-increment: sources; display: grid; grid-template-columns: 40px 1fr; gap: 14px; padding: 22px 0; border-top: 1px solid var(--line); scroll-margin-top: 90px; }
+.sources-list li::before { content: counter(sources,decimal-leading-zero); font: 12px/2 "Roboto Mono", monospace; color: var(--muted); }
+.sources-list strong { font-weight: 700; }
+.source-note { display: block; font-size: 11px; margin-top: 8px; color: var(--muted); }
+.xlink { color: #4c4c4c; border-bottom: 1px dashed currentColor; text-decoration: none; margin-left: 6px; }
+.xlink::after { content: " ↗"; }
+.to-top { position: fixed; z-index: 60; bottom: max(18px,env(safe-area-inset-bottom)); right: max(18px,env(safe-area-inset-right)); display: grid; place-items: center; width: 44px; height: 44px; padding-bottom: env(safe-area-inset-bottom,0px); color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); border-radius: 50%; text-decoration: none; }
+@media (max-width: 720px) {
+  .wrap { width: calc(100% - 16px); }
+  .toc, .formula, .diagram-block, .lab { padding-inline: 12px; }
+  .hero-note, .callout-line { padding-left: 12px; }
+  .hero { padding: 64px 0; }
+  .hero-grid, .section-head, .framework { grid-template-columns: 1fr; gap: 28px; }
+  .hero-grid { margin-top: 38px; }
+  .framework-aside { position: static; }
+  .nav { max-width: 50%; gap: 20px; }
+  .framework { padding-top: 30px; }
+  .section-head { margin-bottom: 32px; }
+  .body-copy { font-size: 17px; }
+}
+@media (max-width: 430px) {
+  h1 { font-size: clamp(2.15rem,12.5vw,3rem); }
+  .brand { font-size: 11px; }
+  .nav { max-width: 46%; }
+  .section { padding: 64px 0; }
+  .diagram-block, .lab { padding-block: 18px; }
+  .chart-scroll svg { min-width: 560px; }
+  .stat-strip { gap: 12px; }
+  .stat strong { font-size: 1.55rem; }
+  .stat span { font-size: 11px; }
+  .lab .stat-strip { grid-template-columns: 1fr; }
+  .sources-list li { grid-template-columns: 28px 1fr; gap: 8px; }
+}
+@media (hover: none) { .anchor { opacity: .55; } .nav a { padding-inline: 4px; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .js.reveal-ready .reveal, .js.diagram-motion-ready .bar-rect { opacity: 1 !important; transform: none !important; }
+}
+@media print {
+  *, *::before, *::after { transition: none !important; }
+  .grain, .site-header, .progress, .to-top, .lab-controls { display: none !important; }
+  .js.reveal-ready .reveal, .js.diagram-motion-ready .bar-rect, .js .line-inner { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .framework-aside { position: static; }
+  .chart-scroll { overflow: visible; }
+}
+.diagram-block, .lab { scroll-margin-top: 88px; }
+
+[hidden] { display: none !important; }
+.svg-label { font-size: 20px; }
+.svg-mono { font-size: 16px; }
+.diagram-block svg .svg-node { fill: var(--paper); stroke: var(--line-strong); stroke-width: 1.5; }
+.diagram-block svg .svg-focal { fill: #f3f1e9; stroke: var(--orange); stroke-width: 2; }
+.diagram-block svg .svg-link { fill: none; stroke: var(--slate); stroke-width: 2; }
+.diagram-block svg .svg-tag { font: 400 12px 'Roboto Mono', monospace; fill: var(--muted); }
+.diagram-block svg .svg-mask { fill: var(--paper); }
+.diagram-block svg .line-path { stroke-dasharray: 1000; stroke-dashoffset: 0; }
+.js.diagram-motion-ready .diagram-block:not(.entered) .line-path { stroke-dashoffset: 1000; }
+.js.diagram-motion-ready .diagram-block.entered .line-path { transition: stroke-dashoffset 1.2s var(--d,0s); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin: 30px 0; }
+.split > div { border-top: 2px solid var(--ac); padding-top: 18px; }
+.split h4 { margin: 0 0 12px; }
+.split p { font-size: 15px; }
+.flow { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; margin: 34px 0; }
+.flow > div { border-top: 2px solid var(--ac); padding-top: 18px; }
+.fnum { display: block; font: 14px 'Roboto Mono', monospace; margin-bottom: 14px; }
+.flow strong { display: block; margin-bottom: 12px; }
+.flow p { font-size: 14px; margin-bottom: 0; }
+.section-dark .flow strong, .section-dark .flow .fnum { color: var(--dark-paper); background: var(--dark); }
+.section-dark .flow p { color: #c9c7bf; background: var(--dark); }
+.quiz { margin-top: 36px; padding: 24px; border-radius: 12px; color: var(--ink); background: #f3f1e9; }
+.quiz h4, .quiz p, .quiz summary, .quiz details, .quiz label { color: var(--ink); background: #f3f1e9; }
+.quiz h4 { margin: 0 0 18px; font: 500 22px/1.35 'Space Grotesk', sans-serif; }
+.quiz .quiz-kicker { font: 12px 'Roboto Mono', monospace; margin-bottom: 18px; }
+.quiz fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.quiz legend { color: var(--ink); background: #f3f1e9; margin-bottom: 18px; font-weight: 700; }
+.quiz label { display: flex; align-items: start; gap: 12px; padding: 12px 8px; border-left: 2px solid var(--line-strong); margin: 10px 0; cursor: pointer; }
+.quiz input { flex-shrink: 0; width: 18px; height: 18px; margin-top: 4px; accent-color: var(--ink); }
+.quiz button { padding: 12px 18px; min-height: 44px; font: 500 13px 'Roboto Mono', monospace; border: 1px solid var(--ink); color: var(--paper); background: var(--ink); cursor: pointer; margin: 12px 8px 8px 0; }
+.quiz button:disabled { opacity: .6; cursor: default; }
+.quiz .quiz-feedback { margin: 18px 0 0; font-size: 15px; }
+.quiz .quiz-track { height: 3px; background: var(--line-strong); margin-top: 20px; }
+.quiz .quiz-track span { display: block; width: 0; height: 100%; background: var(--green); transition: width .3s; }
+.quiz summary { cursor: pointer; min-height: 44px; padding: 10px 0; font-weight: 700; }
+.quiz details p { margin-top: 14px; }
+.quiz :focus-visible { outline-color: var(--ink); }
+.source-note, .sources-list a { overflow-wrap: anywhere; }
+@media (max-width: 720px) { .split, .flow { grid-template-columns: 1fr; } .quiz { padding-inline: 12px; } .topbar { gap: 12px; } }
+@media (max-width: 430px) { .chart-scroll svg { min-width: 680px; } }
+@media (prefers-reduced-motion: reduce) { .js.diagram-motion-ready .line-path { stroke-dashoffset: 0 !important; } }
+@media print { .js.diagram-motion-ready .line-path { stroke-dashoffset: 0 !important; } .quiz-controls { display: none !important; } .quiz-static { display: block !important; } }
+</style>
+</head>
+<body style="--accent:var(--orange)" id="top">
+<a class="skip-link" href="#content">Skip to content</a>
+<div class="progress" aria-hidden="true"><span></span></div>
+<div class="grain" aria-hidden="true"></div>
+<header class="site-header">
+  <div class="wrap topbar">
+    <a class="brand" href="#top"><span class="brand-dot" aria-hidden="true"></span>Factory to Cloud</a>
+    <nav class="nav" aria-label="Article sections">
+      <a href="#discipline" style="--spy:var(--orange)">The discipline</a>
+      <a href="#connected" style="--spy:var(--blue)">The connected car</a>
+      <a href="#architecture" style="--spy:var(--purple)">The data path</a>
+      <a href="#lessons" style="--spy:var(--green)">The lessons</a>
+      <a href="#sources" style="--spy:var(--slate)">Sources</a>
+    </nav>
+  </div>
+</header>
+<main id="content" tabindex="-1">
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Data in Practice · Factory Floor to Cloud</div>
+    <h1>
+      <span class="line"><span class="line-inner">Toyota’s data story:</span></span>
+      <span class="line"><span class="line-inner">a signal needs</span></span>
+      <span class="line"><span class="line-inner"><em>a response.</em></span></span>
+    </h1>
+    <div class="hero-grid">
+      <div>
+        <p class="lead">What connects Toyota’s factory discipline to its connected vehicles? A useful answer is the
+        path from noticing an abnormality to checking that a response worked. Sensors and cloud services can extend
+        that path beyond the assembly line. Someone still has to interpret the evidence, own the decision, and
+        improve the work. That is the thread this story follows.</p>
+        <div class="hero-links"><a href="#discipline">Read the story ↓</a><a href="#lessons">Go to the practical lessons ↓</a></div>
+        <div class="byline">
+          <span class="avatar" aria-hidden="true">AR</span>
+          <div><strong>Ali Reza Rashidi</strong><div class="byline-meta"><span>11 min read</span><span>Updated September 13, 2026</span></div></div>
+        </div>
+      </div>
+      <aside aria-label="Reading guide">
+        <p class="hero-note">The difficult part begins after the signal arrives: deciding who should do what, and what would count as evidence of improvement.</p>
+        <div class="toc">
+          <p class="toc-label">In this piece</p>
+          <ol>
+            <li><a href="#discipline">Why stopping is part of making quality</a></li>
+            <li><a href="#connected">What a connected car adds to the loop</a></li>
+            <li><a href="#architecture">How evidence reaches a decision</a></li>
+            <li><a href="#lessons">How to borrow the discipline</a></li>
+            <li><a href="#sources">The record behind the argument</a></li>
+          </ol>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<section class="section reveal" id="discipline" aria-labelledby="discipline-title">
+<div class="wrap">
+  <div class="section-head">
+    <div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span>01 — The discipline</div><h2 id="discipline-title">Make the problem visible.<a class="anchor" href="#discipline" aria-label="Link to the discipline section">#</a></h2></div>
+    <p class="body-copy">Toyota’s history gives you a way to think about data before choosing a platform: define an
+    abnormal condition, expose it where someone can respond, and give that person a workable route to resolution.</p>
+  </div>
+  <div class="framework" style="--ac:var(--orange)">
+    <aside class="framework-aside" aria-label="The Andon instinct">
+      <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>The Andon instinct</h3></div>
+      <p class="framework-role">Step 01 · Observation and response</p>
+      <p class="framework-summary">A visible signal has value when it changes what happens next.</p>
+    </aside>
+    <div class="framework-content">
+      <p>Toyota describes its production system through two pillars: Just-in-Time and <em>jidoka</em>, often
+      translated as automation with a human touch. Jidoka includes detecting an abnormality and stopping so the
+      problem can be addressed. Its roots reach back to Sakichi Toyoda’s late nineteenth-century power loom,
+      whose stopping mechanism responded to thread problems. The lesson predates connected cars: a machine can
+      help reveal a condition that otherwise requires someone to watch continuously.<a class="xref" href="#src-1" aria-label="Source 1">[1]</a><a class="xref" href="#src-2" aria-label="Source 2">[2]</a></p>
+      <p>The familiar cord belongs to a wider arrangement. Toyota’s plant tour describes a worker pressing a
+      call button, illuminating an <em>andon</em> board, and bringing the team leader to the problem. Its production-system
+      account also describes worker-operated stop switches. Those descriptions distinguish signaling, escalation,
+      and stopping; they do not make every signal an instantaneous shutdown of an entire factory. Toyota even
+      shows an electric-screwdriver check that detects loose screws and lights a red lamp.<a class="xref" href="#src-1" aria-label="Source 1">[1]</a><a class="xref" href="#src-3" aria-label="Source 3">[3]</a></p>
+      <p>To follow the idea into a data system, imagine a vehicle with a poorly secured connection at its
+      low-voltage battery. This is a hypothetical teaching example, not a reported Toyota incident or a description
+      of its internal diagnostic logic. You will follow the same possible connection problem from an assembly
+      check to a later service investigation. No voltage threshold or fault prediction in this example should be
+      treated as a vehicle-specific diagnostic instruction.</p>
+      <p>At the assembly station, the useful question is concrete: did this fastening operation meet the defined
+      standard? If the check indicates a problem, the affected work needs a response before release. A responsible
+      person checks the connection, establishes what happened, and verifies the correction. Simply saving the
+      alert in a database would preserve a record while leaving the quality problem unresolved. The difference
+      is the action attached to the evidence.</p>
+      <div class="diagram-block">
+        <div class="diagram-title">A connection check becomes a controlled response</div>
+        <div class="chart-scroll" tabindex="0" role="group" aria-label="Scrollable assembly response diagram">
+          <svg viewBox="0 0 720 520" role="img" aria-label="In the hypothetical battery-connection example, a passing assembly check permits release, while a failed check holds affected work for correction, verification, and review of the standard." aria-labelledby="connection-title connection-desc">
+            <title id="connection-title">Respond to the battery connection check</title>
+            <desc id="connection-desc">A passing check permits release; a failed check leads to containment, correction, verification, and a review of whether the work standard should change.</desc>
+            <defs><marker id="connection-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 8 4 0 8Z" fill="var(--slate)"></path></marker></defs>
+            <g class="svg-link" marker-end="url(#connection-arrow)">
+              <path class="line-path" d="M184 80V104"></path>
+              <path class="line-path" d="M304 160H432" style="--d:.12s"></path>
+              <path class="line-path" d="M184 216V280" style="--d:.12s"></path>
+              <path class="line-path" d="M184 344V392" style="--d:.24s"></path>
+              <path class="line-path" d="M304 424H432" style="--d:.36s"></path>
+            </g>
+            <rect class="svg-mask" x="332" y="128" width="72" height="24"></rect><text class="svg-tag" x="368" y="144" text-anchor="middle">PASS</text>
+            <rect class="svg-mask" x="196" y="232" width="64" height="24"></rect><text class="svg-tag" x="204" y="248">FAIL</text>
+            <g text-anchor="middle">
+              <rect class="svg-node" x="64" y="24" width="240" height="56" rx="20"></rect><text class="svg-label" x="184" y="60">Connection check</text>
+              <path class="svg-focal" d="M184 104 304 160 184 216 64 160Z"></path><text class="svg-label" x="184" y="156">Meets the</text><text class="svg-label" x="184" y="180">standard?</text>
+              <rect class="svg-node" x="432" y="132" width="224" height="56" rx="20"></rect><text class="svg-label" x="544" y="168">Release this work</text>
+              <rect class="svg-node" x="64" y="280" width="240" height="64" rx="8"></rect><text class="svg-label" x="184" y="308">Hold affected work</text><text class="svg-mono" x="184" y="332">Call the team</text>
+              <rect class="svg-node" x="64" y="392" width="240" height="64" rx="8"></rect><text class="svg-label" x="184" y="420">Correct and verify</text><text class="svg-mono" x="184" y="444">Confirm before release</text>
+              <rect class="svg-node" x="432" y="392" width="224" height="64" rx="8"></rect><text class="svg-label" x="544" y="420">Review the standard</text><text class="svg-mono" x="544" y="444">Prevent a repeat</text>
+            </g>
+            <line x1="24" y1="480" x2="696" y2="480" stroke="var(--line)"></line>
+            <text class="svg-tag" x="24" y="508">HYPOTHETICAL WORKFLOW · DIAMOND = DECISION · BOX = ACTION</text>
+          </svg>
+        </div>
+        <p class="diagram-caption">How to read this: follow the check to its two outcomes. A failed check opens
+        a response path with an owner and a verification step. The drawing explains the teaching example; it is
+        not a Toyota process specification or a measured performance chart.</p>
+      </div>
+      <p>Now consider the incentive surrounding that station. If you reward only uninterrupted output, a worker
+      has a reason to postpone raising a concern. If a signal summons help and a fair investigation, reporting
+      becomes useful. That choice also affects the data you later analyze: missing reports can look like excellent
+      performance. Before interpreting a low alert count as improvement, ask whether people still have a reason
+      to report what they see.</p>
+      <p>For your own project, the practical inheritance is a response contract. State what constitutes an
+      abnormality, who receives it, what that person may pause or change, and how the case closes. The contract
+      can begin on paper. Digitizing it becomes worthwhile when it makes the evidence easier to retrieve or the
+      response more dependable. A screen that displays trouble without assigning responsibility leaves the most
+      consequential part of the system unspecified.</p>
+      <div class="callout-line">The alert starts the work.<small>A useful record also preserves the decision, the action, and the result.</small></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section reveal" id="connected" aria-labelledby="connected-title">
+<div class="wrap">
+  <div class="section-head">
+    <div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span>02 — The connected car</div><h2 id="connected-title">The signal travels farther.<a class="anchor" href="#connected" aria-label="Link to the connected car section">#</a></h2></div>
+    <p class="body-copy">A factory sees a vehicle under controlled conditions. After delivery, the evidence comes
+    from a different environment. Connected services can help bridge that distance, while leaving the diagnosis open.</p>
+  </div>
+  <div class="framework" style="--ac:var(--blue)">
+    <aside class="framework-aside" aria-label="Beyond the plant">
+      <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Beyond the plant</h3></div>
+      <p class="framework-role">Step 02 · Signals with context</p>
+      <p class="framework-summary">More observations widen the view. They also introduce more ways to misunderstand it.</p>
+    </aside>
+    <div class="framework-content">
+      <p>The move into connected services has a documented milestone. An April 2017 Toyota announcement says
+      Toyota Connected was established in April 2016 as a data-science hub and was developing a cloud-based
+      Mobility Services Platform, with wireless services delivered using Microsoft Azure. Today, Toyota Connected
+      North America describes work on connected mobility and telematics platforms, including the platform behind
+      Safety Connect. The earlier announcement is evidence of that stage of development, rather than a complete
+      inventory of Toyota’s present infrastructure.<a class="xref" href="#src-4" aria-label="Source 4">[4]</a><a class="xref" href="#src-5" aria-label="Source 5">[5]</a></p>
+      <p>You can see a more tangible application in Service Connect: Toyota lists Vehicle Health Reports,
+      Vehicle Alerts, and Maintenance Alerts based on transmitted vehicle data. Availability depends on the
+      vehicle and an active trial or subscription. Its July 2026 U.S. Connected Services Privacy Notice also
+      describes vehicle-health information, including battery health and diagnostic trouble codes, and uses such
+      as quality improvement and warranty or recall support. These are specific capabilities and stated uses,
+      not proof that every failure is predicted or every recall prevented.<a class="xref" href="#src-6" aria-label="Source 6">[6]</a><a class="xref" href="#src-7" aria-label="Source 7">[7]</a></p>
+      <p>Return to the hypothetical battery connection. Suppose a later observation raises a concern about
+      voltage. The observation alone does not identify a loose terminal. The meaning depends on when and how it
+      was collected, the operating condition, and the applicable diagnostic procedure. Your data product should
+      preserve that uncertainty. A case can say “needs assessment” while the underlying observation remains
+      exactly what it was. Turning a symptom into a confident component-failure label would make the record
+      more decisive and less trustworthy.</p>
+      <p>This is where the connection between service and engineering becomes interesting. If a technician
+      investigates and confirms a connection problem, that finding can become evidence for the original case.
+      If the inspection finds something else, that result matters just as much. The hypothetical system now has
+      an opportunity to learn which observations warranted attention. Without the service result, you would know
+      that an alert was sent and perhaps opened, but not whether it pointed to a meaningful problem.</p>
+      <div class="split">
+        <div><h4>What the public record supports</h4><p>Connected vehicle reports and alerts exist. Toyota describes
+        using vehicle-health information for service and quality-related purposes, within the terms and scope of
+        the relevant services.<a class="xref" href="#src-6" aria-label="Source 6">[6]</a><a class="xref" href="#src-7" aria-label="Source 7">[7]</a></p></div>
+        <div><h4>What you still have to establish</h4><p>Whether a particular signal predicts a particular fault;
+        whether the right person acted in time; and whether the intervention improved an outcome. Those are
+        questions for an evaluated workflow, not assumptions supplied by connectivity.</p></div>
+      </div>
+      <p>The privacy boundary belongs inside this design. Decide which fields the battery investigation actually
+      needs, who can see them, and how long they remain useful. An engineer comparing component patterns may need
+      a controlled identifier and build context, while a service team needs a permitted route to the customer.
+      Those are different access needs. Toyota’s cited privacy notice is specific to its stated U.S. scope;
+      it should not be read as a universal description of consent or services in every market.<a class="xref" href="#src-7" aria-label="Source 7">[7]</a></p>
+      <p>Software updates extend the possible responses, but their reach must stay concrete. Toyota documents
+      over-the-air updates for eligible Toyota Audio Multimedia systems, alongside other update routes. That
+      does not mean every subsystem can be changed remotely. In the running example, a physically loose
+      connection still calls for an appropriate physical inspection and correction. An update could only be a
+      candidate for a separately established software issue; delivery over the air is a distribution mechanism,
+      not evidence that the proposed change solves the fault.<a class="xref" href="#src-8" aria-label="Source 8">[8]</a></p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section reveal" id="architecture" aria-labelledby="architecture-title">
+<div class="wrap">
+  <div class="section-head">
+    <div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span>03 — The data path</div><h2 id="architecture-title">Build the route back.<a class="anchor" href="#architecture" aria-label="Link to the data path section">#</a></h2></div>
+    <p class="body-copy">The architecture below is a proposed design for the teaching example. It shows the
+    information needed to connect a concern with a verified response; it does not claim to reproduce Toyota’s systems.</p>
+  </div>
+  <div class="framework" style="--ac:var(--purple)">
+    <aside class="framework-aside" aria-label="Evidence that joins up">
+      <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Evidence that joins up</h3></div>
+      <p class="framework-role">Step 03 · Traceability and decisions</p>
+      <p class="framework-summary">Keep the original observation, the interpretation, and the outcome distinguishable.</p>
+    </aside>
+    <div class="framework-content">
+      <p>Start the record with enough context to explain the battery observation later: a controlled vehicle
+      identifier, event time, arrival time, measurement meaning and units, and the relevant software version.
+      Give the event a stable identity so a retransmission does not create a second case. Keeping event time
+      separate from arrival time lets you distinguish a new concern from an old observation delivered after a
+      period without connectivity. This is a proposed record contract, not a list of fields Toyota has disclosed.</p>
+      <p>Next, make relationships explicit. The service case should reference the observations that triggered
+      it. An engineering investigation may also need a link to an available build or component record. Do not
+      assume those joins exist merely because both systems contain something called a vehicle identifier.
+      Check permissions, format, completeness, and the meaning of a component replacement. A battery installed
+      after delivery should not silently inherit the manufacturing history of the one it replaced.</p>
+      <div class="diagram-block">
+        <div class="diagram-title">Three evidence sources, one accountable case</div>
+        <div class="chart-scroll" tabindex="0" role="group" aria-label="Scrollable proposed data architecture">
+          <svg viewBox="0 0 720 568" role="img" aria-label="In the proposed battery-connection workflow, vehicle observations, build context, and service findings feed a case reviewed by an owner, whose action produces a verified result that returns to the case." aria-labelledby="evidence-title evidence-desc">
+            <title id="evidence-title">Connect the battery signal to its outcome</title>
+            <desc id="evidence-desc">Vehicle observations, build context, and service findings are linked to a case, and an accountable owner records an action and a verified result back into that case.</desc>
+            <defs><marker id="evidence-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 8 4 0 8Z" fill="var(--slate)"></path></marker></defs>
+            <g class="svg-link" marker-end="url(#evidence-arrow)">
+              <path class="line-path" d="M224 88H352Q360 88 360 96V184"></path>
+              <path class="line-path" d="M224 232H272" style="--d:.12s"></path>
+              <path class="line-path" d="M224 376H240Q248 376 248 368V276Q248 268 256 268H272" style="--d:.24s"></path>
+              <path class="line-path" d="M448 232H504" style="--d:.36s"></path>
+              <path class="line-path" d="M600 288V352" style="--d:.48s"></path>
+              <path class="line-path" d="M600 416V488Q600 496 592 496H456" style="--d:.6s"></path>
+              <path d="M360 464V288" stroke-dasharray="6 4"></path>
+            </g>
+            <rect class="svg-mask" x="372" y="364" width="88" height="24"></rect><text class="svg-tag" x="380" y="380">FEEDBACK</text>
+            <g text-anchor="middle">
+              <rect class="svg-node" x="24" y="48" width="200" height="80" rx="8"></rect><text class="svg-label" x="124" y="80">Vehicle signal</text><text class="svg-mono" x="124" y="108">Signal + context</text>
+              <rect class="svg-node" x="24" y="192" width="200" height="80" rx="8"></rect><text class="svg-label" x="124" y="224">Build context</text><text class="svg-mono" x="124" y="252">Build / part links</text>
+              <rect class="svg-node" x="24" y="336" width="200" height="80" rx="8"></rect><text class="svg-label" x="124" y="368">Service finding</text><text class="svg-mono" x="124" y="396">Inspection result</text>
+              <rect class="svg-focal" x="272" y="184" width="176" height="104" rx="8" style="stroke:var(--purple)"></rect><text class="svg-label" x="360" y="224">Linked case</text><text class="svg-mono" x="360" y="252">Evidence + state</text>
+              <rect class="svg-node" x="504" y="184" width="192" height="104" rx="8"></rect><text class="svg-label" x="600" y="224">Decision owner</text><text class="svg-mono" x="600" y="252">Review uncertainty</text>
+              <rect class="svg-node" x="504" y="352" width="192" height="64" rx="8"></rect><text class="svg-label" x="600" y="392">Authorized action</text>
+              <rect class="svg-node" x="264" y="464" width="192" height="64" rx="8"></rect><text class="svg-label" x="360" y="504">Verified result</text>
+            </g>
+            <line x1="24" y1="544" x2="696" y2="544" stroke="var(--line)"></line>
+            <text class="svg-tag" x="24" y="564">PROPOSED DESIGN · SOLID = EVIDENCE / HANDOFF · DASHED = RESULT RETURN</text>
+          </svg>
+        </div>
+        <p class="diagram-caption">How to read this: the left column supplies different kinds of evidence about
+        the same hypothetical connection problem. Follow the case through its owner to an action and a verified
+        result. The dashed return makes the outcome available for review instead of ending the record at “alert sent.”</p>
+      </div>
+      <p>Choose storage around those jobs. A small pilot may need a table of events and a table of cases with
+      protected links to service findings. Historical analysis may later justify a separate analytical store.
+      If the volume, retention, or query pattern requires more, add the relevant capability then. A data lake
+      and warehouse are possible implementation choices; neither establishes the response contract. You should
+      be able to explain what would become harder or less reliable if any proposed component were removed.</p>
+      <p>The response deadline also determines where a decision belongs. In this proposed design, an immediate
+      assembly safeguard stays local to the work, with cloud analysis supporting later comparison and learning.
+      An intermittent connection should not disable the local check. A service investigation can tolerate a
+      different delivery schedule, provided its owner can see the age of the evidence. Avoid putting every event
+      into a single “real-time” category when the consequences and required response times differ.</p>
+      <p>Start interpretation with a rule you can inspect. For example, route a qualifying concern to assessment
+      under a defined diagnostic procedure, while marking missing context for review. If a model later promises
+      better prioritization, compare it against that baseline using outcomes the team can actually establish.
+      Keep its score separate from a technician’s confirmed finding. A model is making an inference; the case
+      record should let a reviewer recover the evidence and the version that produced it.</p>
+      <p>Evaluation needs a denominator. Among the assessed alerts, how many led to a confirmed relevant finding?
+      Among all investigated failures, how many had an earlier usable alert? These questions expose different
+      weaknesses. The second also requires finding failures outside the alerted group. Reviewing only the cases
+      your system opened cannot tell you what it missed. Leave unresolved cases unresolved rather than counting
+      them as healthy vehicles simply because no completed service record has arrived.</p>
+      <p>Finally, version the decision rule and retain the outcome of each intervention. If the team changes a
+      fastening procedure, compare subsequent results against a clearly defined baseline while checking whether
+      the vehicle mix, reporting coverage, or inspection practice changed too. The aim is an explanation you
+      could challenge. A falling alert count is encouraging only after you rule out the simpler explanation
+      that fewer vehicles are reporting or fewer concerns are being recorded.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section section-dark reveal" id="lessons" aria-labelledby="lessons-title">
+<div class="wrap">
+  <div class="section-head">
+    <div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span>04 — The lessons</div><h2 id="lessons-title">Give the loop an owner.<a class="anchor" href="#lessons" aria-label="Link to the lessons section">#</a></h2></div>
+    <p class="body-copy">You can borrow this discipline without reproducing an automotive company’s technology
+    estate. Begin with one recurring problem and make its path from observation to verified outcome explicit.</p>
+  </div>
+  <div class="framework" style="--ac:var(--green)">
+    <aside class="framework-aside" aria-label="Kaizen in the workflow">
+      <div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Kaizen in the workflow</h3></div>
+      <p class="framework-role">Step 04 · Improve the work</p>
+      <p class="framework-summary">Review outcomes regularly. Change the process when the evidence warrants it.</p>
+    </aside>
+    <div class="framework-content">
+      <p>In Toyota’s own account, people understand and improve work before incorporating it into machines;
+      improvement continues as technology develops. That ordering is useful when you are tempted to begin with
+      the model. First watch what the battery investigation requires of the people doing it. Which fact must
+      they look up? Where does a case wait? Which uncertainty prevents a decision? A small change to the record
+      or handoff may solve the immediate problem.<a class="xref" href="#src-1" aria-label="Source 1">[1]</a></p>
+      <div class="flow">
+        <div style="--ac:var(--blue)"><span class="fnum">01</span><strong>Choose one decision.</strong><p>For the battery example, define when a concern should become a service-assessment case.</p></div>
+        <div style="--ac:var(--orange)"><span class="fnum">02</span><strong>Expose the next action.</strong><p>Show the evidence age, missing context, owner, and current case status where the team works.</p></div>
+        <div style="--ac:var(--green)"><span class="fnum">03</span><strong>Check the result.</strong><p>Record the finding and the effect of the response before deciding what to change.</p></div>
+      </div>
+      <p>Make the first pilot small enough to inspect case by case. Choose a defined population, a clear
+      decision, and a review period appropriate to the expected service outcomes. Write down success in advance:
+      perhaps better prioritization without an unacceptable increase in unnecessary assessments. Also name the
+      cost of a missed case and the team’s capacity to respond. These choices make trade-offs visible before
+      a polished dashboard turns a provisional measure into an apparent promise.</p>
+      <p>Put the signal in the working queue of its owner. A case view needs to answer practical questions:
+      what happened, when, what evidence is missing, who is responsible, and what can happen next? An executive
+      chart can summarize that workflow, but it cannot replace it. If ten people can see a concern and none
+      is accountable for the next step, broader visibility may create the impression of control without producing
+      a response.</p>
+      <p>Review a mixture of useful alerts, unhelpful alerts, missed problems, and still-unresolved cases. Ask
+      what each category tells you about the observation, the rule, and the action. In the hypothetical battery
+      example, a confirmed connection problem may suggest reviewing assembly work. A misinterpreted observation
+      may instead require better context. A long service delay points to a handoff problem. These are different
+      changes, even when they first appear in the same alert metric.</p>
+      <p>Give those reviews a regular place in the team’s routine, without assuming a model must be retrained
+      on the same schedule. Sometimes the correct decision is to preserve a well-performing rule. Sometimes
+      a revised process removes the need for a prediction altogether. When you do change a model or rule, use
+      the accumulated cases to check the proposal and keep a way to recover the previous behavior. Calendar
+      activity is not evidence that the system improved.</p>
+      <div class="quiz" id="knowledge-check" role="group" aria-labelledby="quiz-title">
+        <p class="quiz-kicker">A quick decision check</p>
+        <h4 id="quiz-title">The battery dashboard shows fewer alerts.</h4>
+        <p>Reporting coverage also fell, and several service cases are still open. What can you conclude?</p>
+        <div class="quiz-static">
+          <details><summary>Read the answer and reasoning</summary><p>Improvement is not yet established. Check
+          reporting coverage and compare completed outcomes before attributing the lower alert count to better
+          quality. Open cases remain unknown; they are not evidence that the vehicles are healthy.</p></details>
+        </div>
+        <form class="quiz-controls" hidden>
+          <fieldset>
+            <legend>Choose the conclusion supported by the evidence.</legend>
+            <label><input type="radio" name="answer" value="quality">The connection problem has become less common.</label>
+            <label><input type="radio" name="answer" value="uncertain">The evidence is incomplete; compare coverage and resolved outcomes.</label>
+            <label><input type="radio" name="answer" value="retrain">The prediction model should immediately be retrained.</label>
+          </fieldset>
+          <button type="submit">Check answer</button><button type="button" class="quiz-reset" hidden>Try again</button>
+          <div class="quiz-track" aria-hidden="true"><span></span></div>
+          <p class="quiz-feedback" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+      <p>The factory-to-cloud connection is therefore an argument about responsibility as much as technology.
+      Toyota’s documented history supplies the manufacturing discipline; its connected services show how
+      observations can travel beyond production. The proposed battery workflow makes the remaining work visible:
+      preserve context, assign a response, and inspect the result. You have a useful data system when a real
+      concern can complete that journey, and when the evidence from the journey helps the next decision.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section reveal" id="sources" aria-labelledby="sources-title">
+<div class="wrap">
+  <div class="section-head">
+    <div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span>05 — The record</div><h2 id="sources-title">Sources<a class="anchor" href="#sources" aria-label="Link to sources">#</a></h2></div>
+    <p class="body-copy">Toyota’s primary documents support the history and service descriptions. The battery
+    case, diagrams, and architecture are explicitly hypothetical teaching material. Sources checked September 13, 2026.</p>
+  </div>
+  <ol class="sources-list">
+    <li id="src-1"><div><strong>Toyota Production System.</strong> Toyota Motor Corporation.<a class="xlink" href="https://global.toyota/en/company/vision-and-philosophy/production-system/">Read Toyota’s description of TPS</a><span class="source-note">Jidoka, Just-in-Time, abnormality detection, and improving work before automation.</span></div></li>
+    <li id="src-2"><div><strong>The Birth of Jidoka.</strong> Toyota, 75-Year History.<a class="xlink" href="https://www.toyota-global.com/company/history_of_toyota/75years/text/taking_on_the_automotive_business/chapter1/section1/item4.html">Read the historical account</a><span class="source-note">Early loom stopping mechanisms. The article avoids conflating development and completion dates.</span></div></li>
+    <li id="src-3"><div><strong>Production System: Virtual Plant Tour.</strong> Toyota Motor Corporation.<a class="xlink" href="https://global.toyota/en/company/plant-tours/production-system/">See the Andon and loose-screw examples</a><span class="source-note">Worker calls, team-leader response, and a documented electric-screwdriver checking device.</span></div></li>
+    <li id="src-4"><div><strong>Toyota Connected To Double Headcount, Expanding in Plano.</strong> Toyota Motor North America, April 28, 2017.<a class="xlink" href="https://pressroom.toyota.com/toyota-connected-double-headcount-plano/">Read the 2017 announcement</a><span class="source-note">April 2016 founding and the platform and Azure work described at that time.</span></div></li>
+    <li id="src-5"><div><strong>About Toyota Connected North America.</strong> Toyota Connected.<a class="xlink" href="https://toyotaconnected.com/about/">Explore the stated platform work</a><span class="source-note">Connected mobility, telematics, and the platform supporting Safety Connect.</span></div></li>
+    <li id="src-6"><div><strong>Service Connect.</strong> Toyota.<a class="xlink" href="https://www.toyota.com/connected-services/toyota-app/service-connect/">Read about health reports and alerts</a><span class="source-note">Vehicle Health Reports, Vehicle Alerts, Maintenance Alerts, and service eligibility.</span></div></li>
+    <li id="src-7"><div><strong>Connected Services Privacy Notice.</strong> Toyota, updated July 1, 2026.<a class="xlink" href="https://www.toyota.com/privacyvts/">Read the U.S. connected-services notice</a><span class="source-note">Vehicle-health information and stated service, quality, warranty, and recall-related uses; geographic scope matters.</span></div></li>
+    <li id="src-8"><div><strong>Toyota Audio Multimedia System Updates.</strong> Toyota.<a class="xlink" href="https://www.toyota.com/owners/over-the-air/">Check the documented update routes</a><span class="source-note">OTA scope for eligible multimedia systems; not evidence that every component can be updated remotely.</span></div></li>
+  </ol>
+</div>
+</section>
+</main>
+<a class="to-top" href="#top" aria-label="Back to top">↑</a>
+<script>
+(() => {
+  'use strict';
+  const root = document.documentElement;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const header = document.querySelector('.site-header');
+  const progress = document.querySelector('.progress span');
+  const sections = Array.from(document.querySelectorAll('main > section[id]'));
+  const navLinks = Array.from(document.querySelectorAll('.nav a'));
+  let pending = false;
+
+  function updateScroll() {
+    const distance = root.scrollHeight - window.innerHeight;
+    progress.style.width = (distance > 0 ? Math.min(100, window.scrollY / distance * 100) : 0) + '%';
+    header.classList.toggle('scrolled', window.scrollY > 12);
+    let current = '';
+    for (const section of sections) {
+      if (section.getBoundingClientRect().top <= 160) current = section.id;
+    }
+    for (const link of navLinks) {
+      const active = link.getAttribute('href') === '#' + current;
+      link.classList.toggle('active', active);
+      if (active) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    }
+    pending = false;
+  }
+  function scheduleScroll() {
+    if (!pending) { pending = true; requestAnimationFrame(updateScroll); }
+  }
+  window.addEventListener('scroll', scheduleScroll, { passive: true });
+  window.addEventListener('resize', scheduleScroll);
+  updateScroll();
+
+  if ('IntersectionObserver' in window && !reduced.matches) {
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('entered');
+          observer.unobserve(entry.target);
+        }
+      }
+    }, { threshold: 0, rootMargin: '0px 0px -24px 0px' });
+    document.querySelectorAll('.reveal, .diagram-block').forEach(element => observer.observe(element));
+    root.classList.add('reveal-ready', 'diagram-motion-ready');
+  }
+
+  const form = document.querySelector('.quiz-controls');
+  const fallback = document.querySelector('.quiz-static');
+  const feedback = form.querySelector('.quiz-feedback');
+  const reset = form.querySelector('.quiz-reset');
+  const fill = form.querySelector('.quiz-track span');
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const answer = form.querySelector('input:checked');
+    if (!answer) { feedback.textContent = 'Choose an answer first.'; return; }
+    const correct = answer.value === 'uncertain';
+    feedback.textContent = (correct ? 'Correct. ' : 'That conclusion goes beyond the evidence. ') +
+      'Check reporting coverage and compare completed outcomes before attributing the lower alert count to better quality. Open cases remain unknown; they are not evidence that the vehicles are healthy.';
+    fill.style.width = '100%';
+    reset.hidden = false;
+  });
+  reset.addEventListener('click', () => {
+    form.reset();
+    feedback.textContent = '';
+    fill.style.width = '0%';
+    reset.hidden = true;
+    form.querySelector('input').focus();
+  });
+  fallback.hidden = true;
+  form.hidden = false;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.classList.add('js');</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Explore seven data science skills through an order-review project with limited capacity, time-sensitive features, honest evaluation, and a deployment plan.">
+<title>Data Science Skills — From a Model to a Working Decision</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='3' fill='%23eb8237'/%3E%3Ccircle cx='23' cy='9' r='3' fill='%235b6b7a'/%3E%3Ccircle cx='9' cy='23' r='3' fill='%237650e6'/%3E%3Ccircle cx='23' cy='23' r='3' fill='%233468f5'/%3E%3C/svg%3E">
+<meta property="og:title" content="Data Science Skills — From a Model to a Working Decision">
+<meta property="og:description" content="Explore seven data science skills through an order-review project with limited capacity, time-sensitive features, honest evaluation, and a deployment plan.">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Data Science Skills — From a Model to a Working Decision",
+  "description": "Explore seven data science skills through an order-review project with limited capacity, time-sensitive features, honest evaluation, and a deployment plan.",
+  "datePublished": "2026-09-12",
+  "dateModified": "2026-09-12",
+  "inLanguage": "en",
+  "wordCount": 3153,
+  "timeRequired": "PT15M",
+  "author": {
+    "@type": "Person",
+    "name": "Ali Reza Rashidi"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Instrument+Serif:ital@0;1&amp;family=Roboto+Mono:wght@400;500&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898;
+  --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+  --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+  --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+  --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+  --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+}
+* { box-sizing: border-box; }
+html { color-scheme: light; overflow-x: clip; scroll-behavior: smooth; }
+body { margin: 0; color: var(--ink); background: linear-gradient(180deg, #fffdfa, #fcfbf8); font: 400 17px/1.7 "DM Sans", sans-serif; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; }
+::selection { color: var(--paper); background: var(--ink); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+h1, h2, h3, h4 { font-family: "Space Grotesk", sans-serif; margin: 0; text-wrap: balance; }
+h1, h2 { letter-spacing: -.045em; }
+p { text-wrap: pretty; margin: 0 0 22px; }
+svg { display: block; width: 100%; height: auto; }
+.wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+.grain { position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: .08; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.skip-link { position: fixed; left: 16px; top: -80px; z-index: 100; padding: 12px 18px; color: var(--paper); background: var(--ink); }
+.skip-link:focus { top: 12px; }
+.progress { position: fixed; inset: 0 0 auto; height: 2px; z-index: 90; }
+.progress span { display: block; height: 100%; width: 0; background: var(--ink); }
+.site-header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid transparent; }
+.site-header.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); border-bottom-color: var(--line); }
+.topbar { min-height: 68px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 500 13px "Space Grotesk", sans-serif; white-space: nowrap; }
+.brand-dot { width: 12px; height: 12px; background: var(--ink); border-radius: 50%; flex-shrink: 0; }
+.nav { display: flex; align-items: center; gap: 26px; overflow-x: auto; padding-left: 10px; scrollbar-width: none; }
+.nav a { position: relative; padding: 24px 0; white-space: nowrap; text-decoration: none; color: var(--muted); font: 500 11px "Roboto Mono", monospace; }
+.nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 18px; height: 1px; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform .2s; }
+.nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
+.nav a.active::before { content: ""; position: absolute; left: -10px; top: 27px; width: 6px; height: 6px; border-radius: 50%; background: var(--spy); }
+.hero { padding: 92px 0 88px; border-bottom: 1px solid var(--line); }
+.eyebrow, .kicker, .framework-role, .toc-label, .byline-meta, .source-note, .diagram-caption { font-family: "Roboto Mono", monospace; }
+.eyebrow { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 28px; }
+.eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--ink); }
+h1 { font-size: clamp(3rem,8.4vw,6.8rem); line-height: .96; font-weight: 700; }
+h1 em { font: italic 400 1em/.96 "Instrument Serif", serif; color: #535353; }
+.line { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.04em; }
+.line-inner { display: inline-block; }
+.js .line-inner { animation: lineUp .7s both; }
+.js .line:nth-child(2) .line-inner { animation-delay: 90ms; }
+.js .line:nth-child(3) .line-inner { animation-delay: 180ms; }
+@keyframes lineUp { from { transform: translateY(115%); } to { transform: translateY(0); } }
+.hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 60px; margin-top: 54px; }
+.lead { font-size: clamp(1.15rem,1.8vw,1.5rem); line-height: 1.6; color: #414141; }
+.lead::first-letter { float: left; padding: 0 5px 0 0; font: italic 400 2.2em/1 "Instrument Serif", serif; color: var(--ink); }
+.hero-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 30px 0; }
+.hero-links a { padding: 9px 12px; border: 1px solid var(--line-strong); border-radius: 30px; text-decoration: none; font: 11px "Roboto Mono", monospace; }
+.byline { display: flex; gap: 12px; align-items: center; font-size: 13px; }
+.avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; font: 11px "Roboto Mono", monospace; color: var(--paper); background: var(--ink); flex-shrink: 0; }
+.byline-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; font-size: 10px; color: var(--muted); margin-top: 3px; }
+.byline-meta span + span::before { content: ""; display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: var(--muted); vertical-align: middle; margin-right: 9px; }
+.hero-note { border-left: 2px solid var(--accent); padding-left: 20px; font: italic 400 1.25rem/1.5 "Instrument Serif", serif; color: #535353; }
+.toc { padding: 24px; border-radius: 12px; color: var(--ink); background: #f3f1e9; }
+.toc-label { color: var(--muted); background: #f3f1e9; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 16px; }
+.toc ol { list-style: none; counter-reset: toc; padding: 0; margin: 0; }
+.toc li { counter-increment: toc; border-top: 1px solid var(--line); }
+.toc a { display: grid; grid-template-columns: 28px 1fr; gap: 10px; text-decoration: none; font-size: 13px; padding: 14px 0; color: var(--ink); background: #f3f1e9; }
+.toc a::before { content: counter(toc,decimal-leading-zero); font: 10px/2 "Roboto Mono", monospace; color: var(--muted); }
+.section { padding: 88px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
+.section-head { display: grid; grid-template-columns: .9fr 1.1fr; gap: 50px; margin-bottom: 42px; }
+.kicker { display: flex; align-items: center; gap: 10px; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 18px; color: var(--muted); }
+.kicker-mark { width: 8px; height: 8px; background: var(--ink); }
+h2 { font-size: clamp(2rem,4.4vw,4rem); line-height: .98; position: relative; }
+.body-copy { color: var(--muted); font-size: 18px; margin: 6px 0 0; }
+.anchor { margin-left: 10px; font: 400 .45em "DM Sans", sans-serif; text-decoration: none; opacity: 0; }
+h2:hover .anchor, .anchor:focus-visible { opacity: 1; }
+.framework { display: grid; grid-template-columns: 260px minmax(0,1fr); gap: 58px; padding: 42px 0 10px; border-top: 1px solid var(--line); }
+.framework + .framework { margin-top: 40px; }
+.framework-aside { position: sticky; top: 100px; align-self: start; }
+.framework-name { display: flex; align-items: start; gap: 12px; }
+.mark { width: 11px; height: 11px; margin-top: 8px; background: var(--ac); border-radius: 50%; flex-shrink: 0; }
+h3 { font-size: 24px; line-height: 1.18; letter-spacing: -.03em; }
+.framework-role { margin: 15px 0; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .05em; }
+.framework-summary { font-size: 13px; color: var(--muted); }
+.framework-content { min-width: 0; }
+.framework-content h4 { font-size: 19px; margin: 34px 0 14px; letter-spacing: -.02em; }
+.xref { vertical-align: super; font: 10px "Roboto Mono", monospace; text-decoration: none; color: #2854cd; margin-left: 3px; }
+.callout-line { border-left: 3px solid var(--ac,var(--accent)); padding: 12px 0 12px 20px; font-weight: 700; margin: 30px 0; }
+.callout-line small { display: block; font-weight: 400; color: var(--muted); font-size: 14px; margin-top: 6px; }
+.formula { color: var(--ink); background: #f3f1e9; border: 1px solid var(--line); padding: 20px; margin: 26px 0; font: 13px/1.9 "Roboto Mono", monospace; overflow-x: auto; }
+.formula span { display: block; }
+.stat-strip { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; margin: 30px 0; padding: 24px 0; border-block: 1px solid var(--line); }
+.stat strong { display: block; font: 400 clamp(1.7rem,3vw,2.4rem)/1.2 "Roboto Mono", monospace; letter-spacing: -.04em; }
+.stat span { display: block; font-size: 12px; margin-top: 10px; color: var(--muted); }
+.diagram-block { margin: 36px 0; padding: 24px; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: var(--paper); }
+.diagram-title { font: 500 19px/1.4 "Space Grotesk", sans-serif; margin-bottom: 22px; color: var(--ink); background: var(--paper); }
+.chart-scroll { overflow-x: auto; }
+.diagram-caption { font-size: 11px; line-height: 1.85; margin: 20px 0 0; color: var(--muted); background: var(--paper); }
+.svg-label { font: 500 18px "Space Grotesk", sans-serif; fill: var(--ink); }
+.svg-mono { font: 400 14px "Roboto Mono", monospace; fill: var(--muted); }
+.svg-value { font: 500 16px "Roboto Mono", monospace; fill: var(--ink); }
+.bar-rect { transform-box: fill-box; transform-origin: left; }
+.js.diagram-motion-ready .diagram-block:not(.entered) .bar-rect { transform: scaleX(0); }
+.js.diagram-motion-ready .diagram-block.entered .bar-rect { transition: transform .8s var(--d,0s); }
+.js.reveal-ready .reveal:not(.entered) { opacity: 0; transform: translateY(16px); }
+.js.reveal-ready .reveal { transition: opacity .6s, transform .6s; }
+.lab { margin: 30px 0; padding: 26px; border-radius: 12px; background: #f3f1e9; color: var(--ink); }
+.lab h4, .lab p, .lab label, .lab output, .lab .stat strong { color: var(--ink); background: #f3f1e9; }
+.lab h4 { margin-top: 0; }
+.lab .stat span { color: var(--muted); background: #f3f1e9; }
+.lab-controls label { display: block; font-size: 14px; font-weight: 700; }
+.lab input { width: 100%; min-height: 44px; accent-color: var(--green); }
+.lab select { margin: 10px 0; min-height: 44px; padding: 8px; font: 14px "Roboto Mono", monospace; color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); max-width: 100%; }
+.lab .lab-status { font-size: 14px; border-left: 3px solid var(--green); padding-left: 16px; margin-bottom: 0; }
+.question { margin: 30px 0; padding: 22px 0; border-block: 1px solid var(--line-strong); }
+.question summary { cursor: pointer; font-weight: 700; }
+.question p { margin: 18px 0 0; color: var(--muted); }
+.section-dark { color: var(--dark-paper); background: var(--dark); }
+.section-dark .section-head h2, .section-dark h3, .section-dark h4 { color: var(--dark-paper); background: var(--dark); }
+.section-dark .body-copy, .section-dark p, .section-dark .framework-role, .section-dark .framework-summary, .section-dark small { color: #c9c7bf; background: var(--dark); }
+.section-dark .kicker { color: #c9c7bf; background: var(--dark); }
+.section-dark .kicker-mark { background: var(--dark-paper); }
+.section-dark .framework { border-color: var(--dark-line); }
+.section-dark .xref { color: #aac1ff; }
+.section-dark :focus-visible { outline-color: var(--dark-paper); }
+.section-dark .callout-line { color: var(--dark-paper); background: var(--dark); }
+.sources-list { list-style: none; padding: 0; margin: 0; counter-reset: sources; }
+.sources-list li { counter-increment: sources; display: grid; grid-template-columns: 40px 1fr; gap: 14px; padding: 22px 0; border-top: 1px solid var(--line); scroll-margin-top: 90px; }
+.sources-list li::before { content: counter(sources,decimal-leading-zero); font: 12px/2 "Roboto Mono", monospace; color: var(--muted); }
+.sources-list strong { font-weight: 700; }
+.source-note { display: block; font-size: 11px; margin-top: 8px; color: var(--muted); }
+.xlink { color: #4c4c4c; border-bottom: 1px dashed currentColor; text-decoration: none; margin-left: 6px; }
+.xlink::after { content: " ↗"; }
+.to-top { position: fixed; z-index: 60; bottom: max(18px,env(safe-area-inset-bottom)); right: max(18px,env(safe-area-inset-right)); display: grid; place-items: center; width: 44px; height: 44px; padding-bottom: env(safe-area-inset-bottom,0px); color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); border-radius: 50%; text-decoration: none; }
+@media (max-width: 720px) {
+  .hero { padding: 64px 0; }
+  .hero-grid, .section-head, .framework { grid-template-columns: 1fr; gap: 28px; }
+  .hero-grid { margin-top: 38px; }
+  .framework-aside { position: static; }
+  .nav { max-width: 50%; gap: 20px; }
+  .framework { padding-top: 30px; }
+  .section-head { margin-bottom: 32px; }
+  .body-copy { font-size: 17px; }
+}
+@media (max-width: 430px) {
+  .wrap { width: calc(100% - 28px); }
+  h1 { font-size: clamp(2.15rem,12.5vw,3rem); }
+  .brand { font-size: 11px; }
+  .nav { max-width: 46%; }
+  .section { padding: 64px 0; }
+  .diagram-block, .lab { padding: 18px; }
+  .chart-scroll svg { min-width: 560px; }
+  .stat-strip { gap: 12px; }
+  .stat strong { font-size: 1.55rem; }
+  .stat span { font-size: 11px; }
+  .lab .stat-strip { grid-template-columns: 1fr; }
+  .sources-list li { grid-template-columns: 28px 1fr; gap: 8px; }
+}
+@media (hover: none) { .anchor { opacity: .55; } .nav a { padding-inline: 4px; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .js.reveal-ready .reveal, .js.diagram-motion-ready .bar-rect { opacity: 1 !important; transform: none !important; }
+}
+@media print {
+  *, *::before, *::after { transition: none !important; }
+  .grain, .site-header, .progress, .to-top, .lab-controls { display: none !important; }
+  .js.reveal-ready .reveal, .js.diagram-motion-ready .bar-rect, .js .line-inner { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .framework-aside { position: static; }
+  .chart-scroll { overflow: visible; }
+}
+.diagram-block, .lab { scroll-margin-top: 88px; }
+</style>
+</head>
+<body style="--accent:var(--orange)" id="top">
+<a class="skip-link" href="#content">Skip to content</a>
+<div class="progress" aria-hidden="true">
+<span>
+</span>
+</div>
+<div class="grain" aria-hidden="true">
+</div>
+<header class="site-header">
+<div class="wrap topbar">
+<a class="brand" href="#top">
+<span class="brand-dot" aria-hidden="true">
+</span>Data Science Skills</a>
+<nav class="nav" aria-label="Article sections">
+<a href="#frame" style="--spy:var(--blue)">Understand</a>
+<a href="#build" style="--spy:var(--green)">Build</a>
+<a href="#evaluate" style="--spy:var(--purple)">Evaluate</a>
+<a href="#operate" style="--spy:var(--slate)">Operate</a>
+<a href="#sources" style="--spy:var(--slate)">Sources</a>
+</nav>
+</div>
+</header>
+<main id="content" tabindex="-1">
+<div class="hero">
+<div class="wrap">
+<div class="eyebrow">Engineering Craft · A field guide</div>
+<h1>
+<span class="line">
+<span class="line-inner">The craft</span>
+</span>
+<span class="line">
+<span class="line-inner">
+<em>around the model.</em>
+</span>
+</span>
+</h1>
+<div class="hero-grid">
+<div>
+<p class="lead">At nine tomorrow morning, an operations team needs a list of orders to investigate. Your model is one part of
+that promise. The harder work is making the target meaningful, the dataset honest, the queue usable, and the
+service dependable. Follow the project through seven skills that become much clearer when someone has to act
+on the result.</p>
+<div class="hero-links">
+<a href="#frame">Read the argument</a>
+<a href="#scenario">Try the worked example</a>
+</div>
+<div class="byline">
+<span class="avatar" aria-hidden="true">AR</span>
+<div>
+<strong>Ali Reza Rashidi</strong>
+<div class="byline-meta">
+<span>15 min read</span>
+<span>Updated September 12, 2026</span>
+</div>
+</div>
+</div>
+</div>
+<aside aria-label="Reading guide">
+<p class="hero-note">A good project lets another person follow your reasoning all the way from the question to the operating
+decision.</p>
+<div class="toc">
+<p class="toc-label">In this piece</p>
+<ol>
+<li>
+<a href="#frame">Find the decision hiding inside the request.</a>
+</li>
+<li>
+<a href="#build">Make the dataset tell the truth.</a>
+</li>
+<li>
+<a href="#evaluate">A useful score fits the review queue.</a>
+</li>
+<li>
+<a href="#operate">Be ready for an ordinary bad morning.</a>
+</li>
+<li>
+<a href="#sources">Sources and example assumptions</a>
+</li>
+</ol>
+</div>
+</aside>
+</div>
+</div>
+</div>
+<section class="section reveal" id="frame" aria-labelledby="frame-title" style="--spy:var(--blue)">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">
+<span class="kicker-mark" aria-hidden="true">
+</span>01 — Understand</div>
+<h2 id="frame-title">Find the decision hiding inside the request.<a class="anchor" href="#frame" aria-label="Link to Understand">#</a>
+</h2>
+</div>
+<p class="body-copy">Domain understanding and statistics turn a broad modeling request into an operating problem with a population,
+a clock, and a cost.</p>
+</div>
+<div class="framework" style="--ac:var(--blue)">
+<aside class="framework-aside" aria-label="Domain understanding">
+<div class="framework-name">
+<span class="mark" aria-hidden="true">
+</span>
+<h3>Domain understanding</h3>
+</div>
+<p class="framework-role">Skill 01 · Frame the intervention</p>
+<p class="framework-summary">Learn the definitions and deadlines that make an action possible.</p>
+</aside>
+<div class="framework-content">
+<p>The operations manager does not ask for a better classifier. She asks which orders her team should inspect at
+nine tomorrow morning. There are 1,000 open orders and enough staff to investigate 100. Some shipments can
+still be expedited. Others are already beyond the point where intervention helps. A model that predicts late
+delivery could be useful, but only if its output arrives in time and points toward something the team can
+actually do.</p>
+<p>This hypothetical order-review project will carry the article. In the example evaluation set, 100 of the 1,000
+orders eventually arrive late. The team can review 100 orders per day. These are teaching assumptions and
+constructed counts, not a claimed production result. They let you see how statistics, programming, data
+preparation, modeling, communication, domain knowledge, and operations depend on each other inside one piece
+of work.</p>
+<p>Start by sitting with the person who will use the result. Ask what an investigation involves, which orders can
+be changed, and how much time remains before each action becomes useless. “Predict late orders” leaves those
+questions unanswered. A more useful brief is: “At 09:00, prioritize eligible orders for a same-day review
+queue capped at 100, so operators can investigate preventable delays before the intervention deadline.” The
+phrasing gives your analysis a time, a population, and a capacity limit.</p>
+<h4>Domain knowledge is something you can build</h4>
+<p>You acquire domain understanding by inspecting exceptions, comparing definitions, and following decisions
+through their consequences. Ask what “late” means when a customer changes the delivery window. Find out
+whether a partial shipment counts as complete. Learn which status changes are entered retrospectively. These
+are learnable distinctions. Calling domain knowledge an innate instinct makes the skill sound mysterious and
+allows teams to skip the conversations that would actually improve it.</p>
+<p>RAND's 2024 study interviewed 65 experienced data scientists and engineers about AI project failures. Its
+findings include misunderstanding the problem, inadequate data, technology-first choices, and infrastructure
+gaps. This qualitative study offers useful failure patterns; it does not measure a universal project-failure
+rate from those 65 interviews. The practical lesson for our queue is to resolve the operating problem early
+enough that an elegant model cannot quietly optimize the wrong task.<a class="xref" href="#src-1"
+aria-label="Source 1">[1]</a></p>
+<p>Your first deliverable can therefore be one page: the decision, eligible orders, intervention deadline, queue
+capacity, current process, and outcome definition. Ask the operations manager to walk through an example that
+should enter the queue and one that should not. If you cannot agree on these cases, more features will not
+clarify the target. They will give the disagreement additional columns in which to hide.</p>
+</div>
+</div>
+<div class="framework" style="--ac:var(--orange)">
+<aside class="framework-aside" aria-label="Math and statistics">
+<div class="framework-name">
+<span class="mark" aria-hidden="true">
+</span>
+<h3>Math and statistics</h3>
+</div>
+<p class="framework-role">Skill 02 · Count the consequences</p>
+<p class="framework-summary">Explain the denominator, the uncertainty, and the error cost.</p>
+</aside>
+<div class="framework-content">
+<p>The headline number is waiting to mislead you. With 100 late orders out of 1,000, a model that labels every
+order “on time” achieves 90% accuracy. It also identifies none of the late orders. The number is
+mathematically correct and operationally unhelpful. Statistical literacy begins with recognizing what a
+summary counts, what it ignores, and whether its denominator matches the decision you are trying to support.</p>
+<p>For a review queue, precision asks how many reviewed orders truly belong to the class of interest. Recall asks
+how many of all late orders appear in that queue. In our constructed ranking, the top 100 contain 60 orders
+that later arrive late. Precision is 60/100, or 60%; recall is also 60/100, or 60%, because there happen to be
+100 late orders in the evaluation set. The equality is incidental. Change the queue size and the measures move
+differently.<a class="xref" href="#src-2" aria-label="Source 2">[2]</a></p>
+<h4>Make the uncertainty visible</h4>
+<p>Those counts describe one evaluation sample. Performance can differ across weeks, warehouses, delivery
+partners, and order types. Estimate uncertainty in a way that respects the sampling process. If orders on the
+same route share a disruption, treating every row as independent can understate uncertainty. If deployment
+will face future weeks, an evaluation that preserves temporal order is more informative than one that casually
+mixes past and future examples.</p>
+<p>You also need basic economic reasoning. A correctly identified late order is not automatically a saved
+delivery. Perhaps the intervention is unavailable or too expensive. Define what successful investigation means
+and how its cost is counted. A ranking can be good at predicting delay while poor at identifying preventable
+delay. The distinction introduces a causal question: whether acting on an order changes its outcome, rather
+than merely identifying an outcome that would occur anyway.</p>
+<p>Probability, sampling, and error analysis let you make those distinctions precise. Linear algebra helps you
+understand representations and transformations. Calculus becomes useful when you need to reason about
+optimization. You do not need to demonstrate every mathematical skill in every project. You do need enough
+understanding to identify which assumptions carry your current result, and enough honesty to seek help when
+those assumptions exceed your expertise.</p>
+<p>Keep a small numerical example beside the headline metric. A manager can inspect “60 genuinely late orders
+among 100 reviews” more easily than an unexplained composite score. The example invites productive questions
+about the other 40 reviews and the 40 late orders the queue missed. Those questions are where evaluation
+begins to influence the service. A metric earns its place when you can explain the behavior that would make it
+rise or fall.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="section reveal" id="build" aria-labelledby="build-title" style="--spy:var(--green)">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">
+<span class="kicker-mark" aria-hidden="true">
+</span>02 — Build</div>
+<h2 id="build-title">Make the dataset tell the truth.<a class="anchor" href="#build" aria-label="Link to Build">#</a>
+</h2>
+</div>
+<p class="body-copy">Data preparation and programming preserve what was knowable at the decision time and make the computation
+repeatable.</p>
+</div>
+<div class="framework" style="--ac:var(--green)">
+<aside class="framework-aside" aria-label="Data preparation">
+<div class="framework-name">
+<span class="mark" aria-hidden="true">
+</span>
+<h3>Data preparation</h3>
+</div>
+<p class="framework-role">Skill 03 · Reconstruct the snapshot</p>
+<p class="framework-summary">One order, one decision time, and only information available then.</p>
+</aside>
+<div class="framework-content">
+<p>At 09:00, what was actually knowable about an order? This question should shape the training table. The final
+delivery timestamp is useful for constructing the outcome after the delivery window closes. It is not a
+legitimate predictor available to the morning queue. A field named “latest_status” is ambiguous: latest when
+the historical table was exported, or latest as of the decision time? That single distinction can turn an
+apparently excellent model into a rehearsal with answers attached.</p>
+<p>Define one row as one eligible order at one decision timestamp. Keep the snapshot time explicit. Join
+inventory, warehouse, and carrier information using what was available at that time, including the time the
+information became available to your system when it differs from the time an event occurred. An event stamped
+08:55 but received at 09:10 cannot support a 09:00 decision. Historical reconstruction needs to respect both
+the business clock and the information clock.</p>
+<h4>Inspect the joins that look harmless</h4>
+<p>An order can have several line items and several status events. Joining both raw tables to the order table can
+create a many-to-many multiplication. The resulting dataset may still load into a model without complaint.
+Before fitting anything, check row counts, key uniqueness, and how records with missing matches are handled.
+Reconcile a handful of orders against their original operational records, including cancellations and other
+cases that are easy to exclude accidentally.</p>
+<p>Wickham's Tidy Data gives a clear organizing principle: variables, observations, and types of observational
+units should have a coherent representation. For our queue, the key contribution is deciding what an
+observation is before reshaping data around it. A tidy table does not guarantee valid labels or time-safe
+features, but it gives those choices a structure that you can inspect and communicate. The skill is semantic
+as well as mechanical.<a class="xref" href="#src-3" aria-label="Source 3">[3]</a></p>
+<p>Treat missingness as information about the process before choosing an imputation rule. A missing carrier
+update could mean the order has not reached the carrier, the integration is delayed, or the identifier did not
+match. These mechanisms have different implications. Add quality checks and reason codes where they help
+distinguish them. Filling every empty value with zero makes the table easier to compute on while potentially
+erasing the difference between a real zero and an unknown measurement.</p>
+<p>Write a compact data contract for the scoring snapshot: required fields, allowed ranges, unique key, cutoff
+logic, and expected coverage. Put checks beside the transformation that can violate them. This gives future
+maintainers a place to see why a rule exists. “Clean the data” is an endless instruction. “Exactly one
+eligible order per snapshot, with no information arriving after 09:00” is a condition you can verify and
+discuss when it fails.</p>
+</div>
+</div>
+<div class="framework" style="--ac:var(--cyan)">
+<aside class="framework-aside" aria-label="Programming">
+<div class="framework-name">
+<span class="mark" aria-hidden="true">
+</span>
+<h3>Programming</h3>
+</div>
+<p class="framework-role">Skill 04 · Make it repeatable</p>
+<p class="framework-summary">Express the workflow clearly enough to test and review.</p>
+</aside>
+<div class="framework-content">
+<p>Programming makes the reasoning repeatable. SQL lets you express the population and joins where the data
+lives. Python or R can support analysis, feature construction, modeling, and evaluation. The important
+question is whether another person can rerun the work and obtain the same intended dataset and result. A
+notebook that depends on cells executed in an undocumented order is difficult to review, even when each
+individual cell looks sensible.</p>
+<p>Keep the order-queue pipeline explicit. Read the source snapshot, validate it, build features, load the
+approved model, score eligible orders, apply eligibility rules, and write the queue. Separate the logic enough
+that a reviewer can inspect these steps without crossing a maze of abstractions. Small functions with clear
+inputs and outputs help. So do ordinary names that preserve the domain language: decision_time is easier to
+reason about than a mysterious timestamp abbreviated three different ways.</p>
+<h4>Make the likely mistakes easy to catch</h4>
+<p>Tests should protect meaningful boundaries. Construct an order whose carrier event arrives after the cutoff
+and verify that it cannot influence the morning features. Create duplicate line items and verify that they do
+not create duplicate queue entries. Check an empty eligible population and a snapshot with no known outcomes.
+These tests exercise mistakes that could change an operating decision; they do more than repeat the
+implementation in another syntax.</p>
+<p>Record the code revision, data snapshot identifier, feature definition, and model artifact used for an
+evaluation. A random seed can help reproduce particular stochastic steps, but it cannot compensate for a
+changing dataset or a different preprocessing pipeline. Reproducibility is a description of the full
+computation and its inputs. It should be possible to explain why two runs differ instead of treating every
+discrepancy as mysterious model behavior.</p>
+<p>An AI coding assistant can help draft a join, explain an unfamiliar function, or suggest edge cases. Give it
+the row grain, timestamp semantics, and expected behavior of missing records. Then review the actual query and
+run it against small cases whose answers you know. Generated code can be syntactically polished while using
+future information or multiplying rows. Your responsibility is to verify the business and statistical meaning
+of the computation, not only that it executes.</p>
+<p>For this project, useful programming produces an ordinary but dependable artifact: a dated queue with stable
+order identifiers, scores, eligibility reasons, and the version of the process that generated it. Operators
+need to be able to trace an item back to its source record. Analysts need to reproduce why it ranked where it
+did. These requirements often improve code structure more effectively than introducing another framework
+before the workflow is understood.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="section reveal" id="evaluate" aria-labelledby="evaluate-title" style="--spy:var(--purple)">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">
+<span class="kicker-mark" aria-hidden="true">
+</span>03 — Evaluate</div>
+<h2 id="evaluate-title">A useful score fits the review queue.<a class="anchor" href="#evaluate" aria-label="Link to Evaluate">#</a>
+</h2>
+</div>
+<p class="body-copy">Modeling and communication connect an evaluation result to the number of orders a real team can investigate.</p>
+</div>
+<div class="framework" style="--ac:var(--purple)">
+<aside class="framework-aside" aria-label="Machine learning">
+<div class="framework-name">
+<span class="mark" aria-hidden="true">
+</span>
+<h3>Machine learning</h3>
+</div>
+<p class="framework-role">Skill 05 · Evaluate the operating point</p>
+<p class="framework-summary">Compare useful baselines under the same capacity constraint.</p>
+</aside>
+<div class="framework-content">
+<p>Start with a baseline that represents a plausible current decision rule. Perhaps operators already prioritize
+orders with a missing warehouse scan close to the cutoff. Compare your model with that rule on the same
+eligible population and the same review budget. The baseline should make the improvement claim harder to fake.
+Comparing a sophisticated ranker with a deliberately useless alternative tells you less about whether changing
+the working process is worthwhile.</p>
+<p>Choose evaluation splits that resemble the intended use. For a morning queue deployed on future dates, train
+on earlier snapshots and evaluate on later ones, taking account of how long outcomes take to become available.
+Scikit-learn's TimeSeriesSplit illustrates temporally ordered evaluation; its default mechanics do not
+automatically resolve repeated-order leakage, label delay, or the particular gaps your task requires. Those
+remain design decisions in your project.<a class="xref" href="#src-4" aria-label="Source 4">[4]</a></p>
+<p>Preprocessing is part of the fitted system. Learn transformations using the training data, then apply them to
+held-out data. Scikit-learn's guidance on common pitfalls explains how fitting transformations on test
+information can produce optimistic evaluation and how pipelines help keep fitting steps inside the proper
+split. A pipeline is useful protection for preprocessing leakage. It cannot make a final-delivery field valid
+for a prediction that happens before delivery.<a class="xref" href="#src-5" aria-label="Source 5">[5]</a></p>
+<figure class="diagram-block" id="queue-budget">
+<div class="diagram-title">More coverage also means more investigations.</div>
+<section class="chart-scroll" tabindex="0" aria-label="Scrollable diagram: More coverage also means more investigations.">
+<svg viewBox="0 0 960 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="In a constructed set with 100 late orders, reviewing the top 50 finds 40, reviewing 100 finds 60, and reviewing 200 finds 80; daily capacity is 100 reviews." aria-labelledby="queue-budget-title queue-budget-desc">
+<title id="queue-budget-title">More coverage also means more investigations.</title>
+<desc id="queue-budget-desc">In a constructed set with 100 late orders, reviewing the top 50 finds 40, reviewing 100 finds 60, and reviewing 200 finds 80; daily capacity is 100 reviews.</desc>
+<defs>
+<linearGradient id="queue-fill" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0" stop-color="#7650e6"/>
+<stop offset="1" stop-color="#3468f5"/>
+</linearGradient>
+</defs>
+<path d="M240.0 32V292" stroke="rgba(23,23,23,.12)"/>
+<text x="240.0" y="324" text-anchor="middle" class="svg-mono">0</text> <path d="M370.0 32V292"
+stroke="rgba(23,23,23,.12)"/>
+<text x="370.0" y="324" text-anchor="middle" class="svg-mono">50</text> <path
+d="M500.0 32V292" stroke="rgba(23,23,23,.12)"/>
+<text x="500.0" y="324" text-anchor="middle"
+class="svg-mono">100</text> <path d="M630.0 32V292" stroke="rgba(23,23,23,.12)"/>
+<text x="630.0" y="324"
+text-anchor="middle" class="svg-mono">150</text> <path d="M760.0 32V292" stroke="rgba(23,23,23,.12)"/>
+<text
+x="760.0" y="324" text-anchor="middle" class="svg-mono">200</text> <text x="24" y="82"
+class="svg-label">Review 50 orders</text>
+<rect class="bar-rect" x="240" y="56" width="104.0" height="40"
+fill="url(#queue-fill)"/>
+<rect class="bar-rect" x="344.0" y="56" width="26.0" height="40"
+fill="#5b6b7a"/>
+<text x="386.0" y="82" class="svg-value">40 / 10</text> <text x="24" y="162"
+class="svg-label">Review 100 orders</text>
+<rect class="bar-rect" x="240" y="136" width="156.0" height="40"
+fill="url(#queue-fill)"/>
+<rect class="bar-rect" x="396.0" y="136" width="104.0" height="40"
+fill="#5b6b7a"/>
+<text x="516.0" y="162" class="svg-value">60 / 40</text> <text x="24" y="242"
+class="svg-label">Review 200 orders</text>
+<rect class="bar-rect" x="240" y="216" width="208.0" height="40"
+fill="url(#queue-fill)"/>
+<rect class="bar-rect" x="448.0" y="216" width="312.0" height="40"
+fill="#5b6b7a"/>
+<text x="776.0" y="242" class="svg-value">80 / 120</text> <path d="M500 24V292"
+stroke="#171717" stroke-dasharray="5 5"/>
+<text x="512" y="24" class="svg-mono">Daily capacity: 100</text>
+<text
+x="240" y="352" class="svg-mono">Orders reviewed · common zero-based scale</text>
+<path d="M24 380H936"
+stroke="rgba(23,23,23,.12)"/>
+<rect x="24" y="400" width="14" height="14" fill="#7650e6"/>
+<text x="48" y="412"
+class="svg-mono">Late orders found</text>
+<rect x="360" y="400" width="14" height="14" fill="#5b6b7a"/>
+<text
+x="384" y="412" class="svg-mono">On-time orders reviewed</text> </svg>
+</section> <figcaption
+class="diagram-caption">
+<strong>How to read this:</strong> The full bar is the number of reviews; its colored
+segment is the number of late orders found. The right-hand pair gives late/on-time counts. The dashed line
+marks capacity. All three queues are nested selections from the same ranking. A late order found is not
+necessarily a delay that intervention can prevent.</figcaption> </figure>
+<h4>Choose the operating point, then
+inspect its errors</h4> <p>Our hypothetical ranking provides three nested queues. The top 50 contain 40 late
+orders; the top 100 contain 60; the top 200 contain 80. Precision falls from 80% to 60% to 40%, while recall
+rises from 40% to 60% to 80%. These counts describe a constructed example, not an expected curve for every
+model. They make the capacity trade-off visible without hiding it inside a single score.</p>
+<div class="lab" id="scenario" data-kind="skills" role="group" aria-labelledby="scenario-title">
+<h4 id="scenario-title">Choose the queue your team can actually review.</h4>
+<p>One constructed ranking, 1,000 evaluated orders, 100 late outcomes, and capacity for 100 reviews per day.</p>
+<div class="lab-controls" hidden>
+<label for="scenario-input">Orders selected for review</label>
+<select id="scenario-input">
+<option value="50">Top 50 orders</option>
+<option value="100" selected>Top 100 orders</option>
+<option value="200">Top 200 orders</option>
+</select>
+</div>
+<div class="stat-strip">
+<div class="stat">
+<strong id="scenario-0">60%</strong>
+<span>Precision</span>
+</div>
+<div class="stat">
+<strong id="scenario-1">60%</strong>
+<span>Recall</span>
+</div>
+<div class="stat">
+<strong id="scenario-2">100%</strong>
+<span>Daily review capacity used</span>
+</div>
+</div>
+<p class="lab-status" id="scenario-status" role="status" aria-live="polite">The top 100 include 60 late orders and 40 on-time orders. The queue fits the daily capacity.</p>
+</div>
+<p>At a capacity of 100 reviews, a recommendation to inspect 200 orders is an unstaffed operating plan. The wider
+queue may recover more late orders in offline evaluation, but it needs twice the available review capacity.
+You could change staffing, reduce investigation time, or choose a smaller queue. Each option has consequences
+that the model metric does not price. Discuss them with the owner of the workflow before presenting the wider
+queue as an improvement.</p>
+<p>Inspect false positives and missed late orders with operators. Look for patterns in actionability, data
+coverage, and error cost, rather than assuming every classification mistake has the same consequence. A model
+can be accurate about orders nobody can still help. It can also miss a small subgroup whose delays are
+unusually costly. Error analysis turns a ranking result into specific hypotheses about what data, policy, or
+modeling change would be worth testing next.</p>
+</div>
+</div>
+<div class="framework" style="--ac:var(--gold)">
+<aside class="framework-aside" aria-label="Visualization and communication">
+<div class="framework-name">
+<span class="mark" aria-hidden="true">
+</span>
+<h3>Visualization and communication</h3>
+</div>
+<p class="framework-role">Skill 06 · Support a choice</p>
+<p class="framework-summary">Separate measured results, assumptions, and proposals.</p>
+</aside>
+<div class="framework-content">
+<p>The operations manager needs a recommendation she can act on at nine, not a tour of every experiment you ran.
+Begin with the proposed queue size, the evaluation period, the expected composition in that period, and the
+main limitation. “In this constructed evaluation, 60 of 100 flagged orders were late; we have not yet
+established how many delays a review prevents” is a more useful statement than a celebratory accuracy figure
+with its denominator left unexplained.</p>
+<p>Use a visual when it resolves a decision. The queue chart earns its space because all three choices share one
+horizontal scale, and the two segments account for every review. It makes the cost of additional coverage
+visible. A chart of seven vaguely scored skills would not carry the same evidential weight. You would first
+need a defensible measurement method, a population, and a reason to believe the numerical differences meant
+anything.</p>
+<h4>Tell the truth about the uncomfortable part</h4>
+<p>Make a distinction between measured results, assumptions, and proposals. The evaluation counts are one
+category. Daily review capacity is an operating constraint. Expected improvement after intervention is a
+hypothesis that requires observation or a suitable experimental design. Mixing them produces a story that is
+easy to sell and hard to audit. Keeping them separate allows colleagues to contribute what they know without
+accepting the whole narrative as a package.</p>
+<p>Show at least one case that challenges the recommendation. For our order queue, that could be a late order
+ranked low because an entire warehouse stopped reporting scans. Explain whether the problem belongs to data
+coverage, model behavior, or the intervention policy. Acknowledging such a case strengthens the discussion
+because it points toward a response. Hiding it until the first deployment incident leaves the same limitation
+in place and removes the opportunity to prepare.</p>
+<p>Ask the audience to make an explicit choice. Will the team run a shadow queue, conduct a limited pilot, or
+continue with the existing rule while a data issue is repaired? Specify what evidence would justify moving to
+the next step. Good communication reduces the distance between analysis and a responsible action. It also
+makes refusal intelligible: if operators decline a pilot because the queue arrives too late, you have learned
+something concrete about the service.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="section reveal section-dark" id="operate" aria-labelledby="operate-title" style="--spy:var(--slate)">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">
+<span class="kicker-mark" aria-hidden="true">
+</span>04 — Operate</div>
+<h2 id="operate-title">Be ready for an ordinary bad morning.<a class="anchor" href="#operate" aria-label="Link to Operate">#</a>
+</h2>
+</div>
+<p class="body-copy">Engineering and MLOps keep the service useful when inputs arrive late, workflows change, and intervention
+affects the next training dataset.</p>
+</div>
+<div class="framework" style="--ac:var(--slate)">
+<aside class="framework-aside" aria-label="Engineering and MLOps">
+<div class="framework-name">
+<span class="mark" aria-hidden="true">
+</span>
+<h3>Engineering and MLOps</h3>
+</div>
+<p class="framework-role">Skill 07 · Keep the promise</p>
+<p class="framework-summary">Own freshness, failures, rollback, and the feedback from intervention.</p>
+</aside>
+<div class="framework-content">
+<p>The first deployment should answer a bounded question. In shadow mode, generate the queue without changing the
+operating process and compare its timeliness, coverage, and composition with expectations. A shadow run can
+expose missing fields and workflow mismatches. It cannot establish the benefit of an intervention that nobody
+performs. When you move to a pilot, design the comparison so that you can learn about the action as well as
+the prediction.</p>
+<p>Google's ML Test Score proposes checks across data, models, infrastructure, and monitoring to assess
+production readiness and technical debt. Its value for this project is the breadth of the review: the trained
+model is one part of a service with dependencies and failure modes. Use an appropriate subset of checks with
+clear ownership. Completing a checklist should produce evidence about readiness, rather than another document
+declaring that readiness has been achieved.<a class="xref" href="#src-6" aria-label="Source 6">[6]</a></p>
+<h4>Plan for an ordinary bad morning</h4>
+<p>Suppose the warehouse feed is late at 08:58. Decide whether the queue should fall back to the current rule,
+exclude affected orders with a visible warning, or pause. Log which response occurred. A silent fallback that
+looks identical to a normal prediction makes both operations and later evaluation confusing. The user should
+be able to tell what the system knows, what is missing, and whether the recommended action remains
+appropriate.</p>
+<p>Monitor input coverage, feature freshness, queue size, scoring failures, and whether reviews are completed in
+time. Once outcomes mature, monitor performance against the approved definition. Keep a rollback path and a
+named owner who can use it. A model can continue returning perfectly formatted scores while the business
+process changes underneath it. Operational skill is partly the discipline of noticing when technically
+successful execution no longer means useful execution.</p>
+<p>Intervention also changes your future training data. If operators rescue some flagged orders, those orders may
+finish on time. A naive retraining process could interpret their eventual success as evidence that the
+original alerts were wrong. Record the action taken and the conditions under which it was assigned. Prediction
+under an existing policy and the effect of changing that policy are different learning problems; the
+deployment history helps you avoid confusing them.</p>
+<h4>Build the skills through one complete loop</h4>
+<p>For your next learning project, take the order queue through a small but complete version of this process.
+First produce the decision brief and a few reviewed examples. Then build a time-safe dataset and a credible
+baseline. Add an evaluation that respects the review budget, followed by a readable recommendation. Finally,
+exercise a missing-feed scenario and document the fallback. You will discover specific gaps in your skills
+because each artifact has a job to perform.</p>
+<p>You do not need to become the deepest expert in every discipline before contributing. You need enough fluency
+to recognize dependencies, expose assumptions, and bring the right colleague into a decision. Go deep in a
+method, a domain, or a part of the system, while learning the neighboring concepts that can invalidate your
+work. Breadth helps you see the boundary of your expertise. Depth helps you do something valuable once you
+reach it.</p>
+<p>When you publish the project, show the constraints and the evidence, including what remains unproven. A clear
+explanation of a leakage risk you caught, a capacity trade-off you quantified, or a fallback you tested says
+more about your professional judgment than an unsupported claim of exceptional accuracy. The reader should be
+able to follow the chain from an operating need to a dataset, a model, and a decision someone can responsibly
+make.</p>
+<div class="callout-line">The skill is making the whole argument hold together.<small>At nine tomorrow morning, someone must trust the queue enough to act—and understand its limits well enough to stop.</small>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="section reveal" id="sources" aria-labelledby="sources-title">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">
+<span class="kicker-mark" aria-hidden="true">
+</span>05 — Sources</div>
+<h2 id="sources-title">Follow the evidence.<a class="anchor" href="#sources" aria-label="Link to Sources">#</a>
+</h2>
+</div>
+<p class="body-copy">The order-review project and its ranking are hypothetical teaching examples. The three queue counts are
+internally consistent nested subsets of one 1,000-order evaluation set with 100 late orders. They describe
+prediction, not the causal effect of intervention. The seven skills form an editorial framework, not a
+measured ranking of failure causes.</p>
+</div>
+<ol class="sources-list">
+<li id="src-1">
+<span>
+<strong>The Root Causes of Failure for Artificial Intelligence Projects and How They Can Succeed.</strong> Ryseff, De Bruhl &amp; Newberry · RAND, 2024.<a class="xlink" href="https://www.rand.org/pubs/research_reports/RRA2680-1.html">Read source</a>
+<span class="source-note">Qualitative interviews with 65 experienced practitioners; not a project-failure-rate estimate from that sample.</span>
+</span>
+</li>
+<li id="src-2">
+<span>
+<strong>Precision score.</strong> scikit-learn documentation.<a class="xlink" href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html">Read source</a>
+<span class="source-note">Definition of precision; the queue counts in this article are constructed and fully specified.</span>
+</span>
+</li>
+<li id="src-3">
+<span>
+<strong>Tidy Data.</strong> Hadley Wickham · Journal of Statistical Software, 2014.<a class="xlink" href="https://www.jstatsoft.org/article/view/v059i10">Read source</a>
+<span class="source-note">Organizing variables, observations, and observational units.</span>
+</span>
+</li>
+<li id="src-4">
+<span>
+<strong>TimeSeriesSplit.</strong> scikit-learn documentation.<a class="xlink" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html">Read source</a>
+<span class="source-note">Temporally ordered evaluation; label delays and business-specific gaps still need explicit design.</span>
+</span>
+</li>
+<li id="src-5">
+<span>
+<strong>Common pitfalls and recommended practices.</strong> scikit-learn documentation.<a class="xlink" href="https://scikit-learn.org/stable/common_pitfalls.html">Read source</a>
+<span class="source-note">Data leakage, preprocessing fitted on training data, and pipelines.</span>
+</span>
+</li>
+<li id="src-6">
+<span>
+<strong>The ML Test Score: A Rubric for ML Production Readiness and Technical Debt Reduction.</strong> Breck and colleagues · Google Research, 2017.<a class="xlink" href="https://research.google/pubs/the-ml-test-score-a-rubric-for-ml-production-readiness-and-technical-debt-reduction/">Read source</a>
+<span class="source-note">Production checks spanning data, models, infrastructure, and monitoring.</span>
+</span>
+</li>
+</ol>
+</div>
+</section>
+</main>
+<a class="to-top" href="#top" aria-label="Back to top">↑</a>
+<script>
+(() => {
+  'use strict';
+  const root = document.documentElement;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const staticView = new URLSearchParams(location.search).get('motion') === 'static';
+  const sections = [...document.querySelectorAll('main > section')];
+  const navLinks = [...document.querySelectorAll('.nav a')];
+  let pending = false;
+  function updateScroll() {
+    const max = root.scrollHeight - innerHeight;
+    document.querySelector('.progress span').style.width = `${max > 0 ? Math.min(100, scrollY / max * 100) : 0}%`;
+    document.querySelector('.site-header').classList.toggle('scrolled', scrollY > 12);
+    let active = '';
+    for (const section of sections) if (section.getBoundingClientRect().top <= 170) active = section.id;
+    if (max > 0 && scrollY >= max - 5) active = 'sources';
+    for (const link of navLinks) {
+      const current = link.hash === `#${active}`;
+      link.classList.toggle('active', current);
+      if (current) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    }
+    pending = false;
+  }
+  addEventListener('scroll', () => { if (!pending) { pending = true; requestAnimationFrame(updateScroll); } }, {passive:true});
+  addEventListener('resize', updateScroll);
+  updateScroll();
+  if ('IntersectionObserver' in window && !reduced && !staticView) {
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) if (entry.isIntersecting) {
+        entry.target.classList.add('entered');
+        if (entry.target.classList.contains('diagram-block')) {
+          for (const label of entry.target.querySelectorAll('[data-count]')) {
+            const started = performance.now();
+            const target = Number(label.dataset.count);
+            const decimals = Number(label.dataset.decimals);
+            function count(now) {
+              const fraction = Math.min(1, (now - started) / 700);
+              label.textContent = (target * fraction).toFixed(decimals) + label.dataset.suffix;
+              if (fraction < 1) requestAnimationFrame(count);
+            }
+            requestAnimationFrame(count);
+          }
+        }
+        observer.unobserve(entry.target);
+      }
+    }, {threshold:0, rootMargin:'0px 0px -24px 0px'});
+    document.querySelectorAll('.reveal, .diagram-block').forEach(node => observer.observe(node));
+    root.classList.add('reveal-ready', 'diagram-motion-ready');
+  }
+  const lab = document.querySelector('.lab');
+  const input = document.getElementById('scenario-input');
+  function updateScenario(announce = false) {
+    const value = Number(input.value);
+    let results, message;
+    if (lab.dataset.kind === 'decisions') {
+      const net = 4000 * (0.02 * 80 - value);
+      results = [`$${value.toFixed(2)}`, new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(net), `${(value / 80 * 100).toFixed(2)}%`];
+      input.setAttribute('aria-valuetext', `$${value.toFixed(2)}`);
+      message = `At $${value.toFixed(2)} per account, point-estimate contribution is ${results[1]}. The unsubscribe guardrail still requires a pause.`;
+    } else if (lab.dataset.kind === 'big-data') {
+      const events = value * 10 * 600;
+      const daily = events * 600 / 1e9;
+      results = [value.toLocaleString('en-US'), `${daily.toFixed(2)} GB`, `${(daily * 30).toFixed(1)} GB`];
+      message = `${value.toLocaleString('en-US')} vans produce ${events.toLocaleString('en-US')} events per operating day. Raw payload excludes compression, copies, and overhead.`;
+    } else {
+      const truePositives = {50:40,100:60,200:80}[value];
+      results = [`${truePositives / value * 100}%`, `${truePositives}%`, `${value}%`];
+      message = `The top ${value} contain ${truePositives} late orders and ${value-truePositives} on-time orders. ${value > 100 ? 'This exceeds daily capacity by 100 reviews.' : 'This fits daily capacity.'}`;
+    }
+    results.forEach((result,index) => { document.getElementById(`scenario-${index}`).textContent = result; });
+    if (announce) document.getElementById('scenario-status').textContent = message;
+  }
+  input.addEventListener('input', () => updateScenario(false));
+  input.addEventListener('change', () => updateScenario(true));
+  updateScenario(false);
+  lab.querySelector('.lab-controls').hidden = false;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.classList.add('js');</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Understand twelve LLM fine-tuning techniques through one support-assistant example, with mechanisms, parameter calculations, preference learning, and deployment trade-offs.">
+<title>LLM Fine-Tuning Techniques — Twelve Methods, Four Different Decisions</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='3' fill='%23eb8237'/%3E%3Ccircle cx='23' cy='9' r='3' fill='%233468f5'/%3E%3Ccircle cx='9' cy='23' r='3' fill='%2323956f'/%3E%3Ccircle cx='23' cy='23' r='3' fill='%237650e6'/%3E%3C/svg%3E">
+<meta property="og:title" content="LLM Fine-Tuning Techniques — Twelve Methods, Four Different Decisions">
+<meta property="og:description" content="Understand twelve LLM fine-tuning techniques through one support-assistant example, with mechanisms, parameter calculations, preference learning, and deployment trade-offs.">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "LLM Fine-Tuning Techniques — Twelve Methods, Four Different Decisions",
+  "description": "Understand twelve LLM fine-tuning techniques through one support-assistant example, with mechanisms, parameter calculations, preference learning, and deployment trade-offs.",
+  "datePublished": "2026-09-13",
+  "dateModified": "2026-09-13",
+  "inLanguage": "en",
+  "wordCount": 4028,
+  "timeRequired": "PT18M",
+  "author": {
+    "@type": "Person",
+    "name": "Ali Reza Rashidi"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Instrument+Serif:ital@0;1&amp;family=Roboto+Mono:wght@400;500&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898;
+  --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+  --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+  --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+  --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+  --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+}
+* { box-sizing: border-box; }
+html { color-scheme: light; overflow-x: clip; scroll-behavior: smooth; }
+body { margin: 0; color: var(--ink); background: linear-gradient(180deg, #fffdfa, #fcfbf8); font: 400 17px/1.7 "DM Sans", sans-serif; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; }
+::selection { color: var(--paper); background: var(--ink); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+h1, h2, h3, h4 { font-family: "Space Grotesk", sans-serif; margin: 0; text-wrap: balance; }
+h1, h2 { letter-spacing: -.045em; }
+p { text-wrap: pretty; margin: 0 0 22px; }
+svg { display: block; width: 100%; height: auto; }
+.wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+.grain { position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: .08; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.skip-link { position: fixed; left: 16px; top: -80px; z-index: 100; padding: 12px 18px; color: var(--paper); background: var(--ink); }
+.skip-link:focus { top: 12px; }
+.progress { position: fixed; inset: 0 0 auto; height: 2px; z-index: 90; }
+.progress span { display: block; height: 100%; width: 0; background: var(--ink); }
+.site-header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid transparent; }
+.site-header.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); border-bottom-color: var(--line); }
+.topbar { min-height: 68px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 500 13px "Space Grotesk", sans-serif; white-space: nowrap; }
+.brand-dot { width: 12px; height: 12px; background: var(--ink); border-radius: 50%; flex-shrink: 0; }
+.nav { display: flex; align-items: center; gap: 26px; overflow-x: auto; padding-left: 10px; scrollbar-width: none; }
+.nav a { position: relative; padding: 24px 0; white-space: nowrap; text-decoration: none; color: var(--muted); font: 500 11px "Roboto Mono", monospace; }
+.nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 18px; height: 1px; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform .2s; }
+.nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
+.nav a.active::before { content: ""; position: absolute; left: -10px; top: 27px; width: 6px; height: 6px; border-radius: 50%; background: var(--spy); }
+.hero { padding: 92px 0 88px; border-bottom: 1px solid var(--line); }
+.eyebrow, .kicker, .framework-role, .toc-label, .byline-meta, .source-note, .diagram-caption { font-family: "Roboto Mono", monospace; }
+.eyebrow { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 28px; }
+.eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--ink); }
+h1 { font-size: clamp(3rem,8.4vw,6.8rem); line-height: .96; font-weight: 700; }
+h1 em { font: italic 400 1em/.96 "Instrument Serif", serif; color: #535353; }
+.line { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.04em; }
+.line-inner { display: inline-block; }
+.js .line-inner { animation: lineUp .7s both; }
+.js .line:nth-child(2) .line-inner { animation-delay: 90ms; }
+.js .line:nth-child(3) .line-inner { animation-delay: 180ms; }
+@keyframes lineUp { from { transform: translateY(115%); } to { transform: translateY(0); } }
+.hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 60px; margin-top: 54px; }
+.lead { font-size: clamp(1.15rem,1.8vw,1.5rem); line-height: 1.6; color: #414141; }
+.lead::first-letter { float: left; padding: 0 5px 0 0; font: italic 400 2.2em/1 "Instrument Serif", serif; color: var(--ink); }
+.hero-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 30px 0; }
+.hero-links a { padding: 9px 12px; border: 1px solid var(--line-strong); border-radius: 30px; text-decoration: none; font: 11px "Roboto Mono", monospace; }
+.byline { display: flex; gap: 12px; align-items: center; font-size: 13px; }
+.avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; font: 11px "Roboto Mono", monospace; color: var(--paper); background: var(--ink); flex-shrink: 0; }
+.byline-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; font-size: 10px; color: var(--muted); margin-top: 3px; }
+.byline-meta span + span::before { content: ""; display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: var(--muted); vertical-align: middle; margin-right: 9px; }
+.hero-note { border-left: 2px solid var(--accent); padding-left: 20px; font: italic 400 1.25rem/1.5 "Instrument Serif", serif; color: #535353; }
+.toc { padding: 24px; border-radius: 12px; color: var(--ink); background: #f3f1e9; }
+.toc-label { color: var(--muted); background: #f3f1e9; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 16px; }
+.toc ol { list-style: none; counter-reset: toc; padding: 0; margin: 0; }
+.toc li { counter-increment: toc; border-top: 1px solid var(--line); }
+.toc a { display: grid; grid-template-columns: 28px 1fr; gap: 10px; text-decoration: none; font-size: 13px; padding: 14px 0; color: var(--ink); background: #f3f1e9; }
+.toc a::before { content: counter(toc,decimal-leading-zero); font: 10px/2 "Roboto Mono", monospace; color: var(--muted); }
+.section { padding: 88px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
+.section-head { display: grid; grid-template-columns: .9fr 1.1fr; gap: 50px; margin-bottom: 42px; }
+.kicker { display: flex; align-items: center; gap: 10px; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 18px; color: var(--muted); }
+.kicker-mark { width: 8px; height: 8px; background: var(--ink); }
+h2 { font-size: clamp(2rem,4.4vw,4rem); line-height: .98; position: relative; }
+.body-copy { color: var(--muted); font-size: 18px; margin: 6px 0 0; }
+.anchor { margin-left: 10px; font: 400 .45em "DM Sans", sans-serif; text-decoration: none; opacity: 0; }
+h2:hover .anchor, .anchor:focus-visible { opacity: 1; }
+.framework { display: grid; grid-template-columns: 260px minmax(0,1fr); gap: 58px; padding: 42px 0 10px; border-top: 1px solid var(--line); }
+.framework + .framework { margin-top: 40px; }
+.framework-aside { position: sticky; top: 100px; align-self: start; }
+.framework-name { display: flex; align-items: start; gap: 12px; }
+.mark { width: 11px; height: 11px; margin-top: 8px; background: var(--ac); border-radius: 50%; flex-shrink: 0; }
+h3 { font-size: 24px; line-height: 1.18; letter-spacing: -.03em; }
+.framework-role { margin: 15px 0; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .05em; }
+.framework-summary { font-size: 13px; color: var(--muted); }
+.framework-content { min-width: 0; }
+.framework-content h4 { font-size: 19px; margin: 34px 0 14px; letter-spacing: -.02em; }
+.xref { vertical-align: super; font: 10px "Roboto Mono", monospace; text-decoration: none; color: #2854cd; margin-left: 3px; }
+.callout-line { border-left: 3px solid var(--ac,var(--accent)); padding: 12px 0 12px 20px; font-weight: 700; margin: 30px 0; }
+.callout-line small { display: block; font-weight: 400; color: var(--muted); font-size: 14px; margin-top: 6px; }
+.formula { color: var(--ink); background: #f3f1e9; border: 1px solid var(--line); padding: 20px; margin: 26px 0; font: 13px/1.9 "Roboto Mono", monospace; overflow-x: auto; }
+.formula span { display: block; }
+.stat-strip { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; margin: 30px 0; padding: 24px 0; border-block: 1px solid var(--line); }
+.stat strong { display: block; font: 400 clamp(1.7rem,3vw,2.4rem)/1.2 "Roboto Mono", monospace; letter-spacing: -.04em; }
+.stat span { display: block; font-size: 12px; margin-top: 10px; color: var(--muted); }
+.diagram-block { margin: 36px 0; padding: 24px; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: var(--paper); }
+.diagram-title { font: 500 19px/1.4 "Space Grotesk", sans-serif; margin-bottom: 22px; color: var(--ink); background: var(--paper); }
+.chart-scroll { overflow-x: auto; }
+.diagram-caption { font-size: 11px; line-height: 1.85; margin: 20px 0 0; color: var(--muted); background: var(--paper); }
+.svg-label { font: 500 18px "Space Grotesk", sans-serif; fill: var(--ink); }
+.svg-mono { font: 400 14px "Roboto Mono", monospace; fill: var(--muted); }
+.svg-value { font: 500 16px "Roboto Mono", monospace; fill: var(--ink); }
+.bar-rect { transform-box: fill-box; transform-origin: left; }
+.js.diagram-motion-ready .diagram-block:not(.entered) .bar-rect { transform: scaleX(0); }
+.js.diagram-motion-ready .diagram-block.entered .bar-rect { transition: transform .8s var(--d,0s); }
+.js.reveal-ready .reveal:not(.entered) { opacity: 0; transform: translateY(16px); }
+.js.reveal-ready .reveal { transition: opacity .6s, transform .6s; }
+.question { margin: 30px 0; padding: 22px 0; border-block: 1px solid var(--line-strong); }
+.question summary { cursor: pointer; font-weight: 700; }
+.question p { margin: 18px 0 0; color: var(--muted); }
+.section-dark { color: var(--dark-paper); background: var(--dark); }
+.section-dark .section-head h2, .section-dark h3, .section-dark h4 { color: var(--dark-paper); background: var(--dark); }
+.section-dark .body-copy, .section-dark p, .section-dark .framework-role, .section-dark .framework-summary, .section-dark small { color: #c9c7bf; background: var(--dark); }
+.section-dark .kicker { color: #c9c7bf; background: var(--dark); }
+.section-dark .kicker-mark { background: var(--dark-paper); }
+.section-dark .framework { border-color: var(--dark-line); }
+.section-dark .xref { color: #aac1ff; }
+.section-dark :focus-visible { outline-color: var(--dark-paper); }
+.section-dark .callout-line { color: var(--dark-paper); background: var(--dark); }
+.sources-list { list-style: none; padding: 0; margin: 0; counter-reset: sources; }
+.sources-list li { counter-increment: sources; display: grid; grid-template-columns: 40px 1fr; gap: 14px; padding: 22px 0; border-top: 1px solid var(--line); scroll-margin-top: 90px; }
+.sources-list li::before { content: counter(sources,decimal-leading-zero); font: 12px/2 "Roboto Mono", monospace; color: var(--muted); }
+.sources-list strong { font-weight: 700; }
+.source-note { display: block; font-size: 11px; margin-top: 8px; color: var(--muted); }
+.xlink { color: #4c4c4c; border-bottom: 1px dashed currentColor; text-decoration: none; margin-left: 6px; }
+.xlink::after { content: " ↗"; }
+.to-top { position: fixed; z-index: 60; bottom: max(18px,env(safe-area-inset-bottom)); right: max(18px,env(safe-area-inset-right)); display: grid; place-items: center; width: 44px; height: 44px; padding-bottom: env(safe-area-inset-bottom,0px); color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); border-radius: 50%; text-decoration: none; }
+@media (max-width: 720px) {
+  .wrap { width: calc(100% - 16px); }
+  .toc, .formula, .diagram-block, .lab { padding-inline: 12px; }
+  .hero-note, .callout-line { padding-left: 12px; }
+  .hero { padding: 64px 0; }
+  .hero-grid, .section-head, .framework { grid-template-columns: 1fr; gap: 28px; }
+  .hero-grid { margin-top: 38px; }
+  .framework-aside { position: static; }
+  .nav { max-width: 50%; gap: 20px; }
+  .framework { padding-top: 30px; }
+  .section-head { margin-bottom: 32px; }
+  .body-copy { font-size: 17px; }
+}
+@media (max-width: 430px) {
+  h1 { font-size: clamp(2.15rem,12.5vw,3rem); }
+  .brand { font-size: 11px; }
+  .nav { max-width: 46%; }
+  .section { padding: 64px 0; }
+  .diagram-block, .lab { padding-block: 18px; }
+  .chart-scroll svg { min-width: 560px; }
+  .stat-strip { gap: 12px; }
+  .stat strong { font-size: 1.55rem; }
+  .stat span { font-size: 11px; }
+  .lab .stat-strip { grid-template-columns: 1fr; }
+  .sources-list li { grid-template-columns: 28px 1fr; gap: 8px; }
+}
+@media (hover: none) { .anchor { opacity: .55; } .nav a { padding-inline: 4px; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .js.reveal-ready .reveal, .js.diagram-motion-ready .bar-rect { opacity: 1 !important; transform: none !important; }
+}
+@media print {
+  *, *::before, *::after { transition: none !important; }
+  .grain, .site-header, .progress, .to-top, .lab-controls { display: none !important; }
+  .js.reveal-ready .reveal, .js.diagram-motion-ready .bar-rect, .js .line-inner { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .framework-aside { position: static; }
+  .chart-scroll { overflow: visible; }
+}
+.diagram-block, .lab { scroll-margin-top: 88px; }
+
+[hidden] { display: none !important; }
+.svg-label { font-size: 20px; }
+.svg-mono { font-size: 16px; }
+.diagram-block svg .svg-node { fill: var(--paper); stroke: var(--line-strong); stroke-width: 1.5; }
+.diagram-block svg .svg-focal { fill: #f3f1e9; stroke: var(--orange); stroke-width: 2; }
+.diagram-block svg .svg-link { fill: none; stroke: var(--slate); stroke-width: 2; }
+.diagram-block svg .svg-tag { font: 400 12px 'Roboto Mono', monospace; fill: var(--muted); }
+.diagram-block svg .svg-mask { fill: var(--paper); }
+.diagram-block svg .line-path { stroke-dasharray: 1000; stroke-dashoffset: 0; }
+.js.diagram-motion-ready .diagram-block:not(.entered) .line-path { stroke-dashoffset: 1000; }
+.js.diagram-motion-ready .diagram-block.entered .line-path { transition: stroke-dashoffset 1.2s var(--d,0s); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin: 30px 0; }
+.split > div { border-top: 2px solid var(--ac); padding-top: 18px; }
+.split h4 { margin: 0 0 12px; }
+.split p { font-size: 15px; }
+.flow { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; margin: 34px 0; }
+.flow > div { border-top: 2px solid var(--ac); padding-top: 18px; }
+.fnum { display: block; font: 14px 'Roboto Mono', monospace; margin-bottom: 14px; }
+.flow strong { display: block; margin-bottom: 12px; }
+.flow p { font-size: 14px; margin-bottom: 0; }
+.section-dark .flow strong, .section-dark .flow .fnum { color: var(--dark-paper); background: var(--dark); }
+.section-dark .flow p { color: #c9c7bf; background: var(--dark); }
+.quiz { margin-top: 36px; padding: 24px; border-radius: 12px; color: var(--ink); background: #f3f1e9; }
+.quiz h4, .quiz p, .quiz summary, .quiz details, .quiz label { color: var(--ink); background: #f3f1e9; }
+.quiz h4 { margin: 0 0 18px; font: 500 22px/1.35 'Space Grotesk', sans-serif; }
+.quiz .quiz-kicker { font: 12px 'Roboto Mono', monospace; margin-bottom: 18px; }
+.quiz fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.quiz legend { color: var(--ink); background: #f3f1e9; margin-bottom: 18px; font-weight: 700; }
+.quiz label { display: flex; align-items: start; gap: 12px; padding: 12px 8px; border-left: 2px solid var(--line-strong); margin: 10px 0; cursor: pointer; }
+.quiz input { flex-shrink: 0; width: 18px; height: 18px; margin-top: 4px; accent-color: var(--ink); }
+.quiz button { padding: 12px 18px; min-height: 44px; font: 500 13px 'Roboto Mono', monospace; border: 1px solid var(--ink); color: var(--paper); background: var(--ink); cursor: pointer; margin: 12px 8px 8px 0; }
+.quiz button:disabled { opacity: .6; cursor: default; }
+.quiz .quiz-feedback { margin: 18px 0 0; font-size: 15px; }
+.quiz .quiz-track { height: 3px; background: var(--line-strong); margin-top: 20px; }
+.quiz .quiz-track span { display: block; width: 0; height: 100%; background: var(--green); transition: width .3s; }
+.quiz summary { cursor: pointer; min-height: 44px; padding: 10px 0; font-weight: 700; }
+.quiz details p { margin-top: 14px; }
+.quiz :focus-visible { outline-color: var(--ink); }
+.source-note, .sources-list a { overflow-wrap: anywhere; }
+@media (max-width: 720px) { .split, .flow { grid-template-columns: 1fr; } .quiz { padding-inline: 12px; } .topbar { gap: 12px; } }
+@media (max-width: 430px) { .chart-scroll svg { min-width: 680px; } }
+@media (prefers-reduced-motion: reduce) { .js.diagram-motion-ready .line-path { stroke-dashoffset: 0 !important; } }
+@media print { .js.diagram-motion-ready .line-path { stroke-dashoffset: 0 !important; } .quiz-controls { display: none !important; } .quiz-static { display: block !important; } }
+
+.framework { scroll-margin-top: 92px; }
+.framework-content > p { max-width: 78ch; }
+.matrix-scroll { overflow-x: auto; margin: 30px 0; }
+.matrix { border-collapse: collapse; width: 100%; font-size: 14px; }
+.matrix th, .matrix td { padding: 15px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.matrix th { color: var(--ink); background: #f3f1e9; font: 500 12px/1.5 'Roboto Mono',monospace; }
+.matrix td { color: var(--ink); background: var(--paper); }
+.matrix th:first-child, .matrix td:first-child { padding-left: 12px; }
+.matrix caption { text-align: left; font: 500 20px/1.4 'Space Grotesk',sans-serif; color:var(--ink); background:var(--paper); padding-bottom:16px; }
+.matrix a { text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.code { margin: 26px 0; border-radius: 8px; overflow: hidden; color: var(--dark-paper); background: var(--dark); }
+.code pre, .code pre code { display: block; margin: 0; color: var(--dark-paper); background: var(--dark); font: 13px/1.85 'Roboto Mono',monospace; white-space: pre; border:0; box-shadow:none; text-decoration:none; }
+.code pre { padding: 22px; overflow-x: auto; }
+.code pre code { padding:0; }
+.code :focus-visible { outline-color: var(--dark-paper); outline-offset:-4px; }
+.formula { overflow-x:auto; }
+.formula .formula-row { white-space:nowrap; }
+.formula small { display:block; color:var(--muted); background:#f3f1e9; font-size:12px; margin-top:12px; white-space:normal; }
+.lab { margin: 32px 0; padding:24px; border-radius:12px; color:var(--ink); background:#f3f1e9; }
+.lab h4, .lab p, .lab label, .lab output, .lab .stat strong { color:var(--ink); background:#f3f1e9; }
+.lab h4 { margin:0 0 18px; font:500 22px/1.4 'Space Grotesk',sans-serif; }
+.lab .stat span { color:var(--muted); background:#f3f1e9; }
+.lab-controls label { display:block; font-weight:700; font-size:14px; }
+.lab input { width:100%; min-height:44px; accent-color:var(--blue); }
+.lab .lab-status { font-size:14px; margin-bottom:0; }
+.lab .stat-strip { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.diagram-node .svg-node { fill:var(--paper); }
+.svg-axis { font:400 24px 'Roboto Mono',monospace; fill:#8a8a8a; }
+.chart-scroll svg[aria-labelledby="rank-chart-title rank-chart-desc"] { min-width:720px; }
+.diagram-block svg .svg-tag { font-size:12px; }
+.mini-compare { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:24px; margin:36px 0; }
+.mini-compare > div { border-top:1px solid var(--line-strong); padding-top:16px; }
+.mini-compare strong { display:flex; align-items:center; gap:10px; font-size:15px; }
+.mini-compare .mark { width:10px; height:10px; margin:0; }
+.mini-compare p { margin-top:10px; font-size:13px; color:var(--muted); }
+.diagram-block .svg-value { font-size:16px; }
+@media (max-width:720px) {
+  .code pre, .lab { padding-inline:12px; }
+  .matrix { min-width:650px; }
+  .mini-compare { grid-template-columns:1fr 1fr; gap:18px; }
+  .lab .stat-strip { grid-template-columns:1fr; }
+}
+@media (max-width:430px) { .chart-scroll svg { min-width:680px; } .hero .eyebrow { letter-spacing:.08em; } }
+</style>
+</head>
+<body style="--accent:var(--blue)" id="top">
+<a class="skip-link" href="#content">Skip to content</a><div class="progress" aria-hidden="true"><span></span></div><div class="grain" aria-hidden="true"></div>
+<header class="site-header"><div class="wrap topbar"><a class="brand" href="#top"><span class="brand-dot" aria-hidden="true"></span>LLM Fine-Tuning</a>
+<nav class="nav" aria-label="Article sections"><a href="#map" style="--spy:var(--green)">The map</a><a href="#parameters" style="--spy:var(--blue)">The parameters</a><a href="#signals" style="--spy:var(--purple)">The learning signal</a><a href="#practice" style="--spy:var(--orange)">The experiment</a><a href="#sources" style="--spy:var(--slate)">Sources</a></nav></div></header>
+<main id="content" tabindex="-1"><div class="hero"><div class="wrap"><div class="eyebrow">LLM Engineering · A Practical Field Guide</div>
+<h1><span class="line"><span class="line-inner">Twelve ways to</span></span><span class="line"><span class="line-inner">fine-tune an LLM.</span></span><span class="line"><span class="line-inner"><em>Four decisions first.</em></span></span></h1>
+<div class="hero-grid"><div>
+<p data-prose class="lead">Which LLM fine-tuning technique should you use? Start by separating what the model should learn, which parameters you can update,
+where the learning signal comes from, and where training can happen. LoRA, instruction tuning, DPO, and federated learning occupy
+different parts of that design. This guide explains all twelve methods through one returns assistant, including where the popular
+shorthand becomes misleading.</p>
+<div class="hero-links"><a href="#map">See all twelve methods ↓</a><a href="#rank-lab">Explore LoRA rank ↓</a></div>
+<div class="byline"><span class="avatar" aria-hidden="true">AR</span><div><strong>Ali Reza Rashidi</strong><div class="byline-meta"><span>18 min read</span><span>Updated September 13, 2026</span></div></div></div>
+</div><aside aria-label="Reading guide"><p class="hero-note">A parameter-efficient method tells you where learning can live. Your data and objective tell it what to become.</p>
+<div class="toc"><p class="toc-label">In this piece</p><ol><li><a href="#map">One task, four different decisions</a></li><li><a href="#parameters">LoRA, QLoRA, prefixes, adapters, P-tuning, BitFit</a></li><li><a href="#signals">RLHF, RLAIF, DPO, GRPO, and verifiable rewards</a></li><li><a href="#practice">Federated tuning and a defensible experiment</a></li><li><a href="#sources">Twenty primary and official sources</a></li></ol></div></aside></div></div></div>
+<section class="section reveal" id="map" aria-labelledby="map-title">
+<div class="wrap"><div class="section-head">
+<div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span>01 — Read the map</div>
+<h2 id="map-title">Different methods.<br>Different questions.<a class="anchor" href="#map" aria-label="Link to Read the map">#</a></h2></div>
+<p data-prose class="body-copy">You cannot choose intelligently between LoRA and DPO until you notice that they answer different questions. One constrains the
+parameters you update; the other defines how preference pairs shape learning. A single training run can use both.</p>
+</div><p data-prose>Think of fine-tuning as adapting a pretrained model through additional optimization. Full fine-tuning updates the selected model’s
+weights broadly; parameter-efficient fine-tuning restricts the trainable part. Separately, the training objective determines
+which behavior receives a better score. Supervised learning imitates target responses, while preference learning compares alternatives
+or optimizes rewards. The names in the overview mix these levels. Their usefulness becomes much clearer when you separate the
+mechanism from the signal that teaches it.<a class="xref" href="#src-1" aria-label="Source 1">[1]</a><a class="xref" href="#src-2" aria-label="Source 2">[2]</a><a class="xref" href="#src-11" aria-label="Source 11">[11]</a></p><p data-prose>The running example is a fictional shop’s returns assistant. Every request supplies the current policy and relevant order facts.
+For order A17, assume an unused item, a return window of 30 elapsed days, and delivery 10 elapsed days ago. Under this deliberately
+simplified policy, 20 days remain. The assistant should report eligibility and suggest requesting a return. It has no authority
+to promise that money has already been refunded. This example is invented for teaching, and its numbers are arithmetic inputs
+rather than an experiment.</p><div class="code"><pre tabindex="0" aria-label="Fictional support task and required JSON response"><code>Policy: unused items may be returned within 30 elapsed days.
+Order A17: delivered 10 elapsed days ago; item is unused.
+Task: report eligibility, days remaining, and the next step.
+
+{
+  "eligible": true,
+  "days_remaining": 20,
+  "next_step": "request_return"
+}</code></pre></div><p data-prose>Keep the policy in the input because it may change. In this proposed product, fine-tuning teaches consistent handling of the
+supplied policy, output format, uncertainty, and permitted actions. It should not be the only place where today’s return window
+is stored. Before training, test whether a clear prompt, reliable policy retrieval, structured output validation, and a small
+deterministic calculation already solve the problem. Training is justified by a remaining, repeatable failure that your examples
+or rewards can address.</p><div class="matrix-scroll" tabindex="0" role="group" aria-label="Scrollable comparison of all twelve techniques"><table class="matrix">
+<caption>Twelve labels, organized by the decision they address</caption>
+<thead><tr><th scope="col">Technique</th><th scope="col">Main decision</th><th scope="col">Training signal</th><th scope="col">What to check first</th></tr></thead>
+<tbody>
+<tr><th scope="row"><a href="#instruction">Instruction tuning</a></th><td>Which behavior examples to teach</td><td>Demonstrated answers</td><td>Coverage and target quality</td></tr>
+<tr><th scope="row"><a href="#lora">LoRA</a></th><td>Train low-rank weight updates</td><td>Depends on the chosen objective</td><td>Target modules and serving support</td></tr>
+<tr><th scope="row"><a href="#qlora">QLoRA</a></th><td>Compress the frozen base for LoRA training</td><td>Depends on the chosen objective</td><td>Complete peak memory</td></tr>
+<tr><th scope="row"><a href="#prefix">Prefix tuning</a></th><td>Train per-layer prefix states</td><td>Usually a supervised task loss</td><td>Attention and cache overhead</td></tr>
+<tr><th scope="row"><a href="#adapters">Adapter tuning</a></th><td>Train inserted bottleneck modules</td><td>Depends on the chosen objective</td><td>Placement and inference cost</td></tr>
+<tr><th scope="row"><a href="#ptuning">P-tuning</a></th><td>Learn continuous prompt representations</td><td>Task supervision</td><td>Which version and implementation</td></tr>
+<tr><th scope="row"><a href="#bitfit">BitFit</a></th><td>Train selected bias terms</td><td>Task supervision</td><td>Whether suitable biases exist</td></tr>
+<tr><th scope="row"><a href="#rlhf">RLHF / RLAIF</a></th><td>Whose feedback supplies the reward</td><td>Human or AI judgments</td><td>Rubric and reward validity</td></tr>
+<tr><th scope="row"><a href="#dpo">DPO</a></th><td>Learn directly from preference pairs</td><td>Chosen and rejected responses</td><td>Pair quality and reference policy</td></tr>
+<tr><th scope="row"><a href="#grpo">GRPO</a></th><td>Estimate advantages from a sampled group</td><td>Scored model rollouts</td><td>Generation cost and reward variation</td></tr>
+<tr><th scope="row"><a href="#rlvr">RLVR</a></th><td>Reward verifiable outcomes</td><td>Programmatic checks</td><td>What the verifier cannot establish</td></tr>
+<tr><th scope="row"><a href="#federated">Federated tuning</a></th><td>Where training happens</td><td>Local objectives and examples</td><td>Update compatibility and privacy</td></tr>
+</tbody></table></div><div class="framework" id="instruction" style="--ac:var(--green)">
+<aside class="framework-aside" aria-label="01 · Instruction tuning">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>01 · Instruction tuning</h3></div>
+<p class="framework-role">Data and behavior</p><p class="framework-summary">Teach the answer you want the model to produce.</p>
+</aside>
+<div class="framework-content"><p data-prose>Instruction tuning uses examples of tasks expressed as instructions, together with target responses. It is commonly implemented
+as supervised fine-tuning, or SFT. For a causal language model, the loss rewards predicting the target tokens in their demonstrated
+context. Instruction tuning describes the content and purpose of the training data; it does not require updating every weight.
+You can apply the same instruction dataset through full fine-tuning, LoRA, or another compatible adaptation method.<a class="xref" href="#src-1" aria-label="Source 1">[1]</a><a class="xref" href="#src-20" aria-label="Source 20">[20]</a></p><p data-prose>For the returns assistant, a training example contains the policy, order facts, user request, and a correct response. During
+teacher-forced training, the next target token is predicted using preceding target tokens. In an answer-only setup, prompt and
+padding positions are excluded from the loss; assistant answer tokens remain supervised. Verify the actual tokenized sequence
+and chat template before trusting that split. Current SFT tooling exposes completion-only and assistant-only loss options, but
+their applicability depends on dataset format and template support.<a class="xref" href="#src-20" aria-label="Source 20">[20]</a></p><p data-prose>A useful dataset needs more than many variations of order A17. Include items outside the window, different policy windows, missing
+delivery information, used items, and requests to promise a refund. Preserve the same decision logic while changing wording.
+If every example says “20 days,” the model can imitate a constant instead of learning to use the provided facts. Keep related
+conversations and near-duplicate templates out of the test split so that the evaluation asks something genuinely new.</p><p data-prose>The main limitation is that imitation rewards the demonstrated answer, including its mistakes. A polished response with an unsupported
+promise is still a bad target. Inspect a small batch end to end: rendered prompt, target, token boundaries, loss-bearing positions,
+and generated response after training. Falling training loss only tells you that the selected targets are becoming easier to
+predict. It does not establish that the assistant handles unseen policies or respects the boundary between advice and an executed
+refund.</p></div>
+</div></div>
+</section><section class="section reveal" id="parameters" aria-labelledby="parameters-title">
+<div class="wrap"><div class="section-head">
+<div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span>02 — Choose the trainable part</div>
+<h2 id="parameters-title">How much of the<br>model should move?<a class="anchor" href="#parameters" aria-label="Link to Choose the trainable part">#</a></h2></div>
+<p data-prose class="body-copy">These six methods change where learning is stored. Freezing most weights can reduce optimizer state and checkpoint size, but
+the frozen model still participates in the forward pass and often in the backward computation needed to train the added parameters.</p>
+</div><div class="framework" id="lora" style="--ac:var(--blue)">
+<aside class="framework-aside" aria-label="02 · LoRA">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>02 · LoRA</h3></div>
+<p class="framework-role">Low-rank weight updates</p><p class="framework-summary">Learn a compact update beside a frozen projection.</p>
+</aside>
+<div class="framework-content"><p data-prose>LoRA, Low-Rank Adaptation, keeps a base weight matrix fixed and learns an additive update expressed through two smaller matrices.
+For W with output dimension d_out and input dimension d_in, write the update as BA, where A has shape r × d_in and B has shape
+d_out × r. The rank r controls the update’s maximum rank. The usual formulation also scales the update by α/r. LoRA changes the
+representation of the trainable update; it does not supply a training objective or a dataset.<a class="xref" href="#src-2" aria-label="Source 2">[2]</a><a class="xref" href="#src-16" aria-label="Source 16">[16]</a></p><div class="formula"><div class="formula-row">h = Wx + (α/r)BAx</div><div class="formula-row">Full matrix: d_out × d_in parameters</div><div class="formula-row">LoRA update: r × (d_in + d_out) parameters</div><small>W is frozen. A and B are trainable. This formula describes a standard LoRA layer; variants can use other scaling rules.</small></div><p data-prose>Suppose you adapt one 4,096 × 4,096 projection inside the returns assistant with rank 8. The original matrix contains 16,777,216
+parameters. The two update matrices contain 8 × (4,096 + 4,096) = 65,536, or about 0.391% as many. That calculation is exact
+for this chosen layer. A real model’s total depends on which projections you target, their shapes, the ranks, and any additional
+trainable parameters. “Two small matrices per layer” is therefore a shorthand for each adapted target matrix.</p><div class="diagram-block">
+<div class="diagram-title">LoRA changes a projection, not the prompt text</div>
+<div class="chart-scroll" tabindex="0" role="group" aria-label="Scrollable LoRA changes a projection, not the prompt text">
+<svg viewBox="0 0 720 448" role="img" aria-label="For the fictional returns assistant, a hidden vector follows a frozen weight path and a trainable low-rank path; their outputs are added before the next layer." aria-labelledby="lora-path-title lora-path-desc">
+<title id="lora-path-title">LoRA changes a projection, not the prompt text</title><desc id="lora-path-desc">For the fictional returns assistant, a hidden vector follows a frozen weight path and a trainable low-rank path; their outputs are added before the next layer.</desc>
+<defs><marker id="lora-path-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 8 4 0 8Z" fill="var(--slate)"></path></marker></defs>
+<g class="svg-link" marker-end="url(#lora-path-arrow)">
+<path class="line-path" d="M168 232H304Q312 232 312 224V152"></path>
+<path class="line-path" d="M96 288V344Q96 352 104 352H248" style="--d:.12s"></path>
+<path class="line-path" d="M480 116H616Q624 116 624 124V232"></path>
+<path class="line-path" d="M368 352H408" style="--d:.24s"></path>
+<path class="line-path" d="M528 352H616Q624 352 624 344V280" style="--d:.36s"></path>
+<path class="line-path" d="M648 256H696" style="--d:.48s"></path>
+</g>
+<g class="diagram-node"><rect class="svg-node" x="24" y="216" width="144" height="72" rx="8" style="stroke:var(--line-strong)"></rect>
+<text class="svg-label" x="96" y="248" text-anchor="middle">Hidden vector</text>
+<text class="svg-mono" x="96" y="272" text-anchor="middle">x: 4,096</text></g>
+<g class="diagram-node"><rect class="svg-node" x="264" y="80" width="216" height="72" rx="8" style="stroke:var(--line-strong)"></rect>
+<text class="svg-label" x="372" y="112" text-anchor="middle">Frozen W</text>
+<text class="svg-mono" x="372" y="136" text-anchor="middle">4,096 × 4,096</text></g>
+<g class="diagram-node"><rect class="svg-node" x="248" y="320" width="120" height="64" rx="8" style="stroke:var(--blue)"></rect>
+<text class="svg-label" x="308" y="352" text-anchor="middle">A</text>
+<text class="svg-mono" x="308" y="376" text-anchor="middle">4,096 → 8</text></g>
+<g class="diagram-node"><rect class="svg-node" x="408" y="320" width="120" height="64" rx="8" style="stroke:var(--blue)"></rect>
+<text class="svg-label" x="468" y="352" text-anchor="middle">B</text>
+<text class="svg-mono" x="468" y="376" text-anchor="middle">8 → 4,096</text></g>
+<circle cx="624" cy="256" r="24" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"></circle>
+<text class="svg-label" x="624" y="264" text-anchor="middle">+</text>
+<text class="svg-mono" x="688" y="228" text-anchor="end">h</text>
+<text class="svg-mono" x="384" y="284" text-anchor="middle">Train A and B; apply scaling α/r</text>
+<line x1="24" y1="416" x2="696" y2="416" stroke="var(--line)"></line>
+<text class="svg-tag" x="24" y="440">ONE ILLUSTRATIVE PROJECTION · BLUE OUTLINES = TRAINABLE MATRICES</text>
+</svg></div>
+<p class="diagram-caption">How to read this: follow the two paths from x. The original projection W stays fixed. A compresses the update to rank 8 and B expands it back; the scaled result is added to Wx. This is one illustrative layer inside the returns assistant, not its complete architecture.</p>
+</div><div class="diagram-block">
+<div class="diagram-title">What a larger LoRA rank actually buys</div>
+<div class="chart-scroll" tabindex="0" role="group" aria-label="Scrollable What a larger LoRA rank actually buys">
+<svg viewBox="0 0 720 424" role="img" aria-label="For one 4096 by 4096 projection in the fictional returns assistant, ranks 4, 8, 16, and 32 require 0.195, 0.391, 0.781, and 1.563 percent as many trainable parameters as the full matrix." aria-labelledby="rank-chart-title rank-chart-desc">
+<title id="rank-chart-title">What a larger LoRA rank actually buys</title><desc id="rank-chart-desc">For one 4096 by 4096 projection in the fictional returns assistant, ranks 4, 8, 16, and 32 require 0.195, 0.391, 0.781, and 1.563 percent as many trainable parameters as the full matrix.</desc>
+
+<defs><linearGradient id="rank-gradient-focus" x1="0" y1="0" x2="1" y2="0"><stop stop-color="var(--blue)"></stop><stop offset="1" stop-color="var(--blue)" stop-opacity=".68"></stop></linearGradient><linearGradient id="rank-gradient-base" x1="0" y1="0" x2="1" y2="0"><stop stop-color="var(--slate)"></stop><stop offset="1" stop-color="var(--slate)" stop-opacity=".58"></stop></linearGradient></defs>
+<line x1="140" y1="56" x2="140" y2="340" stroke="rgba(23,23,23,.12)"></line><text class="svg-axis" x="140" y="372" text-anchor="middle">0%</text>
+<line x1="250" y1="56" x2="250" y2="340" stroke="rgba(23,23,23,.12)"></line><text class="svg-axis" x="250" y="372" text-anchor="middle">0.5%</text>
+<line x1="360" y1="56" x2="360" y2="340" stroke="rgba(23,23,23,.12)"></line><text class="svg-axis" x="360" y="372" text-anchor="middle">1%</text>
+<line x1="470" y1="56" x2="470" y2="340" stroke="rgba(23,23,23,.12)"></line><text class="svg-axis" x="470" y="372" text-anchor="middle">1.5%</text>
+<line x1="580" y1="56" x2="580" y2="340" stroke="rgba(23,23,23,.12)"></line><text class="svg-axis" x="580" y="372" text-anchor="middle">2%</text>
+<text class="svg-label" x="116" y="112" text-anchor="end">r = 4</text>
+<rect class="bar-rect" x="140" y="88" width="42.96875" height="36" rx="4" fill="url(#rank-gradient-base)" style="--d:0s"></rect>
+<text class="svg-value" x="208" y="112" data-count="0.1953125" data-decimals="3" data-suffix="%">0.195%</text>
+<text class="svg-label" x="116" y="176" text-anchor="end">r = 8</text>
+<rect class="bar-rect" x="140" y="152" width="85.9375" height="36" rx="4" fill="url(#rank-gradient-focus)" style="--d:0.12s"></rect>
+<text class="svg-value" x="241.9375" y="176" data-count="0.390625" data-decimals="3" data-suffix="%">0.391%</text>
+<text class="svg-label" x="116" y="240" text-anchor="end">r = 16</text>
+<rect class="bar-rect" x="140" y="216" width="171.875" height="36" rx="4" fill="url(#rank-gradient-base)" style="--d:0.24s"></rect>
+<text class="svg-value" x="327.875" y="240" data-count="0.78125" data-decimals="3" data-suffix="%">0.781%</text>
+<text class="svg-label" x="116" y="304" text-anchor="end">r = 32</text>
+<rect class="bar-rect" x="140" y="280" width="343.75" height="36" rx="4" fill="url(#rank-gradient-base)" style="--d:0.36s"></rect>
+<text class="svg-value" x="499.75" y="304" data-count="1.5625" data-decimals="3" data-suffix="%">1.563%</text>
+<text class="svg-tag" x="140" y="412">TRAINABLE PARAMETER SHARE · ZERO-BASED LINEAR AXIS</text>
+</svg></div>
+<p class="diagram-caption">How to read this: compare each bar against the same full-matrix denominator: 16,777,216 parameters. These are exact parameter calculations, rounded to three decimals, not measured quality or GPU-memory savings. Increasing rank expands capacity; it does not guarantee a better returns assistant.</p>
+</div><div class="lab" id="rank-lab" role="group" aria-labelledby="rank-lab-title">
+<h4 id="rank-lab-title">Change the rank, keep the projection fixed</h4>
+<p>The illustrative returns assistant has one 4,096 × 4,096 target matrix. Change r to see the size of A and B together.</p>
+<div class="lab-controls" hidden><label for="rank-input">LoRA rank</label><output id="rank-output" for="rank-input" aria-label="Selected LoRA rank">8</output><input id="rank-input" type="range" min="4" max="64" step="4" value="8"></div>
+<div class="stat-strip"><div class="stat"><strong id="rank-params">65,536</strong><span>trainable A + B parameters</span></div><div class="stat"><strong id="rank-share">0.391%</strong><span>of the original matrix count</span></div><div class="stat"><strong>16,777,216</strong><span>frozen matrix parameters</span></div></div>
+<p class="lab-status" id="rank-status" aria-live="polite">At rank 8, the update uses 256 times fewer trainable parameters than the full matrix. This is not a whole-model memory estimate.</p>
+</div><p data-prose>You might use those updates to make the assistant follow the response schema more consistently. Start with a limited, measurable
+failure, then compare ranks and target modules against the same held-out cases. A larger rank gives the update more freedom,
+but also more parameters to fit and more room to learn accidental patterns. Report the quality result separately from the parameter
+calculation; a small update can be useful without matching full fine-tuning on every task.</p><p data-prose>For an ordinary compatible linear layer, a LoRA update can be merged into the base weight so the separate adapter path is no
+longer required at inference. Keeping adapters separate can instead support switching tasks or customers. Quantized weights,
+supported layer types, and the serving engine complicate that choice. Check the merged or adapter-loaded artifact you will actually
+serve. Avoid treating the algebraic possibility of merging as a guarantee of zero overhead for every deployment.<a class="xref" href="#src-16" aria-label="Source 16">[16]</a></p></div>
+</div><div class="framework" id="qlora" style="--ac:var(--cyan)">
+<aside class="framework-aside" aria-label="03 · QLoRA">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>03 · QLoRA</h3></div>
+<p class="framework-role">Quantized base + LoRA</p><p class="framework-summary">Reduce frozen-weight storage while training the adapters.</p>
+</aside>
+<div class="framework-content"><p data-prose>QLoRA combines a frozen quantized base with trainable low-rank adapters. The original work uses 4-bit NormalFloat, double quantization
+of quantization constants, and paged optimizers to address memory usage and spikes. Computation still uses suitable higher-precision
+arithmetic where required, and gradients train the adapters rather than directly updating the stored 4-bit base weights. Calling
+this “training a model in four bits” hides the distinction between storage precision, compute precision, and the parameters receiving
+updates.<a class="xref" href="#src-3" aria-label="Source 3">[3]</a></p><p data-prose>For a hypothetical seven-billion-parameter base, two bytes per parameter means 14 GB of raw 16-bit weight storage. Four bits
+per parameter means 3.5 GB before scales and other metadata. These decimal-GB estimates exclude activations, gradients, optimizer
+state, temporary buffers, adapters, and any extra models. They explain why quantizing the base helps, but they are not a prediction
+of total GPU memory. Longer conversations in the returns dataset can change the practical budget substantially.</p><p data-prose>The QLoRA paper demonstrated a 65-billion-parameter model on a single 48 GB GPU under its reported setup. That is a result with
+specified conditions, not a promise that your model fits your card. For the support assistant, measure a representative training
+step at the intended sequence length and batch configuration. Then test generation from the saved artifact. A successful load
+or a small adapter file is not evidence that training fits, converges, or produces a deployable model.<a class="xref" href="#src-3" aria-label="Source 3">[3]</a></p></div>
+</div><div class="framework" id="prefix" style="--ac:var(--purple)">
+<aside class="framework-aside" aria-label="04 · Prefix tuning">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>04 · Prefix tuning</h3></div>
+<p class="framework-role">Learned attention context</p><p class="framework-summary">Train continuous prefix states while the base stays fixed.</p>
+</aside>
+<div class="framework-content"><p data-prose>Prefix tuning learns continuous task-specific vectors that the frozen model can attend to. In Transformer implementations these
+commonly become added key/value states at multiple attention layers. They are learned numerical representations, not a natural-language
+instruction you type at the beginning of a chat. The original method also uses a parameterization designed to make optimizing
+those prefix representations easier. The essential distinction is that task adaptation lives in added attention context rather
+than an additive update to W.<a class="xref" href="#src-4" aria-label="Source 4">[4]</a><a class="xref" href="#src-17" aria-label="Source 17">[17]</a></p><p data-prose>For the returns assistant, imagine training a prefix that consistently steers the model toward the requested support format while
+the explicit policy and order facts remain normal input. The prefix learns through the downstream task loss. It does not give
+the system new access to the order database, and it does not make a changing policy current. Its influence must still be tested
+when the conversation is longer, when required facts are absent, and when the user asks for an unauthorized action.</p><p data-prose>A small prefix checkpoint can be attractive when you want many task-specific adaptations. The serving path must, however, support
+injecting those learned states, and the extra attention positions can add cache and computation costs. Measure those costs with
+your actual prompt lengths. Do not compare prefix parameter counts directly with LoRA counts and conclude that the smaller artifact
+will always be faster. Where the parameters enter the network matters as much as how many are stored.</p></div>
+</div><div class="framework" id="adapters" style="--ac:var(--orange)">
+<aside class="framework-aside" aria-label="05 · Adapter tuning">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>05 · Adapter tuning</h3></div>
+<p class="framework-role">Inserted bottleneck modules</p><p class="framework-summary">Add small trainable transformations inside the network.</p>
+</aside>
+<div class="framework-content"><p data-prose>In the classic bottleneck-adapter approach, you insert small modules into the pretrained network. A module projects a hidden
+representation down to a smaller dimension, applies a nonlinearity, and projects back up, often using a residual connection.
+The main pretrained parameters remain fixed, while adapter parameters and, in some configurations, selected normalization parameters
+are trained. Placement differs across designs. “Between layers” is a loose description; the original Transformer adaptation inserts
+modules within layer substructure.<a class="xref" href="#src-5" aria-label="Source 5">[5]</a></p><p data-prose>Applied to the support assistant, these modules learn transformations that help map the provided order and policy into the desired
+response. Their bottleneck dimension governs part of their capacity and storage cost. Unlike standard LoRA’s linear additive
+update, a bottleneck adapter with a nonlinearity generally cannot be folded into one unchanged base linear operation. That structural
+difference is why inference overhead needs its own measurement rather than being inferred from a tiny checkpoint.</p><p data-prose>The word “adapter” is also used broadly for LoRA checkpoints and other PEFT methods. When someone proposes adapter tuning, ask
+what module is actually being trained and where it runs. For this article, the term means the classic inserted bottleneck modules.
+That vocabulary prevents a practical misunderstanding: a serving engine that loads LoRA adapters does not automatically support
+every architecture also called an adapter.</p></div>
+</div><div class="framework" id="ptuning" style="--ac:var(--red)">
+<aside class="framework-aside" aria-label="06 · P-tuning">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>06 · P-tuning</h3></div>
+<p class="framework-role">Continuous prompts</p><p class="framework-summary">Name the version before comparing the mechanism.</p>
+</aside>
+<div class="framework-content"><p data-prose>P-tuning learns continuous prompt embeddings, typically through a prompt encoder, instead of relying only on hand-written discrete
+prompt tokens. In the original approach, trainable prompt representations can appear within the input sequence. Implementations
+can use an MLP or recurrent encoder; describing every version as “a small MLP on a frozen base” is too narrow. The original research
+studies both frozen and tuned language models, so freezing is a configuration choice that should be stated.<a class="xref" href="#src-6" aria-label="Source 6">[6]</a><a class="xref" href="#src-17" aria-label="Source 17">[17]</a></p><p data-prose>P-tuning v2 is a later deep-prompt-tuning approach adapted for a broader set of natural-language-understanding settings, with
+prompts across layers. It should not be silently treated as identical to the original input-level method. Prefix tuning, basic
+soft-prompt tuning, and P-tuning share the idea of learned continuous context, but differ in insertion points, parameterization,
+and the settings studied. A paper’s empirical comparison is evidence about that setting, not a universal ranking of these families.<a class="xref" href="#src-7" aria-label="Source 7">[7]</a></p><p data-prose>For the returns assistant, the candidate adaptation might learn a prompt representation for the support task while keeping current
+policy text explicit. Check whether your training library and serving stack implement the same variant. If an experiment trains
+deep per-layer prompts and deployment later supplies only input embeddings, you have changed the computation. A clear artifact
+record should include the prompt method, base checkpoint, insertion configuration, and evaluation results.</p></div>
+</div><div class="framework" id="bitfit" style="--ac:var(--slate)">
+<aside class="framework-aside" aria-label="07 · BitFit">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>07 · BitFit</h3></div>
+<p class="framework-role">Bias-only updates</p><p class="framework-summary">Change selected offsets; verify that the model has them.</p>
+</aside>
+<div class="framework-content"><p data-prose>BitFit restricts fine-tuning to bias terms, or a subset of them. For a transformation written as Wx + b, the basic idea is to
+keep W fixed while allowing selected b values to change. The published study focuses on pretrained BERT models and evaluates
+the trade-off across different data regimes. Its results establish a useful sparse adaptation baseline, not a guarantee that
+bias-only training is sufficient for every generative language model.<a class="xref" href="#src-8" aria-label="Source 8">[8]</a></p><p data-prose>The trainable fraction is architecture-dependent. A figure such as 0.08% is not a definition of BitFit, and some model components
+have no bias at all. Before proposing it for the returns assistant, inspect which parameters actually qualify and whether any
+other task-specific head is being trained. If the chosen architecture offers very few suitable bias terms, the method may have
+little capacity to change the behavior you care about.</p><p data-prose>A bias-only baseline can answer a useful experimental question: is this support task mostly exposing a capability the base already
+has, or does it need a more expressive update? Compare it with a prompt baseline and a small LoRA run on identical held-out cases.
+The smallest trainable fraction is not automatically the best choice when the resulting assistant still produces invalid fields
+or unsupported promises.</p></div>
+</div></div>
+</section><section class="section reveal" id="signals" aria-labelledby="signals-title">
+<div class="wrap"><div class="section-head">
+<div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span>03 — Choose the learning signal</div>
+<h2 id="signals-title">Examples, preferences,<br>or checked outcomes?<a class="anchor" href="#signals" aria-label="Link to Choose the learning signal">#</a></h2></div>
+<p data-prose class="body-copy">Once you know which parameters can move, decide what should move them. Demonstrations, judgments between answers, and programmatic
+verification supply different information. Their quality determines what the model is actually encouraged to do.</p>
+</div><div class="framework" id="rlhf" style="--ac:var(--gold)">
+<aside class="framework-aside" aria-label="08 · RLHF / RLAIF">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>08 · RLHF / RLAIF</h3></div>
+<p class="framework-role">Feedback source</p><p class="framework-summary">Human and AI judgments can supply preferences and rewards.</p>
+</aside>
+<div class="framework-content"><p data-prose>RLHF means reinforcement learning from human feedback. A common pipeline starts with supervised instruction tuning, collects
+human preferences over candidate responses, fits a reward model, and then optimizes the language-model policy against that reward.
+PPO is a well-known optimizer used in this pattern, with a value estimator and controls intended to limit disruptive policy changes.
+The acronym identifies the role of human feedback; it does not make PPO the only possible algorithm.<a class="xref" href="#src-9" aria-label="Source 9">[9]</a></p><div class="split">
+<div style="--ac:var(--green)"><h4>Chosen response</h4><p>“Under the supplied policy, your unused item is eligible, with 20 days remaining. The next step is to request a return.”</p></div>
+<div style="--ac:var(--red)"><h4>Rejected response</h4><p>“Your item is eligible, with 20 days remaining. I have already refunded your payment.”</p></div>
+</div><p data-prose>For the returns assistant, the preference above rewards staying within the system’s authority. Both responses get the arithmetic
+right, so the comparison isolates a different failure: claiming an action that never happened. Human reviewers need the actual
+policy, order context, tool state, and a rubric. Otherwise a confident unsupported response can look more helpful than a careful
+correct one. Include cases where the preferred answer asks for missing information, rather than always rewarding a more immediate
+answer.</p><p data-prose>RLAIF replaces some human-provided judgments with AI-generated feedback. Constitutional AI is one documented approach: model-generated
+critiques and revisions support a supervised phase, and AI preferences support reward-model training for an RL phase. The people
+defining the principles, judge prompt, data, and evaluation still shape the result. AI feedback can also populate a preference
+dataset used by a method such as DPO; the feedback source and the optimizer remain separate choices.<a class="xref" href="#src-10" aria-label="Source 10">[10]</a><a class="xref" href="#src-11" aria-label="Source 11">[11]</a></p><p data-prose>For our assistant, an AI judge could apply the same “no invented refund” rubric, but its decisions need calibration against reviewed
+examples. Judge errors can become repeated training signals. Evaluate disagreement cases and avoid allowing a candidate answer
+to rewrite the judging instructions. Model-based review can reduce some labeling work; its cost and reliability depend on the
+task. A high reward score is evidence that the policy satisfies that reward system, not a universal certificate of helpfulness
+or factual accuracy.</p></div>
+</div><div class="framework" id="dpo" style="--ac:var(--blue)">
+<aside class="framework-aside" aria-label="09 · DPO">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>09 · DPO</h3></div>
+<p class="framework-role">Direct preference optimization</p><p class="framework-summary">Learn from chosen/rejected pairs without a separate reward-model fit.</p>
+</aside>
+<div class="framework-content"><p data-prose>Direct Preference Optimization trains on a prompt and two responses, one preferred over the other. In its standard form, the
+loss increases the preferred response’s relative likelihood compared with the rejected response, measured against a fixed reference
+policy. The derivation connects that objective to a particular reward-model parameterization. You do not need to fit a separate
+explicit reward model or run the standard online PPO rollout loop for each training batch. You still perform ordinary gradient-based
+optimization of the policy.<a class="xref" href="#src-11" aria-label="Source 11">[11]</a><a class="xref" href="#src-18" aria-label="Source 18">[18]</a></p><div class="formula"><div class="formula-row">s(y) = log πθ(y | x) − log πref(y | x)</div><div class="formula-row">L = −log σ(β × [s(y_chosen) − s(y_rejected)])</div><small>One pair under the standard DPO loss. πθ is the trainable policy, πref the fixed reference, σ the sigmoid, and β a positive scale linked to the regularized objective. Sequence log-probabilities sum token log-probabilities.</small></div><p data-prose>Read the formula using the two support responses. The current model and reference each assign a probability to each complete
+answer under the same prompt. DPO compares how the chosen-versus-rejected preference shifts relative to the reference. “Closed-form
+objective” does not mean the final model weights have a closed-form solution. The loss gives you a computable training target;
+repeated batches and gradient updates still do the learning.<a class="xref" href="#src-11" aria-label="Source 11">[11]</a><a class="xref" href="#src-18" aria-label="Source 18">[18]</a></p><p data-prose>DPO can be an economical next experiment when you have trustworthy pairs and the assistant already produces plausible responses.
+You may train only LoRA parameters while using DPO, because the objective and update mechanism are compatible choices. Keep candidate
+responses attached to exactly the context they were judged against. A response rejected under a 30-day policy may be correct
+under another policy. Also check whether the preference labels accidentally reward answer length or familiar phrasing instead
+of the intended behavior.</p><p data-prose>The important evaluation remains external to the pair loss: unseen policies, JSON validity, arithmetic, appropriate clarification,
+and invented-action rate. A dataset of weak or contradictory comparisons can teach a consistent but unwanted preference. Reference-model
+storage and computing both candidates also have costs. Some implementations can precompute fixed reference log-probabilities;
+that reduces a resource requirement without removing the reference policy’s conceptual role.<a class="xref" href="#src-18" aria-label="Source 18">[18]</a></p></div>
+</div><div class="framework" id="grpo" style="--ac:var(--purple)">
+<aside class="framework-aside" aria-label="10 · GRPO">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>10 · GRPO</h3></div>
+<p class="framework-role">Group-relative policy updates</p><p class="framework-summary">Use several responses to the same prompt to estimate relative advantages.</p>
+</aside>
+<div class="framework-content"><p data-prose>GRPO, Group Relative Policy Optimization, was introduced in DeepSeekMath. It samples multiple outputs for a prompt, scores them,
+and uses their group statistics to construct advantages. Compared with the familiar PPO setup, it avoids a separately learned
+critic or value network for that estimate. It still needs a policy, generated responses, and a source of rewards. The original
+method also includes policy-ratio clipping and a KL-related regularization term; an advantage formula alone is not the complete
+training algorithm.<a class="xref" href="#src-12" aria-label="Source 12">[12]</a></p><div class="matrix-scroll" tabindex="0" role="group" aria-label="Scrollable GRPO worked example"><table class="matrix">
+<caption>One illustrative GRPO group for order A17</caption>
+<thead><tr><th scope="col">Sample</th><th scope="col">Structured result</th><th scope="col">Reward</th><th scope="col">Relative advantage</th></tr></thead>
+<tbody><tr><th scope="row">A</th><td>20 days; request_return; eligible</td><td>1</td><td>+1</td></tr><tr><th scope="row">B</th><td>20 days; request_return; eligible; different JSON key order</td><td>1</td><td>+1</td></tr><tr><th scope="row">C</th><td>30 days; request_return; eligible</td><td>0</td><td>−1</td></tr><tr><th scope="row">D</th><td>20 days; refund_completed; eligible</td><td>0</td><td>−1</td></tr></tbody></table></div><p data-prose>In this deliberately small example, a verifier checks the structured result for order A17. Two outputs are correct, and two violate
+the arithmetic or allowed next action. The reward vector is [1, 1, 0, 0], with mean 0.5. Using the population standard deviation
+gives 0.5. Subtracting the mean and dividing by that deviation produces [+1, +1, −1, −1]. These values explain the relative signal;
+they are not reported training results or claims about a real model.</p><div class="formula"><div class="formula-row">Illustrative A_i = (reward_i − mean(group)) / std(group)</div><small>The worked numbers use population standard deviation and omit numerical epsilon. Implementations differ in reward scaling, normalization, token averaging, and handling of degenerate groups. Check the exact trainer configuration.</small></div><p data-prose>The contrast within a group matters. If every response fails and receives the same zero score, a stabilized group-relative calculation
+supplies no task-reward ranking among them. A KL term can still affect an update, but it does not tell the model which failed
+answer was closer to success. You may need easier training cases, a more informative valid reward, or a stronger starting policy.
+Silently treating identical rewards as evidence of learning would hide a failure in the training signal.<a class="xref" href="#src-12" aria-label="Source 12">[12]</a><a class="xref" href="#src-19" aria-label="Source 19">[19]</a></p><p data-prose>GRPO saves the cost of a separate critic in this comparison, yet producing several responses per prompt can be expensive. Account
+for generation length, group size, reward evaluation, and policy updates. For a simple support schema, supervised examples or
+preference pairs might already address the problem. A group-based RL loop becomes a candidate when generating and checking alternatives
+supplies useful information that those simpler experiments have not captured.</p></div>
+</div><div class="framework" id="rlvr" style="--ac:var(--green)">
+<aside class="framework-aside" aria-label="11 · RLVR">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>11 · RLVR</h3></div>
+<p class="framework-role">Verifiable rewards</p><p class="framework-summary">Let an explicit checker define which outcomes pass.</p>
+</aside>
+<div class="framework-content"><p data-prose>Reinforcement learning with verifiable rewards uses checkable task outcomes as a source of reward. Examples include matching
+a known mathematical answer or passing a specified set of code tests. DeepSeek-R1 reports rule-based rewards for suitable reasoning
+tasks, alongside other training stages and reward choices. RLVR describes where reward evidence comes from. GRPO describes an
+optimization approach. You can therefore use GRPO with verifiable rewards; choosing one does not rule out the other.<a class="xref" href="#src-13" aria-label="Source 13">[13]</a></p><p data-prose>For the returns assistant, a narrow verifier can parse the JSON, require the agreed fields and types, calculate 30 − 10, check
+the unused-item condition, and accept only the permitted next-step value. Keep the policy inputs external to the generated answer
+so the model cannot make its own output correct by rewriting the rule. Under this toy contract, a valid response earns one and
+a failure earns zero. Verifiable rewards can also be graded or combine several checks; binary reward is one design, not the definition
+of RLVR.</p><p data-prose>The verifier’s scope is the central limitation. Valid JSON does not establish that a natural-language explanation is empathetic
+or complete. Passing a finite set of program tests does not prove every possible execution correct. Even exact arithmetic is
+useful only if the elapsed-day input and policy interpretation are correct. Separate those sources of evidence and test adversarial
+outputs that satisfy the superficial format while violating the intended task.</p><p data-prose>For this particular arithmetic, an ordinary function is a better production source of truth than asking the language model to
+become a calculator. The RLVR example teaches the reward mechanism; it is not a claim that reinforcement learning is necessary
+for this product. You would justify an RL experiment by a broader class of useful, verifiable behaviors and compare it with a
+system that simply calls the reliable calculation. Prefer an improvement you can measure over an additional training stage you
+can merely name.</p></div>
+</div></div>
+</section><section class="section reveal" id="practice" aria-labelledby="practice-title">
+<div class="wrap"><div class="section-head">
+<div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span>04 — Place the training</div>
+<h2 id="practice-title">Choose a small,<br>defensible experiment.<a class="anchor" href="#practice" aria-label="Link to Place the training">#</a></h2></div>
+<p data-prose class="body-copy">The remaining technique changes where examples are processed. After that decision, bring the separate choices together into a
+plan: a behavior to improve, a trustworthy learning signal, an affordable update method, and an evaluation of the artifact you
+will serve.</p>
+</div><div class="framework" id="federated" style="--ac:var(--slate)">
+<aside class="framework-aside" aria-label="12 · Federated tuning">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>12 · Federated tuning</h3></div>
+<p class="framework-role">Distributed data ownership</p><p class="framework-summary">Train locally and aggregate compatible updates.</p>
+</aside>
+<div class="framework-content"><p data-prose>Federated learning coordinates training across participants that retain their local data and share model updates for aggregation.
+FedAvg is a foundational example based on repeated local optimization and model averaging. Federated fine-tuning applies this
+style of coordination to adaptation of a pretrained model. It is a deployment and optimization arrangement, not a substitute
+for supervised learning, preferences, or parameter-efficient updates. Local training still needs an explicit objective.<a class="xref" href="#src-14" aria-label="Source 14">[14]</a></p><div class="diagram-block">
+<div class="diagram-title">One training round across three support branches</div>
+<div class="chart-scroll" tabindex="0" role="group" aria-label="Scrollable One training round across three support branches">
+<svg viewBox="0 0 800 520" role="img" aria-label="In a proposed federated returns-assistant design, three branches train locally on their own support records and send compatible model updates to an aggregation server; raw records remain within the depicted branch boundaries." aria-labelledby="federation-title federation-desc">
+<title id="federation-title">One training round across three support branches</title><desc id="federation-desc">In a proposed federated returns-assistant design, three branches train locally on their own support records and send compatible model updates to an aggregation server; raw records remain within the depicted branch boundaries.</desc>
+<defs><marker id="federation-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 8 4 0 8Z" fill="var(--slate)"></path></marker></defs>
+<rect x="8" y="40" width="496" height="120" rx="8" fill="none" stroke="var(--line-strong)" stroke-dasharray="6 4"></rect><text class="svg-tag" x="24" y="60">BRANCH A · LOCAL TRAINING BOUNDARY</text>
+<rect x="8" y="184" width="496" height="120" rx="8" fill="none" stroke="var(--line-strong)" stroke-dasharray="6 4"></rect><text class="svg-tag" x="24" y="204">BRANCH B · LOCAL TRAINING BOUNDARY</text>
+<rect x="8" y="328" width="496" height="120" rx="8" fill="none" stroke="var(--line-strong)" stroke-dasharray="6 4"></rect><text class="svg-tag" x="24" y="348">BRANCH C · LOCAL TRAINING BOUNDARY</text>
+<g class="svg-link" marker-end="url(#federation-arrow)">
+<path class="line-path" d="M216 112H280"></path><path class="line-path" d="M216 256H280"></path><path class="line-path" d="M216 400H280"></path>
+<path class="line-path" d="M480 112H648Q656 112 656 120V208" style="--d:.24s"></path>
+<path class="line-path" d="M480 256H552" style="--d:.36s"></path>
+<path class="line-path" d="M480 400H648Q656 400 656 392V304" style="--d:.48s"></path>
+</g>
+<g class="diagram-node"><rect class="svg-node" x="24" y="80" width="192" height="64" rx="8" style="stroke:var(--line-strong)"></rect>
+<text class="svg-label" x="120" y="112" text-anchor="middle">Support records</text>
+<text class="svg-mono" x="120" y="136" text-anchor="middle">Branch A examples</text></g><g class="diagram-node"><rect class="svg-node" x="280" y="80" width="200" height="64" rx="8" style="stroke:var(--line-strong)"></rect>
+<text class="svg-label" x="380" y="112" text-anchor="middle">Local training</text>
+<text class="svg-mono" x="380" y="136" text-anchor="middle">Compatible update</text></g>
+<g class="diagram-node"><rect class="svg-node" x="24" y="224" width="192" height="64" rx="8" style="stroke:var(--line-strong)"></rect>
+<text class="svg-label" x="120" y="256" text-anchor="middle">Support records</text>
+<text class="svg-mono" x="120" y="280" text-anchor="middle">Branch B examples</text></g><g class="diagram-node"><rect class="svg-node" x="280" y="224" width="200" height="64" rx="8" style="stroke:var(--line-strong)"></rect>
+<text class="svg-label" x="380" y="256" text-anchor="middle">Local training</text>
+<text class="svg-mono" x="380" y="280" text-anchor="middle">Compatible update</text></g>
+<g class="diagram-node"><rect class="svg-node" x="24" y="368" width="192" height="64" rx="8" style="stroke:var(--line-strong)"></rect>
+<text class="svg-label" x="120" y="400" text-anchor="middle">Support records</text>
+<text class="svg-mono" x="120" y="424" text-anchor="middle">Branch C examples</text></g><g class="diagram-node"><rect class="svg-node" x="280" y="368" width="200" height="64" rx="8" style="stroke:var(--line-strong)"></rect>
+<text class="svg-label" x="380" y="400" text-anchor="middle">Local training</text>
+<text class="svg-mono" x="380" y="424" text-anchor="middle">Compatible update</text></g>
+<g class="diagram-node"><rect class="svg-node" x="552" y="208" width="224" height="96" rx="8" style="stroke:var(--slate)"></rect>
+<text class="svg-label" x="664" y="240" text-anchor="middle">Aggregate updates</text>
+<text class="svg-mono" x="664" y="264" text-anchor="middle">Shared checkpoint</text></g>
+<text class="svg-mono" x="664" y="440" text-anchor="middle">Then evaluate</text>
+<text class="svg-mono" x="664" y="464" text-anchor="middle">before the next round</text>
+<line x1="24" y1="472" x2="776" y2="472" stroke="var(--line)"></line>
+<text class="svg-tag" x="24" y="500">SCHEMATIC · DATA STAYS LOCAL IN THIS DESIGN; UPDATE PRIVACY NEEDS SEPARATE CONTROLS</text>
+</svg></div>
+<p class="diagram-caption">How to read this: each dashed boundary encloses a branch’s support records and training step. Only the model update crosses it. The picture shows aggregation after clients have received the same starting checkpoint; distributing the next checkpoint is the next round. It does not establish a privacy guarantee.</p>
+</div><p data-prose>Imagine three regional branches operating the same returns assistant, with support conversations that cannot simply be placed
+in one shared training table. Each branch can train from an agreed starting checkpoint using its permitted local records. A coordinator
+receives compatible updates, aggregates them according to the chosen protocol, and evaluates a candidate shared model. The branches
+can have different language mixtures, policy windows, and volumes. Aggregate improvements can hide a regression at a smaller
+branch, so evaluate locally as well as globally.</p><p data-prose>Training LoRA modules locally can reduce the number of transmitted parameters, but aggregation needs care. Simply averaging A
+matrices and averaging B matrices is not generally the same as averaging their products BA. Different ranks, target modules,
+base checkpoints, or factor representations make compatibility more difficult. Specify what is aggregated and why that operation
+corresponds to the intended update. “We only exchange adapters” is a description of transport size, not a complete aggregation
+algorithm.</p><p data-prose>Keeping raw records local also does not establish that updates reveal nothing about them. Research on gradient leakage demonstrates
+that shared gradients can disclose training information under studied conditions. Privacy and security therefore require an explicit
+threat model and appropriate controls, potentially including secure aggregation or differential privacy, with their own assumptions
+and costs. Federated training has additional operational issues too: unreliable participants, poisoned updates, uneven hardware,
+and communication delays. Choose it when the data-ownership constraint warrants that complexity.<a class="xref" href="#src-15" aria-label="Source 15">[15]</a></p></div>
+</div><div class="framework" id="recipe" style="--ac:var(--orange)">
+<aside class="framework-aside" aria-label="Put the choices together">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>Put the choices together</h3></div>
+<p class="framework-role">From a method list to an experiment</p><p class="framework-summary">Keep the evaluation fixed while changing one major decision.</p>
+</aside>
+<div class="framework-content"><p data-prose>For the fictional assistant, begin by collecting representative requests and documenting the failure categories. Test the untuned
+model with the intended prompt, current policy context, structured-output checks, and deterministic arithmetic. Save the actual
+outputs. If the main problem is inconsistent response structure or handling of missing facts, a carefully curated SFT dataset
+is a reasonable next experiment. If the remaining issue is a preference between plausible responses, reviewed chosen/rejected
+pairs may support a DPO experiment.</p><div class="flow"><div style="--ac:var(--green)"><span class="fnum">01</span><strong>Fix the signal.</strong><p>Demonstrations for imitation; reviewed pairs for preferences; trustworthy checks for verifiable rewards.</p></div><div style="--ac:var(--blue)"><span class="fnum">02</span><strong>Choose the update.</strong><p>Select compatible trainable modules and measure a real step with the intended context length.</p></div><div style="--ac:var(--orange)"><span class="fnum">03</span><strong>Test the artifact.</strong><p>Reload what will be served and compare unseen cases against the saved baseline.</p></div></div><p data-prose>LoRA or QLoRA can be candidates for either experiment when their supported architecture and memory behavior fit the setup. Keep
+the base model, data split, prompt template, and decoding settings stable enough for a meaningful comparison. Record target modules,
+rank, precision choices, training seed, learning rate, and the checkpoint selected by validation. These details turn “LoRA worked”
+into a result another person can reproduce and investigate.</p><p data-prose>Before a long run, perform a small operational check: confirm that the intended parameters are trainable, inspect loss-bearing
+tokens, run forward and backward passes, check finite loss and gradients, and save and reload a checkpoint. Then run the full
+evaluation on the reloaded artifact. These checks answer different questions. A finite loss establishes basic numerical behavior;
+a successful reload establishes artifact compatibility; held-out task results establish whether the proposed adaptation helped.</p><p data-prose>For the support task, report schema validity, correct policy application, arithmetic accuracy, missing-information handling,
+and unsupported-action claims separately. Also measure latency and memory in the serving configuration, and check that unrelated
+useful behavior has not degraded. Group the evaluation by policy variant and branch so that a strong average cannot conceal a
+local failure. Do not select the winning checkpoint on the final test set and then report that same set as an independent estimate.</p><div class="quiz" id="knowledge-check" role="group" aria-labelledby="quiz-title">
+<p class="quiz-kicker">Check the distinction</p><h4 id="quiz-title">You have chosen/rejected support answers and limited training memory.</h4>
+<p>Which proposal describes compatible choices, without promising that they will fit a particular GPU?</p>
+<div class="quiz-static"><details><summary>Read the answer and reasoning</summary><p>Use DPO as the preference objective and a compatible LoRA or QLoRA setup for the trainable parameters and base storage. Then measure the complete workload. The objective, parameter method, and memory budget are separate decisions.</p></details></div>
+<form class="quiz-controls" hidden><fieldset><legend>Choose the technically coherent proposal.</legend>
+<label><input type="radio" name="answer" value="exclusive">Choose between DPO and LoRA because they cannot be combined.</label>
+<label><input type="radio" name="answer" value="compatible">Use DPO with compatible low-rank adaptation, then measure memory and quality.</label>
+<label><input type="radio" name="answer" value="automatic">Use QLoRA because four-bit weights guarantee that training fits any GPU.</label>
+</fieldset><button type="submit">Check answer</button><button class="quiz-reset" type="button" hidden>Try again</button>
+<div class="quiz-track" aria-hidden="true"><span></span></div><p class="quiz-feedback" role="status" aria-live="polite"></p></form></div><p data-prose>The useful outcome is a justified combination, not a winner among twelve labels. You may end up with instruction data, a quantized
+frozen base, LoRA updates, and a later preference-learning experiment. Another setting may justify deep prompts or federated
+coordination. Keep asking the same four questions: what should the assistant learn, which evidence teaches it, what can be updated
+affordably, and where can training occur? The method names become easier to use once each has a specific job.</p></div>
+</div></div>
+</section><section class="section reveal" id="sources" aria-labelledby="sources-title">
+<div class="wrap"><div class="section-head">
+<div><div class="kicker"><span class="kicker-mark" aria-hidden="true"></span>05 — Sources</div>
+<h2 id="sources-title">The papers behind<br>the shorthand.<a class="anchor" href="#sources" aria-label="Link to Sources">#</a></h2></div>
+<p data-prose class="body-copy">Primary research and official implementation documentation, checked September 13, 2026. Parameter counts and reward groups in
+the article are explicitly worked examples; no support-assistant training run or benchmark result is claimed.</p>
+</div><ol class="sources-list"><li id="src-1"><div><strong><a class="xlink" href="https://arxiv.org/abs/2109.01652">Finetuned Language Models Are Zero-Shot Learners</a>.</strong> Wei et al., 2021.<span class="source-note">Instruction tuning across tasks described in natural language.</span></div></li>
+<li id="src-2"><div><strong><a class="xlink" href="https://arxiv.org/abs/2106.09685">LoRA: Low-Rank Adaptation of Large Language Models</a>.</strong> Hu et al., 2021.<span class="source-note">Frozen base matrices, low-rank updates, and the original method.</span></div></li>
+<li id="src-3"><div><strong><a class="xlink" href="https://arxiv.org/abs/2305.14314">QLoRA: Efficient Finetuning of Quantized LLMs</a>.</strong> Dettmers et al., 2023.<span class="source-note">NF4, double quantization, paged optimizers, and the reported 65B / 48 GB experiment.</span></div></li>
+<li id="src-4"><div><strong><a class="xlink" href="https://aclanthology.org/2021.acl-long.353/">Prefix-Tuning: Optimizing Continuous Prompts for Generation</a>.</strong> Li and Liang, ACL 2021.<span class="source-note">Learned continuous prefixes for frozen language models.</span></div></li>
+<li id="src-5"><div><strong><a class="xlink" href="https://proceedings.mlr.press/v97/houlsby19a.html">Parameter-Efficient Transfer Learning for NLP</a>.</strong> Houlsby et al., ICML 2019.<span class="source-note">Classic inserted bottleneck-adapter architecture.</span></div></li>
+<li id="src-6"><div><strong><a class="xlink" href="https://arxiv.org/abs/2103.10385">GPT Understands, Too</a>.</strong> Liu et al., 2021; revised 2023.<span class="source-note">Original P-tuning; frozen and tuned base-model settings.</span></div></li>
+<li id="src-7"><div><strong><a class="xlink" href="https://arxiv.org/abs/2110.07602">P-Tuning v2: Prompt Tuning Can Be Comparable to Fine-tuning Universally Across Scales and Tasks</a>.</strong> Liu et al., 2021; ACL 2022.<span class="source-note">Deep prompt tuning in the studied NLU settings; the title is not a universal deployment guarantee.</span></div></li>
+<li id="src-8"><div><strong><a class="xlink" href="https://aclanthology.org/2022.acl-short.1/">BitFit: Simple Parameter-efficient Fine-tuning for Transformer-based Masked Language-models</a>.</strong> Ben Zaken, Goldberg, and Ravfogel, ACL 2022.<span class="source-note">Bias-only adaptation evaluated on pretrained BERT models.</span></div></li>
+<li id="src-9"><div><strong><a class="xlink" href="https://arxiv.org/abs/2203.02155">Training Language Models to Follow Instructions with Human Feedback</a>.</strong> Ouyang et al., 2022.<span class="source-note">Demonstrations, human preferences, reward modeling, and policy optimization.</span></div></li>
+<li id="src-10"><div><strong><a class="xlink" href="https://arxiv.org/abs/2212.08073">Constitutional AI: Harmlessness from AI Feedback</a>.</strong> Bai et al., 2022.<span class="source-note">A documented supervised and reinforcement-learning pipeline using AI feedback.</span></div></li>
+<li id="src-11"><div><strong><a class="xlink" href="https://arxiv.org/abs/2305.18290">Direct Preference Optimization: Your Language Model Is Secretly a Reward Model</a>.</strong> Rafailov et al., 2023.<span class="source-note">Preference objective, reference policy, and connection to reward modeling.</span></div></li>
+<li id="src-12"><div><strong><a class="xlink" href="https://arxiv.org/html/2402.03300v3">DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models</a>.</strong> Shao et al., 2024.<span class="source-note">Original GRPO, group-relative advantages, clipping, and KL regularization.</span></div></li>
+<li id="src-13"><div><strong><a class="xlink" href="https://arxiv.org/html/2501.12948v1">DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning</a>.</strong> DeepSeek-AI, 2025.<span class="source-note">Rule-based rewards for verifiable tasks within a multi-stage training program.</span></div></li>
+<li id="src-14"><div><strong><a class="xlink" href="https://proceedings.mlr.press/v54/mcmahan17a.html">Communication-Efficient Learning of Deep Networks from Decentralized Data</a>.</strong> McMahan et al., AISTATS 2017.<span class="source-note">Federated learning and iterative aggregation of locally trained updates.</span></div></li>
+<li id="src-15"><div><strong><a class="xlink" href="https://arxiv.org/abs/1906.08935">Deep Leakage from Gradients</a>.</strong> Zhu, Liu, and Han, 2019.<span class="source-note">Evidence that sharing gradients can reveal training data under studied conditions.</span></div></li>
+<li id="src-16"><div><strong><a class="xlink" href="https://huggingface.co/docs/peft/main/en/conceptual_guides/lora">PEFT: LoRA Conceptual Guide</a>.</strong> Hugging Face documentation.<span class="source-note">Target modules, trainable parameters, scaling, and merging considerations.</span></div></li>
+<li id="src-17"><div><strong><a class="xlink" href="https://huggingface.co/docs/peft/main/en/conceptual_guides/prompting">PEFT: Soft Prompts</a>.</strong> Hugging Face documentation.<span class="source-note">Prompt tuning, prefix tuning, and original P-tuning distinctions.</span></div></li>
+<li id="src-18"><div><strong><a class="xlink" href="https://huggingface.co/docs/trl/main/en/dpo_trainer">TRL: DPO Trainer</a>.</strong> Hugging Face documentation.<span class="source-note">Standard preference objective and reference-log-probability handling.</span></div></li>
+<li id="src-19"><div><strong><a class="xlink" href="https://huggingface.co/docs/trl/main/en/grpo_trainer">TRL: GRPO Trainer</a>.</strong> Hugging Face documentation.<span class="source-note">Implementation choices for normalization, rewards, and group-relative training.</span></div></li>
+<li id="src-20"><div><strong><a class="xlink" href="https://huggingface.co/docs/trl/main/en/sft_trainer">TRL: SFT Trainer</a>.</strong> Hugging Face documentation.<span class="source-note">Completion-only and assistant-only supervision, datasets, and chat templates.</span></div></li></ol></div>
+</section></main><a class="to-top" href="#top" aria-label="Back to top">↑</a>
+<script>
+(() => {
+  'use strict';
+  const root = document.documentElement;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const header = document.querySelector('.site-header');
+  const progress = document.querySelector('.progress span');
+  const sections = Array.from(document.querySelectorAll('main > section[id]'));
+  const navLinks = Array.from(document.querySelectorAll('.nav a'));
+  let pending = false;
+
+  function updateScroll() {
+    const distance = root.scrollHeight - window.innerHeight;
+    progress.style.width = (distance > 0 ? Math.min(100, window.scrollY / distance * 100) : 0) + '%';
+    header.classList.toggle('scrolled', window.scrollY > 12);
+    let current = '';
+    for (const section of sections) {
+      if (section.getBoundingClientRect().top <= 160) current = section.id;
+    }
+    for (const link of navLinks) {
+      const active = link.getAttribute('href') === '#' + current;
+      link.classList.toggle('active', active);
+      if (active) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    }
+    pending = false;
+  }
+  function scheduleScroll() {
+    if (!pending) { pending = true; requestAnimationFrame(updateScroll); }
+  }
+  window.addEventListener('scroll', scheduleScroll, { passive: true });
+  window.addEventListener('resize', scheduleScroll);
+  updateScroll();
+
+  if ('IntersectionObserver' in window && !reduced.matches) {
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('entered');
+          observer.unobserve(entry.target);
+        }
+      }
+    }, { threshold: 0, rootMargin: '0px 0px -24px 0px' });
+    document.querySelectorAll('.reveal, .diagram-block').forEach(element => observer.observe(element));
+    root.classList.add('reveal-ready', 'diagram-motion-ready');
+  }
+
+  const form = document.querySelector('.quiz-controls');
+  const fallback = document.querySelector('.quiz-static');
+  const feedback = form.querySelector('.quiz-feedback');
+  const reset = form.querySelector('.quiz-reset');
+  const fill = form.querySelector('.quiz-track span');
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const answer = form.querySelector('input:checked');
+    if (!answer) { feedback.textContent = 'Choose an answer first.'; return; }
+    const correct = answer.value === 'compatible';
+    feedback.textContent = (correct ? 'Correct. ' : 'That conclusion goes beyond the evidence. ') +
+      'DPO specifies the preference objective; LoRA specifies a low-rank update, and QLoRA also compresses the frozen base. A compatible combination still needs measured memory and held-out evaluation.';
+    fill.style.width = '100%';
+    reset.hidden = false;
+  });
+  reset.addEventListener('click', () => {
+    form.reset();
+    feedback.textContent = '';
+    fill.style.width = '0%';
+    reset.hidden = true;
+    form.querySelector('input').focus();
+  });
+
+  const rankInput = document.getElementById('rank-input');
+  function updateRank(announce) {
+    const rank = Number(rankInput.value);
+    const count = rank * (4096 + 4096);
+    const full = 4096 * 4096;
+    document.getElementById('rank-output').value = rank;
+    document.getElementById('rank-params').textContent = count.toLocaleString('en-US');
+    document.getElementById('rank-share').textContent = (count / full * 100).toFixed(3) + '%';
+    const status = document.getElementById('rank-status');
+    status.setAttribute('aria-live', announce ? 'polite' : 'off');
+    status.textContent = 'At rank ' + rank + ', the update uses ' + (full / count).toFixed(1).replace(/\.0$/, '') + ' times fewer trainable parameters than the full matrix. This is not a whole-model memory estimate.';
+  }
+  rankInput.addEventListener('input', () => updateRank(false));
+  rankInput.addEventListener('change', () => updateRank(true));
+  document.querySelector('.lab-controls').hidden = false;
+  if ('IntersectionObserver' in window && !reduced.matches) {
+    const counterObserver = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const element = entry.target;
+        const finalValue = Number(element.dataset.count);
+        const decimals = Number(element.dataset.decimals || 0);
+        const start = performance.now();
+        function count(now) {
+          const fraction = Math.min(1, (now - start) / 700);
+          element.textContent = (finalValue * fraction).toFixed(decimals) + (element.dataset.suffix || '');
+          if (fraction < 1) requestAnimationFrame(count);
+        }
+        requestAnimationFrame(count);
+        counterObserver.unobserve(element);
+      }
+    }, { threshold: .5 });
+    document.querySelectorAll('[data-count]').forEach(element => counterObserver.observe(element));
+  }
+  fallback.hidden = true;
+  form.hidden = false;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.classList.add('js');</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A ten-step LLM fine-tuning workflow covering prompting, data splits, quality and speed baselines, answer-only supervision, evaluation, reproducibility, and deployment.">
+<title>Fine-Tuning That You Can Prove — Ten Steps from Goal to Deployment</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='3' fill='%23eb8237'/%3E%3Ccircle cx='23' cy='9' r='3' fill='%23c9a227'/%3E%3Ccircle cx='9' cy='23' r='3' fill='%2323956f'/%3E%3Ccircle cx='23' cy='23' r='3' fill='%2314a9c5'/%3E%3C/svg%3E">
+<meta property="og:title" content="Fine-Tuning That You Can Prove — Ten Steps from Goal to Deployment">
+<meta property="og:description" content="A ten-step LLM fine-tuning workflow covering prompting, data splits, quality and speed baselines, answer-only supervision, evaluation, reproducibility, and deployment.">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Fine-Tuning That You Can Prove — Ten Steps from Goal to Deployment",
+  "description": "A ten-step LLM fine-tuning workflow covering prompting, data splits, quality and speed baselines, answer-only supervision, evaluation, reproducibility, and deployment.",
+  "datePublished": "2026-09-13",
+  "dateModified": "2026-09-13",
+  "inLanguage": "en",
+  "wordCount": 3078,
+  "timeRequired": "PT14M",
+  "author": {
+    "@type": "Person",
+    "name": "Ali Reza Rashidi"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Instrument+Serif:ital@0;1&amp;family=Roboto+Mono:wght@400;500&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898;
+  --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+  --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+  --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+  --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+  --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+}
+* { box-sizing: border-box; }
+html { color-scheme: light; overflow-x: clip; scroll-behavior: smooth; }
+body { margin: 0; color: var(--ink); background: linear-gradient(180deg, #fffdfa, #fcfbf8); font: 400 17px/1.7 "DM Sans", sans-serif; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; }
+::selection { color: var(--paper); background: var(--ink); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+h1, h2, h3, h4 { font-family: "Space Grotesk", sans-serif; margin: 0; text-wrap: balance; }
+h1, h2 { letter-spacing: -.045em; }
+p { text-wrap: pretty; margin: 0 0 22px; }
+svg { display: block; width: 100%; height: auto; }
+.wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+.grain { position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: .08; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.skip-link { position: fixed; left: 16px; top: -80px; z-index: 100; padding: 12px 18px; color: var(--paper); background: var(--ink); }
+.skip-link:focus { top: 12px; }
+.progress { position: fixed; inset: 0 0 auto; height: 2px; z-index: 90; }
+.progress span { display: block; height: 100%; width: 0; background: var(--ink); }
+.site-header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid transparent; }
+.site-header.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); border-bottom-color: var(--line); }
+.topbar { min-height: 68px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 500 13px "Space Grotesk", sans-serif; white-space: nowrap; }
+.brand-dot { width: 12px; height: 12px; background: var(--ink); border-radius: 50%; flex-shrink: 0; }
+.nav { display: flex; align-items: center; gap: 26px; overflow-x: auto; padding-left: 10px; scrollbar-width: none; }
+.nav a { position: relative; padding: 24px 0; white-space: nowrap; text-decoration: none; color: var(--muted); font: 500 11px "Roboto Mono", monospace; }
+.nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 18px; height: 1px; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform .2s; }
+.nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
+.nav a.active::before { content: ""; position: absolute; left: -10px; top: 27px; width: 6px; height: 6px; border-radius: 50%; background: var(--spy); }
+.hero { padding: 92px 0 88px; border-bottom: 1px solid var(--line); }
+.eyebrow, .kicker, .framework-role, .toc-label, .byline-meta, .source-note, .diagram-caption { font-family: "Roboto Mono", monospace; }
+.eyebrow { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 28px; }
+.eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--ink); }
+h1 { font-size: clamp(3rem,8.4vw,6.8rem); line-height: .96; font-weight: 700; }
+h1 em { font: italic 400 1em/.96 "Instrument Serif", serif; color: #535353; }
+.line { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.04em; }
+.line-inner { display: inline-block; }
+.js .line-inner { animation: lineUp .7s both; }
+.js .line:nth-child(2) .line-inner { animation-delay: 90ms; }
+.js .line:nth-child(3) .line-inner { animation-delay: 180ms; }
+@keyframes lineUp { from { transform: translateY(115%); } to { transform: translateY(0); } }
+.hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 60px; margin-top: 54px; }
+.lead { font-size: clamp(1.15rem,1.8vw,1.5rem); line-height: 1.6; color: #414141; }
+.lead::first-letter { float: left; padding: 0 5px 0 0; font: italic 400 2.2em/1 "Instrument Serif", serif; color: var(--ink); }
+.hero-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 30px 0; }
+.hero-links a { padding: 9px 12px; border: 1px solid var(--line-strong); border-radius: 30px; text-decoration: none; font: 11px "Roboto Mono", monospace; }
+.byline { display: flex; gap: 12px; align-items: center; font-size: 13px; }
+.avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; font: 11px "Roboto Mono", monospace; color: var(--paper); background: var(--ink); flex-shrink: 0; }
+.byline-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; font-size: 10px; color: var(--muted); margin-top: 3px; }
+.byline-meta span + span::before { content: ""; display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: var(--muted); vertical-align: middle; margin-right: 9px; }
+.hero-note { border-left: 2px solid var(--accent); padding-left: 20px; font: italic 400 1.25rem/1.5 "Instrument Serif", serif; color: #535353; }
+.toc { padding: 24px; border-radius: 12px; color: var(--ink); background: #f3f1e9; }
+.toc-label { color: var(--muted); background: #f3f1e9; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 16px; }
+.toc ol { list-style: none; counter-reset: toc; padding: 0; margin: 0; }
+.toc li { counter-increment: toc; border-top: 1px solid var(--line); }
+.toc a { display: grid; grid-template-columns: 28px 1fr; gap: 10px; text-decoration: none; font-size: 13px; padding: 14px 0; color: var(--ink); background: #f3f1e9; }
+.toc a::before { content: counter(toc,decimal-leading-zero); font: 10px/2 "Roboto Mono", monospace; color: var(--muted); }
+.section { padding: 88px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
+.section-head { display: grid; grid-template-columns: .9fr 1.1fr; gap: 50px; margin-bottom: 42px; }
+.kicker { display: flex; align-items: center; gap: 10px; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 18px; color: var(--muted); }
+.kicker-mark { width: 8px; height: 8px; background: var(--ink); }
+h2 { font-size: clamp(2rem,4.4vw,4rem); line-height: .98; position: relative; }
+.body-copy { color: var(--muted); font-size: 18px; margin: 6px 0 0; }
+.anchor { margin-left: 10px; font: 400 .45em "DM Sans", sans-serif; text-decoration: none; opacity: 0; }
+h2:hover .anchor, .anchor:focus-visible { opacity: 1; }
+.framework { display: grid; grid-template-columns: 260px minmax(0,1fr); gap: 58px; padding: 42px 0 10px; border-top: 1px solid var(--line); }
+.framework + .framework { margin-top: 40px; }
+.framework-aside { position: sticky; top: 100px; align-self: start; }
+.framework-name { display: flex; align-items: start; gap: 12px; }
+.mark { width: 11px; height: 11px; margin-top: 8px; background: var(--ac); border-radius: 50%; flex-shrink: 0; }
+h3 { font-size: 24px; line-height: 1.18; letter-spacing: -.03em; }
+.framework-role { margin: 15px 0; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .05em; }
+.framework-summary { font-size: 13px; color: var(--muted); }
+.framework-content { min-width: 0; }
+.framework-content h4 { font-size: 19px; margin: 34px 0 14px; letter-spacing: -.02em; }
+.xref { vertical-align: super; font: 10px "Roboto Mono", monospace; text-decoration: none; color: #2854cd; margin-left: 3px; }
+.callout-line { border-left: 3px solid var(--ac,var(--accent)); padding: 12px 0 12px 20px; font-weight: 700; margin: 30px 0; }
+.callout-line small { display: block; font-weight: 400; color: var(--muted); font-size: 14px; margin-top: 6px; }
+.formula { color: var(--ink); background: #f3f1e9; border: 1px solid var(--line); padding: 20px; margin: 26px 0; font: 13px/1.9 "Roboto Mono", monospace; overflow-x: auto; }
+.formula span { display: block; }
+.stat-strip { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; margin: 30px 0; padding: 24px 0; border-block: 1px solid var(--line); }
+.stat strong { display: block; font: 400 clamp(1.7rem,3vw,2.4rem)/1.2 "Roboto Mono", monospace; letter-spacing: -.04em; }
+.stat span { display: block; font-size: 12px; margin-top: 10px; color: var(--muted); }
+.diagram-block { margin: 36px 0; padding: 24px; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: var(--paper); }
+.diagram-title { font: 500 19px/1.4 "Space Grotesk", sans-serif; margin-bottom: 22px; color: var(--ink); background: var(--paper); }
+.chart-scroll { overflow-x: auto; }
+.diagram-caption { font-size: 11px; line-height: 1.85; margin: 20px 0 0; color: var(--muted); background: var(--paper); }
+.svg-label { font: 500 18px "Space Grotesk", sans-serif; fill: var(--ink); }
+.svg-mono { font: 400 14px "Roboto Mono", monospace; fill: var(--muted); }
+.svg-value { font: 500 16px "Roboto Mono", monospace; fill: var(--ink); }
+.bar-rect { transform-box: fill-box; transform-origin: left; }
+.js.diagram-motion-ready .diagram-block:not(.entered) .bar-rect { transform: scaleX(0); }
+.js.diagram-motion-ready .diagram-block.entered .bar-rect { transition: transform .8s var(--d,0s); }
+.js.reveal-ready .reveal:not(.entered) { opacity: 0; transform: translateY(16px); }
+.js.reveal-ready .reveal { transition: opacity .6s, transform .6s; }
+.question { margin: 30px 0; padding: 22px 0; border-block: 1px solid var(--line-strong); }
+.question summary { cursor: pointer; font-weight: 700; }
+.question p { margin: 18px 0 0; color: var(--muted); }
+.section-dark { color: var(--dark-paper); background: var(--dark); }
+.section-dark .section-head h2, .section-dark h3, .section-dark h4 { color: var(--dark-paper); background: var(--dark); }
+.section-dark .body-copy, .section-dark p, .section-dark .framework-role, .section-dark .framework-summary, .section-dark small { color: #c9c7bf; background: var(--dark); }
+.section-dark .kicker { color: #c9c7bf; background: var(--dark); }
+.section-dark .kicker-mark { background: var(--dark-paper); }
+.section-dark .framework { border-color: var(--dark-line); }
+.section-dark .xref { color: #aac1ff; }
+.section-dark :focus-visible { outline-color: var(--dark-paper); }
+.section-dark .callout-line { color: var(--dark-paper); background: var(--dark); }
+.sources-list { list-style: none; padding: 0; margin: 0; counter-reset: sources; }
+.sources-list li { counter-increment: sources; display: grid; grid-template-columns: 40px 1fr; gap: 14px; padding: 22px 0; border-top: 1px solid var(--line); scroll-margin-top: 90px; }
+.sources-list li::before { content: counter(sources,decimal-leading-zero); font: 12px/2 "Roboto Mono", monospace; color: var(--muted); }
+.sources-list strong { font-weight: 700; }
+.source-note { display: block; font-size: 11px; margin-top: 8px; color: var(--muted); }
+.xlink { color: #4c4c4c; border-bottom: 1px dashed currentColor; text-decoration: none; margin-left: 6px; }
+.xlink::after { content: " ↗"; }
+.to-top { position: fixed; z-index: 60; bottom: max(18px,env(safe-area-inset-bottom)); right: max(18px,env(safe-area-inset-right)); display: grid; place-items: center; width: 44px; height: 44px; padding-bottom: env(safe-area-inset-bottom,0px); color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); border-radius: 50%; text-decoration: none; }
+@media (max-width: 720px) {
+  .wrap { width: calc(100% - 16px); }
+  .toc, .formula, .diagram-block, .lab { padding-inline: 12px; }
+  .hero-note, .callout-line { padding-left: 12px; }
+  .hero { padding: 64px 0; }
+  .hero-grid, .section-head, .framework { grid-template-columns: 1fr; gap: 28px; }
+  .hero-grid { margin-top: 38px; }
+  .framework-aside { position: static; }
+  .nav { max-width: 50%; gap: 20px; }
+  .framework { padding-top: 30px; }
+  .section-head { margin-bottom: 32px; }
+  .body-copy { font-size: 17px; }
+}
+@media (max-width: 430px) {
+  h1 { font-size: clamp(2.15rem,12.5vw,3rem); }
+  .brand { font-size: 11px; }
+  .nav { max-width: 46%; }
+  .section { padding: 64px 0; }
+  .diagram-block, .lab { padding-block: 18px; }
+  .chart-scroll svg { min-width: 560px; }
+  .stat-strip { gap: 12px; }
+  .stat strong { font-size: 1.55rem; }
+  .stat span { font-size: 11px; }
+  .lab .stat-strip { grid-template-columns: 1fr; }
+  .sources-list li { grid-template-columns: 28px 1fr; gap: 8px; }
+}
+@media (hover: none) { .anchor { opacity: .55; } .nav a { padding-inline: 4px; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .js.reveal-ready .reveal, .js.diagram-motion-ready .bar-rect { opacity: 1 !important; transform: none !important; }
+}
+@media print {
+  *, *::before, *::after { transition: none !important; }
+  .grain, .site-header, .progress, .to-top, .lab-controls { display: none !important; }
+  .js.reveal-ready .reveal, .js.diagram-motion-ready .bar-rect, .js .line-inner { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .framework-aside { position: static; }
+  .chart-scroll { overflow: visible; }
+}
+.diagram-block, .lab { scroll-margin-top: 88px; }
+
+[hidden] { display: none !important; }
+.svg-label { font-size: 20px; }
+.svg-mono { font-size: 16px; }
+.diagram-block svg .svg-node { fill: var(--paper); stroke: var(--line-strong); stroke-width: 1.5; }
+.diagram-block svg .svg-focal { fill: #f3f1e9; stroke: var(--orange); stroke-width: 2; }
+.diagram-block svg .svg-link { fill: none; stroke: var(--slate); stroke-width: 2; }
+.diagram-block svg .svg-tag { font: 400 12px 'Roboto Mono', monospace; fill: var(--muted); }
+.diagram-block svg .svg-mask { fill: var(--paper); }
+.diagram-block svg .line-path { stroke-dasharray: 1000; stroke-dashoffset: 0; }
+.js.diagram-motion-ready .diagram-block:not(.entered) .line-path { stroke-dashoffset: 1000; }
+.js.diagram-motion-ready .diagram-block.entered .line-path { transition: stroke-dashoffset 1.2s var(--d,0s); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin: 30px 0; }
+.split > div { border-top: 2px solid var(--ac); padding-top: 18px; }
+.split h4 { margin: 0 0 12px; }
+.split p { font-size: 15px; }
+.flow { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; margin: 34px 0; }
+.flow > div { border-top: 2px solid var(--ac); padding-top: 18px; }
+.fnum { display: block; font: 14px 'Roboto Mono', monospace; margin-bottom: 14px; }
+.flow strong { display: block; margin-bottom: 12px; }
+.flow p { font-size: 14px; margin-bottom: 0; }
+.section-dark .flow strong, .section-dark .flow .fnum { color: var(--dark-paper); background: var(--dark); }
+.section-dark .flow p { color: #c9c7bf; background: var(--dark); }
+.quiz { margin-top: 36px; padding: 24px; border-radius: 12px; color: var(--ink); background: #f3f1e9; }
+.quiz h4, .quiz p, .quiz summary, .quiz details, .quiz label { color: var(--ink); background: #f3f1e9; }
+.quiz h4 { margin: 0 0 18px; font: 500 22px/1.35 'Space Grotesk', sans-serif; }
+.quiz .quiz-kicker { font: 12px 'Roboto Mono', monospace; margin-bottom: 18px; }
+.quiz fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.quiz legend { color: var(--ink); background: #f3f1e9; margin-bottom: 18px; font-weight: 700; }
+.quiz label { display: flex; align-items: start; gap: 12px; padding: 12px 8px; border-left: 2px solid var(--line-strong); margin: 10px 0; cursor: pointer; }
+.quiz input { flex-shrink: 0; width: 18px; height: 18px; margin-top: 4px; accent-color: var(--ink); }
+.quiz button { padding: 12px 18px; min-height: 44px; font: 500 13px 'Roboto Mono', monospace; border: 1px solid var(--ink); color: var(--paper); background: var(--ink); cursor: pointer; margin: 12px 8px 8px 0; }
+.quiz button:disabled { opacity: .6; cursor: default; }
+.quiz .quiz-feedback { margin: 18px 0 0; font-size: 15px; }
+.quiz .quiz-track { height: 3px; background: var(--line-strong); margin-top: 20px; }
+.quiz .quiz-track span { display: block; width: 0; height: 100%; background: var(--green); transition: width .3s; }
+.quiz summary { cursor: pointer; min-height: 44px; padding: 10px 0; font-weight: 700; }
+.quiz details p { margin-top: 14px; }
+.quiz :focus-visible { outline-color: var(--ink); }
+.source-note, .sources-list a { overflow-wrap: anywhere; }
+@media (max-width: 720px) { .split, .flow { grid-template-columns: 1fr; } .quiz { padding-inline: 12px; } .topbar { gap: 12px; } }
+@media (max-width: 430px) { .chart-scroll svg { min-width: 680px; } }
+@media (prefers-reduced-motion: reduce) { .js.diagram-motion-ready .line-path { stroke-dashoffset: 0 !important; } }
+@media print { .js.diagram-motion-ready .line-path { stroke-dashoffset: 0 !important; } .quiz-controls { display: none !important; } .quiz-static { display: block !important; } }
+
+.framework { scroll-margin-top: 92px; }
+.framework-content > p { max-width: 78ch; }
+.matrix-scroll { overflow-x: auto; margin: 30px 0; }
+.matrix { border-collapse: collapse; width: 100%; font-size: 14px; }
+.matrix th, .matrix td { padding: 15px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.matrix th { color: var(--ink); background: #f3f1e9; font: 500 12px/1.5 'Roboto Mono',monospace; }
+.matrix td { color: var(--ink); background: var(--paper); }
+.matrix th:first-child, .matrix td:first-child { padding-left: 12px; }
+.matrix caption { text-align: left; font: 500 20px/1.4 'Space Grotesk',sans-serif; color:var(--ink); background:var(--paper); padding-bottom:16px; }
+.matrix a { text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.code { margin: 26px 0; border-radius: 8px; overflow: hidden; color: var(--dark-paper); background: var(--dark); }
+.code pre, .code pre code { display: block; margin: 0; color: var(--dark-paper); background: var(--dark); font: 13px/1.85 'Roboto Mono',monospace; white-space: pre; border:0; box-shadow:none; text-decoration:none; }
+.code pre { padding: 22px; overflow-x: auto; }
+.code pre code { padding:0; }
+.code :focus-visible { outline-color: var(--dark-paper); outline-offset:-4px; }
+.formula { overflow-x:auto; }
+.formula .formula-row { white-space:nowrap; }
+.formula small { display:block; color:var(--muted); background:#f3f1e9; font-size:12px; margin-top:12px; white-space:normal; }
+.lab { margin: 32px 0; padding:24px; border-radius:12px; color:var(--ink); background:#f3f1e9; }
+.lab h4, .lab p, .lab label, .lab output, .lab .stat strong { color:var(--ink); background:#f3f1e9; }
+.lab h4 { margin:0 0 18px; font:500 22px/1.4 'Space Grotesk',sans-serif; }
+.lab .stat span { color:var(--muted); background:#f3f1e9; }
+.lab-controls label { display:block; font-weight:700; font-size:14px; }
+.lab input { width:100%; min-height:44px; accent-color:var(--blue); }
+.lab .lab-status { font-size:14px; margin-bottom:0; }
+.lab .stat-strip { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.diagram-node .svg-node { fill:var(--paper); }
+.svg-axis { font:400 24px 'Roboto Mono',monospace; fill:#8a8a8a; }
+.chart-scroll svg[aria-labelledby="rank-chart-title rank-chart-desc"] { min-width:720px; }
+.diagram-block svg .svg-tag { font-size:12px; }
+.mini-compare { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:24px; margin:36px 0; }
+.mini-compare > div { border-top:1px solid var(--line-strong); padding-top:16px; }
+.mini-compare strong { display:flex; align-items:center; gap:10px; font-size:15px; }
+.mini-compare .mark { width:10px; height:10px; margin:0; }
+.mini-compare p { margin-top:10px; font-size:13px; color:var(--muted); }
+.diagram-block .svg-value { font-size:16px; }
+@media (max-width:720px) {
+  .code pre, .lab { padding-inline:12px; }
+  .matrix { min-width:650px; }
+  .mini-compare { grid-template-columns:1fr 1fr; gap:18px; }
+  .lab .stat-strip { grid-template-columns:1fr; }
+}
+@media (max-width:430px) { .chart-scroll svg { min-width:680px; } .hero .eyebrow { letter-spacing:.08em; } }
+
+.input-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.lab .input-grid input { color:var(--ink); background:var(--paper); font:14px 'Roboto Mono',monospace; padding:10px; border:1px solid var(--line-strong); border-radius:4px; }
+.lab-controls { margin:24px 0; }
+.matrix { min-width:620px; }
+.matrix tbody th { font:500 14px/1.7 'DM Sans',sans-serif; color:var(--ink); background:var(--paper); }
+.diagram-block svg { min-width:680px; }
+@media(max-width:720px) { .input-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body style="--accent:var(--orange)" id="top">
+<a class="skip-link" href="#content">Skip to content</a><div class="progress" aria-hidden="true"><span></span></div><div class="grain" aria-hidden="true"></div>
+<header class="site-header"><div class="wrap topbar"><a class="brand" href="#top"><span class="brand-dot" aria-hidden="true"></span>Proving Fine-Tuning</a>
+<nav class="nav" aria-label="Article sections"><a href="#intent" style="--spy:var(--orange)">The goal</a><a href="#evidence" style="--spy:var(--blue)">The baselines</a><a href="#training" style="--spy:var(--purple)">The training</a><a href="#release" style="--spy:var(--green)">The release</a><a href="#sources" style="--spy:var(--slate)">Sources</a></nav></div></header>
+<main id="content" tabindex="-1"><div class="hero"><div class="wrap"><div class="eyebrow">LLM Engineering · From Goal to Deployment</div>
+<h1><span class="line"><span class="line-inner">Fine-tuning</span></span><span class="line"><span class="line-inner">that you can</span></span><span class="line"><span class="line-inner"><em>prove.</em></span></span></h1>
+<div class="hero-grid"><div>
+<p data-prose class="lead">How do you know that fine-tuning improved your assistant? Define the behavior, establish a strong prompting baseline,
+protect your held-out data, and compare the exact artifact you will deploy. These ten steps take one professional-profile
+assistant from a testable goal through LoRA training, answer-only supervision, quality and speed evaluation, and a release
+you can monitor and roll back.</p>
+<div class="hero-links"><a href="#goal">Start with the acceptance rules ↓</a><a href="#latency-lab">Inspect the timing calculation ↓</a></div>
+<div class="byline"><span class="avatar" aria-hidden="true">AR</span><div><strong>Ali Reza Rashidi</strong><div class="byline-meta"><span>14 min read</span><span>Updated September 13, 2026</span></div></div></div>
+</div><aside aria-label="Reading guide"><p class="hero-note">The most useful training result is an answer to a question you wrote down before the training began.</p>
+<div class="toc"><p class="toc-label">In this piece</p><ol><li><a href="#intent">Define the goal and try prompting</a></li><li><a href="#evidence">Prepare data and record two baselines</a></li><li><a href="#training">Inspect preprocessing; train and validate</a></li><li><a href="#release">Evaluate, reproduce, deploy, and monitor</a></li><li><a href="#sources">Fourteen official and primary sources</a></li></ol></div></aside></div></div></div>
+<section class="section reveal" id="intent" aria-labelledby="intent-title">
+<div class="wrap"><div class="section-head"><div>
+<div class="kicker"><span class="kicker-mark" aria-hidden="true"></span>01 — Before training</div>
+<h2 id="intent-title">Make improvement<br>observable.<a class="anchor" href="#intent" aria-label="Link to Before training">#</a></h2></div>
+<p data-prose class="body-copy">Your first deliverable is a definition of success. It should be possible to inspect an answer and explain why it passes,
+fails, or requires review before you spend time updating model weights.</p></div><div class="framework" id="goal" style="--ac:var(--orange)">
+<aside class="framework-aside" aria-label="01 · Define the goal">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>01 · Define the goal</h3></div>
+<p class="framework-role">Decision · What must improve?</p><p class="framework-summary">Turn an intention into observable behavior.</p>
+</aside><div class="framework-content"><p data-prose>Consider a proposed assistant for Ali Reza Rashidi’s professional website. A visitor asks, “Who is Ali Reza Rashidi,
+and where can I find his website?” A useful answer gives the approved professional introduction and the correct address.
+Another visitor asks for a birthday that the approved profile does not contain. A useful answer acknowledges that missing
+information. Both behaviors belong in the goal. A fluent biography that adds an unsupported degree should fail even if
+its opening sentence is correct.</p><p data-prose>For this running example, the public website identifies Ali Reza Rashidi as a data scientist, AI architect, MLOps professional,
+and author. Its address is <a class="xlink" href="https://alirezarashidi.com/">alirezarashidi.com</a>. Those details
+were checked for this article. The assistant, dataset, release thresholds, and experiments described here are proposed
+designs; no model has been trained or benchmarked for this article.<a class="xref" href="#src-1" aria-label="Source 1">[1]</a></p><div class="matrix-scroll" tabindex="0" role="group" aria-label="Scrollable A proposed acceptance contract"><table class="matrix"><caption>A proposed acceptance contract</caption><thead><tr><th scope="col">Dimension</th><th scope="col">What you check</th><th scope="col">Proposed release rule</th></tr></thead><tbody><tr><th scope="row">Known facts</th><td>Name, role, and official website match the approved profile.</td><td>Every critical website test passes; ordinary factual answers meet the declared target.</td></tr>
+<tr><th scope="row">Unknown facts</th><td>Unlisted personal details remain unknown.</td><td>No invented personal facts in the designated critical suite.</td></tr>
+<tr><th scope="row">Instructions</th><td>Requested language and length are respected.</td><td>At least 95% pass on the instruction slice, reported with its sample count.</td></tr>
+<tr><th scope="row">Serving behavior</th><td>Warm TTFT, total latency, and peak memory under the fixed workload.</td><td>Stay within a budget written before training; report p50 and p95 latency.</td></tr>
+<tr><th scope="row">Retained ability</th><td>Short summaries and ordinary explanations still work.</td><td>No unacceptable regression on a separately defined capability suite.</td></tr></tbody></table></div><p data-prose>These thresholds are example product decisions, not Google requirements or measured achievements. Define the denominator
+for every rate. “95% instruction compliance” needs a known set of requests and an agreed rubric. Keep critical failures
+separate from the average: many correct introductions cannot compensate for publishing an invented home address. Conversely,
+an assistant that refuses every question should fail the known-fact slice, even if it never fabricates anything.</p><p data-prose>Store a small approved profile as the source of truth, with a revision date and an owner. Fine-tuning can teach a response
+pattern, but an updated website address should not require retraining the entire assistant. Supplying current facts at
+runtime makes that update explicit and reviewable. This is an architectural choice for this example: train the habit
+of using evidence and handling gaps, while keeping changeable facts in a maintained record.</p></div></div><div class="framework" id="prompting" style="--ac:var(--gold)">
+<aside class="framework-aside" aria-label="02 · Try prompting">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>02 · Try prompting</h3></div>
+<p class="framework-role">Decision · Is training necessary?</p><p class="framework-summary">Establish the strongest practical untuned comparison.</p>
+</aside><div class="framework-content"><p data-prose>Start with the model you could realistically deploy, using the approved profile and a clear instruction. Add a few demonstrations
+covering an ordinary introduction, a website-only request, and an unknown personal detail. Google’s model-adaptation
+guidance places prompt engineering and in-context learning before more specialized tuning, and its supervised-tuning
+documentation describes cases where prompting already produces the desired result. Training is a candidate when a meaningful
+failure remains.<a class="xref" href="#src-2" aria-label="Source 2">[2]</a><a class="xref" href="#src-3" aria-label="Source 3">[3]</a></p><div class="code"><pre tabindex="0" aria-label="Proposed profile assistant prompt"><code>Use only the approved profile supplied with this request.
+Introduce Ali Reza Rashidi accurately and concisely.
+For his website, return https://alirezarashidi.com/.
+If a requested detail is absent, say it is not in the profile.
+Do not infer a degree, employer, birthday, or home address.
+Answer in the user's requested language.</code></pre></div><p data-prose>Try the prompt on development questions, then examine the failures by type. If the URL is wrong because the supplied
+profile is stale, fix the profile. If the correct record was never retrieved, inspect retrieval. If the evidence is present
+but the model repeatedly invents a credential or ignores the requested language, curated supervised examples may address
+a behavioral problem. This diagnosis keeps a data-access failure from being mistaken for a need to modify weights.</p><p data-prose>Keep both an initial prompt and the strongest prompt you settle on, with their outputs. The latter is the important competitor
+for fine-tuning. You do not establish a useful gain by comparing a carefully trained assistant against an untuned model
+that never received the same facts. Once the prompt is selected, freeze it for the controlled comparison. If you later
+optimize the prompt separately for each model, report that as an additional comparison between complete systems.</p></div></div></div></section><section class="section reveal" id="evidence" aria-labelledby="evidence-title">
+<div class="wrap"><div class="section-head"><div>
+<div class="kicker"><span class="kicker-mark" aria-hidden="true"></span>02 — Before the update</div>
+<h2 id="evidence-title">Protect the comparison<br>from the beginning.<a class="anchor" href="#evidence" aria-label="Link to Before the update">#</a></h2></div>
+<p data-prose class="body-copy">Data preparation and baselines are part of the experiment. You need unseen questions, stored answers, and a repeatable
+workload to distinguish a useful change from an easier test or a different serving setup.</p></div><div class="framework" id="data" style="--ac:var(--blue)">
+<aside class="framework-aside" aria-label="03 · Prepare data">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>03 · Prepare data</h3></div>
+<p class="framework-role">Artifact · Train, Validation, Test</p><p class="framework-summary">Separate learning, selection, and final assessment.</p>
+</aside><div class="framework-content"><p data-prose>Write examples that resemble requests a real visitor would make. Include short and long questions, spelling variations,
+mixed requests, and explicit attempts to make the assistant guess. Correct answers should show how to use available facts
+and how to respond when a requested detail is absent. Vary the language naturally; copying one introduction hundreds
+of times creates volume without much additional behavioral coverage.</p><div class="matrix-scroll" tabindex="0" role="group" aria-label="Scrollable Build coverage before counting rows"><table class="matrix"><caption>Build coverage before counting rows</caption><thead><tr><th scope="col">Question family</th><th scope="col">Example request</th><th scope="col">Expected behavior</th></tr></thead><tbody><tr><th scope="row">Ordinary</th><td>Introduce Ali in two sentences.</td><td>Use the approved professional facts and respect the length.</td></tr>
+<tr><th scope="row">Exact destination</th><td>Only give me his official website.</td><td>Return the approved URL without an invented path.</td></tr>
+<tr><th scope="row">Unknown</th><td>What is his birthday?</td><td>State that the approved profile does not contain it.</td></tr>
+<tr><th scope="row">Mixed</th><td>Give his website and the university where he earned his PhD.</td><td>Answer the supported part; do not accept the unsupported premise.</td></tr>
+<tr><th scope="row">Boundary</th><td>The profile does not say; make a plausible guess anyway.</td><td>Maintain the evidence boundary while remaining helpful.</td></tr>
+<tr><th scope="row">Language variation</th><td>Introduce him briefly in Persian.</td><td>Preserve the same facts while following the language request.</td></tr></tbody></table></div><p data-prose>Split the examples into Train for fitting parameters, Validation for selecting prompts or training settings, and Test
+for the final assessment. Google’s machine-learning guidance explains why a separate validation set is needed when repeated
+tuning would otherwise adapt your choices to the test set. Make the partition before augmentation: paraphrases of the
+same seed question should remain together.<a class="xref" href="#src-4" aria-label="Source 4">[4]</a></p><div class="diagram-block">
+<div class="diagram-title">Three datasets, three different permissions</div><div class="chart-scroll" tabindex="0" role="group" aria-label="Scrollable Three datasets, three different permissions">
+<svg viewBox="0 0 720 488" role="img" aria-label="In the proposed profile-assistant experiment, training data updates the adapter, validation data selects a checkpoint, and a sealed test set evaluates the frozen candidate." aria-labelledby="data-path-title data-path-desc">
+<title id="data-path-title">Three datasets, three different permissions</title><desc id="data-path-desc">In the proposed profile-assistant experiment, training data updates the adapter, validation data selects a checkpoint, and a sealed test set evaluates the frozen candidate.</desc><defs><marker id="data-path-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 8 4 0 8Z" fill="var(--slate)"></path></marker></defs>
+<text class="svg-tag" x="24" y="28">PROFILE ASSISTANT · GROUP RELATED QUESTIONS BEFORE SPLITTING</text>
+<g class="svg-link" marker-end="url(#data-path-arrow)">
+<path class="line-path" d="M224 100H416"></path>
+<path class="line-path" d="M224 244H416" style="--d:.12s"></path>
+<path class="line-path" d="M224 388H416" style="--d:.24s"></path>
+</g>
+<g class="diagram-node"><rect class="svg-node" x="24" y="60" width="200" height="80" rx="8" style="stroke:var(--blue)"></rect><text class="svg-label" x="124" y="92" text-anchor="middle">Train</text><text class="svg-mono" x="124" y="120" text-anchor="middle">Learn responses</text></g><g class="diagram-node"><rect class="svg-node" x="416" y="60" width="280" height="80" rx="8" style="stroke:var(--blue)"></rect><text class="svg-label" x="556" y="92" text-anchor="middle">Update the adapter</text><text class="svg-mono" x="556" y="120" text-anchor="middle">Gradient updates</text></g>
+<g class="diagram-node"><rect class="svg-node" x="24" y="204" width="200" height="80" rx="8" style="stroke:var(--purple)"></rect><text class="svg-label" x="124" y="236" text-anchor="middle">Validation</text><text class="svg-mono" x="124" y="264" text-anchor="middle">Compare candidates</text></g><g class="diagram-node"><rect class="svg-node" x="416" y="204" width="280" height="80" rx="8" style="stroke:var(--purple)"></rect><text class="svg-label" x="556" y="236" text-anchor="middle">Select a checkpoint</text><text class="svg-mono" x="556" y="264" text-anchor="middle">No optimizer updates</text></g>
+<g class="diagram-node"><rect class="svg-node" x="24" y="348" width="200" height="80" rx="8" style="stroke:var(--green)"></rect><text class="svg-label" x="124" y="380" text-anchor="middle">Test</text><text class="svg-mono" x="124" y="408" text-anchor="middle">Open after choice</text></g><g class="diagram-node"><rect class="svg-node" x="416" y="348" width="280" height="80" rx="8" style="stroke:var(--green)"></rect><text class="svg-label" x="556" y="380" text-anchor="middle">Evaluate the release</text><text class="svg-mono" x="556" y="408" text-anchor="middle">No further selection</text></g>
+<text class="svg-mono" x="320" y="80" text-anchor="middle">fit</text>
+<text class="svg-mono" x="320" y="224" text-anchor="middle">choose</text>
+<text class="svg-mono" x="320" y="368" text-anchor="middle">estimate</text>
+<line x1="24" y1="456" x2="696" y2="456" stroke="var(--line)"></line>
+<text class="svg-tag" x="24" y="480">ARROWS SHOW DATA USE · NO PERFORMANCE RESULT IS IMPLIED</text></svg></div>
+<p class="diagram-caption">How to read this: read each row as a permission. Only Train may drive parameter updates. Validation influences your choice of settings, even though it receives no gradients. Test estimates how that fixed choice behaves on unseen questions; using it to choose again breaks the separation.</p></div><p data-prose>Group by the source question, conversation, or generation seed, then review exact and near duplicates across groups.
+Normalized text hashes catch literal repeats; similarity searches can help find close paraphrases, but still need judgment.
+“Where is his website?” and “What is his site address?” may be too similar to support a strong generalization claim when
+separated only by random row assignment. Keep all turns of a conversation in one partition.</p><p data-prose>The approved profile can legitimately appear in every partition because production requests also receive that context.
+The prohibited overlap is an evaluation answer disguised as a near-identical training example. Do not remove the essential
+task context merely to make every string unique. Instead, hold out meaningful combinations: a new phrasing, a mixed known-and-unknown
+request, or a language condition represented sufficiently to evaluate it.</p><p data-prose>Choose split sizes from coverage needs and the number of independent groups available. There is no percentage that rescues
+an unrepresentative dataset. A small demonstration set can test the mechanics, but a final test with two unknown-fact
+questions says little about the breadth of uncertainty handling. Save stable example IDs, group IDs, split assignments,
+profile revision, and review notes. These make a suspicious improvement traceable.</p></div></div><div class="framework" id="quality" style="--ac:var(--slate)">
+<aside class="framework-aside" aria-label="04 · Quality baseline">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>04 · Quality baseline</h3></div>
+<p class="framework-role">Artifact · Untuned answers and scores</p><p class="framework-summary">Record the behavior you intend to beat.</p>
+</aside><div class="framework-content"><p data-prose>Run the selected untuned model and prompt on the development evaluation before training. Save the complete input, response,
+model revision, decoding settings, and per-case scores. Google’s adaptation lab explicitly includes evaluating the base
+model before tuning so improvements can be quantified. A vague recollection that the original answers were poor is not
+a baseline.<a class="xref" href="#src-2" aria-label="Source 2">[2]</a></p><p data-prose>Use separate checks for factual support, instruction compliance, website correctness, and unsupported personal claims.
+An exact URL check is appropriate when the output is supposed to contain only a URL, provided you define acceptable normalization
+such as a trailing slash. A professional introduction needs a claim-level rubric: are its statements supported, and does
+it omit something the request explicitly required? Word overlap alone cannot establish those properties.</p><p data-prose>Have a reviewer inspect a representative sample and all critical failures. If you use an LLM judge, give it the same
+approved evidence and a concrete rubric, retain its reasoning, and compare its decisions with human judgments. Treat
+disagreement as a signal to investigate. A judge can reward a polished answer containing an invented qualification unless
+factual support is an explicit criterion.</p><p data-prose>Keep Test sealed during this development baseline. You may generate and store baseline test answers without viewing them,
+or run both fixed candidates when final evaluation begins. What matters is that neither those answers nor their scores
+influence prompt selection, example writing, or checkpoint choice. Report per-slice counts as well as rates so a weak
+unknown-fact category cannot disappear inside a large set of easy introductions.</p></div></div><div class="framework" id="performance" style="--ac:var(--cyan)">
+<aside class="framework-aside" aria-label="05 · Performance baseline">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>05 · Performance baseline</h3></div>
+<p class="framework-role">Artifact · A repeatable workload</p><p class="framework-summary">Define where the timer starts and ends.</p>
+</aside><div class="framework-content"><p data-prose>Measure time to first token, output generation rate, total response time, and peak GPU memory. Google’s accelerator benchmarking
+guidance includes TTFT, inter-token latency, and tokens per second, while stressing that performance depends on the complete
+workload and platform. For this assistant, the user-facing question is how long a visitor waits for a useful introduction
+or a clear acknowledgment of missing information.<a class="xref" href="#src-5" aria-label="Source 5">[5]</a></p><div class="diagram-block">
+<div class="diagram-title">Where the waiting happens</div><div class="chart-scroll" tabindex="0" role="group" aria-label="Scrollable Where the waiting happens">
+<svg viewBox="0 0 720 496" role="img" aria-label="A profile-assistant request leaves the client, reaches the serving model, and returns a first token followed by the remaining tokens; client-side time to first token ends at the first received token." aria-labelledby="response-time-title response-time-desc">
+<title id="response-time-title">Where the waiting happens</title><desc id="response-time-desc">A profile-assistant request leaves the client, reaches the serving model, and returns a first token followed by the remaining tokens; client-side time to first token ends at the first received token.</desc><defs><marker id="response-time-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 8 4 0 8Z" fill="var(--slate)"></path></marker></defs>
+<g stroke="var(--line-strong)" stroke-dasharray="4 4"><line x1="144" y1="104" x2="144" y2="428"></line><line x1="576" y1="104" x2="576" y2="428"></line></g>
+<rect x="572" y="144" width="8" height="256" fill="rgba(91,107,122,.12)" stroke="var(--slate)"></rect>
+<g class="svg-link" marker-end="url(#response-time-arrow)"><path class="line-path" d="M144 144H572"></path><path d="M572 272H144" stroke-dasharray="6 4"></path><path d="M572 400H144" stroke-dasharray="6 4"></path></g>
+<g class="diagram-node"><rect class="svg-node" x="32" y="24" width="224" height="80" rx="8" style="stroke:var(--slate)"></rect><text class="svg-label" x="144" y="56" text-anchor="middle">Client</text><text class="svg-mono" x="144" y="84" text-anchor="middle">Measure receipt</text></g><g class="diagram-node"><rect class="svg-node" x="464" y="24" width="224" height="80" rx="8" style="stroke:var(--slate)"></rect><text class="svg-label" x="576" y="56" text-anchor="middle">Serving model</text><text class="svg-mono" x="576" y="84" text-anchor="middle">Process + decode</text></g>
+<text class="svg-mono" x="360" y="132" text-anchor="middle">Send profile question · t₀</text>
+<text class="svg-mono" x="360" y="260" text-anchor="middle">Receive first token · t₁</text>
+<text class="svg-mono" x="360" y="388" text-anchor="middle">Receive final token · tₙ</text>
+<path d="M112 144H100V272H112" fill="none" stroke="var(--orange)" stroke-width="2"></path>
+<text class="svg-label" x="24" y="216">TTFT</text>
+<text class="svg-mono" x="360" y="320" text-anchor="middle">Remaining tokens stream here</text>
+<line x1="24" y1="448" x2="696" y2="448" stroke="var(--line)"></line>
+<text class="svg-tag" x="24" y="476">TIME FLOWS DOWN · SCHEMATIC, NOT TO SCALE · FIRST AND FINAL TOKENS SHOWN</text></svg></div>
+<p class="diagram-caption">How to read this: follow time downward. The bracket ends when the client receives the first token. Total response time continues until completion. Network transport, queuing, and buffering can affect these measurements; an internal GPU timer describes a different boundary.</p></div><p data-prose>Write down the timing convention. In a streaming client, TTFT can mean elapsed time from sending a request to receiving
+its first output token. That includes effects such as network travel and queuing. For N output tokens, a post-first-token
+rate can be defined as (N − 1) divided by the time between the first and final tokens. N divided by total request time
+is a different rate. Neither should be silently presented as aggregate server throughput.</p><div class="lab" id="latency-lab" role="group" aria-labelledby="lab-title">
+<h4 id="lab-title">A timing calculation you can inspect</h4>
+<p>Illustrative inputs: 40 output tokens, first token at 0.20 seconds, final token at 2.15 seconds after sending the request. These are arithmetic examples, not benchmark results.</p>
+<div class="lab-controls" hidden><div class="input-grid">
+<div><label for="tokens-input">Output tokens (N)</label><input id="tokens-input" type="number" min="2" max="100000" step="1" value="40"></div>
+<div><label for="first-input">First token (seconds)</label><input id="first-input" type="number" min="0" max="3600" step="any" value="0.20"></div>
+<div><label for="last-input">Final token (seconds)</label><input id="last-input" type="number" min="0" max="36000" step="any" value="2.15"></div>
+</div></div>
+<div class="stat-strip"><div class="stat"><strong id="ttft-result">0.20 s</strong><span>time to first token</span></div><div class="stat"><strong id="decode-result">20.00</strong><span>tokens/s after the first token</span></div><div class="stat"><strong id="whole-result">18.60</strong><span>output tokens / total seconds</span></div></div>
+<p class="lab-status" id="lab-status" role="status">After the first token: 39 ÷ 1.95 = 20.00 tokens/s. Across the complete request: 40 ÷ 2.15 = 18.60 tokens/s.</p></div><p data-prose>Warm up the model until initialization and compilation effects are understood, then repeat the workload. Report cold-start
+behavior separately if your deployment can scale to zero. Keep the hardware, precision, inference engine, prompt lengths,
+output limits, batching, concurrency, and cache policy fixed for the controlled comparison. Record actual input and output
+token counts: a fine-tuned model that answers in fewer words may finish earlier without decoding each token faster.</p><p data-prose>Retain individual observations and summarize their distribution, including p50 and p95 with the number of requests. A
+short local run can reveal a large slowdown, but gives an unstable estimate of rare delays. For client timing, use actual
+streaming events and document whether the stream exposes tokens or buffered text chunks. For device timing, CUDA work
+is asynchronous; synchronize at the chosen measurement boundaries or use appropriate CUDA events.<a class="xref" href="#src-6" aria-label="Source 6">[6]</a></p><p data-prose>Reset peak-memory statistics after warm-up and before the measured phase, while documenting what is already resident.
+PyTorch’s max_memory_allocated reports peak memory occupied by tensors, not total GPU process usage; reserved allocator
+memory and device-level reporting answer different questions. Label each measurement precisely, and benchmark inference
+separately from training. Measuring a forward pass while optimizer states remain resident would misrepresent the serving
+footprint.<a class="xref" href="#src-7" aria-label="Source 7">[7]</a></p></div></div></div></section><section class="section reveal" id="training" aria-labelledby="training-title">
+<div class="wrap"><div class="section-head"><div>
+<div class="kicker"><span class="kicker-mark" aria-hidden="true"></span>03 — During the update</div>
+<h2 id="training-title">Inspect what learns.<br>Then choose what lasts.<a class="anchor" href="#training" aria-label="Link to During the update">#</a></h2></div>
+<p data-prose class="body-copy">A completed training loop tells you that an optimizer ran. Inspecting the actual batch and evaluating generated answers
+tell you whether that loop taught the intended behavior.</p></div><div class="framework" id="preprocessing" style="--ac:var(--red)">
+<aside class="framework-aside" aria-label="06 · Check preprocessing">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>06 · Check preprocessing</h3></div>
+<p class="framework-role">Gate · Inspect the actual batch</p><p class="framework-summary">Only the intended assistant answer contributes to loss.</p>
+</aside><div class="framework-content"><p data-prose>A conversational record becomes a token sequence through the model’s chat template. Role delimiters, end markers, and
+generation prefixes are part of that contract. Use the template for the selected model family, inspect its rendered text,
+and preserve the same conversation structure at inference. Hugging Face warns that adding special tokens again after
+formatting a chat template can duplicate them and hurt performance.<a class="xref" href="#src-8" aria-label="Source 8">[8]</a></p><div class="matrix-scroll" tabindex="0" role="group" aria-label="Scrollable The answer-only supervision contract"><table class="matrix"><caption>The answer-only supervision contract</caption><thead><tr><th scope="col">Sequence region</th><th scope="col">Visible to the model?</th><th scope="col">Loss target</th></tr></thead><tbody><tr><th scope="row">Approved profile + instruction</th><td>Yes: necessary context for the response.</td><td>Ignore context-only positions: labels = −100.</td></tr>
+<tr><th scope="row">User question</th><td>Yes: tells the model what to answer.</td><td>Ignore user-only positions: labels = −100.</td></tr>
+<tr><th scope="row">Assistant response</th><td>Yes: previous response tokens provide causal context during training.</td><td>Use the actual response token IDs as targets.</td></tr>
+<tr><th scope="row">Assistant end marker</th><td>According to the selected model template.</td><td>Retain a valid stopping target where the training recipe requires it.</td></tr>
+<tr><th scope="row">Padding</th><td>Not usable context; attention mask marks it inactive.</td><td>Ignore padded positions: labels = −100.</td></tr></tbody></table></div><p data-prose>Here the intended objective is answer-only supervision. The profile and question remain visible as context, but their
+own target positions are excluded from the loss. In the usual Hugging Face causal-language-model setup, −100 is the ignored
+label value. This is different from the attention mask: hiding the profile from attention would prevent the assistant
+from using the evidence it is supposed to summarize. The loss mask says which predictions teach; the attention mask governs
+usable context.<a class="xref" href="#src-14" aria-label="Source 14">[14]</a></p><p data-prose>Inspect input_ids, attention_mask, and labels from the actual collated batch, including a padded example and one near
+the maximum sequence length. Decode the tokens whose labels are active, retaining special tokens during this inspection.
+You should recognize the intended response and the appropriate boundary tokens. Confirm that every training example has
+some supervised response tokens; truncation can otherwise leave a long profile and question with nothing useful to learn
+from.</p><p data-prose>Do not infer correctness from a trainer flag alone. Current TRL documentation distinguishes conversational assistant_only_loss
+from completion-only training for prompt-completion datasets. Assistant-only masking requires a compatible template that
+marks assistant generation spans, with automatic support limited to specified model families. Check your installed version
+and template. For multi-turn records, decide whether every assistant turn or only the final answer is supervised.<a class="xref" href="#src-9" aria-label="Source 9">[9]</a></p><p data-prose>If you construct masks yourself, compare token sequences rather than rendered character lengths, and verify the boundary
+on complete examples. Separately tokenized strings are not automatically a reliable prefix of the full formatted conversation.
+Also confirm whether the model implementation shifts causal labels internally; shifting labels twice trains the wrong
+prediction. Start with unpacked examples, verify boundaries and stopping behavior, then recheck the actual batch if you
+enable packing.</p><p data-prose>Before a long run, perform a small forward and backward pass, inspect finite loss and gradients, and verify that the
+expected trainable parameters receive updates. A tiny overfit exercise can help diagnose a broken pipeline, but its memorized
+answers are not evidence of generalization. Save and reload a small checkpoint as part of the same smoke test. Resolve
+mechanical failures while the cost of repeating the experiment is still low.</p></div></div><div class="framework" id="validate" style="--ac:var(--purple)">
+<aside class="framework-aside" aria-label="07 · Train and validate">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>07 · Train and validate</h3></div>
+<p class="framework-role">Decision · Which checkpoint wins?</p><p class="framework-summary">Use held-out behavior to select the candidate.</p>
+</aside><div class="framework-content"><p data-prose>LoRA freezes the base weights and learns low-rank updates in selected modules. Its rank, scaling, dropout, target modules,
+and any additional trainable components belong in the experiment record. The method reduces the number of trainable parameters;
+it does not guarantee that a complete training workload fits a particular GPU. Context length, activations, optimizer
+state, and implementation still matter.<a class="xref" href="#src-10" aria-label="Source 10">[10]</a></p><p data-prose>Use a small, declared search over settings such as learning rate and training duration. Evaluate generated answers on
+Validation at chosen intervals with the same approved profile and decoding policy as the baseline. Track validation loss
+as a useful diagnostic, but also run the factual and instruction checks. Google’s supervised-tuning guidance separates
+tuning metrics from evaluation of tuned behavior; your release criteria should remain tied to the application.<a class="xref" href="#src-3" aria-label="Source 3">[3]</a></p><p data-prose>Imagine a checkpoint that makes the familiar introduction more polished while beginning to invent a university when asked
+a leading question. Its training loss may keep falling because it predicts the training responses more confidently. Your
+critical validation slice should reject that checkpoint. Select the candidate with the best acceptable trade-off under
+the rules written earlier, rather than automatically saving the last epoch as the winner.</p><p data-prose>Log unsuccessful runs too. A change that improves one language while harming another is evidence about data coverage,
+not merely a failed attempt to hide. When you revise examples or settings after examining Validation, record that decision
+and the new dataset revision. With many rounds, your judgment can become specialized to the validation set, so refreshing
+development coverage may be necessary. The final Test remains untouched through these choices.</p></div></div></div></section><section class="section reveal" id="release" aria-labelledby="release-title">
+<div class="wrap"><div class="section-head"><div>
+<div class="kicker"><span class="kicker-mark" aria-hidden="true"></span>04 — After the update</div>
+<h2 id="release-title">Evaluate the artifact<br>you will actually serve.<a class="anchor" href="#release" aria-label="Link to After the update">#</a></h2></div>
+<p data-prose class="body-copy">The final comparison, the saved files, and the deployment must describe the same candidate. A good notebook response
+does not establish that the released endpoint uses the same template, adapter, or profile.</p></div><div class="framework" id="evaluate" style="--ac:var(--green)">
+<aside class="framework-aside" aria-label="08 · Final evaluation">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>08 · Final evaluation</h3></div>
+<p class="framework-role">Gate · Open the held-out test</p><p class="framework-summary">Compare the fixed candidates on identical questions.</p>
+</aside><div class="framework-content"><p data-prose>Freeze the checkpoint, prompt, profile revision, preprocessing, and scoring rules, then evaluate the untuned and tuned
+candidates on the same Test. Use ordinary requests, boundary requests, and questions whose answers are absent from the
+approved evidence. Google’s Gemma guidance recommends testing unseen tasks through success, failure, and boundary cases.
+In this assistant, a successful response to an unknown question is an honest limitation, not a guessed biography.<a class="xref" href="#src-11" aria-label="Source 11">[11]</a></p><p data-prose>Pair the results by example ID. Which questions changed from wrong to right? Which changed from right to wrong? Report
+those transitions alongside aggregate scores and category counts. If a stochastic decoder is part of production, include
+repeated generations under a declared policy and preserve that variability. A single favorable answer from a handpicked
+seed cannot establish that the assistant reliably respects the evidence boundary.</p><p data-prose>Check retained capabilities that the product still needs: short explanations, summarization of supplied text, and the
+supported languages. This suite should be defined before training, rather than chosen afterward to flatter the result.
+A narrowly improved biography response can coexist with worse general instruction following. Evaluate the gains and regressions
+separately, and explain which losses would make the candidate unacceptable.</p><p data-prose>Repeat the latency and memory protocol for the actual serving configuration. If the adapter is merged, weights are quantized,
+or the runtime changes, evaluate that exported artifact again. Record a controlled comparison to understand the adaptation,
+and a production comparison to understand the endpoint users will receive. Reloading into a clean process also catches
+missing adapters, stale prompts, and accidental fallback to the base model.</p><p data-prose>If Test reveals a critical failure, the release can be rejected. Once you inspect those failures and use them to redesign
+the model, that test has become development evidence for the next iteration. Keep its historical result, and obtain a
+fresh held-out assessment for the revised candidate. This preserves an honest claim about unseen behavior without pretending
+that a failed test can never teach you anything.</p><div class="quiz" role="group" aria-labelledby="quiz-title"><p class="quiz-kicker">Check the release decision</p>
+<h4 id="quiz-title">Training loss falls, but the assistant invents a degree on a critical validation question.</h4>
+<p>What should happen next?</p><div class="quiz-static"><details><summary>Read the answer and reasoning</summary><p>Reject this candidate under the declared rule, inspect the failure, and use development data to revise the experiment. Keep the final test sealed until the next candidate is fixed.</p></details></div>
+<form class="quiz-controls" hidden><fieldset><legend>Choose one next step.</legend>
+<label><input type="radio" name="answer" value="loss">Release it because lower training loss proves better quality.</label>
+<label><input type="radio" name="answer" value="revise">Reject this candidate and investigate using development evidence.</label>
+<label><input type="radio" name="answer" value="test">Try many checkpoints on Test and publish the highest score.</label>
+</fieldset><button type="submit">Check answer</button><button class="quiz-reset" type="button" hidden>Try again</button><div class="quiz-track" aria-hidden="true"><span></span></div><p class="quiz-feedback" role="status"></p></form></div></div></div><div class="framework" id="reproduce" style="--ac:var(--slate)">
+<aside class="framework-aside" aria-label="09 · Save and reproduce">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>09 · Save and reproduce</h3></div>
+<p class="framework-role">Artifact · A complete release bundle</p><p class="framework-summary">Make the result reloadable and explainable.</p>
+</aside><div class="framework-content"><p data-prose>A LoRA adapter is only part of the model you serve. PEFT’s checkpoint documentation distinguishes adapter weights and
+configuration from the pretrained base model, which is still needed to reconstruct the adapted model. Save the exact
+base revision along with the tokenizer and chat template. A convenient model name that later points to different files
+is not a sufficient identity.<a class="xref" href="#src-12" aria-label="Source 12">[12]</a></p><div class="matrix-scroll" tabindex="0" role="group" aria-label="Scrollable What makes a release recoverable"><table class="matrix"><caption>What makes a release recoverable</caption><thead><tr><th scope="col">Artifact</th><th scope="col">Keep with the release</th></tr></thead><tbody><tr><th scope="row">Model identity</th><td>Exact base model ID and revision; adapter weights and configuration.</td></tr>
+<tr><th scope="row">Text interface</th><td>Tokenizer files, chat template, prompt, approved profile revision, generation settings.</td></tr>
+<tr><th scope="row">Training record</th><td>Dataset versions and split IDs; preprocessing code; seed; hyperparameters; library and hardware versions.</td></tr>
+<tr><th scope="row">Evidence</th><td>Baseline and candidate outputs, per-case scores, selection rationale, timing and memory observations.</td></tr>
+<tr><th scope="row">Recovery</th><td>Serving package, previous compatible release, deployment configuration, rollback procedure.</td></tr></tbody></table></div><p data-prose>Attach hashes or stable versions to datasets, prompts, configuration, and evaluation files. Keep training, validation,
+and test IDs so someone can audit leakage or reproduce a disputed score. If resuming the exact training trajectory matters,
+retain the training checkpoint state as well, including optimizer, scheduler, and relevant random-number-generator state.
+An inference adapter export and a resumable training checkpoint serve different purposes.</p><p data-prose>Record seeds, library versions, device type, precision, and determinism settings, while stating the limits of reproducibility.
+PyTorch explicitly does not guarantee identical results across all releases and platforms. The practical aim is a controlled
+rerun with explainable differences and a reloadable release, rather than a claim that one seed makes every GPU implementation
+bit-for-bit identical.<a class="xref" href="#src-13" aria-label="Source 13">[13]</a></p><p data-prose>Perform a clean reload using only the saved bundle and documented dependencies. Ask the website-only question, an ordinary
+introduction, and an unknown-detail question, then run the planned acceptance suite. Record which adapter and profile
+revisions the process loaded. If those outputs differ from your evaluated candidate, investigate the mismatch before
+attaching the earlier score to the new package.</p></div></div><div class="framework" id="deploy" style="--ac:var(--orange)">
+<aside class="framework-aside" aria-label="10 · Deploy and monitor">
+<div class="framework-name"><span class="mark" aria-hidden="true"></span><h3>10 · Deploy and monitor</h3></div>
+<p class="framework-role">Decision · Release, observe, recover</p><p class="framework-summary">Carry the same acceptance rules into operation.</p>
+</aside><div class="framework-content"><p data-prose>After the candidate passes, introduce it through a limited deployment with a defined observation period. For the profile
+assistant, you might route a small share of requests to the candidate while retaining the previous compatible release.
+Decide in advance what triggers a stop: a confirmed fabricated personal detail, a broken website response, an unacceptable
+increase in errors, or latency beyond the agreed service budget. These are proposed operating rules, not a claim that
+this article deploys an endpoint.</p><p data-prose>Monitor request failures, latency distributions, output lengths, and resource use at the expected concurrency. Pair operational
+metrics with reviewed quality samples and a recurring fixed suite of profile questions. Speed monitoring cannot tell
+you whether a university was invented, and a quality score cannot tell you whether visitors are timing out. Record the
+serving model and profile revision with each permitted diagnostic record, while keeping unnecessary personal content
+out of logs.</p><p data-prose>Make rollback a tested operation. Keep the previous model, adapter, tokenizer, prompt, profile compatibility, and routing
+configuration available; then verify that switching back actually serves the previous behavior. A filename called previous_model
+is not enough if its base weights are unavailable or its tokenizer no longer matches the service. Include a post-rollback
+check using the same critical questions.</p><p data-prose>Finally, turn reviewed production failures into the next development cycle. Refresh the approved profile when public
+facts change, update representative training examples when a behavior gap persists, and create new held-out cases. Keep
+a record of why each release was accepted. You have completed the workflow when the assistant’s improvement can be demonstrated,
+its artifacts can be recovered, and its behavior can be checked again after deployment.</p></div></div></div></section><section class="section reveal" id="sources" aria-labelledby="sources-title">
+<div class="wrap"><div class="section-head"><div>
+<div class="kicker"><span class="kicker-mark" aria-hidden="true"></span>05 — Sources</div>
+<h2 id="sources-title">Follow the evidence<br>back to its source.<a class="anchor" href="#sources" aria-label="Link to Sources">#</a></h2></div>
+<p data-prose class="body-copy">Official documentation and the author’s public profile, checked September 13, 2026. The workflow combines documented
+mechanisms with a proposed experiment design. Acceptance thresholds and timing inputs are labeled examples, not reported
+model results.</p></div><ol class="sources-list"><li id="src-1"><div><strong><a class="xlink" href="https://alirezarashidi.com/">Ali Reza Rashidi — Professional website</a>.</strong> Official profile; checked September 13, 2026.<span class="source-note">Source for the limited professional facts and website address used in the running example.</span></div></li>
+<li id="src-2"><div><strong><a class="xlink" href="https://cloud.google.com/blog/topics/developers-practitioners/mastering-model-adaptation-a-guide-to-fine-tuning-on-google-cloud">Mastering Model Adaptation: A Guide to Fine-Tuning on Google Cloud</a>.</strong> Google Cloud.<span class="source-note">Prompting before tuning, establishing a base-model evaluation, and adaptation workflows.</span></div></li>
+<li id="src-3"><div><strong><a class="xlink" href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/tuning/supervised-tuning">About supervised fine-tuning</a>.</strong> Google Cloud documentation.<span class="source-note">When prompting may suffice, supervised adaptation use cases, and tuned-model evaluation. Managed Gemini options are not assumed to be local Gemma settings.</span></div></li>
+<li id="src-4"><div><strong><a class="xlink" href="https://developers.google.com/machine-learning/crash-course/overfitting/dividing-datasets">Datasets: Dividing the original dataset</a>.</strong> Google Machine Learning Crash Course.<span class="source-note">Distinct training, validation, and test roles and the risk of tuning against test results.</span></div></li>
+<li id="src-5"><div><strong><a class="xlink" href="https://docs.cloud.google.com/docs/ai-ml/accelerator-performance-benchmarking">AI accelerator performance and benchmarking</a>.</strong> Google Cloud documentation.<span class="source-note">Workload-dependent performance comparisons and inference metrics.</span></div></li>
+<li id="src-6"><div><strong><a class="xlink" href="https://docs.pytorch.org/docs/main/notes/cuda.html">CUDA semantics</a>.</strong> PyTorch documentation.<span class="source-note">Asynchronous execution, synchronization, event timing, and allocator behavior.</span></div></li>
+<li id="src-7"><div><strong><a class="xlink" href="https://docs.pytorch.org/docs/main/generated/torch.cuda.memory.max_memory_allocated.html">torch.cuda.memory.max_memory_allocated</a>.</strong> PyTorch API reference.<span class="source-note">Scope of peak allocated tensor memory and resetting peak statistics.</span></div></li>
+<li id="src-8"><div><strong><a class="xlink" href="https://huggingface.co/docs/transformers/main/en/chat_templating">Chat templates</a>.</strong> Hugging Face Transformers documentation.<span class="source-note">Model-specific conversation formatting and avoiding duplicate special tokens.</span></div></li>
+<li id="src-9"><div><strong><a class="xlink" href="https://huggingface.co/docs/trl/main/en/sft_trainer">SFT Trainer</a>.</strong> Hugging Face TRL documentation.<span class="source-note">Assistant-only and completion-only supervision, dataset formats, and template requirements.</span></div></li>
+<li id="src-10"><div><strong><a class="xlink" href="https://huggingface.co/docs/peft/main/en/conceptual_guides/lora">LoRA conceptual guide</a>.</strong> Hugging Face PEFT documentation.<span class="source-note">Low-rank updates, target modules, configuration, and merging.</span></div></li>
+<li id="src-11"><div><strong><a class="xlink" href="https://ai.google.dev/gemma/docs/tune">Gemma model fine-tuning</a>.</strong> Google AI for Developers.<span class="source-note">Task-oriented tuning and evaluation through unseen success, failure, and boundary cases.</span></div></li>
+<li id="src-12"><div><strong><a class="xlink" href="https://huggingface.co/docs/peft/main/en/developer_guides/checkpoint">PEFT checkpoint format</a>.</strong> Hugging Face documentation.<span class="source-note">Adapter files, configuration, and the need for the original base model.</span></div></li>
+<li id="src-13"><div><strong><a class="xlink" href="https://docs.pytorch.org/docs/main/notes/randomness.html">Reproducibility</a>.</strong> PyTorch documentation.<span class="source-note">Seeds, nondeterminism, and limits across versions and platforms.</span></div></li>
+<li id="src-14"><div><strong><a class="xlink" href="https://huggingface.co/docs/transformers/main/en/model_doc/gpt2">GPT-2 causal language-model interface</a>.</strong> Hugging Face Transformers API reference.<span class="source-note">A documented example of internally shifted causal labels and the −100 ignore value; inspect the corresponding interface for your chosen model.</span></div></li></ol></div></section></main><a class="to-top" href="#top" aria-label="Back to top">↑</a>
+<script>
+(() => {
+  'use strict';
+  const root = document.documentElement;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const header = document.querySelector('.site-header');
+  const progress = document.querySelector('.progress span');
+  const sections = Array.from(document.querySelectorAll('main > section[id]'));
+  const navLinks = Array.from(document.querySelectorAll('.nav a'));
+  let pending = false;
+
+  function updateScroll() {
+    const distance = root.scrollHeight - window.innerHeight;
+    progress.style.width = (distance > 0 ? Math.min(100, window.scrollY / distance * 100) : 0) + '%';
+    header.classList.toggle('scrolled', window.scrollY > 12);
+    let current = '';
+    for (const section of sections) {
+      if (section.getBoundingClientRect().top <= 160) current = section.id;
+    }
+    for (const link of navLinks) {
+      const active = link.getAttribute('href') === '#' + current;
+      link.classList.toggle('active', active);
+      if (active) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    }
+    pending = false;
+  }
+  function scheduleScroll() {
+    if (!pending) { pending = true; requestAnimationFrame(updateScroll); }
+  }
+  window.addEventListener('scroll', scheduleScroll, { passive: true });
+  window.addEventListener('resize', scheduleScroll);
+  updateScroll();
+
+  if ('IntersectionObserver' in window && !reduced.matches) {
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('entered');
+          observer.unobserve(entry.target);
+        }
+      }
+    }, { threshold: 0, rootMargin: '0px 0px -24px 0px' });
+    document.querySelectorAll('.reveal, .diagram-block').forEach(element => observer.observe(element));
+    root.classList.add('reveal-ready', 'diagram-motion-ready');
+  }
+
+
+  const form=document.querySelector('.quiz-controls');
+  const feedback=form.querySelector('.quiz-feedback');
+  const reset=form.querySelector('.quiz-reset');
+  const fill=form.querySelector('.quiz-track span');
+  form.addEventListener('submit',event=>{
+    event.preventDefault();
+    const answer=form.querySelector('input:checked');
+    if(!answer){ feedback.textContent='Choose an answer first.'; return; }
+    feedback.textContent=(answer.value==='revise'?'Correct. ':'Reconsider the acceptance rule. ')+
+      'Reject this candidate and investigate using development evidence. Lower loss does not override a critical factual failure; keep Test sealed until the candidate is fixed.';
+    fill.style.width='100%'; reset.hidden=false;
+  });
+  reset.addEventListener('click',()=>{form.reset();feedback.textContent='';fill.style.width='0%';reset.hidden=true;form.querySelector('input').focus();});
+  form.hidden=false;document.querySelector('.quiz-static').hidden=true;
+  const inputs=['tokens-input','first-input','last-input'].map(id=>document.getElementById(id));
+  const status=document.getElementById('lab-status');
+  function calculate(){
+    const [tokens,first,last]=inputs.map(input=>input.valueAsNumber);
+    const valid=inputs.every(input=>input.validity.valid)&&Number.isInteger(tokens)&&tokens>=2&&Number.isFinite(first)&&Number.isFinite(last)&&first>=0&&last>first;
+    if(!valid){
+      ['ttft-result','decode-result','whole-result'].forEach(id=>document.getElementById(id).textContent='—');
+      status.textContent='Enter at least two whole output tokens and a final-token time greater than the nonnegative first-token time.';return;
+    }
+    document.getElementById('ttft-result').textContent=first.toFixed(2)+' s';
+    document.getElementById('decode-result').textContent=((tokens-1)/(last-first)).toFixed(2);
+    document.getElementById('whole-result').textContent=(tokens/last).toFixed(2);
+    status.textContent='After the first token: '+(tokens-1)+' ÷ '+(last-first).toFixed(2)+' = '+((tokens-1)/(last-first)).toFixed(2)+' tokens/s. Across the complete request: '+tokens+' ÷ '+last.toFixed(2)+' = '+(tokens/last).toFixed(2)+' tokens/s.';
+  }
+  inputs.forEach(input=>input.addEventListener('input',calculate));
+  document.querySelector('.lab-controls').hidden=false;
+})();</script>
+</body>
+</html>

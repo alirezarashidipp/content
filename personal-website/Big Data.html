@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.classList.add('js');</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Follow a delivery fleet to understand data volume, workload design, storage, late events, distributed processing, and operational ownership.">
+<title>Big Data — The Work Behind the Volume</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='3' fill='%2323956f'/%3E%3Ccircle cx='23' cy='9' r='3' fill='%23eb8237'/%3E%3Ccircle cx='9' cy='23' r='3' fill='%235b6b7a'/%3E%3Ccircle cx='23' cy='23' r='3' fill='%237650e6'/%3E%3C/svg%3E">
+<meta property="og:title" content="Big Data — The Work Behind the Volume">
+<meta property="og:description" content="Follow a delivery fleet to understand data volume, workload design, storage, late events, distributed processing, and operational ownership.">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Big Data — The Work Behind the Volume",
+  "description": "Follow a delivery fleet to understand data volume, workload design, storage, late events, distributed processing, and operational ownership.",
+  "datePublished": "2026-09-12",
+  "dateModified": "2026-09-12",
+  "inLanguage": "en",
+  "wordCount": 2694,
+  "timeRequired": "PT12M",
+  "author": {
+    "@type": "Person",
+    "name": "Ali Reza Rashidi"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Instrument+Serif:ital@0;1&amp;family=Roboto+Mono:wght@400;500&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fcfbf8; --paper: #fffdfa; --ink: #171717; --muted: #656565; --soft: #989898;
+  --line: rgba(23,23,23,0.12); --line-strong: rgba(23,23,23,0.22);
+  --blue: #3468f5; --orange: #eb8237; --green: #23956f; --purple: #7650e6;
+  --cyan: #14a9c5; --red: #db6478; --gold: #c9a227; --slate: #5b6b7a;
+  --dark: #161614; --dark-paper: #f5f3ec; --dark-line: rgba(245,243,236,0.16);
+  --shadow: 0 16px 40px rgba(0,0,0,0.05); --max: 1180px;
+}
+* { box-sizing: border-box; }
+html { color-scheme: light; overflow-x: clip; scroll-behavior: smooth; }
+body { margin: 0; color: var(--ink); background: linear-gradient(180deg, #fffdfa, #fcfbf8); font: 400 17px/1.7 "DM Sans", sans-serif; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; }
+::selection { color: var(--paper); background: var(--ink); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(23,23,23,.25); border-radius: 8px; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+h1, h2, h3, h4 { font-family: "Space Grotesk", sans-serif; margin: 0; text-wrap: balance; }
+h1, h2 { letter-spacing: -.045em; }
+p { text-wrap: pretty; margin: 0 0 22px; }
+svg { display: block; width: 100%; height: auto; }
+.wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+.grain { position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: .08; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.skip-link { position: fixed; left: 16px; top: -80px; z-index: 100; padding: 12px 18px; color: var(--paper); background: var(--ink); }
+.skip-link:focus { top: 12px; }
+.progress { position: fixed; inset: 0 0 auto; height: 2px; z-index: 90; }
+.progress span { display: block; height: 100%; width: 0; background: var(--ink); }
+.site-header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid transparent; }
+.site-header.scrolled { background: rgba(252,251,248,.82); backdrop-filter: blur(10px); border-bottom-color: var(--line); }
+.topbar { min-height: 68px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 500 13px "Space Grotesk", sans-serif; white-space: nowrap; }
+.brand-dot { width: 12px; height: 12px; background: var(--ink); border-radius: 50%; flex-shrink: 0; }
+.nav { display: flex; align-items: center; gap: 26px; overflow-x: auto; padding-left: 10px; scrollbar-width: none; }
+.nav a { position: relative; padding: 24px 0; white-space: nowrap; text-decoration: none; color: var(--muted); font: 500 11px "Roboto Mono", monospace; }
+.nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 18px; height: 1px; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform .2s; }
+.nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
+.nav a.active::before { content: ""; position: absolute; left: -10px; top: 27px; width: 6px; height: 6px; border-radius: 50%; background: var(--spy); }
+.hero { padding: 92px 0 88px; border-bottom: 1px solid var(--line); }
+.eyebrow, .kicker, .framework-role, .toc-label, .byline-meta, .source-note, .diagram-caption { font-family: "Roboto Mono", monospace; }
+.eyebrow { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 28px; }
+.eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--ink); }
+h1 { font-size: clamp(3rem,8.4vw,6.8rem); line-height: .96; font-weight: 700; }
+h1 em { font: italic 400 1em/.96 "Instrument Serif", serif; color: #535353; }
+.line { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.04em; }
+.line-inner { display: inline-block; }
+.js .line-inner { animation: lineUp .7s both; }
+.js .line:nth-child(2) .line-inner { animation-delay: 90ms; }
+.js .line:nth-child(3) .line-inner { animation-delay: 180ms; }
+@keyframes lineUp { from { transform: translateY(115%); } to { transform: translateY(0); } }
+.hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 60px; margin-top: 54px; }
+.lead { font-size: clamp(1.15rem,1.8vw,1.5rem); line-height: 1.6; color: #414141; }
+.lead::first-letter { float: left; padding: 0 5px 0 0; font: italic 400 2.2em/1 "Instrument Serif", serif; color: var(--ink); }
+.hero-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 30px 0; }
+.hero-links a { padding: 9px 12px; border: 1px solid var(--line-strong); border-radius: 30px; text-decoration: none; font: 11px "Roboto Mono", monospace; }
+.byline { display: flex; gap: 12px; align-items: center; font-size: 13px; }
+.avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; font: 11px "Roboto Mono", monospace; color: var(--paper); background: var(--ink); flex-shrink: 0; }
+.byline-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; font-size: 10px; color: var(--muted); margin-top: 3px; }
+.byline-meta span + span::before { content: ""; display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: var(--muted); vertical-align: middle; margin-right: 9px; }
+.hero-note { border-left: 2px solid var(--accent); padding-left: 20px; font: italic 400 1.25rem/1.5 "Instrument Serif", serif; color: #535353; }
+.toc { padding: 24px; border-radius: 12px; color: var(--ink); background: #f3f1e9; }
+.toc-label { color: var(--muted); background: #f3f1e9; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 16px; }
+.toc ol { list-style: none; counter-reset: toc; padding: 0; margin: 0; }
+.toc li { counter-increment: toc; border-top: 1px solid var(--line); }
+.toc a { display: grid; grid-template-columns: 28px 1fr; gap: 10px; text-decoration: none; font-size: 13px; padding: 14px 0; color: var(--ink); background: #f3f1e9; }
+.toc a::before { content: counter(toc,decimal-leading-zero); font: 10px/2 "Roboto Mono", monospace; color: var(--muted); }
+.section { padding: 88px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
+.section-head { display: grid; grid-template-columns: .9fr 1.1fr; gap: 50px; margin-bottom: 42px; }
+.kicker { display: flex; align-items: center; gap: 10px; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 18px; color: var(--muted); }
+.kicker-mark { width: 8px; height: 8px; background: var(--ink); }
+h2 { font-size: clamp(2rem,4.4vw,4rem); line-height: .98; position: relative; }
+.body-copy { color: var(--muted); font-size: 18px; margin: 6px 0 0; }
+.anchor { margin-left: 10px; font: 400 .45em "DM Sans", sans-serif; text-decoration: none; opacity: 0; }
+h2:hover .anchor, .anchor:focus-visible { opacity: 1; }
+.framework { display: grid; grid-template-columns: 260px minmax(0,1fr); gap: 58px; padding: 42px 0 10px; border-top: 1px solid var(--line); }
+.framework + .framework { margin-top: 40px; }
+.framework-aside { position: sticky; top: 100px; align-self: start; }
+.framework-name { display: flex; align-items: start; gap: 12px; }
+.mark { width: 11px; height: 11px; margin-top: 8px; background: var(--ac); border-radius: 50%; flex-shrink: 0; }
+h3 { font-size: 24px; line-height: 1.18; letter-spacing: -.03em; }
+.framework-role { margin: 15px 0; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .05em; }
+.framework-summary { font-size: 13px; color: var(--muted); }
+.framework-content { min-width: 0; }
+.framework-content h4 { font-size: 19px; margin: 34px 0 14px; letter-spacing: -.02em; }
+.xref { vertical-align: super; font: 10px "Roboto Mono", monospace; text-decoration: none; color: #2854cd; margin-left: 3px; }
+.callout-line { border-left: 3px solid var(--ac,var(--accent)); padding: 12px 0 12px 20px; font-weight: 700; margin: 30px 0; }
+.callout-line small { display: block; font-weight: 400; color: var(--muted); font-size: 14px; margin-top: 6px; }
+.formula { color: var(--ink); background: #f3f1e9; border: 1px solid var(--line); padding: 20px; margin: 26px 0; font: 13px/1.9 "Roboto Mono", monospace; overflow-x: auto; }
+.formula span { display: block; }
+.stat-strip { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; margin: 30px 0; padding: 24px 0; border-block: 1px solid var(--line); }
+.stat strong { display: block; font: 400 clamp(1.7rem,3vw,2.4rem)/1.2 "Roboto Mono", monospace; letter-spacing: -.04em; }
+.stat span { display: block; font-size: 12px; margin-top: 10px; color: var(--muted); }
+.diagram-block { margin: 36px 0; padding: 24px; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: var(--paper); }
+.diagram-title { font: 500 19px/1.4 "Space Grotesk", sans-serif; margin-bottom: 22px; color: var(--ink); background: var(--paper); }
+.chart-scroll { overflow-x: auto; }
+.diagram-caption { font-size: 11px; line-height: 1.85; margin: 20px 0 0; color: var(--muted); background: var(--paper); }
+.svg-label { font: 500 18px "Space Grotesk", sans-serif; fill: var(--ink); }
+.svg-mono { font: 400 14px "Roboto Mono", monospace; fill: var(--muted); }
+.svg-value { font: 500 16px "Roboto Mono", monospace; fill: var(--ink); }
+.bar-rect { transform-box: fill-box; transform-origin: left; }
+.js.diagram-motion-ready .diagram-block:not(.entered) .bar-rect { transform: scaleX(0); }
+.js.diagram-motion-ready .diagram-block.entered .bar-rect { transition: transform .8s var(--d,0s); }
+.js.reveal-ready .reveal:not(.entered) { opacity: 0; transform: translateY(16px); }
+.js.reveal-ready .reveal { transition: opacity .6s, transform .6s; }
+.lab { margin: 30px 0; padding: 26px; border-radius: 12px; background: #f3f1e9; color: var(--ink); }
+.lab h4, .lab p, .lab label, .lab output, .lab .stat strong { color: var(--ink); background: #f3f1e9; }
+.lab h4 { margin-top: 0; }
+.lab .stat span { color: var(--muted); background: #f3f1e9; }
+.lab-controls label { display: block; font-size: 14px; font-weight: 700; }
+.lab input { width: 100%; min-height: 44px; accent-color: var(--green); }
+.lab select { margin: 10px 0; min-height: 44px; padding: 8px; font: 14px "Roboto Mono", monospace; color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); max-width: 100%; }
+.lab .lab-status { font-size: 14px; border-left: 3px solid var(--green); padding-left: 16px; margin-bottom: 0; }
+.question { margin: 30px 0; padding: 22px 0; border-block: 1px solid var(--line-strong); }
+.question summary { cursor: pointer; font-weight: 700; }
+.question p { margin: 18px 0 0; color: var(--muted); }
+.section-dark { color: var(--dark-paper); background: var(--dark); }
+.section-dark .section-head h2, .section-dark h3, .section-dark h4 { color: var(--dark-paper); background: var(--dark); }
+.section-dark .body-copy, .section-dark p, .section-dark .framework-role, .section-dark .framework-summary, .section-dark small { color: #c9c7bf; background: var(--dark); }
+.section-dark .kicker { color: #c9c7bf; background: var(--dark); }
+.section-dark .kicker-mark { background: var(--dark-paper); }
+.section-dark .framework { border-color: var(--dark-line); }
+.section-dark .xref { color: #aac1ff; }
+.section-dark :focus-visible { outline-color: var(--dark-paper); }
+.section-dark .callout-line { color: var(--dark-paper); background: var(--dark); }
+.sources-list { list-style: none; padding: 0; margin: 0; counter-reset: sources; }
+.sources-list li { counter-increment: sources; display: grid; grid-template-columns: 40px 1fr; gap: 14px; padding: 22px 0; border-top: 1px solid var(--line); scroll-margin-top: 90px; }
+.sources-list li::before { content: counter(sources,decimal-leading-zero); font: 12px/2 "Roboto Mono", monospace; color: var(--muted); }
+.sources-list strong { font-weight: 700; }
+.source-note { display: block; font-size: 11px; margin-top: 8px; color: var(--muted); }
+.xlink { color: #4c4c4c; border-bottom: 1px dashed currentColor; text-decoration: none; margin-left: 6px; }
+.xlink::after { content: " ↗"; }
+.to-top { position: fixed; z-index: 60; bottom: max(18px,env(safe-area-inset-bottom)); right: max(18px,env(safe-area-inset-right)); display: grid; place-items: center; width: 44px; height: 44px; padding-bottom: env(safe-area-inset-bottom,0px); color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); border-radius: 50%; text-decoration: none; }
+@media (max-width: 720px) {
+  .wrap { width: calc(100% - 16px); }
+  .toc, .formula, .diagram-block, .lab { padding-inline: 12px; }
+  .hero-note, .callout-line { padding-left: 12px; }
+  .hero { padding: 64px 0; }
+  .hero-grid, .section-head, .framework { grid-template-columns: 1fr; gap: 28px; }
+  .hero-grid { margin-top: 38px; }
+  .framework-aside { position: static; }
+  .nav { max-width: 50%; gap: 20px; }
+  .framework { padding-top: 30px; }
+  .section-head { margin-bottom: 32px; }
+  .body-copy { font-size: 17px; }
+}
+@media (max-width: 430px) {
+  h1 { font-size: clamp(2.15rem,12.5vw,3rem); }
+  .brand { font-size: 11px; }
+  .nav { max-width: 46%; }
+  .section { padding: 64px 0; }
+  .diagram-block, .lab { padding-block: 18px; }
+  .chart-scroll svg { min-width: 560px; }
+  .stat-strip { gap: 12px; }
+  .stat strong { font-size: 1.55rem; }
+  .stat span { font-size: 11px; }
+  .lab .stat-strip { grid-template-columns: 1fr; }
+  .sources-list li { grid-template-columns: 28px 1fr; gap: 8px; }
+}
+@media (hover: none) { .anchor { opacity: .55; } .nav a { padding-inline: 4px; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .js.reveal-ready .reveal, .js.diagram-motion-ready .bar-rect { opacity: 1 !important; transform: none !important; }
+}
+@media print {
+  *, *::before, *::after { transition: none !important; }
+  .grain, .site-header, .progress, .to-top, .lab-controls { display: none !important; }
+  .js.reveal-ready .reveal, .js.diagram-motion-ready .bar-rect, .js .line-inner { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .framework-aside { position: static; }
+  .chart-scroll { overflow: visible; }
+}
+.diagram-block, .lab { scroll-margin-top: 88px; }
+</style>
+</head>
+<body style="--accent:var(--green)" id="top">
+<a class="skip-link" href="#content">Skip to content</a>
+<div class="progress" aria-hidden="true">
+<span>
+</span>
+</div>
+<div class="grain" aria-hidden="true">
+</div>
+<header class="site-header">
+<div class="wrap topbar">
+<a class="brand" href="#top">
+<span class="brand-dot" aria-hidden="true">
+</span>Big Data</a>
+<nav class="nav" aria-label="Article sections">
+<a href="#workload" style="--spy:var(--blue)">The workload</a>
+<a href="#layout" style="--spy:var(--green)">The layout</a>
+<a href="#reliability" style="--spy:var(--orange)">The failure paths</a>
+<a href="#ownership" style="--spy:var(--purple)">The operating promise</a>
+<a href="#sources" style="--spy:var(--slate)">Sources</a>
+</nav>
+</div>
+</header>
+<main id="content" tabindex="-1">
+<div class="hero">
+<div class="wrap">
+<div class="eyebrow">Data Systems · A field guide</div>
+<h1>
+<span class="line">
+<span class="line-inner">Make the data</span>
+</span>
+<span class="line">
+<span class="line-inner">
+<em>earn its keep.</em>
+</span>
+</span>
+</h1>
+<div class="hero-grid">
+<div>
+<p class="lead">A fleet can produce millions of events and still leave a dispatcher without a usable answer. The missing piece
+may be freshness, a stable identifier, or a definition everyone agrees on. Start with that gap, then work
+outward to storage, processing, and scale. The architecture becomes easier to defend when every component has
+a job.</p>
+<div class="hero-links">
+<a href="#workload">Read the argument</a>
+<a href="#scenario">Try the worked example</a>
+</div>
+<div class="byline">
+<span class="avatar" aria-hidden="true">AR</span>
+<div>
+<strong>Ali Reza Rashidi</strong>
+<div class="byline-meta">
+<span>12 min read</span>
+<span>Updated September 12, 2026</span>
+</div>
+</div>
+</div>
+</div>
+<aside aria-label="Reading guide">
+<p class="hero-note">A record has value when its meaning survives the journey from an event to an action.</p>
+<div class="toc">
+<p class="toc-label">In this piece</p>
+<ol>
+<li>
+<a href="#workload">How much work must happen, and when?</a>
+</li>
+<li>
+<a href="#layout">Read less before you compute more.</a>
+</li>
+<li>
+<a href="#reliability">The van reconnects. The story changes.</a>
+</li>
+<li>
+<a href="#ownership">Someone has to own what “arrival” means.</a>
+</li>
+<li>
+<a href="#sources">Sources and example assumptions</a>
+</li>
+</ol>
+</div>
+</aside>
+</div>
+</div>
+</div>
+<section class="section reveal" id="workload" aria-labelledby="workload-title" style="--spy:var(--blue)">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">
+<span class="kicker-mark" aria-hidden="true">
+</span>01 — The workload</div>
+<h2 id="workload-title">How much work must happen, and when?<a class="anchor" href="#workload" aria-label="Link to The workload">#</a>
+</h2>
+</div>
+<p class="body-copy">A delivery fleet makes the abstract language of big data concrete: arrival rates, event sizes, retention, and
+two very different deadlines.</p>
+</div>
+<div class="framework" style="--ac:var(--blue)">
+<aside class="framework-aside" aria-label="Describe the demand">
+<div class="framework-name">
+<span class="mark" aria-hidden="true">
+</span>
+<h3>Describe the demand</h3>
+</div>
+<p class="framework-role">01 · Volume, velocity, meaning</p>
+<p class="framework-summary">Measure the workload before selecting the execution model.</p>
+</aside>
+<div class="framework-content">
+<p>At 8:40 in the morning, a dispatcher wants to know which vans are likely to miss their delivery windows. The
+organization already stores months of location events. Its dashboard has maps, filters, and an impressive
+total-record count. Yet the dispatcher is still calling drivers because the latest positions are old and
+several vehicles appear twice. The company has accumulated data. It has not made the particular information
+needed for this decision reliably available.</p>
+<p>That is a better starting point for understanding big data than a forecast about how many zettabytes the world
+will create. Scale matters when it changes what you must do to answer a question on time, at an acceptable
+cost, with evidence you can trust. A large archive and a difficult workload are related, but they are not
+interchangeable. You can have a huge dataset that is rarely queried and a small stream whose latency makes it
+operationally demanding.</p>
+<p>Consider a hypothetical delivery network with 1,200 vans. During a ten-hour operating day, each van emits ten
+telemetry events per minute. Each event occupies 600 bytes in its raw representation. The business needs two
+products: a dispatch view that is fresh enough to support intervention, and a weekly analysis of route
+performance. We will use this same network throughout. The numbers are explicit planning assumptions, not a
+report about a real fleet or an infrastructure benchmark.</p>
+<h4>Turn “large” into a workload</h4>
+<p>The fleet produces 7.2 million events a day. At 600 bytes per event, that is 4.32 GB daily, or 129.6 GB over
+30 operating days, using decimal units. During the stated operating window, the average arrival rate is 200
+events per second. Those figures describe different pressures. Storage must accommodate retained history;
+ingestion must cope with arrivals; queries must finish before their answers lose value. A single total cannot
+tell you which part is difficult.</p>
+<div class="formula">
+<span>Events/day = 1,200 vans × 10 events/minute × 600 minutes</span>
+<span>Raw GB/day = 7,200,000 × 600 bytes / 1,000,000,000 = 4.32</span>
+<span>30-day raw payload = 129.6 GB · operating-window average = 200 events/second</span>
+</div>
+<p>Average arrival rate is only a starting point. Drivers may lose connectivity and upload a backlog when they
+return to a depot. A software update might cause events to arrive in bursts. A busy morning can concentrate
+demand on the dispatch view while weekly jobs are still running. You should measure peak rates and recovery
+behavior, rather than multiplying a daily average by a vague “safety factor” and assuming the capacity problem
+is solved.</p>
+<p>NIST's Big Data Interoperability Framework makes the useful distinction: the need for scalable architecture
+depends on the interaction of application requirements and constraints. Its definitions discuss volume,
+velocity, variety, and variability. That is a reminder that the familiar V lists are descriptive aids, not a
+certification scheme. There is no universal row count beyond which a responsible engineer must buy a
+distributed platform.<a class="xref" href="#src-1" aria-label="Source 1">[1]</a></p>
+<p>The popular additions, veracity and value, ask questions that should be present at every size. Can you trust
+what an event means? Who uses its result? For the dispatch view, a location without a trustworthy vehicle
+identifier is not “almost usable.” It might lead someone to call the wrong driver. For the weekly report, a
+change in event frequency can look like a change in activity. More observations do not automatically correct a
+changing measurement process.</p>
+<h4>Define the service before choosing its machinery</h4>
+<p>Specify what “fresh enough” means with the dispatcher. In this example, take a proposed target of seeing
+accepted telemetry within two minutes of its event time during normal connectivity. That is a service
+objective to evaluate, not a guarantee this architecture has demonstrated. The weekly report has a different
+deadline and can wait for reconciliation. Forcing both uses into one pipeline often creates an uncomfortable
+compromise: too much machinery for reporting and too little clarity for operations.</p>
+<p>A useful workload description includes data size, arrival pattern, retention, query shape, concurrency,
+freshness, and recovery expectations. It should also say what happens when the service falls behind. The
+dispatcher might see a clear stale-data warning and revert to manual checks. The analyst might wait for a
+reconciled partition. Those responses are part of the design, because the organization's need for an answer
+does not disappear when a stream processor is unavailable.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="section reveal" id="layout" aria-labelledby="layout-title" style="--spy:var(--green)">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">
+<span class="kicker-mark" aria-hidden="true">
+</span>02 — The layout</div>
+<h2 id="layout-title">Read less before you compute more.<a class="anchor" href="#layout" aria-label="Link to The layout">#</a>
+</h2>
+</div>
+<p class="body-copy">Storage layout, query shape, and physical copies can matter more than the headline size of an archive.</p>
+</div>
+<div class="framework" style="--ac:var(--green)">
+<aside class="framework-aside" aria-label="Organize the bytes">
+<div class="framework-name">
+<span class="mark" aria-hidden="true">
+</span>
+<h3>Organize the bytes</h3>
+</div>
+<p class="framework-role">02 · Layout and capacity</p>
+<p class="framework-summary">Name the representation and copies included in every estimate.</p>
+</aside>
+<div class="framework-content">
+<p>You can often reduce the work before adding machines. The weekly route review needs a defined period, a subset
+of fields, and a particular aggregation. It does not need every byte from every telemetry event. Start by
+making that question cheap to express and execute. Keep event dates and vehicle identifiers explicit. Separate
+the analytical representation from the original payload when doing so makes repeated queries easier to
+understand and cheaper to run.</p>
+<p>Apache Parquet is a column-oriented file format designed for efficient storage and retrieval, with compression
+and encoding support. Columnar storage lets engines organize data by field rather than treating every record
+as an indivisible object. For the fleet, an analysis of event time and route identifier need not conceptually
+require the full diagnostic payload. The exact bytes read still depend on the engine, file layout, metadata,
+encodings, and the query.<a class="xref" href="#src-2" aria-label="Source 2">[2]</a></p>
+<p>Partitioning retained data by a useful date key can help restrict a weekly query to the relevant days. It can
+also create trouble if you partition too finely and generate thousands of tiny files. Partitioning by every
+vehicle and every minute sounds precise, but it may increase listing, metadata, and scheduling work. The right
+layout is the one that serves actual access patterns. Precision in folder names is not the same thing as
+efficient execution.</p>
+<h4>Count physical copies, not just logical records</h4>
+<p>Suppose, purely for a capacity exercise, that the retained payload compresses by 3:1 and you keep two physical
+copies of that compressed payload. The 30-day raw size of 129.6 GB becomes 43.2 GB per compressed copy and
+86.4 GB across the two copies. This is not a predicted compression ratio for telemetry. It is a transparent
+scenario that reveals why raw bytes, compressed bytes, and replicated bytes should never appear under one
+ambiguous “data size” label.</p>
+<figure class="diagram-block" id="storage-copies">
+<div class="diagram-title">One fleet, three definitions of stored size.</div>
+<section class="chart-scroll" tabindex="0" aria-label="Scrollable diagram: One fleet, three definitions of stored size.">
+<svg viewBox="0 0 960 352" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Raw payload: 129.6 GB; One compressed copy: 43.2 GB; Two compressed copies: 86.4 GB." aria-labelledby="storage-copies-title storage-copies-desc">
+<title id="storage-copies-title">One fleet, three definitions of stored size.</title>
+<desc id="storage-copies-desc">Raw payload: 129.6 GB; One compressed copy: 43.2 GB; Two compressed copies: 86.4 GB.</desc>
+<defs>
+<linearGradient id="storage-copies-fill" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0" stop-color="#23956f"/>
+<stop offset="1" stop-color="#14a9c5"/>
+</linearGradient>
+</defs>
+<path d="M240 32V272" stroke="rgba(23,23,23,.12)"/>
+<text x="240" y="302" text-anchor="middle" class="svg-mono">0 GB</text> <path d="M380 32V272"
+stroke="rgba(23,23,23,.12)"/>
+<text x="380" y="302" text-anchor="middle" class="svg-mono">40 GB</text> <path
+d="M520 32V272" stroke="rgba(23,23,23,.12)"/>
+<text x="520" y="302" text-anchor="middle" class="svg-mono">80
+GB</text> <path d="M660 32V272" stroke="rgba(23,23,23,.12)"/>
+<text x="660" y="302" text-anchor="middle"
+class="svg-mono">120 GB</text> <path d="M800 32V272" stroke="rgba(23,23,23,.12)"/>
+<text x="800" y="302"
+text-anchor="middle" class="svg-mono">160 GB</text> <text x="24" y="82" class="svg-label">Raw
+payload</text>
+<rect class="bar-rect" x="240" y="56" width="453.600" height="40" rx="3" fill="#5b6b7a"
+style="--d:0.0s"/>
+<text x="709.600" y="82" class="svg-value" data-count="129.6" data-decimals="1"
+data-suffix=" GB">129.6 GB</text> <text x="24" y="162" class="svg-label">One compressed copy</text>
+<rect
+class="bar-rect" x="240" y="136" width="151.200" height="40" rx="3" fill="#5b6b7a" style="--d:0.12s"/>
+<text
+x="407.200" y="162" class="svg-value" data-count="43.2" data-decimals="1" data-suffix=" GB">43.2 GB</text>
+<text x="24" y="242" class="svg-label">Two compressed copies</text>
+<rect class="bar-rect" x="240" y="216"
+width="302.400" height="40" rx="3" fill="url(#storage-copies-fill)" style="--d:0.24s"/>
+<text x="558.400"
+y="242" class="svg-value" data-count="86.4" data-decimals="1" data-suffix=" GB">86.4 GB</text> <text x="24"
+y="344" class="svg-mono">Constructed example · axis begins at zero ·  GB</text> </svg>
+</section> <figcaption
+class="diagram-caption">
+<strong>How to read this:</strong> Each row describes the same 30-day payload under a
+different representation or copy count. Assume 3:1 compression and two compressed copies. These are
+alternatives for comparison, not additive components; separately retained raw data, metadata, backups, and
+temporary files are excluded.</figcaption> </figure> <p>Even that physical-copy estimate leaves things out.
+Indexes, metadata, temporary shuffle files, logs, backups, and separately retained raw data can all contribute
+to the footprint. If you keep the raw archive alongside the two compressed copies, you must add its size
+rather than pretending the compressed representation replaced it. A capacity estimate should name what it
+includes. Otherwise two teams can report different numbers while both are correctly measuring different parts
+of the system.</p>
+<div class="lab" id="scenario" data-kind="big-data" role="group" aria-labelledby="scenario-title">
+<h4 id="scenario-title">Change the fleet. Keep the assumptions visible.</h4>
+<p>Ten events per minute, ten hours per operating day, 600 bytes per event, and 30 operating days retained. Raw
+payload only.</p>
+<div class="lab-controls" hidden>
+<label for="scenario-input">Number of vans</label>
+<input id="scenario-input" type="range" min="100" max="5000" step="100" value="1200">
+</div>
+<div class="stat-strip">
+<div class="stat">
+<strong id="scenario-0">1,200</strong>
+<span>Vans</span>
+</div>
+<div class="stat">
+<strong id="scenario-1">4.32 GB</strong>
+<span>Raw payload per day</span>
+</div>
+<div class="stat">
+<strong id="scenario-2">129.6 GB</strong>
+<span>30-day raw payload</span>
+</div>
+</div>
+<p class="lab-status" id="scenario-status" role="status" aria-live="polite">The 1,200-van fleet produces 7,200,000 events per day under the stated assumptions.</p>
+</div>
+<p>The calculator changes the fleet size while holding event frequency, operating hours, event bytes, and
+retention fixed. Its outputs are arithmetic consequences of those assumptions. They are not estimates of cloud
+cost or proof that one machine will be sufficient. Use the exercise to identify which inputs you need to
+measure. An unexpectedly large payload may matter more than a small increase in vehicle count, and a photo
+attachment would create an entirely different size distribution.</p>
+<h4>Benchmark the question you actually ask</h4>
+<p>Run a representative route query against a representative period and record the result, elapsed time, bytes
+scanned when available, memory behavior, and concurrent load. Include a cold run and a repeated run if caching
+matters to the service. A fast result obtained from a warmed cache can be perfectly useful; it becomes
+misleading only when you report it as if it described first-time access or a recovery after restart.</p>
+<p>The working set matters as much as retained history. A system might hold a large archive while a typical
+report touches a small slice. Another query might join nearly everything and produce a large intermediate
+result. Input size alone will not predict the difference. Inspect the query plan and the sizes of intermediate
+operations. A join that multiplies records because its key is not unique can exhaust resources without
+teaching you anything about genuine business growth.</p>
+<p>The practical choice is therefore conditional. Start with the simplest arrangement that meets the measured
+workload, and record what would trigger a change: missed freshness objectives, sustained memory pressure,
+concurrency limits, recovery time, or an unacceptable cost curve. That is a stronger architecture argument
+than either “everything should be distributed” or “everything fits on a laptop.” Both slogans replace a
+workload with an identity.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="section reveal" id="reliability" aria-labelledby="reliability-title" style="--spy:var(--orange)">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">
+<span class="kicker-mark" aria-hidden="true">
+</span>03 — The failure paths</div>
+<h2 id="reliability-title">The van reconnects. The story changes.<a class="anchor" href="#reliability" aria-label="Link to The failure paths">#</a>
+</h2>
+</div>
+<p class="body-copy">Late events, duplicate deliveries, and replay determine whether the system stays meaningful when ordinary
+failures occur.</p>
+</div>
+<div class="framework" style="--ac:var(--orange)">
+<aside class="framework-aside" aria-label="Design for replay">
+<div class="framework-name">
+<span class="mark" aria-hidden="true">
+</span>
+<h3>Design for replay</h3>
+</div>
+<p class="framework-role">03 · Time, identity, recovery</p>
+<p class="framework-summary">A retry must not quietly become a second business event.</p>
+</aside>
+<div class="framework-content">
+<p>The fleet's most interesting problem arrives when a van reconnects. It uploads an event stamped 08:32 at
+08:41, after a newer event has already reached the platform. Which position should the dispatch view display?
+If the system blindly uses arrival order, the van may appear to move backward. The issue is not solved by
+storing more rows. You need to distinguish when an event happened from when your system learned about it.</p>
+<p>Keep event time and ingestion time as separate fields. Decide how late data changes each product. The
+operational view might retain the latest valid position by event time and show a freshness indicator. The
+weekly report can include reconciled late events before its cutoff. If very late data arrives after a report
+is finalized, record whether you revise the report or publish a correction. “Real time” is not a complete
+policy for information that arrives out of order.</p>
+<figure class="diagram-block" id="fleet-flow">
+<div class="diagram-title">The same events serve two different clocks.</div>
+<section class="chart-scroll" tabindex="0" aria-label="Scrollable diagram: The same events serve two different clocks.">
+<svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fleet events feed a retained log, which supports a freshness-oriented dispatch view and a reconciled table for weekly review." aria-labelledby="fleet-flow-title fleet-flow-desc">
+<title id="fleet-flow-title">The same events serve two different clocks.</title>
+<desc id="fleet-flow-desc">Fleet events feed a retained log, which supports a freshness-oriented dispatch view and a reconciled table for weekly review.</desc>
+<defs>
+<marker id="flow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+<path d="M0 0L10 5L0 10Z" fill="#656565"/>
+</marker>
+</defs> <path d="M176 184H224" fill="none" stroke="#656565" stroke-width="2"
+marker-end="url(#flow-arrow)"/> <path d="M384 164H416Q424 164 424 156V96Q424 88 432 88H464" fill="none"
+stroke="#656565" stroke-width="2" marker-end="url(#flow-arrow)"/> <path d="M384 204H408Q416 204 416
+212V272Q416 280 424 280H464" fill="none" stroke="#656565" stroke-width="2" marker-end="url(#flow-arrow)"/>
+<path d="M640 88H688" fill="none" stroke="#656565" stroke-width="2" marker-end="url(#flow-arrow)"/> <path
+d="M640 280H688" fill="none" stroke="#656565" stroke-width="2" marker-end="url(#flow-arrow)"/> <g
+class="diagram-node">
+<rect x="24" y="144" width="152" height="80" rx="6" fill="#fffdfa"
+stroke="#656565"/>
+<text x="100.0" y="176" text-anchor="middle" class="svg-label">Fleet events</text>
+<text
+x="100.0" y="202" text-anchor="middle" class="svg-mono">Stable event IDs</text>
+</g> <g
+class="diagram-node">
+<rect x="224" y="144" width="160" height="80" rx="6" fill="#fffdfa"
+stroke="#656565"/>
+<text x="304.0" y="176" text-anchor="middle" class="svg-label">Retained log</text>
+<text
+x="304.0" y="202" text-anchor="middle" class="svg-mono">Replay source</text>
+</g> <g class="diagram-node">
+<rect
+x="464" y="48" width="176" height="80" rx="6" fill="#fff4ec" stroke="#eb8237"/>
+<text x="552.0" y="80"
+text-anchor="middle" class="svg-label">Dispatch state</text>
+<text x="552.0" y="106" text-anchor="middle"
+class="svg-mono">Freshness first</text>
+</g> <g class="diagram-node">
+<rect x="464" y="240" width="176"
+height="80" rx="6" fill="#fffdfa" stroke="#656565"/>
+<text x="552.0" y="272" text-anchor="middle"
+class="svg-label">Reconciled table</text>
+<text x="552.0" y="298" text-anchor="middle"
+class="svg-mono">Completeness first</text>
+</g> <g class="diagram-node">
+<rect x="688" y="48" width="216"
+height="80" rx="6" fill="#fffdfa" stroke="#656565"/>
+<text x="796.0" y="80" text-anchor="middle"
+class="svg-label">Dispatch view</text>
+<text x="796.0" y="106" text-anchor="middle" class="svg-mono">Freshness
+visible</text>
+</g> <g class="diagram-node">
+<rect x="688" y="240" width="216" height="80" rx="6" fill="#fffdfa"
+stroke="#656565"/>
+<text x="796.0" y="272" text-anchor="middle" class="svg-label">Weekly review</text>
+<text
+x="796.0" y="298" text-anchor="middle" class="svg-mono">Defined cutoff</text>
+</g> <path d="M24 360H936"
+stroke="rgba(23,23,23,.12)"/>
+<text x="24" y="394" class="svg-mono">One event history · two products with
+different freshness and reconciliation rules</text> </svg>
+</section> <figcaption
+class="diagram-caption">
+<strong>How to read this:</strong> Follow the retained log into two branches. The
+upper branch serves intervention; the lower branch reconciles history for analysis. This is a logical view,
+not a mandatory product stack. Replay and late-data rules must be defined for each consumer.</figcaption>
+</figure> <p>The diagram separates an operational projection from a reconciled analytical table. Both
+originate from the fleet's accepted events, but they have different rules about freshness and completeness.
+The event record remains available for replay within the retention policy. Replay is valuable when
+transformation logic changes or a downstream job fails. It also means that consumers must be designed for
+records they may encounter again. Recovery is a normal path through the system, not an exceptional footnote.</p>
+<h4>A retry is also a data event</h4>
+<p>Imagine the client sends a telemetry event, the server accepts it, and the acknowledgement is lost. The client
+retries. Without a stable identity and a deduplication rule, one physical occurrence can become two analytical
+records. Define an event identifier or a suitable compound key at the source, then state what uniqueness
+means. A timestamp by itself may not be unique, and an identifier generated afresh on every retry defeats the
+purpose.</p>
+<p>Apache Kafka's design documentation distinguishes at-most-once, at-least-once, and exactly-once processing
+guarantees and explains the boundaries of its transactional support. In particular, writing to an external
+destination requires cooperation with that destination to coordinate progress and output. A broker feature
+does not automatically prevent a downstream application from sending two alerts or performing the same
+business action twice. Read the guarantee at the boundary where your actual effect occurs.<a class="xref"
+href="#src-3" aria-label="Source 3">[3]</a></p>
+<p>For the dispatch product, make alert handling idempotent where the action permits it: processing the same
+event again should not create another identical task. Store a stable alert key and an action state. Be careful
+when replacing a record, however. A late correction is not always a duplicate, and simply discarding repeated
+keys can erase legitimate updates. The business semantics determine whether you append, replace, reconcile, or
+reject an incoming record.</p>
+<h4>Distribution makes failure more varied</h4>
+<p>MapReduce helped establish a practical way to express large computations through map and reduce operations
+while a runtime handled partitioning, scheduling, and failures across machines. The important contribution was
+an execution model, not a promise that distribution removes engineering trade-offs. Dean and Ghemawat's
+original paper is still useful reading because it explains the machinery that sits behind an apparently simple
+parallel computation.<a class="xref" href="#src-4" aria-label="Source 4">[4]</a></p>
+<p>On a fleet workload, a distributed aggregation may need to move records between workers so that matching route
+keys can be combined. Uneven keys can concentrate work on one worker. Slow storage can make additional compute
+irrelevant. Retries consume resources, and partial failures complicate diagnosis. These are reasons to measure
+and design carefully, not reasons to reject distributed systems. Parallel execution earns its complexity when
+it solves a demonstrated constraint.</p>
+<p>Make recovery measurable. Ask how long it takes to rebuild the dispatch projection, replay a day's events, or
+restore a reconciled table. If replay shares capacity with live traffic, test the combined demand. A platform
+that keeps up only when nothing goes wrong has not met an operational requirement. Your architecture should
+explain how it catches up, how it signals degraded freshness, and who decides which workloads receive priority
+during recovery.</p>
+<details class="question">
+<summary>If every event is stored successfully, is the dispatch view trustworthy?</summary>
+<p>Not necessarily. Events can be stale, duplicated, out of order, or associated with the wrong vehicle. Storage
+success answers a narrower question than whether the operational view represents the fleet accurately enough
+to support an action.</p>
+</details>
+</div>
+</div>
+</div>
+</section>
+<section class="section reveal section-dark" id="ownership" aria-labelledby="ownership-title" style="--spy:var(--purple)">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">
+<span class="kicker-mark" aria-hidden="true">
+</span>04 — The operating promise</div>
+<h2 id="ownership-title">Someone has to own what “arrival” means.<a class="anchor" href="#ownership" aria-label="Link to The operating promise">#</a>
+</h2>
+</div>
+<p class="body-copy">A reliable platform needs definitions, retention choices, recovery procedures, and a clear account of who uses
+its answers.</p>
+</div>
+<div class="framework" style="--ac:var(--purple)">
+<aside class="framework-aside" aria-label="Own the service">
+<div class="framework-name">
+<span class="mark" aria-hidden="true">
+</span>
+<h3>Own the service</h3>
+</div>
+<p class="framework-role">04 · Definitions and consequences</p>
+<p class="framework-summary">Keep technical health connected to what users can safely do.</p>
+</aside>
+<div class="framework-content">
+<p>The most expensive ambiguity in a data platform is often a word. In the delivery network, “arrival” might mean
+entering a geofence, the driver marking a stop complete, or the customer accepting the parcel. Each definition
+can be useful. Mixing them in one weekly on-time rate produces a number that is difficult to interpret and
+nearly impossible to defend. A schema can tell you that a field is a timestamp. It cannot tell you which
+business event the timestamp represents.</p>
+<p>Name an owner for the event definition and record how changes are introduced. If a mobile application starts
+emitting a new version, consumers need to know whether the change is additive or alters meaning. Keep a
+version field where it helps trace this distinction, and validate required fields at ingestion. Rejected
+records should be visible in a quality report with a reason. A pipeline that silently drops inconvenient
+records can look unusually healthy while its coverage deteriorates.</p>
+<h4>Retention is a product choice</h4>
+<p>Ask why you retain each representation. Dispatch may need recent locations. Route analysis may need
+longer-lived aggregates. Incident investigation may require detailed event history for a defined period. Those
+purposes can justify different access controls and retention periods. Keeping everything forever postpones the
+decision while allowing storage, access, and maintenance obligations to grow. In the fleet example, detailed
+location history also deserves more restrictive access than a summarized route-performance report.</p>
+<p>A deletion policy should account for derived tables, exported files, and backups according to the
+organization's actual requirements. The design question is practical: if an owner changes the retention
+period, can the team identify the affected copies and apply the change consistently? A data catalog is useful
+when it helps answer that question. A catalog full of obsolete descriptions is another representation whose
+reliability someone needs to maintain.</p>
+<h4>Report value at the point of use</h4>
+<p>Measure whether dispatchers receive timely, correct information and can act on it. How many alerts arrive
+after intervention is no longer possible? How often does a user have to verify a vehicle's position by phone?
+Are certain depots systematically underrepresented because their connectivity differs? These are service
+questions, not universal performance benchmarks. They connect technical measurements to the particular job for
+which the platform exists.</p>
+<p>Keep infrastructure and outcome measures separate enough to diagnose problems. Ingestion lag can rise while
+the weekly report remains accurate. A route report can be produced on time while its business definition is
+wrong. A dispatch view can be fresh while the intervention policy is ineffective. Collapsing these into one
+green “pipeline health” indicator makes the dashboard easier to scan and the system harder to understand. You
+need both technical service signals and checks on meaning.</p>
+<p>Before expanding the platform, examine the cheapest useful improvement. It might be a stable event key, a
+clearer definition of arrival, or a smaller analytical table that removes repeated processing. It might also
+be additional workers, better isolation, or a distributed engine. What matters is the connection between the
+proposed change and the observed constraint. An engineering review should be able to follow that connection
+without relying on the prestige of a product name.</p>
+<p>This is also how you build a credible migration plan. Move a bounded workload, compare its outputs with the
+existing system, and exercise its failure paths. Preserve a way to reconcile differences. A parallel run can
+reveal definition mismatches that a successful deployment cannot. Switching infrastructure and changing
+business semantics in the same release makes discrepancies harder to explain, because the team loses a stable
+reference for what an improvement is supposed to preserve.</p>
+<p>Return to the dispatcher at 8:40. The valuable outcome is a timely view with clear freshness, stable
+identities, and a known response when coverage is incomplete. The weekly analyst needs a different but
+reconcilable account of the same events. Big data becomes useful when these promises are explicit and
+supported by the architecture. The impressive number is no longer how many records you retained. It is whether
+the right person can use the right answer before the opportunity to act has passed.</p>
+<div class="callout-line">Scale the part of the system that is actually constrained.<small>Start with the workload, preserve the meaning of the events, and make recovery part of the product.</small>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="section reveal" id="sources" aria-labelledby="sources-title">
+<div class="wrap">
+<div class="section-head">
+<div>
+<div class="kicker">
+<span class="kicker-mark" aria-hidden="true">
+</span>05 — Sources</div>
+<h2 id="sources-title">Follow the evidence.<a class="anchor" href="#sources" aria-label="Link to Sources">#</a>
+</h2>
+</div>
+<p class="body-copy">The fleet is hypothetical. Event frequency, payload size, retention, compression, copies, and freshness target
+are declared assumptions. All displayed capacities use decimal GB and are arithmetic illustrations, not
+measured compression ratios, cloud prices, or throughput benchmarks.</p>
+</div>
+<ol class="sources-list">
+<li id="src-1">
+<span>
+<strong>NIST Big Data Interoperability Framework: Volume 1, Definitions, Version 3.</strong> NIST SP 1500-1r2 · 2019.<a class="xlink" href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.1500-1r2.pdf">Read source</a>
+<span class="source-note">Application requirements and the characteristics that motivate scalable architectures.</span>
+</span>
+</li>
+<li id="src-2">
+<span>
+<strong>Apache Parquet overview.</strong> Apache Software Foundation.<a class="xlink" href="https://parquet.apache.org/docs/overview/">Read source</a>
+<span class="source-note">Column-oriented storage, compression, and encoding; actual query behavior depends on the execution engine.</span>
+</span>
+</li>
+<li id="src-3">
+<span>
+<strong>Kafka design: message delivery semantics.</strong> Apache Kafka documentation · version 4.1.<a class="xlink" href="https://kafka.apache.org/41/design/design/">Read source</a>
+<span class="source-note">Delivery guarantees, transactions, idempotence, and cooperation with external output systems.</span>
+</span>
+</li>
+<li id="src-4">
+<span>
+<strong>MapReduce: Simplified Data Processing on Large Clusters.</strong> Jeffrey Dean &amp; Sanjay Ghemawat · 2004.<a class="xlink" href="https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/">Read source</a>
+<span class="source-note">The original programming model and runtime approach to large distributed computations.</span>
+</span>
+</li>
+</ol>
+</div>
+</section>
+</main>
+<a class="to-top" href="#top" aria-label="Back to top">↑</a>
+<script>
+(() => {
+  'use strict';
+  const root = document.documentElement;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const staticView = new URLSearchParams(location.search).get('motion') === 'static';
+  const sections = [...document.querySelectorAll('main > section')];
+  const navLinks = [...document.querySelectorAll('.nav a')];
+  let pending = false;
+  function updateScroll() {
+    const max = root.scrollHeight - innerHeight;
+    document.querySelector('.progress span').style.width = `${max > 0 ? Math.min(100, scrollY / max * 100) : 0}%`;
+    document.querySelector('.site-header').classList.toggle('scrolled', scrollY > 12);
+    let active = '';
+    for (const section of sections) if (section.getBoundingClientRect().top <= 170) active = section.id;
+    if (max > 0 && scrollY >= max - 5) active = 'sources';
+    for (const link of navLinks) {
+      const current = link.hash === `#${active}`;
+      link.classList.toggle('active', current);
+      if (current) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    }
+    pending = false;
+  }
+  addEventListener('scroll', () => { if (!pending) { pending = true; requestAnimationFrame(updateScroll); } }, {passive:true});
+  addEventListener('resize', updateScroll);
+  updateScroll();
+  if ('IntersectionObserver' in window && !reduced && !staticView) {
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) if (entry.isIntersecting) {
+        entry.target.classList.add('entered');
+        if (entry.target.classList.contains('diagram-block')) {
+          for (const label of entry.target.querySelectorAll('[data-count]')) {
+            const started = performance.now();
+            const target = Number(label.dataset.count);
+            const decimals = Number(label.dataset.decimals);
+            function count(now) {
+              const fraction = Math.min(1, (now - started) / 700);
+              label.textContent = (target * fraction).toFixed(decimals) + label.dataset.suffix;
+              if (fraction < 1) requestAnimationFrame(count);
+            }
+            requestAnimationFrame(count);
+          }
+        }
+        observer.unobserve(entry.target);
+      }
+    }, {threshold:0, rootMargin:'0px 0px -24px 0px'});
+    document.querySelectorAll('.reveal, .diagram-block').forEach(node => observer.observe(node));
+    root.classList.add('reveal-ready', 'diagram-motion-ready');
+  }
+  const lab = document.querySelector('.lab');
+  const input = document.getElementById('scenario-input');
+  function updateScenario(announce = false) {
+    const value = Number(input.value);
+    let results, message;
+    if (lab.dataset.kind === 'decisions') {
+      const net = 4000 * (0.02 * 80 - value);
+      results = [`$${value.toFixed(2)}`, new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(net), `${(value / 80 * 100).toFixed(2)}%`];
+      input.setAttribute('aria-valuetext', `$${value.toFixed(2)}`);
+      message = `At $${value.toFixed(2)} per account, point-estimate contribution is ${results[1]}. The unsubscribe guardrail still requires a pause.`;
+    } else if (lab.dataset.kind === 'big-data') {
+      const events = value * 10 * 600;
+      const daily = events * 600 / 1e9;
+      results = [value.toLocaleString('en-US'), `${daily.toFixed(2)} GB`, `${(daily * 30).toFixed(1)} GB`];
+      message = `${value.toLocaleString('en-US')} vans produce ${events.toLocaleString('en-US')} events per operating day. Raw payload excludes compression, copies, and overhead.`;
+    } else {
+      const truePositives = {50:40,100:60,200:80}[value];
+      results = [`${truePositives / value * 100}%`, `${truePositives}%`, `${value}%`];
+      message = `The top ${value} contain ${truePositives} late orders and ${value-truePositives} on-time orders. ${value > 100 ? 'This exceeds daily capacity by 100 reviews.' : 'This fits daily capacity.'}`;
+    }
+    results.forEach((result,index) => { document.getElementById(`scenario-${index}`).textContent = result; });
+    if (announce) document.getElementById('scenario-status').textContent = message;
+  }
+  input.addEventListener('input', () => updateScenario(false));
+  input.addEventListener('change', () => updateScenario(true));
+  updateScenario(false);
+  lab.querySelector('.lab-controls').hidden = false;
+})();
+</script>
+</body>
+</html>

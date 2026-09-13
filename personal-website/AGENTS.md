@@ -117,17 +117,27 @@ When asked to create a new article on a topic, produce **one complete `.html` fi
 
 ## 6. Content rules
 
-- **Editorial voice**: second person, direct, confident; explains real mechanisms, not hype. Short sentences. An occasional em-dash aside. No "In today's fast-paced world", no "revolutionary/game-changing", no bullet-only sections.
+- **Editorial voice / human-like text**: write natural, professional English in the second person, with a clear argument, specific examples, and varied sentence lengths. Prefer plain language and connected prose; explain mechanisms and trade-offs. Edit the full draft for repetitive phrasing, formulaic transitions, generic introductions, and inflated claims. Preserve Ali Reza Rashidi's credibility: use personal experiences, client stories, or achievements only when supplied or verified; label hypothetical examples clearly.
 - **Depth**: pick ONE concrete running example (e.g. the prompt "The weather today is very…") and carry it through the entire article — every diagram reuses it.
 - **Structure**: 3–5 numbered sections; each concept = one `.framework` with its own accent color; every diagram earns its place and has a caption that teaches reading it.
 - **Honesty**: real citations in Sources; xref superscripts on factual claims; state preconditions and limits, not just benefits.
-- Length target: ~5–8 min read, 600–900 lines of HTML.
+- **Minimum reading time**: at least 8 minutes of substantive reading, measured at 225 words per minute: at least 1,800 words of original main-article prose. Exclude navigation, repeated headings, metadata, source lists, and code from the count. Display the estimate as `ceil(prose words / 225)` minutes. Follow a longer minimum when the user requests one (for example, 10 minutes requires at least 2,250 words). Reach the length through useful explanation and analysis, without repetition or filler. Aim for 600–900 HTML lines; content depth takes priority over line count.
+
+### Google-friendly SEO (required)
+
+- Define the reader's main question and answer it clearly near the beginning. Add original reasoning, useful examples, and traceable evidence throughout; integrate relevant topic terms naturally rather than repeating keywords mechanically.
+- Give every article a distinct, descriptive `<title>` and meta description under section 2. Use one clear H1 and a logical H2/H3 hierarchy. The title, H1, opening, and Article schema must describe the same topic and match the visible content.
+- Keep article text and meaningful links in the initial HTML, readable without JavaScript. Use descriptive anchor text; add contextual internal links only to verified, relevant destinations. Add a canonical URL only when the final public URL is known; never substitute a localhost or guessed URL.
+- Keep authorship, citations, and publication/modification dates accurate. Apply the mobile and accessibility checks in section 7. Before delivery, verify metadata/schema consistency, heading order, link targets, and static content visibility.
+- Follow [Google's people-first content guidance](https://developers.google.com/search/docs/fundamentals/creating-helpful-content) and [SEO Starter Guide](https://developers.google.com/search/docs/fundamentals/seo-starter-guide). The reading-time minimum is this publication's editorial requirement, not a Google ranking requirement; Google has no preferred word count. Treat SEO as discoverability and clarity, without promising rankings or indexing.
 
 ## 7. Accessibility & mobile (required)
 
 - `lang="en"`, skip link, `aria-labelledby` on sections, `aria-label` on nav/SVG, `:focus-visible` outlines (2px ink).
 - `-webkit-tap-highlight-color: transparent`; safe-area-inset padding on `.to-top` for iOS.
 - Breakpoints: 720px (stack grids, smaller type) and 430px (H1 `clamp(2.15rem,12.5vw,3rem)`, tighter stat strip, chart min-width scroll).
+- **Mobile reading width**: at widths up to 720px, override the desktop `.wrap` with `width: calc(100% - 16px)` for 8px side margins. Use 12px horizontal padding in TOC, formula, diagram, and interactive blocks. Avoid accumulating nested side padding that narrows the prose column; retain any necessary device safe-area inset.
+- **Mobile verification**: inspect at 320px, 390px, 430px, and 720px as well as desktop. Require readable text without zoom, usable touch controls, and no page-level horizontal overflow or clipped text. Keep horizontal scrolling inside wide chart/code wrappers. Verify that the same article text and sources remain available with and without JavaScript.
 - `@media (hover: none)`: anchors semi-visible, nav touch padding.
 - `color-scheme: light`; `overflow-x: clip` guard.
 - **Rendered contrast gate**: on every dark or tinted surface, set both foreground and background explicitly on the text-bearing component selector; do not rely on inheritance for headings or code. At minimum, dark sections must style their own H2 and code blocks must style their own `pre`. After reveal animations settle, inspect computed colors in the browser at desktop and 390px, including under generic host rules for `h2` and `pre`; require WCAG AA contrast (4.5:1 for normal text, 3:1 for large text).
